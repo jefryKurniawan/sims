@@ -1,0 +1,74 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Google Fonts: Inter for International School */
+/* Imported via CDN in app.blade.php for performance */
+
+@theme {
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --color-primary: #003366;
+  --color-primary-light: #004080;
+  --color-primary-dark: #002244;
+  --color-secondary: #6c757d;
+  --color-accent: #28a745;
+
+  --color-sidebar: #1e293b;
+  --color-sidebar-hover: #334155;
+  --color-sidebar-active: #003366;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Slider Animations */
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.animation-delay-200 {
+    animation-delay: 0.2s;
+}
+
+.animation-delay-400 {
+    animation-delay: 0.4s;
+}
+
+/* Slider item transitions */
+.slide-item {
+    transition: opacity 1s ease-in-out;
+}
+
+.slide-item.active {
+    opacity: 1;
+}
+
+.slide-item.hidden {
+    opacity: 0;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

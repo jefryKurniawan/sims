@@ -1,0 +1,2 @@
+import{t as e}from"./app.js";var t=e();function n(){return(0,t.jsxs)(n,{children:[(0,t.jsx)(`meta`,{charSet:`utf-8`}),(0,t.jsx)(`meta`,{name:`viewport`,content:`width=device-width, initial-scale=1`}),(0,t.jsx)(`link`,{rel:`icon`,href:`/favicon.ico`}),(0,t.jsx)(`meta`,{name:`description`,content:`Sekolahku - Sistem Manajemen Sekolah`})]})}export{n as t};
+//# sourceMappingURL=Head.js.map

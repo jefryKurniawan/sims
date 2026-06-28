@@ -1,0 +1,258 @@
+import { useForm, usePage, Link } from '@inertiajs/inertia-react';
+import { useState } from 'react';
+
+export default function Create() {
+    const { flash } = usePage().props;
+    const [previewBukti, setPreviewBukti] = useState('');
+
+    const { data, post, processing, errors, reset } = useForm({
+        nisn: '',
+        nama_lengkap: '',
+        tempat_lahir: '',
+        tanggal_lahir: '',
+        jenis_kelamin: '',
+        alamat: '',
+        no_hp: '',
+        email: '',
+        nama_ortu: '',
+        no_hp_ortu: '',
+        asal_sekolah: '',
+        prestasi: '',
+        biaya_pendaftaran: '',
+        bukti_bayar: null,
+    });
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            post('bukti_bayar', file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewBukti(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post(route('ppdb.store'), {
+            preserveScroll: true,
+            onSuccess: () => reset(),
+        });
+    };
+
+    return (
+        <>
+            <div className="mb-6">
+                <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Tambah Calon Siswa Baru</h1>
+                <Link href={route('ppdb.index')} className="btn btn-outline mt-2">
+                    Kembali ke Daftar Calon Siswa
+                </Link>
+                {flash?.success && (
+                    <div className="mt-4 p-4 bg-green-100 dark:bg-green-900 dark:text-green-300 rounded-lg">
+                        {flash.success}
+                    </div>
+                )}
+            </div>
+
+            <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
+                {/* Data Pribadi */}
+                <div className="border-b pb-4">
+                    <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200">Data Pribadi Siswa</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="label"><span className="label-text font-medium">NISN <span className="text-red-500">*</span></span></label>
+                            <input
+                                type="text"
+                                value={data.nisn}
+                                onChange={(e) => post('nisn', e.target.value)}
+                                className="input input-bordered w-full"
+                                placeholder="Nomor Induk Siswa Nasional"
+                            />
+                            {errors.nisn && <span className="text-error text-sm mt-1">{errors.nisn}</span>}
+                        </div>
+                        <div>
+                            <label className="label"><span className="label-text font-medium">Nama Lengkap <span className="text-red-500">*</span></span></label>
+                            <input
+                                type="text"
+                                value={data.nama_lengkap}
+                                onChange={(e) => post('nama_lengkap', e.target.value)}
+                                className="input input-bordered w-full"
+                                placeholder="Nama lengkap siswa"
+                            />
+                            {errors.nama_lengkap && <span className="text-error text-sm mt-1">{errors.nama_lengkap}</span>}
+                        </div>
+                        <div>
+                            <label className="label"><span className="label-text font-medium">Tempat Lahir <span className="text-red-500">*</span></span></label>
+                            <input
+                                type="text"
+                                value={data.tempat_lahir}
+                                onChange={(e) => post('tempat_lahir', e.target.value)}
+                                className="input input-bordered w-full"
+                                placeholder="Tempat lahir"
+                            />
+                            {errors.tempat_lahir && <span className="text-error text-sm mt-1">{errors.tempat_lahir}</span>}
+                        </div>
+                        <div>
+                            <label className="label"><span className="label-text font-medium">Tanggal Lahir <span className="text-red-500">*</span></span></label>
+                            <input
+                                type="date"
+                                value={data.tanggal_lahir}
+                                onChange={(e) => post('tanggal_lahir', e.target.value)}
+                                className="input input-bordered w-full"
+                            />
+                            {errors.tanggal_lahir && <span className="text-error text-sm mt-1">{errors.tanggal_lahir}</span>}
+                        </div>
+                        <div>
+                            <label className="label"><span className="label-text font-medium">Jenis Kelamin <span className="text-red-500">*</span></span></label>
+                            <select
+                                value={data.jenis_kelamin}
+                                onChange={(e) => post('jenis_kelamin', e.target.value)}
+                                className="select select-bordered w-full"
+                            >
+                                <option value="">Pilih</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                            {errors.jenis_kelamin && <span className="text-error text-sm mt-1">{errors.jenis_kelamin}</span>}
+                        </div>
+                        <div>
+                            <label className="label"><span className="label-text font-medium">Email (Opsional)</span></label>
+                            <input
+                                type="email"
+                                value={data.email}
+                                onChange={(e) => post('email', e.target.value)}
+                                className="input input-bordered w-full"
+                                placeholder="email@example.com"
+                            />
+                            {errors.email && <span className="text-error text-sm mt-1">{errors.email}</span>}
+                        </div>
+                        <div className="md:col-span-2">
+                            <label className="label"><span className="label-text font-medium">Alamat <span className="text-red-500">*</span></span></label>
+                            <textarea
+                                value={data.alamat}
+                                onChange={(e) => post('alamat', e.target.value)}
+                                className="textarea textarea-bordered w-full"
+                                rows="3"
+                                placeholder="Alamat lengkap"
+                            ></textarea>
+                            {errors.alamat && <span className="text-error text-sm mt-1">{errors.alamat}</span>}
+                        </div>
+                        <div>
+                            <label className="label"><span className="label-text font-medium">No. HP Siswa <span className="text-red-500">*</span></span></label>
+                            <input
+                                type="text"
+                                value={data.no_hp}
+                                onChange={(e) => post('no_hp', e.target.value)}
+                                className="input input-bordered w-full"
+                                placeholder="08xxxxxxxxxx"
+                            />
+                            {errors.no_hp && <span className="text-error text-sm mt-1">{errors.no_hp}</span>}
+                        </div>
+                        <div>
+                            <label className="label"><span className="label-text font-medium">Prestasi (Opsional)</span></label>
+                            <textarea
+                                value={data.prestasi}
+                                onChange={(e) => post('prestasi', e.target.value)}
+                                className="textarea textarea-bordered w-full"
+                                rows="2"
+                                placeholder="Prestasi yang dicapai (jika ada)"
+                            ></textarea>
+                            {errors.prestasi && <span className="text-error text-sm mt-1">{errors.prestasi}</span>}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Data Orang Tua */}
+                <div className="border-b pb-4">
+                    <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200">Data Orang Tua/Wali</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="label"><span className="label-text font-medium">Nama Orang Tua <span className="text-red-500">*</span></span></label>
+                            <input
+                                type="text"
+                                value={data.nama_ortu}
+                                onChange={(e) => post('nama_ortu', e.target.value)}
+                                className="input input-bordered w-full"
+                                placeholder="Nama lengkap orang tua/wali"
+                            />
+                            {errors.nama_ortu && <span className="text-error text-sm mt-1">{errors.nama_ortu}</span>}
+                        </div>
+                        <div>
+                            <label className="label"><span className="label-text font-medium">No. HP Orang Tua <span className="text-red-500">*</span></span></label>
+                            <input
+                                type="text"
+                                value={data.no_hp_ortu}
+                                onChange={(e) => post('no_hp_ortu', e.target.value)}
+                                className="input input-bordered w-full"
+                                placeholder="08xxxxxxxxxx"
+                            />
+                            {errors.no_hp_ortu && <span className="text-error text-sm mt-1">{errors.no_hp_ortu}</span>}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Data Sekolah Asal */}
+                <div className="border-b pb-4">
+                    <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200">Data Sekolah Asal</h2>
+                    <div>
+                        <label className="label"><span className="label-text font-medium">Nama Sekolah Asal <span className="text-red-500">*</span></span></label>
+                        <input
+                            type="text"
+                            value={data.asal_sekolah}
+                            onChange={(e) => post('asal_sekolah', e.target.value)}
+                            className="input input-bordered w-full"
+                            placeholder="Nama sekolah sebelumnya"
+                        />
+                        {errors.asal_sekolah && <span className="text-error text-sm mt-1">{errors.asal_sekolah}</span>}
+                    </div>
+                </div>
+
+                {/* Pembayaran */}
+                <div>
+                    <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200">Pembayaran Pendaftaran</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="label"><span className="label-text font-medium">Biaya Pendaftaran <span className="text-red-500">*</span></span></label>
+                            <input
+                                type="number"
+                                value={data.biaya_pendaftaran}
+                                onChange={(e) => post('biaya_pendaftaran', e.target.value)}
+                                className="input input-bordered w-full"
+                                placeholder="0"
+                                min="0"
+                            />
+                            {errors.biaya_pendaftaran && <span className="text-error text-sm mt-1">{errors.biaya_pendaftaran}</span>}
+                        </div>
+                        <div>
+                            <label className="label"><span className="label-text font-medium">Bukti Bayar (Opsional)</span></label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="file-input file-input-bordered w-full"
+                            />
+                            {previewBukti && (
+                                <div className="mt-2">
+                                    <img src={previewBukti} alt="Preview" className="w-32 h-32 object-cover rounded border" />
+                                </div>
+                            )}
+                            {errors.bukti_bayar && <span className="text-error text-sm mt-1">{errors.bukti_bayar}</span>}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex justify-end space-x-2 pt-4 border-t">
+                    <Link href={route('ppdb.index')} className="btn btn-outline">
+                        Batal
+                    </Link>
+                    <button type="submit" className="btn btn-primary" disabled={processing}>
+                        {processing ? 'Menyimpan...' : 'Simpan Data'}
+                    </button>
+                </div>
+            </form>
+        </>
+    );
+}

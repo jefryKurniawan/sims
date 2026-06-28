@@ -1,0 +1,2 @@
+import{t as e}from"./app.js";import{t}from"./Head.js";var n=e();function r(){return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsx)(t,{title:`Beranda`}),(0,n.jsxs)(`div`,{className:`p-6`,children:[(0,n.jsx)(`h1`,{className:`text-2xl font-bold mb-6`,children:`Selamat Datang di Sekolahku`}),(0,n.jsx)(`p`,{className:`mb-4`,children:`Ini adalah halaman beranda dari sistem manajemen sekolah.`})]})]})}export{r as default};
+//# sourceMappingURL=Index3.js.map
