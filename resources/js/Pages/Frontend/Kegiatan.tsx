@@ -32,8 +32,9 @@ export default function Kegiatan({ kegiatan }: Props) {
 
     return (
         <>
-            <Head title={kegiatan.judul} />
-            <div className="min-h-screen bg-gray-50">
+            <Head title={`${kegiatan.judul} - SMAS St. Bonaventura`} />
+            <Header />
+            <div className="min-h-screen bg-gray-50 pt-20">
                 {/* Hero Section */}
                 <div className="relative h-[350px] bg-gradient-to-br from-emerald-500 via-emerald-700 to-emerald-900 overflow-hidden">
                     {kegiatan.gambar ? (
@@ -155,6 +156,7 @@ export default function Kegiatan({ kegiatan }: Props) {
                     </div>
                 </section>
             </div>
+            <Footer />
         </>
     );
 }

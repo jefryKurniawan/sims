@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && cp public/build/.vite/manifest.json public/build/manifest.json",
+    "build:raw": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -14,7 +15,7 @@
     "@tailwindcss/vite": "^4.3.1",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "@vitejs/plugin-react": "^4.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
     "@vitejs/plugin-react-swc": "^4.0.0",
     "autoprefixer": "^10.4.13",
     "axios": "^0.27",

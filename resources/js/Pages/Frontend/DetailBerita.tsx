@@ -1,4 +1,6 @@
-import { Link } from '@inertiajs/inertia-react';
+import { Head, Link } from '@inertiajs/inertia-react';
+import Header from '@/Components/Frontend/Header';
+import Footer from '@/Components/Frontend/Footer';
 import FrontendLayout from '@/Layout/FrontendLayout';
 import { ArrowLeft, Image as ImageIcon } from 'lucide-react';
 
@@ -37,8 +39,10 @@ function formatDate(dateStr: string) {
 
 export default function DetailBerita({ berita, recentBeritas }: Props) {
     return (
-        <FrontendLayout title={berita.title}>
-            <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <>
+            <Head title={`${berita.title} - SMAS St. Bonaventura`} />
+            <Header />
+            <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
                 <div className="mb-8">
                     <Link
                         href="/berita"
@@ -125,6 +129,7 @@ export default function DetailBerita({ berita, recentBeritas }: Props) {
                     </div>
                 </section>
             )}
-        </FrontendLayout>
+            <Footer />
+        </>
     );
 }

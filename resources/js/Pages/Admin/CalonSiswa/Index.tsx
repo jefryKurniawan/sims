@@ -55,192 +55,185 @@ export default function Index({ calonSiswa, filters }) {
 
     const getStatusBadgeClass = (status) => {
         const classes = {
-            pendaftaran: 'badge badge-warning',
-            seleksi: 'badge badge-info',
-            lulus: 'badge badge-success',
-            tidak_lulus: 'badge badge-error',
+            pendaftaran: 'px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-700',
+            seleksi: 'px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700',
+            lulus: 'px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700',
+            tidak_lulus: 'px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700',
         };
-        return classes[status] || 'badge badge-neutral';
+        return classes[status] || 'px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700';
     };
 
     const getKeputusanBadgeClass = (keputusan) => {
         const classes = {
-            belum: 'badge badge-neutral',
-            diterima: 'badge badge-success',
-            ditolak: 'badge badge-error',
+            belum: 'px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700',
+            diterima: 'px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700',
+            ditolak: 'px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700',
         };
-        return classes[keputusan] || 'badge badge-neutral';
+        return classes[keputusan] || 'px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700';
     };
 
     return (
         <>
-            <div className="mb-6">
-                <div className="flex justify-between items-center">
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white">PPDB - Calon Siswa</h1>
-                    <Link href={route('ppdb.create')} className="btn btn-primary">
+            <Head title="PPDB - Calon Siswa" />
+            <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                    <h1 className="text-2xl font-bold text-gray-800">PPDB - Calon Siswa</h1>
+                    <Link href={route('ppdb.create')} className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                         Tambah Calon Siswa Baru
                     </Link>
                 </div>
 
                 {flash?.success && (
-                    <div className="mt-4 p-4 bg-green-100 dark:bg-green-900 dark:text-green-300 rounded-lg flex items-center">
-                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
+                    <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
                         {flash.success}
                     </div>
                 )}
-            </div>
 
-            {/* Filter Form */}
-            <form onSubmit={handleSubmit} className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label className="label"><span className="label-text">Pencarian</span></label>
-                        <input
-                            type="text"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Nama, NISN, atau No HP..."
-                            className="input input-bordered w-full"
-                        />
+                <form onSubmit={handleSubmit} className="mb-6 bg-white rounded-lg border p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
+                            <input
+                                type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Nama, NISN, atau No HP..."
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                                <option value="">Semua Status</option>
+                                <option value="pendaftaran">Pendaftaran</option>
+                                <option value="seleksi">Seleksi</option>
+                                <option value="lulus">Lulus</option>
+                                <option value="tidak_lulus">Tidak Lulus</option>
+                            </select>
+                        </div>
+                        <div className="flex items-end space-x-2">
+                            <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 flex-1">Filter</button>
+                            <Link href={route('ppdb.index')} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Reset</Link>
+                        </div>
                     </div>
-                    <div>
-                        <label className="label"><span className="label-text">Status</span></label>
-                        <select
-                            value={statusFilter}
-                            onChange={(e) => setStatusFilter(e.target.value)}
-                            className="select select-bordered w-full"
-                        >
-                            <option value="">Semua Status</option>
-                            <option value="pendaftaran">Pendaftaran</option>
-                            <option value="seleksi">Seleksi</option>
-                            <option value="lulus">Lulus</option>
-                            <option value="tidak_lulus">Tidak Lulus</option>
-                        </select>
-                    </div>
-                    <div className="flex items-end space-x-2">
-                        <button type="submit" className="btn btn-primary flex-1">Filter</button>
-                        <Link href={route('ppdb.index')} className="btn btn-outline">Reset</Link>
-                    </div>
-                </div>
-            </form>
+                </form>
 
-            {/* Table */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
-                <table className="table table-zebra w-full">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>NISN</th>
-                            <th>Nama Lengkap</th>
-                            <th>Asal Sekolah</th>
-                            <th>Status</th>
-                            <th>Keputusan</th>
-                            <th>Tanggal Daftar</th>
-                            <th className="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {calonSiswa.data.length > 0 ? (
-                            calonSiswa.data.map((cs, index) => (
-                                <tr key={cs.id} className="hover">
-                                    <td>{(calonSiswa.current_page - 1) * calonSiswa.per_page + index + 1}</td>
-                                    <td className="font-medium">{cs.nisn}</td>
-                                    <td>
-                                        <div>
+                <div className="bg-white rounded-lg border overflow-x-auto">
+                    <table className="w-full">
+                        <thead>
+                            <tr className="bg-gray-50 border-b">
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">NISN</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nama Lengkap</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Asal Sekolah</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Keputusan</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Tanggal Daftar</th>
+                                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                            {calonSiswa.data.length > 0 ? (
+                                calonSiswa.data.map((cs, index) => (
+                                    <tr key={cs.id} className="hover:bg-gray-50">
+                                        <td className="px-4 py-3 text-sm text-gray-700">{(calonSiswa.current_page - 1) * calonSiswa.per_page + index + 1}</td>
+                                        <td className="px-4 py-3 text-sm font-medium text-gray-700">{cs.nisn}</td>
+                                        <td className="px-4 py-3 text-sm text-gray-700">
                                             <div className="font-semibold">{cs.nama_lengkap}</div>
-                                            <div className="text-sm text-gray-500">{cs.no_hp}</div>
-                                        </div>
-                                    </td>
-                                    <td>{cs.asal_sekolah}</td>
-                                    <td>
-                                        <span className={`${getStatusBadgeClass(cs.status)} badge-xs badge`}>
-                                            {cs.status}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span className={`${getKeputusanBadgeClass(cs.keputusan)} badge-xs badge`}>
-                                            {cs.keputusan}
-                                        </span>
-                                    </td>
-                                    <td>{cs.tanggal_daftar?.format('d M Y')}</td>
-                                    <td className="text-center whitespace-nowrap">
-                                        {cs.keputusan === 'belum' && (
-                                            <>
-                                                <button
-                                                    onClick={() => handleAccept(cs.id)}
-                                                    className="btn btn-xs btn-success mr-1"
-                                                    title="Terima & Konversi ke Siswa"
-                                                >
-                                                    ✓ Terima
-                                                </button>
-                                                <button
-                                                    onClick={() => handleReject(cs.id)}
-                                                    className="btn btn-xs btn-error mr-1"
-                                                    title="Tolak"
-                                                >
-                                                    ✕ Tolak
-                                                </button>
-                                            </>
-                                        )}
-                                        <Link
-                                            href={route('ppdb.edit', cs.id)}
-                                            className="btn btn-xs btn-outline"
-                                        >
-                                            Edit
-                                        </Link>
-                                        <button
-                                            onClick={() => handleDelete(cs.id)}
-                                            className="btn btn-xs btn-error ml-1"
-                                        >
-                                            Hapus
-                                        </button>
+                                            <div className="text-xs text-gray-500">{cs.no_hp}</div>
+                                        </td>
+                                        <td className="px-4 py-3 text-sm text-gray-700">{cs.asal_sekolah}</td>
+                                        <td className="px-4 py-3">
+                                            <span className={getStatusBadgeClass(cs.status)}>
+                                                {cs.status}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <span className={getKeputusanBadgeClass(cs.keputusan)}>
+                                                {cs.keputusan}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 text-sm text-gray-700">{cs.tanggal_daftar?.format('d M Y')}</td>
+                                        <td className="px-4 py-3 text-center whitespace-nowrap">
+                                            {cs.keputusan === 'belum' && (
+                                                <>
+                                                    <button
+                                                        onClick={() => handleAccept(cs.id)}
+                                                        className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700 mr-1"
+                                                        title="Terima & Konversi ke Siswa"
+                                                    >
+                                                        ✓ Terima
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleReject(cs.id)}
+                                                        className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700 mr-1"
+                                                        title="Tolak"
+                                                    >
+                                                        ✕ Tolak
+                                                    </button>
+                                                </>
+                                            )}
+                                            <Link
+                                                href={route('ppdb.edit', cs.id)}
+                                                className="px-3 py-1 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
+                                            >
+                                                Edit
+                                            </Link>
+                                            <button
+                                                onClick={() => handleDelete(cs.id)}
+                                                className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700 ml-1"
+                                            >
+                                                Hapus
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="8" className="px-4 py-8 text-center text-sm text-gray-500">
+                                        Tidak ada data calon siswa
                                     </td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="8" className="text-center py-8 text-gray-500">
-                                    Tidak ada data calon siswa
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                            )}
+                        </tbody>
+                    </table>
 
-                {/* Pagination */}
-                {calonSiswa.data.length > 0 && (
-                    <div className="p-4 flex justify-between items-center border-t dark:border-gray-700">
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                            Menampilkan {calonSiswa.from} - {calonSiswa.to} dari {calonSiswa.total} data
-                        </div>
-                        <div className="join">
-                            {calonSiswa.prev_page_url && (
+                    {calonSiswa.data.length > 0 && (
+                        <div className="px-4 py-3 flex justify-between items-center border-t">
+                            <div className="text-sm text-gray-600">
+                                Menampilkan {calonSiswa.from} - {calonSiswa.to} dari {calonSiswa.total} data
+                            </div>
+                            <div className="flex gap-1">
+                                {calonSiswa.prev_page_url && (
+                                    <Link
+                                        href={calonSiswa.prev_page_url}
+                                        className="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
+                                    >
+                                        Prev
+                                    </Link>
+                                )}
                                 <Link
-                                    href={calonSiswa.prev_page_url}
-                                    className="join-item btn btn-sm"
+                                    href={route('ppdb.index', { ...filters, page: 1 })}
+                                    className="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
                                 >
-                                    Prev
+                                    1
                                 </Link>
-                            )}
-                            <Link
-                                href={route('ppdb.index', { ...filters, page: 1 })}
-                                className="join-item btn btn-sm"
-                            >
-                                1
-                            </Link>
-                            {calonSiswa.next_page_url && (
-                                <Link
-                                    href={calonSiswa.next_page_url}
-                                    className="join-item btn btn-sm"
-                                >
-                                    Next
-                                </Link>
-                            )}
+                                {calonSiswa.next_page_url && (
+                                    <Link
+                                        href={calonSiswa.next_page_url}
+                                        className="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
+                                    >
+                                        Next
+                                    </Link>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </>
     );

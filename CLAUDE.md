@@ -254,6 +254,30 @@ The UI should reflect a clean, professional, and trustworthy school‑management
 
 --- 
 
+## Session Summary (2026-06-29)
+
+### Goal
+Update dashboard / admin menu pages to match `resources/homepage.html` reference design.
+
+### Completed
+1. **Sidebar.tsx** — Removed collapsible accordion logic (`expandedGroups` state, `toggleGroup`, `<ChevronDown>` icons). All groups render always-open with static labels.
+2. **AppLayout.tsx** — Added `Mail` (lucide-react) icon in header between notification bell and user avatar.
+3. **Dashboard.tsx** — Added dark PPDB promo section (gradient navy bg, emerald accent, total pendaftar count, CTA link).
+4. **routes/web.php** — Fixed 500 error on `/auth/login`:
+   - Route was referencing non-existent `App\Http\Controllers\Inertia\AuthController`
+   - Changed import to `App\Http\Controllers\Auth\LoginController` and `*RegisterController`
+   - Updated route definitions to use `LoginController::class` / `RegisterController::class`
+5. **Build** — `vite build` passes clean (255 modules, 0 errors).
+
+### Remaining Frontend Gaps (from reference)
+- Sidebar: Icons shown inline (reference shows them, current sidebar has them too — verify).
+- Header: Right section matches (logo-text, icons, avatar — verified).
+- Dashboard: Dark PPDB promo section added. Other cards/stats look similar to reference.
+
+### PHP 8.5 Compatibility Note
+- Server runs PHP 8.5.7 — aggressive deprecations/incompatibilities possible (e.g., `Carbon\Carbon::setLastErrors()` type error in newer Carbon versions).
+- Carbon 2.73.0 is currently installed; `composer update` may be needed if Carbon errors resurface.
+
 ## Authentication & Authorization
 - **Guard**: `web` (session) for frontend, `sanctum` for API (Orang Tua).
 - **Roles**: Admin, Guru, Staf, Murid, Orang Tua, Alumni, Guest — created via `RoleSeeder`.

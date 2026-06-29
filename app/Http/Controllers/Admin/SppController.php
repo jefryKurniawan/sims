@@ -9,6 +9,7 @@ use App\Models\Siswa;
 use App\Models\SppPembayaran;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
 class SppController extends Controller
 {
@@ -35,7 +36,9 @@ class SppController extends Controller
         $tagihan = $query->orderBy('tanggal_jatuh_tempo', 'asc')
                          ->paginate(15);
 
-        return response()->json($tagihan);
+        return Inertia::render('Admin/Spp/Index', [
+            'tagihan' => $tagihan,
+        ]);
     }
 
     /**

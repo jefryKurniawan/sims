@@ -18,6 +18,15 @@ use Inertia\Inertia;
 
 class FrontendController extends Controller
 {
+    private function commonData(): array
+    {
+        return [
+            'footer' => Footer::first(),
+            'jurusanM' => Jurusan::with('dataJurusan')->get(),
+            'kegiatanM' => Kegiatan::all(),
+        ];
+    }
+
     public function index()
     {
         $berita = Berita::with('kategori', 'user')
@@ -33,35 +42,29 @@ class FrontendController extends Controller
         $slider = ImageSlider::orderBy('created_at', 'desc')->get();
         $about = About::first();
         $video = Video::first();
-        $footer = Footer::first();
-        $jurusanM = Jurusan::with('dataJurusan')->get();
-        $kegiatanM = Kegiatan::all();
         $pengajar = User::with('userDetail')
             ->whereHas('userDetail')
             ->where('role', 'guru')
             ->get();
 
-        return Inertia::render('Frontend/Index', [
+        return Inertia::render('Frontend/Index', array_merge([
             'berita' => $berita,
             'event' => $event,
             'slider' => $slider,
             'about' => $about,
             'video' => $video,
-            'footer' => $footer,
-            'jurusanM' => $jurusanM,
-            'kegiatanM' => $kegiatanM,
             'pengajar' => $pengajar,
-        ]);
+        ], $this->commonData()));
     }
 
     public function profileSekolah()
     {
-        return Inertia::render('Frontend/ProfileSekolah');
+        return Inertia::render('Frontend/ProfileSekolah', $this->commonData());
     }
 
     public function visimisi()
     {
-        return Inertia::render('Frontend/Visimisi');
+        return Inertia::render('Frontend/Visimisi', $this->commonData());
     }
 
     public function programStudi($slug)
@@ -70,18 +73,18 @@ class FrontendController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return Inertia::render('Frontend/ProgramStudi', [
+        return Inertia::render('Frontend/ProgramStudi', array_merge([
             'jurusan' => $jurusan,
-        ]);
+        ], $this->commonData()));
     }
 
     public function kegiatan($slug)
     {
         $kegiatan = Kegiatan::where('slug', $slug)->firstOrFail();
 
-        return Inertia::render('Frontend/Kegiatan', [
+        return Inertia::render('Frontend/Kegiatan', array_merge([
             'kegiatan' => $kegiatan,
-        ]);
+        ], $this->commonData()));
     }
 
     public function berita()
@@ -91,9 +94,9 @@ class FrontendController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(9);
 
-        return Inertia::render('Frontend/Berita', [
+        return Inertia::render('Frontend/Berita', array_merge([
             'beritas' => $beritas,
-        ]);
+        ], $this->commonData()));
     }
 
     public function detailBerita($slug)
@@ -110,10 +113,10 @@ class FrontendController extends Controller
             ->limit(4)
             ->get();
 
-        return Inertia::render('Frontend/DetailBerita', [
+        return Inertia::render('Frontend/DetailBerita', array_merge([
             'berita' => $berita,
             'recentBeritas' => $recentBeritas,
-        ]);
+        ], $this->commonData()));
     }
 
     public function events()
@@ -121,9 +124,9 @@ class FrontendController extends Controller
         $events = Events::orderBy('acara', 'desc')
             ->paginate(9);
 
-        return Inertia::render('Frontend/Events', [
+        return Inertia::render('Frontend/Events', array_merge([
             'events' => $events,
-        ]);
+        ], $this->commonData()));
     }
 
     public function detailEvent($slug)
@@ -135,10 +138,10 @@ class FrontendController extends Controller
             ->limit(3)
             ->get();
 
-        return Inertia::render('Frontend/DetailEvent', [
+        return Inertia::render('Frontend/DetailEvent', array_merge([
             'event' => $event,
             'relatedEvents' => $relatedEvents,
-        ]);
+        ], $this->commonData()));
     }
 
     public function alumni()
@@ -147,34 +150,33 @@ class FrontendController extends Controller
             ->orderBy('tahun_lulus', 'desc')
             ->paginate(12);
 
-        // Get stats
         $totalAlumni = Alumni::count();
         $alumniByYear = Alumni::selectRaw('tahun_lulus, COUNT(*) as count')
             ->groupBy('tahun_lulus')
             ->orderBy('tahun_lulus', 'desc')
             ->get();
 
-        return Inertia::render('Frontend/Alumni', [
+        return Inertia::render('Frontend/Alumni', array_merge([
             'alumni' => $alumni,
             'stats' => [
                 'total' => $totalAlumni,
                 'byYear' => $alumniByYear,
             ],
-        ]);
+        ], $this->commonData()));
     }
 
     public function tracerStudy()
     {
-        return Inertia::render('Frontend/TracerStudy');
+        return Inertia::render('Frontend/TracerStudy', $this->commonData());
     }
 
     public function forum()
     {
-        return Inertia::render('Frontend/Forum');
+        return Inertia::render('Frontend/Forum', $this->commonData());
     }
 
     public function donasi()
     {
-        return Inertia::render('Frontend/Donasi');
+        return Inertia::render('Frontend/Donasi', $this->commonData());
     }
 }

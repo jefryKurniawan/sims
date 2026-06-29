@@ -1,5 +1,4 @@
-import { Link, usePage } from '@inertiajs/inertia-react';
-import AdminLayout from '@/Layout/AdminLayout';
+import { Head, Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
 interface GuruItem {
@@ -35,7 +34,8 @@ export default function Index({ guru }: Props) {
     };
 
     return (
-        <AdminLayout title="GTK">
+        <>
+            <Head title="GTK" />
             <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold text-gray-800">GTK</h1>
@@ -104,6 +104,6 @@ export default function Index({ guru }: Props) {
                     </table>
                 </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }

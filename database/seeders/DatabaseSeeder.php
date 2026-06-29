@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             DonationSeeder::class,
             SiswaSeeder::class,
             DispensasiSeeder::class,
+            EventSeeder::class,
             SpmbApplicantSeeder::class,
             SpmbAfirmasiSeeder::class,
             SpmbPrestasiSeeder::class,
@@ -39,6 +40,8 @@ class DatabaseSeeder extends Seeder
             SpmbRankingSeeder::class,
             ForumThreadSeeder::class,
             ForumReplySeeder::class,
+            FooterSeeder::class,
+            SppTagihanSeeder::class,
         ]);
     }
 }

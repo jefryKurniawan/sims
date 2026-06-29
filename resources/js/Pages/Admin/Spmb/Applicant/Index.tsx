@@ -1,5 +1,6 @@
 import { usePage, Link } from '@inertiajs/inertia-react';
 import { useState } from 'react';
+import AdminLayout from '@/Layout/AdminLayout';
 
 export default function Index() {
     const { data } = usePage().props;
@@ -31,145 +32,145 @@ export default function Index() {
 
     const getStatusBadge = (status: string) => {
         const classes: Record<string, string> = {
-            draft: 'badge badge-neutral',
-            submitted: 'badge badge-info',
-            verifikasi_berkas: 'badge badge-warning',
-            lulus_seleksi: 'badge badge-success',
-            diterima: 'badge badge-success',
-            ditolak: 'badge badge-error',
+            draft: 'px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700',
+            submitted: 'px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700',
+            verifikasi_berkas: 'px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-700',
+            lulus_seleksi: 'px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700',
+            diterima: 'px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700',
+            ditolak: 'px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-700',
         };
-        return classes[status] || 'badge badge-neutral';
+        return classes[status] || 'px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700';
     };
 
     return (
-        <>
-            <div className="mb-6">
-                <h1 className="text-2xl font-bold">Pendaftar SPMB</h1>
+        <AdminLayout title="Pendaftar SPMB">
+            <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                    <h1 className="text-2xl font-bold text-gray-800">Pendaftar SPMB</h1>
+                </div>
+
                 {flash?.success && (
-                    <div className="mt-4 p-4 bg-green-100 dark:bg-green-900 dark:text-green-300 rounded-lg flex items-center">
-                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
+                    <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
                         {flash.success}
                     </div>
                 )}
-            </div>
 
-            <form onSubmit={handleSubmit} className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label className="label"><span className="label-text">Pencarian</span></label>
-                        <input
-                            type="text"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Nama, NISN, No. Registrasi..."
-                            className="input input-bordered w-full"
-                        />
+                <form onSubmit={handleSubmit} className="mb-6 bg-white rounded-lg border p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
+                            <input
+                                type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Nama, NISN, No. Registrasi..."
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Semua Status</option>
+                                <option value="draft">Draft</option>
+                                <option value="submitted">Submitted</option>
+                                <option value="verifikasi_berkas">Verifikasi Berkas</option>
+                                <option value="lulus_seleksi">Lulus Seleksi</option>
+                                <option value="diterima">Diterima</option>
+                                <option value="ditolak">Ditolak</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Jalur</label>
+                            <select value={jalurFilter} onChange={(e) => setJalurFilter(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Semua Jalur</option>
+                                <option value="reguler">Reguler</option>
+                                <option value="afirmasi">Afirmasi</option>
+                                <option value="prestasi">Prestasi</option>
+                            </select>
+                        </div>
+                        <div className="flex items-end space-x-2">
+                            <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 flex-1">Filter</button>
+                            <a href="/dashboard/spmb/applicant" className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Reset</a>
+                        </div>
                     </div>
-                    <div>
-                        <label className="label"><span className="label-text">Status</span></label>
-                        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="select select-bordered w-full">
-                            <option value="">Semua Status</option>
-                            <option value="draft">Draft</option>
-                            <option value="submitted">Submitted</option>
-                            <option value="verifikasi_berkas">Verifikasi Berkas</option>
-                            <option value="lulus_seleksi">Lulus Seleksi</option>
-                            <option value="diterima">Diterima</option>
-                            <option value="ditolak">Ditolak</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="label"><span className="label-text">Jalur</span></label>
-                        <select value={jalurFilter} onChange={(e) => setJalurFilter(e.target.value)} className="select select-bordered w-full">
-                            <option value="">Semua Jalur</option>
-                            <option value="reguler">Reguler</option>
-                            <option value="afirmasi">Afirmasi</option>
-                            <option value="prestasi">Prestasi</option>
-                        </select>
-                    </div>
-                    <div className="flex items-end space-x-2">
-                        <button type="submit" className="btn btn-primary flex-1">Filter</button>
-                        <a href="/dashboard/spmb/applicant" className="btn btn-outline">Reset</a>
-                    </div>
-                </div>
-            </form>
+                </form>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
-                <table className="table table-zebra w-full">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>No. Registrasi</th>
-                            <th>Nama Lengkap</th>
-                            <th>Jalur</th>
-                            <th>Status</th>
-                            <th>Skor</th>
-                            <th>Tanggal Daftar</th>
-                            <th className="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {applicants.data.length > 0 ? (
-                            applicants.data.map((a: any, index: number) => (
-                                <tr key={a.id} className="hover">
-                                    <td>{(applicants.current_page - 1) * applicants.per_page + index + 1}</td>
-                                    <td className="font-mono text-sm">{a.nomor_registrasi}</td>
-                                    <td>
-                                        <div className="font-semibold">{a.nama_lengkap}</div>
-                                        <div className="text-sm text-gray-500">{a.nisn}</div>
-                                    </td>
-                                    <td>{a.jalur_pendaftaran}</td>
-                                    <td>
-                                        <span className={`${getStatusBadge(a.status_pendaftaran)} badge-xs badge`}>
-                                            {a.status_pendaftaran?.replace(/_/g, ' ')}
-                                        </span>
-                                    </td>
-                                    <td>{a.ranking?.skor_total ? Number(a.ranking.skor_total).toFixed(2) : '-'}</td>
-                                    <td>{new Date(a.created_at).toLocaleDateString('id-ID')}</td>
-                                    <td className="text-center whitespace-nowrap">
-                                        <Link
-                                            href={route('spmb.applicant.show', a.id)}
-                                            className="btn btn-xs btn-outline mr-1"
-                                        >
-                                            Detail
-                                        </Link>
-                                        <button
-                                            onClick={() => handleDelete(a.id)}
-                                            className="btn btn-xs btn-error"
-                                        >
-                                            Hapus
-                                        </button>
+                <div className="bg-white rounded-lg border overflow-x-auto">
+                    <table className="w-full">
+                        <thead>
+                            <tr className="bg-gray-50 border-b">
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No. Registrasi</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nama Lengkap</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Jalur</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Skor</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Tanggal Daftar</th>
+                                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                            {applicants.data.length > 0 ? (
+                                applicants.data.map((a: any, index: number) => (
+                                    <tr key={a.id} className="hover:bg-gray-50">
+                                        <td className="px-4 py-3 text-sm text-gray-700">{(applicants.current_page - 1) * applicants.per_page + index + 1}</td>
+                                        <td className="px-4 py-3 text-sm font-mono text-gray-700">{a.nomor_registrasi}</td>
+                                        <td className="px-4 py-3 text-sm text-gray-700">
+                                            <div className="font-semibold">{a.nama_lengkap}</div>
+                                            <div className="text-xs text-gray-500">{a.nisn}</div>
+                                        </td>
+                                        <td className="px-4 py-3 text-sm text-gray-700">{a.jalur_pendaftaran}</td>
+                                        <td className="px-4 py-3">
+                                            <span className={getStatusBadge(a.status_pendaftaran)}>
+                                                {a.status_pendaftaran?.replace(/_/g, ' ')}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 text-sm text-gray-700">{a.ranking?.skor_total ? Number(a.ranking.skor_total).toFixed(2) : '-'}</td>
+                                        <td className="px-4 py-3 text-sm text-gray-700">{new Date(a.created_at).toLocaleDateString('id-ID')}</td>
+                                        <td className="px-4 py-3 text-center whitespace-nowrap">
+                                            <Link
+                                                href={route('spmb.applicant.show', a.id)}
+                                                className="px-3 py-1 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 mr-1"
+                                            >
+                                                Detail
+                                            </Link>
+                                            <button
+                                                onClick={() => handleDelete(a.id)}
+                                                className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
+                                            >
+                                                Hapus
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={8} className="px-4 py-8 text-center text-sm text-gray-500">
+                                        Tidak ada data pendaftar
                                     </td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={8} className="text-center py-8 text-gray-500">
-                                    Tidak ada data pendaftar
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                            )}
+                        </tbody>
+                    </table>
 
-                {applicants.data.length > 0 && (
-                    <div className="p-4 flex justify-between items-center border-t dark:border-gray-700">
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                            Menampilkan {applicants.from} - {applicants.to} dari {applicants.total} data
+                    {applicants.data.length > 0 && (
+                        <div className="px-4 py-3 flex justify-between items-center border-t">
+                            <div className="text-sm text-gray-600">
+                                Menampilkan {applicants.from} - {applicants.to} dari {applicants.total} data
+                            </div>
+                            <div className="flex gap-1">
+                                {applicants.prev_page_url && (
+                                    <Link href={applicants.prev_page_url} className="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">Prev</Link>
+                                )}
+                                <Link href={route('spmb.applicant.index', { ...filters, page: 1 })} className="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">1</Link>
+                                {applicants.next_page_url && (
+                                    <Link href={applicants.next_page_url} className="px-3 py-1 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">Next</Link>
+                                )}
+                            </div>
                         </div>
-                        <div className="join">
-                            {applicants.prev_page_url && (
-                                <Link href={applicants.prev_page_url} className="join-item btn btn-sm">Prev</Link>
-                            )}
-                            <Link href={route('spmb.applicant.index', { ...filters, page: 1 })} className="join-item btn btn-sm">1</Link>
-                            {applicants.next_page_url && (
-                                <Link href={applicants.next_page_url} className="join-item btn btn-sm">Next</Link>
-                            )}
-                        </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-        </>
+        </AdminLayout>
     );
 }

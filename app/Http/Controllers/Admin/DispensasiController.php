@@ -16,7 +16,7 @@ class DispensasiController extends Controller
     public function index()
     {
         $dispensasi = Dispensasi::with('siswa')->get();
-        $siswa = Siswa::select('id', 'nama', 'nisn')->get();
+        $siswa = Siswa::select('id', 'nama_lengkap', 'nisn')->get();
 
         return Inertia::render('Admin/Dispensasi/Index', [
             'dispensasi' => $dispensasi,
@@ -29,7 +29,7 @@ class DispensasiController extends Controller
      */
     public function create()
     {
-        $siswa = Siswa::select('id', 'nama', 'nisn')->get();
+        $siswa = Siswa::select('id', 'nama_lengkap', 'nisn')->get();
 
         return Inertia::render('Admin/Dispensasi/Create', [
             'siswa' => $siswa,
@@ -61,7 +61,7 @@ class DispensasiController extends Controller
      */
     public function edit(Dispensasi $dispensasi)
     {
-        $siswa = Siswa::select('id', 'nama', 'nisn')->get();
+        $siswa = Siswa::select('id', 'nama_lengkap', 'nisn')->get();
 
         return Inertia::render('Admin/Dispensasi/Edit', [
             'dispensasi' => $dispensasi,

@@ -11,6 +11,7 @@ use ErrorException;
 use Session;
 use DB;
 use Validator;
+use Inertia\Inertia;
 
 class MuridController extends Controller
 {
@@ -22,7 +23,9 @@ class MuridController extends Controller
     public function index()
     {
         $murid = User::whereIn('role',['Guest','Murid'])->get();
-        return view('backend.pengguna.murid.index', compact('murid'));
+        return Inertia::render('Admin/Murid/Index', [
+            'murid' => $murid,
+        ]);
     }
 
     /**
@@ -32,7 +35,7 @@ class MuridController extends Controller
      */
     public function create()
     {
-        return view('backend.pengguna.murid.create');
+        return Inertia::render('Admin/Murid/Create');
     }
 
     /**
@@ -124,7 +127,9 @@ class MuridController extends Controller
     public function edit($id)
     {
         $murid = User::whereIn('role',['Guest','Murid'])->find($id);
-        return view('backend.pengguna.murid.edit', compact('murid'));
+        return Inertia::render('Admin/Murid/Edit', [
+            'murid' => $murid,
+        ]);
     }
 
     /**

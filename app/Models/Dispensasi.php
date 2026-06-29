@@ -22,6 +22,6 @@ class Dispensasi extends Model
 
     public function siswa()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Siswa::class);
     }
 }

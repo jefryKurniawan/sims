@@ -27,9 +27,10 @@ class AlumniController extends Controller
      */
     public function create()
     {
-        $users = User::where('role', 'Alumni')->orWhere(function($q) {
-            $q->whereNull('alumni_id'); // maybe we want to allow any user to be assigned as alumni? For simplicity, we can show all users not already having alumni record.
-        })->get(['id', 'name', 'email']);
+        $assignedUserIds = Alumni::pluck('user_id');
+        $users = User::where('role', 'Alumni')
+            ->orWhereNotIn('id', $assignedUserIds)
+            ->get(['id', 'name', 'email']);
 
         return Inertia::render('Admin/Alumni/Create', [
             'users' => $users,
@@ -61,9 +62,10 @@ class AlumniController extends Controller
      */
     public function edit(Alumni $alumni)
     {
-        $users = User::where('id', $alumni->user_id)->orWhere(function($q) {
-            $q->whereNull('alumni_id');
-        })->get(['id', 'name', 'email']);
+        $assignedUserIds = Alumni::where('id', '!=', $alumni->id)->pluck('user_id');
+        $users = User::where('id', $alumni->user_id)
+            ->orWhereNotIn('id', $assignedUserIds)
+            ->get(['id', 'name', 'email']);
 
         return Inertia::render('Admin/Alumni/Edit', [
             'alumni' => $alumni,

@@ -1,2 +1,0 @@
-import{n as e,t}from"./app.js";import{t as n}from"./Head.js";var r=e(),i=t();function a(){let{props:e}=(0,r.usePage)(),{slug:t}=e;return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsx)(n,{title:`Kegiatan`}),(0,i.jsxs)(`div`,{className:`p-6`,children:[(0,i.jsx)(`h1`,{className:`text-2xl font-bold mb-6`,children:`Kegiatan Sekolah`}),(0,i.jsxs)(`p`,{className:`mb-4`,children:[`Informasi tentang kegiatan dengan slug: `,t]})]})]})}export{a as default};
-//# sourceMappingURL=Kegiatan.js.map

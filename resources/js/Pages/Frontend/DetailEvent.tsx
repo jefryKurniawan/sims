@@ -43,8 +43,9 @@ export default function DetailEvent({ event, relatedEvents }: Props) {
 
     return (
         <>
-            <Head title={event.title} />
-            <div className="min-h-screen bg-gray-50">
+            <Head title={`${event.title} - SMAS St. Bonaventura`} />
+            <Header />
+            <div className="min-h-screen bg-gray-50 pt-20">
                 {/* Hero Section */}
                 <div className="relative h-[400px] bg-gradient-to-br from-primary via-primary-dark to-purple-900 overflow-hidden">
                     {event.thumbnail ? (
@@ -205,6 +206,7 @@ export default function DetailEvent({ event, relatedEvents }: Props) {
                     </div>
                 </section>
             </div>
+            <Footer />
         </>
     );
 }

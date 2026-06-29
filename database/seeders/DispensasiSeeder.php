@@ -13,7 +13,7 @@ class DispensasiSeeder extends Seeder
         $siswaList = Siswa::inRandomOrder()->limit(10)->get();
         foreach ($siswaList as $siswa) {
             Dispensasi::create([
-                'siswa_id' => $siswa->user_id, // foreign key to users table
+                'siswa_id' => $siswa->id, // foreign key ke siswa.id (sebelumnya pakai user_id, sudah dimigrasi ke siswa.id)
                 'jenis' => $this->faker()->randomElement(['potongan', 'penundaan']),
                 'nominal' => $this->faker()->randomFloat(2, 0, 500000),
                 'tanggal_mulai' => $this->faker()->date(),

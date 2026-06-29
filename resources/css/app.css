@@ -1,22 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Work+Sans:wght@400;500&family=Hanken+Grotesk:wght@600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Google Fonts: Inter for International School */
-/* Imported via CDN in app.blade.php for performance */
-
 @theme {
-  --font-heading: 'Inter', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --margin-desktop: 64px;
+  --margin-mobile: 20px;
+  --gutter: 24px;
+  --container-max: 1280px;
+  --font-heading: 'Manrope', sans-serif;
+  --font-body: 'Work Sans', sans-serif;
+  --font-label: 'Hanken Grotesk', sans-serif;
 
   --color-primary: #003366;
   --color-primary-light: #004080;
   --color-primary-dark: #002244;
-  --color-secondary: #6c757d;
+  --color-secondary: #E31E24;
   --color-accent: #28a745;
 
   --color-sidebar: #1e293b;
   --color-sidebar-hover: #334155;
   --color-sidebar-active: #003366;
+
+  --color-navy-deep: #0b1c30;
+  --color-navy-medium: #132f4c;
+  --color-navy-card: #162a44;
+  --color-school-red: #ef4444;
+  --color-school-yellow: #facc15;
+  --color-school-orange: #fb923c;
+  --color-school-emerald: #28a745;
+  --color-surface-low: #eff4ff;
+  --color-surface-high: #dce3f5;
+  --color-on-primary-container: #001d36;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -37,26 +52,13 @@
     animation: fade-in-up 0.6s ease-out forwards;
 }
 
-.animation-delay-200 {
-    animation-delay: 0.2s;
-}
-
-.animation-delay-400 {
-    animation-delay: 0.4s;
-}
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
 
 /* Slider item transitions */
-.slide-item {
-    transition: opacity 1s ease-in-out;
-}
-
-.slide-item.active {
-    opacity: 1;
-}
-
-.slide-item.hidden {
-    opacity: 0;
-}
+.slide-item { transition: opacity 1s ease-in-out; }
+.slide-item.active { opacity: 1; }
+.slide-item.hidden { opacity: 0; }
 
 /* Line clamp utilities */
 .line-clamp-2 {
@@ -66,9 +68,31 @@
     overflow: hidden;
 }
 
+.nav-active {
+  border-bottom: 2px solid #E31E24;
+  color: #E31E24;
+  font-weight: 700;
+  padding-bottom: 4px;
+}
+
 .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+/* Custom Scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
 }

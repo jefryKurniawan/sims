@@ -5,6 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+    server: {
+        hmr: false,
+    },
     plugins: [
         tailwindcss(),
         laravel({
@@ -14,7 +17,7 @@ export default defineConfig({
             ],
             refresh: true,
         }),
-        react()
+        react({ jsxRuntime: 'automatic' })
     ],
     resolve: {
         alias: {

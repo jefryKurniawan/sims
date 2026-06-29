@@ -1,5 +1,4 @@
 import { Link, usePage } from '@inertiajs/inertia-react';
-import AdminLayout from '@/Layout/AdminLayout';
 import { Inertia } from '@inertiajs/inertia';
 
 interface UserDetail {
@@ -41,7 +40,8 @@ export default function Index({ perpus }: Props) {
     };
 
     return (
-        <AdminLayout title="Pengguna Perpustakaan">
+        <>
+            <Head title="Pengguna Perpustakaan" />
             <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold text-gray-800">Pengguna Perpustakaan</h1>
@@ -112,6 +112,6 @@ export default function Index({ perpus }: Props) {
                     </table>
                 </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }

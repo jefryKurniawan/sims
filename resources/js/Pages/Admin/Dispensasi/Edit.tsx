@@ -1,10 +1,10 @@
-import { useForm, usePage } from '@inertiajs/inertia-react';
-import { useEffect } from 'react';
+import { useForm, usePage, Link } from '@inertiajs/inertia-react';
+import AdminLayout from '@/Layout/AdminLayout';
 
 export default function Edit() {
-    const { data } = usePage().props;
-    const { dispensasi, siswa } = data;
-    const [form] = useForm({
+    const { data: pageData } = usePage().props;
+    const { dispensasi, siswa } = pageData;
+    const { data, setData, put, processing, errors, reset } = useForm({
         siswa_id: dispensasi.siswa_id || '',
         jenis: dispensasi.jenis || 'potongan',
         nominal: dispensasi.nominal || '',
@@ -13,125 +13,115 @@ export default function Edit() {
         keterangan: dispensasi.keterangan || '',
     });
 
-    useEffect(() => {
-        // Initialize form with dispensasi data
-        if (dispensasi) {
-            form.set('siswa_id', dispensasi.siswa_id);
-            form.set('jenis', dispensasi.jenis);
-            form.set('nominal', dispensasi.nominal);
-            form.set('tanggal_mulai', dispensasi.tanggal_mulai ? dispensasi.tanggal_mulai.split('T')[0] : '');
-            form.set('tanggal_selesai', dispensasi.tanggal_selesai ? dispensasi.tanggal_selesai.split('T')[0] : '');
-            form.set('keterangan', dispensasi.keterangan);
-        }
-    }, [dispensasi, form]);
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(route('dispensasi.update', dispensasi.id), form);
+        put(route('dispensasi.update', dispensasi.id), {
+            preserveScroll: true,
+        });
     };
 
     return (
-        <>
-            <div className="mb-6">
-                <h1 className="text-2xl font-bold">Edit Dispensasi</h1>
-                <Link
-                    href={route('dispensasi.index')}
-                    className="btn btn-outline mb-2"
-                >
-                    Kembali ke Daftar Dispensasi
-                </Link>
-            </div>
+        <AdminLayout title="Dispensasi SPP - Edit">
+            <div className="p-6">
+                <div className="mb-6">
+                    <h1 className="text-2xl font-bold">Edit Dispensasi</h1>
+                    <Link
+                        href={route('dispensasi.index')}
+                        className="inline-block px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 mt-2"
+                    >
+                        Kembali ke Daftar Dispensasi
+                    </Link>
+                </div>
 
-            <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
-                <div>
-                    <label className="block text-sm font-medium mb-2">Siswa</label>
-                    <select
-                        value={form.siswa_id}
-                        onChange={e => form.set('siswa_id', e.target.value)}
-                        className="select select-bordered w-full"
-                    >
-                        <option value="">Pilih Siswa</option>
-                        {siswa.map((s) => (
-                            <option key={s.id} value={s.id}>
-                                {s.nama} ({s.nisn})
-                            </option>
-                        ))}
-                    </select>
-                    {!!form.errors.siswa_id && <span className="text-error text-sm">{form.errors.siswa_id}</span>}
-                </div>
-                <div>
-                    <label className="block text-sm font-medium mb-2">Jenis Dispensasi</label>
-                    <select
-                        value={form.jenis}
-                        onChange={e => form.set('jenis', e.target.value)}
-                        className="select select-bordered w-full"
-                    >
-                        <option value="potongan">Potongan</option>
-                        <option value="penundaan">Penundaan</option>
-                    </select>
-                    {!!form.errors.jenis && <span className="text-error text-sm">{form.errors.jenis}</span>}
-                </div>
-                <div>
-                    <label className="block text-sm font-medium mb-2">Nominal (Rp)</label>
-                    <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        value={form.nominal}
-                        onChange={e => form.set('nominal', e.target.value)}
-                        className="input input-bordered w-full"
-                        placeholder="Nominal dispensasi"
-                    />
-                    {!!form.errors.nominal && <span className="text-error text-sm">{form.errors.nominal}</span>}
-                </div>
-                <div className="grid grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">Tanggal Mulai</label>
-                        <input
-                            type="date"
-                            value={form.tanggal_mulai}
-                            onChange={e => form.set('tanggal_mulai', e.target.value)}
-                            className="input input-bordered w-full"
-                        />
-                        {!!form.errors.tanggal_mulai && <span className="text-error text-sm">{form.errors.tanggal_mulai}</span>}
+                        <label className="block text-sm font-medium mb-2">Siswa</label>
+                        <select
+                            value={data.siswa_id}
+                            onChange={e => setData('siswa_id', e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                        >
+                            <option value="">Pilih Siswa</option>
+                            {siswa?.map((s) => (
+                                <option key={s.id} value={s.id}>
+                                    {s.nama_lengkap} ({s.nisn})
+                                </option>
+                            ))}
+                        </select>
+                        {errors.siswa_id && <span className="text-red-600 text-sm">{errors.siswa_id}</span>}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-2">Tanggal Selesai</label>
-                        <input
-                            type="date"
-                            value={form.tanggal_selesai}
-                            onChange={e => form.set('tanggal_selesai', e.target.value)}
-                            className="input input-bordered w-full"
-                        />
-                        {!!form.errors.tanggal_selesai && <span className="text-error text-sm">{form.errors.tanggal_selesai}</span>}
+                        <label className="block text-sm font-medium mb-2">Jenis Dispensasi</label>
+                        <select
+                            value={data.jenis}
+                            onChange={e => setData('jenis', e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                        >
+                            <option value="potongan">Potongan</option>
+                            <option value="penundaan">Penundaan</option>
+                        </select>
+                        {errors.jenis && <span className="text-red-600 text-sm">{errors.jenis}</span>}
                     </div>
-                </div>
-                <div>
-                    <label className="block text-sm font-medium mb-2">Keterangan</label>
-                    <textarea
-                        value={form.keterangan}
-                        onChange={e => form.set('keterangan', e.target.value)}
-                        className="textarea textarea-bordered w-full"
-                        rows={3}
-                        placeholder="Keterangan tambahan"
-                    />
-                    {!!form.errors.keterangan && <span className="text-error text-sm">{form.errors.keterangan}</span>}
-                </div>
-                <div className="flex justify-end space-x-2">
-                    <button
-                        type="button"
-                        onClick={() => {
-                            form.reset();
-                        }}
-                        className="btn btn-outline"
-                    >
-                        Batal
-                    </button>
-                    <button type="submit" className="btn btn-primary">
-                        Update Dispensasi
-                    </button>
-                </div>
-            </form>
-        </>
+                    <div>
+                        <label className="block text-sm font-medium mb-2">Nominal (Rp)</label>
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={data.nominal}
+                            onChange={e => setData('nominal', e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                            placeholder="Nominal dispensasi"
+                        />
+                        {errors.nominal && <span className="text-red-600 text-sm">{errors.nominal}</span>}
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-2">Tanggal Mulai</label>
+                            <input
+                                type="date"
+                                value={data.tanggal_mulai}
+                                onChange={e => setData('tanggal_mulai', e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                            />
+                            {errors.tanggal_mulai && <span className="text-red-600 text-sm">{errors.tanggal_mulai}</span>}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-2">Tanggal Selesai</label>
+                            <input
+                                type="date"
+                                value={data.tanggal_selesai}
+                                onChange={e => setData('tanggal_selesai', e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                            />
+                            {errors.tanggal_selesai && <span className="text-red-600 text-sm">{errors.tanggal_selesai}</span>}
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-2">Keterangan</label>
+                        <textarea
+                            value={data.keterangan}
+                            onChange={e => setData('keterangan', e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                            rows={3}
+                            placeholder="Keterangan tambahan"
+                        />
+                        {errors.keterangan && <span className="text-red-600 text-sm">{errors.keterangan}</span>}
+                    </div>
+                    <div className="flex justify-end space-x-2">
+                        <button
+                            type="button"
+                            onClick={() => reset()}
+                            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                            Batal
+                        </button>
+                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
+                            {processing ? 'Menyimpan...' : 'Update Dispensasi'}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </AdminLayout>
     );
 }

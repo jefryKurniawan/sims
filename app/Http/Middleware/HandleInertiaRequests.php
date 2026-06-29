@@ -2,46 +2,22 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
-    /**
-     * The root template that is loaded on the first page visit.
-     *
-     * @var string
-     */
     protected $rootView = 'app';
 
-    /**
-     * Determines the current asset version.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string|null
-     */
-    public function version(Request $request)
+    public function handle($request, Closure $next)
     {
-        return parent::version($request);
-    }
-
-    /**
-     * Defines the props that are shared by default.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function share(Request $request)
-    {
-        return array_merge(parent::share($request), [
+        Inertia::share([
             'auth' => [
-                'user' => $request->user() ? [
-                    'id' => $request->user()->id,
-                    'name' => $request->user()->name,
-                    'email' => $request->user()->email,
-                    'role' => $request->user()->role,
-                    'foto_profile' => $request->user()->foto_profile,
-                ] : null,
+                'user' => $request->user()
+                    ? $request->user()->only(['id', 'name', 'email', 'role', 'foto_profile'])
+                    : null,
             ],
             'flash' => [
                 'success' => $request->session()->get('success'),
@@ -50,5 +26,7 @@ class HandleInertiaRequests extends Middleware
                 'info' => $request->session()->get('info'),
             ],
         ]);
+
+        return parent::handle($request, $next);
     }
 }

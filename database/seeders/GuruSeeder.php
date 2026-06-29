@@ -4,7 +4,10 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Guru;
+use App\Models\User;
+use App\Models\UsersDetail;
 use Carbon\Carbon;
 
 class GuruSeeder extends Seeder
@@ -13,6 +16,7 @@ class GuruSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
         Guru::truncate();
+        User::where('role', 'Guru')->delete();
         Schema::enableForeignKeyConstraints();
 
         $gurus = [
@@ -65,24 +69,8 @@ class GuruSeeder extends Seeder
                 'tanggal_masuk' => '2019-07-15',
             ],
             [
-                'nama_lengkap' => 'Dwi Prasetyo',
-                'nuptk' => null,
-                'jenis_kelamin' => 'L',
-                'tempat_lahir' => 'Yogyakarta',
-                'tanggal_lahir' => '1995-05-18',
-                'agama' => 'Islam',
-                'alamat' => 'Jl. Pahlawan No. 12, Yogyakarta',
-                'no_telp' => '084567890123',
-                'email' => 'dwi@sekolah.sch.id',
-                'jenis' => 'Tenaga Kependidikan',
-                'bidang_studi' => null,
-                'jabatan' => 'Staff Tata Usaha',
-                'status_kepegawaian' => 'Tetap Yayasan',
-                'tanggal_masuk' => '2018-03-01',
-            ],
-            [
                 'nama_lengkap' => 'Eka Fitriani, S.Pd.',
-                'nuptk' => '123456789014',
+                'nuptk' => '123456789015',
                 'jenis_kelamin' => 'P',
                 'tempat_lahir' => 'Medan',
                 'tanggal_lahir' => '1992-09-27',
@@ -96,58 +84,31 @@ class GuruSeeder extends Seeder
                 'status_kepegawaian' => 'Kontrak',
                 'tanggal_masuk' => '2020-07-15',
             ],
-            [
-                'nama_lengkap' => 'Fajar Nugraha, S.Kom.',
-                'nuptk' => null,
-                'jenis_kelamin' => 'L',
-                'tempat_lahir' => 'Semarang',
-                'tanggal_lahir' => '1998-01-10',
-                'agama' => 'Islam',
-                'alamat' => 'Jl. Baru No. 5, Semarang',
-                'no_telp' => '086789012345',
-                'email' => 'fajar@sekolah.sch.id',
-                'jenis' => 'Tenaga Kependidikan',
-                'bidang_studi' => null,
-                'jabatan' => 'Staff IT',
-                'status_kepegawaian' => 'Kontrak',
-                'tanggal_masuk' => '2021-08-01',
-            ],
-            [
-                'nama_lengkap' => 'Gita Permata Sari, S.Ag.',
-                'nuptk' => '123456789015',
-                'jenis_kelamin' => 'P',
-                'tempat_lahir' => 'Makassar',
-                'tanggal_lahir' => '1988-12-05',
-                'agama' => 'Islam',
-                'alamat' => 'Jl. Indah No. 7, Makassar',
-                'no_telp' => '087890123456',
-                'email' => 'gita@sekolah.sch.id',
-                'jenis' => 'Guru',
-                'bidang_studi' => 'Pendidikan Agama Islam',
-                'jabatan' => 'Guru PAI',
-                'status_kepegawaian' => 'Tetap Yayasan',
-                'tanggal_masuk' => '2015-07-15',
-            ],
-            [
-                'nama_lengkap' => 'Hendra Gunawan',
-                'nuptk' => null,
-                'jenis_kelamin' => 'L',
-                'tempat_lahir' => 'Palembang',
-                'tanggal_lahir' => '1993-06-20',
-                'agama' => 'Islam',
-                'alamat' => 'Jl. Damai No. 21, Palembang',
-                'no_telp' => '088901234567',
-                'email' => 'hendra@sekolah.sch.id',
-                'jenis' => 'Tenaga Kependidikan',
-                'bidang_studi' => null,
-                'jabatan' => 'Staff Perpustakaan',
-                'status_kepegawaian' => 'Honorer',
-                'tanggal_masuk' => '2022-01-10',
-            ],
         ];
 
         foreach ($gurus as $guru) {
-            Guru::create($guru);
+            // Create in Guru table
+            $guruRecord = Guru::create($guru);
+
+            // Also create User + UsersDetail for frontend display
+            $usernameSlug = \Illuminate\Support\Str::slug($guru['nama_lengkap']);
+            $user = User::create([
+                'name' => $guru['nama_lengkap'],
+                'username' => $usernameSlug,
+                'email' => $guru['email'],
+                'password' => Hash::make('password'),
+                'role' => 'Guru',
+                'status' => 'Aktif',
+            ]);
+
+            UsersDetail::create([
+                'user_id' => $user->id,
+                'role' => 'Guru',
+                'mengajar' => $guru['bidang_studi'],
+                'nip' => $guru['nuptk'],
+                'email' => $guru['email'],
+                'is_active' => 1,
+            ]);
         }
     }
 }

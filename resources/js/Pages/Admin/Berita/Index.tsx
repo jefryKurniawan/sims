@@ -1,5 +1,4 @@
-import { Link, usePage } from '@inertiajs/inertia-react';
-import AdminLayout from '@/Layout/AdminLayout';
+import { Head, Link, usePage } from '@inertiajs/inertia-react';
 import Pagination from '@/Components/Pagination';
 import { useState } from 'react';
 import { Inertia } from '@inertiajs/inertia';
@@ -49,7 +48,8 @@ export default function Index({ berita, kategori, filters }: Props) {
     };
 
     return (
-        <AdminLayout title="Berita">
+        <>
+            <Head title="Berita" />
             <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold text-gray-800">Berita</h1>
@@ -158,6 +158,6 @@ export default function Index({ berita, kategori, filters }: Props) {
                     </>
                 )}
             </div>
-        </AdminLayout>
+        </>
     );
 }

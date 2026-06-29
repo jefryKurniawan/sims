@@ -27,8 +27,9 @@ interface Props {
 export default function ProgramStudi({ jurusan }: Props) {
     return (
         <>
-            <Head title={jurusan.nama} />
-            <div className="min-h-screen bg-gray-50">
+            <Head title={`${jurusan.nama} - SMAS St. Bonaventura`} />
+            <Header />
+            <div className="min-h-screen bg-gray-50 pt-20">
                 {/* Hero Section */}
                 <div className="relative h-[350px] bg-gradient-to-br from-primary via-primary-dark to-blue-900 overflow-hidden">
                     {jurusan.gambar ? (
@@ -133,6 +134,7 @@ export default function ProgramStudi({ jurusan }: Props) {
                     </div>
                 </section>
             </div>
+            <Footer />
         </>
     );
 }

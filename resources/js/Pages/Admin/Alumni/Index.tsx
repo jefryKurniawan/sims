@@ -1,5 +1,4 @@
-import { Link, usePage } from '@inertiajs/inertia-react';
-import AdminLayout from '@/Layout/AdminLayout';
+import { Head, Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
 interface User {
@@ -33,7 +32,8 @@ export default function Index({ alumni }: Props) {
     };
 
     return (
-        <AdminLayout title="Alumni">
+        <>
+            <Head title="Alumni" />
             <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold text-gray-800">Alumni</h1>
@@ -102,6 +102,6 @@ export default function Index({ alumni }: Props) {
                     </table>
                 </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }

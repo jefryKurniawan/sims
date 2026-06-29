@@ -1,9 +1,8 @@
 import { useForm, Head, Link } from '@inertiajs/inertia-react';
 import { useState } from 'react';
-import Header from '@/Components/Frontend/Header';
-import Footer from '@/Components/Frontend/Footer';
+import FrontendLayout from '@/Layout/FrontendLayout';
 
-export default function Register() {
+function Register() {
     const { data, setData, post, processing, errors, progress } = useForm({
         nisn: '',
         nama_lengkap: '',
@@ -409,3 +408,5 @@ export default function Register() {
         </>
     );
 }
+
+Register.layout = FrontendLayout;
