@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 import { useState, useEffect } from 'react';
-import { Head, usePage, Link } from '@inertiajs/inertia-react';
+import { Head, usePage, Link, useForm } from '@inertiajs/inertia-react';
 import Sidebar from './Sidebar';
 import { Menu, Bell, Mail, Search, ChevronRight } from 'lucide-react';
 import type { PageProps } from '@/types';
@@ -21,6 +21,16 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
     );
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [toastVisible, setToastVisible] = useState(false);
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const { post } = useForm();
+
+    const handleLogout = () => {
+        post('/auth/logout', {
+            onSuccess: () => {
+                // Inertia will handle the redirect to /login
+            },
+        });
+    };
 
     useEffect(() => {
         if (flash?.success || flash?.error) {
@@ -81,28 +91,43 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
 
                             {/* Right */}
                             <div className="flex items-center gap-3">
-                                <button className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all">
-                                    <Bell className="w-5 h-5" />
-                                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-school-red rounded-full ring-2 ring-white" />
-                                </button>
+                                <button classNameEndPoint>
+  </button>
                                 <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all">
                                     <Mail className="w-5 h-5" />
                                 </button>
 
-                                <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
-                                    <div className="text-right hidden sm:block">
-                                        <p className="text-sm font-semibold text-gray-800 font-body">
-                                            {auth?.user?.name || 'Admin'}
-                                        </p>
-                                        <p className="text-xs text-gray-500 font-label">
-                                            {auth?.user?.role || 'Administrator'}
-                                        </p>
-                                    </div>
-                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-sm flex-shrink-0">
-                                        <span className="text-sm font-bold text-white font-heading">
-                                            {auth?.user?.name?.charAt(0).toUpperCase() || 'A'}
-                                        </span>
-                                    </div>
+                                <div className="relative">
+                                    <button
+                                        onClick={() => setUserMenuOpen(!userMenuOpen)}
+                                        className="flex items-center gap-3 pl-3 border-l border-gray-200"
+                                    >
+                                        <div className="text-right hidden sm:block">
+                                            <p className="text-sm font-semibold text-gray-800 font-body">
+                                                {auth?.user?.name || 'Admin'}
+                                            </p>
+                                            <p className="text-xs text-gray-500 font-label">
+                                                {auth?.user?.role || 'Administrator'}
+                                            </p>
+                                        </div>
+                                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-sm flex-shrink-0">
+                                            <span className="text-sm font-bold text-white font-heading">
+                                                {auth?.user?.name?.charAt(0).toUpperCase() || 'A'}
+                                            </span>
+                                        </div>
+                                    </button>
+                                    {userMenuOpen && (
+                                        <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-xl z-50">
+                                            <div className="py-1">
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                                                >
+                                                    Logout
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

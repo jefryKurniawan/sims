@@ -35,10 +35,14 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const { url } = usePage();
+  const currentPath = new URL(url, window.location.origin).pathname;
+
   const isActive = (href: string): boolean => {
     if (href === '#') return false;
     try {
-      return window.location.pathname === href || window.location.pathname.startsWith(href + '/');
+      const target = new URL(href, window.location.origin).pathname;
+      return currentPath === target || currentPath.startsWith(target + '/');
     } catch {
       return false;
     }

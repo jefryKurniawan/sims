@@ -1,5 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
+import { Edit, Trash } from 'lucide-react';
 
 interface UserItem {
     id: number;
@@ -44,53 +45,51 @@ export default function Index({ murid }: Props) {
                     </div>
                 )}
 
-                <div className="bg-white rounded-lg border overflow-hidden">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="bg-gray-50 border-b">
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nama</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Username</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Role</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Aksi</th>
+                <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
+                    <table className="w-full text-sm text-left rtl:text-right text-body">
+                        <thead className="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
+                            <tr>
+                                <th scope="col" className="px-6 py-3 font-medium text-left whitespace-nowrap">No</th>
+                                <th scope="col" className="px-6 py-3 font-medium text-left whitespace-nowrap">Nama</th>
+                                <th scope="col" className="px-6 py-3 font-medium text-left whitespace-nowrap">Email</th>
+                                <th scope="col" className="px-6 py-3 font-medium text-left whitespace-nowrap">Username</th>
+                                <th scope="col" className="px-6 py-3 font-medium text-left whitespace-nowrap">Role</th>
+                                <th scope="col" className="px-6 py-3 font-medium text-left whitespace-nowrap">Status</th>
+                                <th scope="col" className="px-6 py-3 font-medium text-left whitespace-nowrap">Aksi</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y">
                             {murid.map((item, index) => (
-                                <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="px-4 py-3 text-sm text-gray-700">{index + 1}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.name}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.email}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.username}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.role}</td>
-                                    <td className="px-4 py-3">
+                                <tr key={item.id} className="">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{index + 1}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{item.name}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{item.email}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{item.username}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{item.role}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${item.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                                             {item.status === 'active' ? 'Aktif' : 'Nonaktif'}
                                         </span>
                                     </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex gap-2">
-                                            <Link
-                                                href={route('users.murid.edit', item.id)}
-                                                className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                            >
-                                                Edit
-                                            </Link>
-                                            <button
-                                                onClick={() => handleDelete(item.id)}
-                                                className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
-                                            >
-                                                Hapus
-                                            </button>
-                                        </div>
+                                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                                        <Link
+                                            href={route('users.murid.edit', item.id)}
+                                            className="mr-3"
+                                        >
+                                            <Edit className="h-5 w-5 text-blue-600 hover:text-blue-700" />
+                                        </Link>
+                                        <button
+                                            onClick={() => handleDelete(item.id)}
+                                            className="text-red-600 hover:text-red-700"
+                                        >
+                                            <Trash className="h-5 w-5" />
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
                             {murid.length === 0 && (
                                 <tr>
-                                    <td colSpan={7} className="px-4 py-8 text-center text-sm text-gray-500">
+                                    <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                                         Tidak ada data Calon Murid
                                     </td>
                                 </tr>

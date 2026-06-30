@@ -269,6 +269,14 @@ The UI should reflect a clean, professional, and trustworthy school‑management
      - Offline page: `public/offline.html`
      - Assets dicache saat first load, berfungsi offline setelahnya
 
+## Controller Structure
+- **Admin controllers**: `app/Http/Controllers/Admin/` (includes subdirs `Pengguna/`, `Spmb/`, `Website/`)
+- **Frontend controllers**: `app/Http/Controllers/Frontend/` (PageController, PpdbController, SpmbController, GuruController)
+- **Route files**: `routes/admin.php` — all admin/dashboard routes; `routes/frontend.php` — all public routes; `routes/web.php` is entry point that requires both
+- **Namespace**: RouteServiceProvider sets `$namespace = App\Http\Controllers`, so relative controller strings get prepended automatically
+- **Inertia page paths**: remain unchanged (e.g., `Pages/Admin/*`, `Pages/Frontend/*`, `Pages/Spmb/*`)
+- **Dual systems**: Old Blade modules (nWidart Modules: PPDB, SPP, Perpustakaan) coexist with new Inertia implementations
+
 ## Collaboration & Review
 - When creating a new feature branch, prefix it with `feature/` (e.g., `feature/ppdb-auto-sync`).
 - Open a Pull Request that includes:
@@ -277,41 +285,6 @@ The UI should reflect a clean, professional, and trustworthy school‑management
   - Any new migrations, seeders, and tests.
 - Request review from at least one other team member (ideally one backend and one frontend) before merging.
 - Ensure the CI pipeline runs (phpunit, npm test, linters) and passes.
-
-## References
-- [Laravel Documentation](https://laravel.com/docs)
-- [Inertia.js + React Guide](https://inertiajs.com/)
-- [tailwind-admin-reactjs-free Template](https://github.com/zuramai/tailwind-admin-reactjs-free)
-- [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs)
-- [shadcn/ui Documentation](https://ui.shadcn.com/)
-- [Google Fonts – Poppins & Open Sans](https://fonts.google.com/)
-- [PWA Basics](https://web.dev/progressive-web-apps/)
-
---- 
-
-## Session Summary (2026-06-29)
-
-### Goal
-Update dashboard / admin menu pages to match `resources/homepage.html` reference design.
-
-### Completed
-1. **Sidebar.tsx** — Removed collapsible accordion logic (`expandedGroups` state, `toggleGroup`, `<ChevronDown>` icons). All groups render always-open with static labels.
-2. **AppLayout.tsx** — Added `Mail` (lucide-react) icon in header between notification bell and user avatar.
-3. **Dashboard.tsx** — Added dark PPDB promo section (gradient navy bg, emerald accent, total pendaftar count, CTA link).
-4. **routes/web.php** — Fixed 500 error on `/auth/login`:
-   - Route was referencing non-existent `App\Http\Controllers\Inertia\AuthController`
-   - Changed import to `App\Http\Controllers\Auth\LoginController` and `*RegisterController`
-   - Updated route definitions to use `LoginController::class` / `RegisterController::class`
-5. **Build** — `vite build` passes clean (255 modules, 0 errors).
-
-### Remaining Frontend Gaps (from reference)
-- Sidebar: Icons shown inline (reference shows them, current sidebar has them too — verify).
-- Header: Right section matches (logo-text, icons, avatar — verified).
-- Dashboard: Dark PPDB promo section added. Other cards/stats look similar to reference.
-
-### PHP 8.5 Compatibility Note
-- Server runs PHP 8.5.7 — aggressive deprecations/incompatibilities possible (e.g., `Carbon\Carbon::setLastErrors()` type error in newer Carbon versions).
-- Carbon 2.73.0 is currently installed; `composer update` may be needed if Carbon errors resurface.
 
 ## Authentication & Authorization
 - **Guard**: `web` (session) for frontend, `sanctum` for API (Orang Tua).

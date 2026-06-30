@@ -65,7 +65,7 @@ class PrestasiController extends Controller
     {
         $validated = $request->validate([
             'siswa_id' => 'required|exists:siswa,id',
-            'jenis' => ['required', Rule::in(['akademik', 'non_akademik'])],
+            'jenis' => ['required', Rule::in(['akademik', 'non_akademik', 'nonakademik'])],
             'prestasi' => 'required|string|max:255',
             'tingkat' => 'required|string|max:100',
             'tanggal' => 'required|date',
@@ -107,7 +107,7 @@ class PrestasiController extends Controller
     {
         $validated = $request->validate([
             'siswa_id' => 'required|exists:siswa,id',
-            'jenis' => ['required', Rule::in(['akademik', 'non_akademik'])],
+            'jenis' => ['required', Rule::in(['akademik', 'non_akademik', 'nonakademik'])],
             'prestasi' => 'required|string|max:255',
             'tingkat' => 'required|string|max:100',
             'tanggal' => 'required|date',

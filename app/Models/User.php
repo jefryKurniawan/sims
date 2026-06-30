@@ -8,10 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Modules\Perpustakaan\Entities\Member;
-use Modules\PPDB\Entities\BerkasMurid;
-use Modules\PPDB\Entities\DataOrangTua;
-use Modules\SPP\Entities\BankAccount;
-use Modules\SPP\Entities\PaymentSpp;
+use App\Models\BankAccount;
+use App\Models\PaymentSpp;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -60,16 +58,6 @@ class User extends Authenticatable
     public function muridDetail()
     {
         return $this->belongsTo(dataMurid::class, 'id','user_id');
-    }
-
-    public function dataOrtu()
-    {
-        return $this->belongsTo(DataOrangTua::class,'id','user_id');
-    }
-
-    public function berkas()
-    {
-        return $this->belongsTo(BerkasMurid::class,'id','user_id');
     }
 
     public function member()

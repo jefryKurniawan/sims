@@ -9,6 +9,8 @@ class MenuItemsSeeder extends Seeder
 {
     public function run(): void
     {
+        // Clear existing menu items to avoid duplicates and stale routes
+        MenuItem::truncate();
         $groups = [
             // Dashboard
             [
@@ -91,14 +93,14 @@ class MenuItemsSeeder extends Seeder
                 'route' => null,
                 'order' => 7,
                 'children' => [
-                    ['label' => 'Berita', 'icon' => 'newspaper', 'route' => 'backend-berita.index', 'permission' => 'Admin'],
-                    ['label' => 'Event', 'icon' => 'calendar', 'route' => 'backend-event.index', 'permission' => 'Admin'],
-                    ['label' => 'Program Studi', 'icon' => 'book', 'route' => 'program-studi.index', 'permission' => 'Admin'],
-                    ['label' => 'Kegiatan', 'icon' => 'activity', 'route' => 'backend-kegiatan.index', 'permission' => 'Admin'],
-                    ['label' => 'Profile Sekolah', 'icon' => 'building', 'route' => 'backend-profile-sekolah.index', 'permission' => 'Admin'],
-                    ['label' => 'Visi & Misi', 'icon' => 'target', 'route' => 'backend-visimisi.index', 'permission' => 'Admin'],
-                    ['label' => 'Image Slider', 'icon' => 'image', 'route' => 'backend-imageslider.index', 'permission' => 'Admin'],
-                    ['label' => 'Footer', 'icon' => 'layout', 'route' => 'backend-footer.index', 'permission' => 'Admin'],
+                    ['label' => 'Berita', 'icon' => 'newspaper', 'route' => 'website.berita.index', 'permission' => 'Admin'],
+                    ['label' => 'Event', 'icon' => 'calendar', 'route' => 'website.event.index', 'permission' => 'Admin'],
+                    ['label' => 'Program Studi', 'icon' => 'book', 'route' => 'website.program-studi.index', 'permission' => 'Admin'],
+                    ['label' => 'Kegiatan', 'icon' => 'activity', 'route' => 'website.kegiatan.index', 'permission' => 'Admin'],
+                    ['label' => 'Profile Sekolah', 'icon' => 'building', 'route' => 'website.profile-sekolah.index', 'permission' => 'Admin'],
+                    ['label' => 'Visi & Misi', 'icon' => 'target', 'route' => 'website.visimisi.index', 'permission' => 'Admin'],
+                    ['label' => 'Image Slider', 'icon' => 'image', 'route' => 'website.slider.index', 'permission' => 'Admin'],
+                    ['label' => 'Footer', 'icon' => 'layout', 'route' => 'website.footer.index', 'permission' => 'Admin'],
                 ],
             ],
             // Pengguna
@@ -108,12 +110,12 @@ class MenuItemsSeeder extends Seeder
                 'route' => null,
                 'order' => 8,
                 'children' => [
-                    ['label' => 'Pengajar', 'icon' => 'chalkboard-teacher', 'route' => 'backend-pengguna-pengajar.index', 'permission' => 'Admin'],
-                    ['label' => 'Staf', 'icon' => 'briefcase', 'route' => 'backend-pengguna-staf.index', 'permission' => 'Admin'],
-                    ['label' => 'Murid', 'icon' => 'user-graduate', 'route' => 'backend-pengguna-murid.index', 'permission' => 'Admin'],
-                    ['label' => 'PPDB', 'icon' => 'user-plus', 'route' => 'backend-pengguna-ppdb.index', 'permission' => 'Admin'],
-                    ['label' => 'Perpustakaan', 'icon' => 'bookmark', 'route' => 'backend-pengguna-perpus.index', 'permission' => 'Admin'],
-                    ['label' => 'Bendahara', 'icon' => 'dollar-sign', 'route' => 'backend-pengguna-bendahara.index', 'permission' => 'Admin'],
+                    ['label' => 'Pengajar', 'icon' => 'chalkboard-teacher', 'route' => 'users.pengajar.index', 'permission' => 'Admin'],
+                    ['label' => 'Staf', 'icon' => 'briefcase', 'route' => 'users.staf.index', 'permission' => 'Admin'],
+                    ['label' => 'Murid', 'icon' => 'user-graduate', 'route' => 'users.murid.index', 'permission' => 'Admin'],
+                    ['label' => 'PPDB', 'icon' => 'user-plus', 'route' => 'users.ppdb.index', 'permission' => 'Admin'],
+                    ['label' => 'Perpustakaan', 'icon' => 'bookmark', 'route' => 'users.perpus.index', 'permission' => 'Admin'],
+                    ['label' => 'Bendahara', 'icon' => 'dollar-sign', 'route' => 'users.bendahara.index', 'permission' => 'Admin'],
                 ],
             ],
             // Pengaturan

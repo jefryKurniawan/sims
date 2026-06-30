@@ -1,5 +1,5 @@
-import { Head, Link, usePage } from '@inertiajs/inertia-react';
-import { Inertia } from '@inertiajs/inertia';
+import { Head, Link, usePage } from "@inertiajs/inertia-react";
+import { Inertia } from "@inertiajs/inertia";
 
 interface GuruItem {
     id: number;
@@ -28,8 +28,8 @@ export default function Index({ guru }: Props) {
     const { flash } = usePage().props;
 
     const handleDelete = (id: number) => {
-        if (confirm('Apakah anda yakin ingin menghapus data GTK ini?')) {
-            Inertia.delete(route('gtk.destroy', id));
+        if (confirm("Apakah anda yakin ingin menghapus data GTK ini?")) {
+            Inertia.delete(route("gtk.destroy", id));
         }
     };
 
@@ -40,7 +40,7 @@ export default function Index({ guru }: Props) {
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold text-gray-800">GTK</h1>
                     <Link
-                        href={route('gtk.create')}
+                        href={route("gtk.create")}
                         className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                     >
                         Tambah GTK
@@ -53,38 +53,55 @@ export default function Index({ guru }: Props) {
                     </div>
                 )}
 
-                <div className="bg-white rounded-lg border overflow-hidden">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="bg-gray-50 border-b">
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nama</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">NUPTK</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Jenis</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Jabatan</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No. Telp</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Aksi</th>
+                <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
+                    <table className="w-full text-sm text-left rtl:text-right text-body">
+                        <thead className="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
+                            <tr className="bg-gray-50">
+                                <th className="px-6 py-3 font-medium">No</th>
+                                <th className="px-6 py-3 font-medium">Nama</th>
+                                <th className="px-6 py-3 font-medium">NUPTK</th>
+                                <th className="px-6 py-3 font-medium">Jenis</th>
+                                <th className="px-6 py-3 font-medium">
+                                    Jabatan
+                                </th>
+                                <th className="px-6 py-3 font-medium">
+                                    No. Telp
+                                </th>
+                                <th className="px-6 py-3 font-medium">Aksi</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y">
                             {guru.map((item, index) => (
                                 <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="px-4 py-3 text-sm text-gray-700">{index + 1}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.nama_lengkap}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.nuptk || '-'}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.jenis}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.jabatan}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.no_telp}</td>
-                                    <td className="px-4 py-3">
+                                    <td className="px-6 py-4">{index + 1}</td>
+                                    <td className="px-6 py-4">
+                                        {item.nama_lengkap}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {item.nuptk || "-"}
+                                    </td>
+                                    <td className="px-6 py-4">{item.jenis}</td>
+                                    <td className="px-6 py-4">
+                                        {item.jabatan}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {item.no_telp}
+                                    </td>
+                                    <td className="px-6 py-4">
                                         <div className="flex gap-2">
                                             <Link
-                                                href={route('gtk.edit', item.id)}
+                                                href={route(
+                                                    "gtk.edit",
+                                                    item.id,
+                                                )}
                                                 className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
                                             >
                                                 Edit
                                             </Link>
                                             <button
-                                                onClick={() => handleDelete(item.id)}
+                                                onClick={() =>
+                                                    handleDelete(item.id)
+                                                }
                                                 className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
                                             >
                                                 Hapus
@@ -95,7 +112,10 @@ export default function Index({ guru }: Props) {
                             ))}
                             {guru.length === 0 && (
                                 <tr>
-                                    <td colSpan={7} className="px-4 py-8 text-center text-sm text-gray-500">
+                                    <td
+                                        colSpan={7}
+                                        className="px-4 py-8 text-center text-sm text-gray-500"
+                                    >
                                         Tidak ada data GTK
                                     </td>
                                 </tr>

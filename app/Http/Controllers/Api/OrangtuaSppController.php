@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Siswa;
 use App\Models\SppTagihan;
-use Modules\SPP\Entities\PaymentSpp;
-use Modules\SPP\Entities\DetailPaymentSpp;
+use App\Models\PaymentSpp;
+use App\Models\DetailPaymentSpp;
 use Carbon\Carbon;
 
 class OrangtuaSppController extends Controller
@@ -47,7 +47,7 @@ class OrangtuaSppController extends Controller
         $invoices = $tagihan->toArray();
 
         // Add monthly SPP installments (based on SppSetting amount for each month of current school year)
-        $sppSetting = \Modules\SPP\Entities\SppSetting::first();
+        $sppSetting = \App\Models\SppSetting::first();
         $monthlyAmount = $sppSetting ? $sppSetting->amount : 0;
         $currentYear = now()->year;
         // Assuming school year starts July? We'll just generate for months Jan-Dec of current year as example

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\AuditLog; // ponytail: added missing import for AuditLog
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;

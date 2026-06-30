@@ -27,7 +27,6 @@ class DatabaseSeeder extends Seeder
             PengumumanPpdbSeeder::class,
             AlumniSeeder::class,
             TracerStudySeeder::class,
-            DonationSeeder::class,
             SiswaSeeder::class,
             DispensasiSeeder::class,
             EventSeeder::class,

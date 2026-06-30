@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Modules\Murid\Http\Requests\ConfirmPaymentRequest;
-use Modules\SPP\Entities\DetailPaymentSpp;
+use App\Models\DetailPaymentSpp;
 
 class PembayaranController extends Controller
 {

@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Siswa;
 use App\Models\SppTagihan;
 use App\Models\Berita;
-use Modules\SPP\Entities\SppSetting;
+use App\Models\SppSetting;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;

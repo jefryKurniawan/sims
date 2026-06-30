@@ -26,13 +26,13 @@ export default function Login() {
                     Masuk ke Akun Anda
                 </h2>
 
-                {flash?.error && (
+                {flash.error && (
                     <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-700 dark:text-red-300">
                         {flash.error}
                     </div>
                 )}
 
-                {flash?.success && (
+                {flash.success && (
                     <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg text-sm text-green-700 dark:text-green-300">
                         {flash.success}
                     </div>

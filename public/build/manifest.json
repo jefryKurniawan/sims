@@ -219,6 +219,13 @@
       "_createLucideIcon.js"
     ]
   },
+  "_trash.js": {
+    "file": "assets/trash.js",
+    "name": "trash",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
   "_trending-up.js": {
     "file": "assets/trending-up.js",
     "name": "trending-up",
@@ -354,7 +361,9 @@
     "src": "resources/js/Pages/Admin/CalonSiswa/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "_jsx-runtime.js",
+      "_trash.js",
+      "_plus.js"
     ]
   },
   "resources/js/Pages/Admin/Dispensasi/Create.tsx": {
@@ -385,7 +394,9 @@
     "src": "resources/js/Pages/Admin/Dispensasi/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "_jsx-runtime.js",
+      "_trash.js",
+      "_plus.js"
     ]
   },
   "resources/js/Pages/Admin/Donasi/Create.tsx": {
@@ -500,7 +511,8 @@
     "src": "resources/js/Pages/Admin/Murid/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "_jsx-runtime.js",
+      "_trash.js"
     ]
   },
   "resources/js/Pages/Admin/Perpustakaan/Create.tsx": {
@@ -744,8 +756,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_trash.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Ranking/Index.tsx": {
@@ -765,7 +776,8 @@
     "src": "resources/js/Pages/Admin/Spp/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "_jsx-runtime.js",
+      "_trash.js"
     ]
   },
   "resources/js/Pages/Admin/TracerStudy/Create.tsx": {
