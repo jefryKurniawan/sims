@@ -19,6 +19,48 @@ The next phase consists of targeted improvements outlined in the PRD. The goal i
 - Keep the codebase clean: remove commented‑out code, adhere to Laravel naming conventions, and use type‑hinting where possible.
 - All new UI components must be accessible (WCAG 2.1 AA) and responsive.
 
+## Reusable Frontend Code Patterns (Inertia React)
+
+Semua kode React baru di `resources/js/` WAJIB mengikuti pola di bawah. Lihat `docs/lean-prd.md` untuk versi lengkap dengan kode contoh.
+
+### Routing & Data
+- **Form handling**: WAJIB `useForm` dari `@inertiajs/inertia-react`. Jangan React Hook Form, Formik, atau `fetch()`.
+- **Data fetching**: via Inertia props saja. Controller kirim `Inertia::render('Page', [...])`, page terima via destructured props. Shared props via `usePage().props`.
+- **File upload**: `useState` + `FormData` + `Inertia.post()`.
+
+### Tables
+- **WAJIB** `@tanstack/react-table` untuk semua tabel baru. Jangan `<table>` manual.
+- Pagination: package `Components/Pagination.tsx` (admin), `Components/Frontend/Pagination.tsx` (public).
+
+### Layout Resolution
+- `Pages/Admin/*` → otomatis dibungkus AppLayout (sidebar + topbar).
+- `Pages/Frontend/*`, `Pages/Spmb/*`, `Pages/Auth/*` → TIDAK dibungkus AppLayout (self-contained).
+- Override: export `.layout = GuestLayout` pada page.
+
+### Icons
+- WAJIB `lucide-react`, import spesifik untuk tree-shaking `import { User } from 'lucide-react'`.
+- Dynamic: `<Icon name="User" />` dari `@/lib/icons`.
+- Jangan FontAwesome, Heroicons, @iconify/react, react-icons.
+
+### Components
+| shadcn/ui siap pakai | Radix tersedia (belum di-wrap) |
+|---|---|
+| Button, Input, Card, Badge, Checkbox | Accordion, Collapsible, Popover |
+| DropdownMenu, Label, Separator | Progress, RadioGroup, Select |
+| Avatar, Sheet | Switch, Tabs, Tooltip |
+
+### State & Validation
+- **Zustand** untuk global state. Buat store di `resources/js/store/`.
+- **Arktype** untuk runtime validation (opsional, belum dipakai di pages).
+
+### Flash Messages
+Controller: `->with('success', '...')` → otomatis di-render AppLayout. Tidak perlu render manual.
+
+### Aksesibilitas
+- Setiap `<input>` harus punya `<label>` dengan `htmlFor`.
+- Tombol harus punya `type` eksplisit (`button`, `submit`, `reset`).
+- Icon-only button harus punya `aria-label`.
+
 ## Instructions for Laravel‑Specialist
 
 ### 1. **PPDB. PPDB Enhancements
@@ -145,14 +187,7 @@ The UI should reflect a clean, professional, and trustworthy school‑management
    - Copy the Mazer template’s `layouts/app.blade.php` (or equivalent) into `resources/views/layouts/app.blade.php`.
    - Replace placeholder content with the Laravel‑Blade `@yield('content')` wrapper for Inertia.
    - Adjust the sidebar menu items to match the modules: Dashboard, Siswa, PPDB, SPP, Perpustakaan, Alumni, Laporan, Pengguna, Settings.
-3. **Component Library** (optional but recommended):
-   - Create a reusable `components/` folder under `resources/js` for common UI elements:
-     - `BaseButton.vue` (or `.jsx`) – props: variant (primary, secondary, danger), size, loading.
-     - `BaseInput.vue` – supports text, email, password, number, date.
-     - `SelectDropdown.vue` – with search capability.
-     - `DataTable.vue` – wraps a server‑side paginated table, accepts columns definition and endpoint.
-   - Use these components in all pages to guarantee consistency.
-4. **Pages to Build/Update** (based on PRD):
+3. **Pages to Build/Update** (based on PRD):
    - **Dashboard**: show summary cards and quick links.
    - **PPDB**: list applicants with filters (status, tanggal); detail view shows ability to “Terima” (accept) which triggers backend sync.
    - **SPO–SPP**: tagihan list, pembayaran form, dispensasi management.

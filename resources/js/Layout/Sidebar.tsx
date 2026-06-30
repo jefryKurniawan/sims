@@ -3,7 +3,7 @@ import { usePage, Link } from '@inertiajs/inertia-react';
 import {
   X, LayoutDashboard, Users, CreditCard, BookOpen, GraduationCap,
   Globe, Settings, Cog, UserPlus, Library, FileText,
-  ScrollText, BarChart3, School, Images
+  ScrollText, BarChart3, School, Trophy
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -116,8 +116,8 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
         },
         {
           title: 'Galeri Prestasi',
-          href: '#',
-          icon: <Images className="w-5 h-5" />
+          href: route('admin.prestasi.index'),
+          icon: <Trophy className="w-5 h-5" />
         },
       ]
     },

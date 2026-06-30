@@ -12,111 +12,123 @@ class PrestasiController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $prestasi = Prestasi::with('siswa.user')->paginate(10);
-        return response()->json($prestasi);
+        $query = Prestasi::with(['siswa', 'siswa.user'])->orderBy('created_at', 'desc');
+
+        // filter by jenis
+        if ($request->filled('jenis')) {
+            $query->where('jenis', $request->jenis);
+        }
+
+        // filter by tingkat
+        if ($request->filled('tingkat')) {
+            $query->where('tingkat', 'like', "%{$request->tingkat}%");
+        }
+
+        // search keyword in prestasi & siswa id
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('prestasi', 'like', "%{$search}%")
+                  ->orWhere('siswa_id', $search);
+            });
+        }
+
+        $prestasis = $query->paginate(10);
+        $jenisList = Prestasi::selectRaw('distinct jenis')->pluck('jenis');
+        return inertia('Admin/Prestasi/Index', [
+            'prestasis' => $prestasis,
+            'filters' => [
+                'jenis' => $request->jenis,
+                'tingkat' => $request->tingkat,
+                'search' => $request->search,
+            ],
+            'jenisList' => $jenisList,
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        // For API, we can return metadata like list of siswa for dropdown.
-        $siswa = Siswa::select('id', 'nama_lengkap')->get();
-        return response()->json(['siswa_options' => $siswa]);
+        $siswa = Siswa::with('user')->orderBy('nama_lengkap')->get();
+        return inertia('Admin/Prestasi/Create', ['siswa' => $siswa]);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'siswa_id' => 'required|exists:siswa,id',
-            'jenis' => ['required', Rule::in(['akademik', 'nonakademik'])],
+            'jenis' => ['required', Rule::in(['akademik', 'non_akademik'])],
             'prestasi' => 'required|string|max:255',
             'tingkat' => 'required|string|max:100',
             'tanggal' => 'required|date',
-            'bukti' => 'nullable|string|max:255', // path to file
-            'keterangan' => 'nullable|string',
+            'bukti' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
+            'keterangan' => 'nullable|string|max:500',
         ]);
 
-        $prestasi = Prestasi::create($validated);
+        if ($request->hasFile('bukti')) {
+            $validated['bukti'] = $request->file('bukti')->store('prestasi-bukti', 'public');
+        }
 
-        return response()->json($prestasi, 201);
+        Prestasi::create($validated);
+        return redirect()->route('admin.prestasi.index')->with('success', 'Prestasi berhasil ditambahkan.');
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Prestasi $prestasi)
     {
-        $prestasi = Prestasi::with('siswa.user')->findOrFail($id);
-        return response()->json($prestasi);
+        $prestasi->load(['siswa', 'siswa.user']);
+        return inertia('Admin/Prestasi/Show', ['prestasi' => $prestasi]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Prestasi $prestasi)
     {
-        $prestasi = Prestasi::findOrFail($id);
-        return response()->json($prestasi);
+        $prestasi->load('siswa');
+        $siswa = Siswa::with('user')->orderBy('nama_lengkap')->get();
+        return inertia('Admin/Prestasi/Edit', ['prestasi' => $prestasi, 'siswa' => $siswa]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Prestasi $prestasi)
     {
-        $prestasi = Prestasi::findOrFail($id);
-
         $validated = $request->validate([
-            'siswa_id' => 'sometimes|required|exists:siswa,id',
-            'jenis' => ['sometimes', Rule::in(['akademik', 'nonakademik'])],
-            'prestasi' => 'sometimes|string|max:255',
-            'tingkat' => 'sometimes|string|max:100',
-            'tanggal' => 'sometimes|date',
-            'bukti' => 'sometimes|nullable|string|max:255',
-            'keterangan' => 'sometimes|nullable|string',
+            'siswa_id' => 'required|exists:siswa,id',
+            'jenis' => ['required', Rule::in(['akademik', 'non_akademik'])],
+            'prestasi' => 'required|string|max:255',
+            'tingkat' => 'required|string|max:100',
+            'tanggal' => 'required|date',
+            'bukti' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
+            'keterangan' => 'nullable|string|max:500',
         ]);
 
-        $prestasi->update($validated);
+        if ($request->hasFile('bukti')) {
+            $validated['bukti'] = $request->file('bukti')->store('prestasi-bukti', 'public');
+        }
 
-        return response()->json($prestasi);
+        $prestasi->update($validated);
+        return redirect()->route('admin.prestasi.index')->with('success', 'Prestasi berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Prestasi $prestasi)
     {
-        $prestasi = Prestasi::findOrFail($id);
         $prestasi->delete();
-
-        return response()->json(['message' => 'Prestasi deleted']);
+        return redirect()->route('admin.prestasi.index')->with('success', 'Prestasi berhasil dihapus.');
     }
 }

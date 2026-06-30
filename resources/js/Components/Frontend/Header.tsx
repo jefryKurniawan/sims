@@ -12,7 +12,7 @@ const menuItems = [
   { label: 'Alumni', href: '/alumni' },
   { label: 'Visi Misi', href: '/visi-dan-misi' },
   { label: 'Mapel', href: '/program/ipa' },
-  { label: 'Event', href: '/event' },
+  { label: 'Guru', href: '/guru' },
 ];
 
 export default function Header() {

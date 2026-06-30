@@ -226,7 +226,7 @@ export default function Index({
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pilar Akademik & Karakter Kami</h2>
               <p className="text-gray-600 text-lg">Mengenal lebih dekat para pendidik yang berdedikasi</p>
             </div>
-            <Link href="#" className="inline-flex items-center gap-2 text-white font-bold px-8 py-3 rounded-full hover:shadow-lg transition-all" style={{ backgroundColor: secondaryColor }}>
+            <Link href="/guru" className="inline-flex items-center gap-2 text-white font-bold px-8 py-3 rounded-full hover:shadow-lg transition-all" style={{ backgroundColor: secondaryColor }}>
               Lihat Semua Daftar Guru
             </Link>
           </div>

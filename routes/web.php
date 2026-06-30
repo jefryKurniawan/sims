@@ -42,6 +42,9 @@ Route::get('alumni/tracer-study', 'Inertia\FrontendController@tracerStudy')->nam
 Route::get('alumni/forum', 'Inertia\FrontendController@forum')->name('alumni.forum');
 Route::get('alumni/donasi', 'Inertia\FrontendController@donasi')->name('alumni.donasi');
 
+//// GURU & TENAGA KEPENDIDIKAN \\
+Route::get('guru', [App\Http\Controllers\Frontend\GuruController::class, 'index'])->name('guru');
+
 //// PPDB - Hybrid Registration (No Login Required) \\
 Route::prefix('ppdb')->group(function () {
     Route::get('/daftar', [App\Http\Controllers\Inertia\FrontendPpdbController::class, 'register'])->name('ppdb.frontend.register');
@@ -134,6 +137,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
 
         //// ALUMNI \\
         Route::resource('alumni', 'Admin\AlumniController');
+        Route::resource('alumni/donasi', 'Admin\DonasiController', ['as' => 'alumni']);
+        Route::post('alumni/donasi/{donasi}/verify', 'Admin\DonasiController@verify')->name('alumni.donasi.verify');
+        Route::resource('alumni/tracer-study', 'Admin\TracerStudyController', ['as' => 'alumni']);
         Route::resource('berita-admin', 'Admin\BeritaController');
 
         //// USER MANAGEMENT \\
@@ -143,6 +149,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::resource('users/ppdb', 'Backend\Pengguna\PPDBController', ['as' => 'users']);
         Route::resource('users/perpus', 'Backend\Pengguna\PerpusController', ['as' => 'users']);
         Route::resource('users/bendahara', 'Backend\Pengguna\BendaharaController', ['as' => 'users']);
+
+        //// PRESTASI SISWA \\
+        Route::resource('prestasi', 'Admin\PrestasiController', ['as' => 'admin']);
 
         //// SPP - DISPENSI \\
         Route::resource('dispensasi', 'Admin\DispensasiController');

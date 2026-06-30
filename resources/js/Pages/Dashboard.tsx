@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts';
 import type { ApexOptions } from 'apexcharts';
 import {
   Users, UserPlus, BookOpen, CreditCard, TrendingUp, TrendingDown,
-  School, Library, Globe, BarChart3,
+  School, Library, Globe, BarChart3, Trophy,
   ChevronRight, Calendar, Clock, ArrowUpRight, ArrowRight
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -229,6 +229,14 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
       color: 'text-teal-600',
       bgColor: 'bg-teal-50',
     },
+    {
+      title: 'Galeri Prestasi',
+      desc: 'Prestasi akademik & non-akademik',
+      href: route('admin.prestasi.index'),
+      icon: <Trophy className="w-6 h-6" />,
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-50',
+    },
   ];
 
   const activityColors = ['bg-emerald-500', 'bg-blue-500', 'bg-purple-500', 'bg-orange-500', 'bg-rose-500', 'bg-cyan-500', 'bg-amber-500', 'bg-indigo-500'];
@@ -360,7 +368,7 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
           <h2 className="text-lg font-bold text-gray-900 font-heading mb-4">
             Akses Cepat
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickAccess.map((item, index) => (
               <Link
                 key={index}
