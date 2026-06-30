@@ -15,6 +15,18 @@ class SpmbPublicController extends Controller
         private SpmbRegistrationService $registrationService,
     ) {}
 
+    public function index()
+    {
+        // Ambil SPMB config yang sedang aktif (untuk banner & info)
+        $config = SpmbConfig::where('aktif', true)
+            ->orderBy('tahun_ajaran', 'desc')
+            ->first();
+
+        return Inertia::render('Spmb/Index', [
+            'config' => $config,
+        ]);
+    }
+
     public function pendaftaran()
     {
         $config = SpmbConfig::where('aktif', true)

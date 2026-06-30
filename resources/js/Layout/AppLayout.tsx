@@ -13,7 +13,12 @@ interface AppLayoutProps {
 export default function AppLayout({ children, title }: AppLayoutProps) {
     const { auth, flash } = usePage().props as unknown as PageProps;
     const component = usePage().component as string | undefined;
-    const isLanding = component && component.startsWith('Frontend/');
+    // ponytail: Halaman ini self-contained (punya Header/Footer sendiri) — bypass admin chrome.
+    const isLanding = !!component && (
+        component.startsWith('Frontend/') ||
+        component.startsWith('Spmb/') ||
+        component.startsWith('Auth/')
+    );
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [toastVisible, setToastVisible] = useState(false);
 

@@ -59,8 +59,8 @@ createInertiaApp({
             import.meta.glob('./Pages/**/*.tsx')
         );
 
-        // Skip layout wrapping for Frontend pages
-        if (name.startsWith('Frontend/')) {
+        // Skip layout wrapping for public (self-contained with own Header/Footer) pages
+        if (name.startsWith('Frontend/') || name.startsWith('Spmb/') || name.startsWith('Auth/')) {
             return page;
         }
 

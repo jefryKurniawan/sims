@@ -15,6 +15,7 @@ class Events extends Model
         'title',
         'slug',
         'content',
+        'full_content',
         'desc',
         'thumbnail',
         'acara',

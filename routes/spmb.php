@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 // Public Routes (No Login Required)
 Route::prefix('spmb')->group(function () {
+    Route::get('/', [App\Http\Controllers\SpmbPublicController::class, 'index'])->name('spmb.index');
     Route::get('/daftar', [App\Http\Controllers\SpmbPublicController::class, 'pendaftaran'])->name('spmb.pendaftaran');
     Route::post('/daftar', [App\Http\Controllers\SpmbPublicController::class, 'store'])->name('spmb.store');
     Route::get('/sukses', [App\Http\Controllers\SpmbPublicController::class, 'berhasil'])->name('spmb.berhasil');

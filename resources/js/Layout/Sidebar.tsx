@@ -59,6 +59,11 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           icon: <UserPlus className="w-5 h-5" />,
           badge: 'New'
         },
+        {
+          title: 'Konfigurasi SPMB',
+          href: route('spmb.config.index'),
+          icon: <Cog className="w-5 h-5" />,
+        },
       ]
     },
     {
