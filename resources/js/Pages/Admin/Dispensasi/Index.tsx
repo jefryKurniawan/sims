@@ -1,7 +1,7 @@
 import { Head, useForm, usePage, Link } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 import { useState } from 'react';
-import { Edit, Trash, Plus } from 'lucide-react';
+import { Edit, Trash, Plus, Eye } from 'lucide-react';
 
 export default function Index() {
   const { dispensasi, siswa, flash } = usePage().props;
@@ -68,7 +68,7 @@ export default function Index() {
                 <select
                   value={form.siswa_id}
                   onChange={e => form.set('siswa_id', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                 >
                   <option value="">Pilih Siswa</option>
                   {siswa.map((s: any) => (
@@ -84,7 +84,7 @@ export default function Index() {
                 <select
                   value={form.jenis}
                   onChange={e => form.set('jenis', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                 >
                   <option value="potongan">Potongan</option>
                   <option value="penundaan">Penundaan</option>
@@ -100,7 +100,7 @@ export default function Index() {
                     min="0"
                     value={form.nominal}
                     onChange={e => form.set('nominal', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                     placeholder="Nominal dispensasi"
                   />
                   {!!form.errors.nominal && <span className="text-red-600 text-sm">{form.errors.nominal}</span>}
@@ -111,7 +111,7 @@ export default function Index() {
                     type="date"
                     value={form.tanggal_mulai}
                     onChange={e => form.set('tanggal_mulai', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                   />
                   {!!form.errors.tanggal_mulai && <span className="text-red-600 text-sm">{form.errors.tanggal_mulai}</span>}
                 </div>
@@ -123,7 +123,7 @@ export default function Index() {
                     type="date"
                     value={form.tanggal_selesai}
                     onChange={e => form.set('tanggal_selesai', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                   />
                   {!!form.errors.tanggal_selesai && <span className="text-red-600 text-sm">{form.errors.tanggal_selesai}</span>}
                 </div>
@@ -132,7 +132,7 @@ export default function Index() {
                   <textarea
                     value={form.keterangan}
                     onChange={e => form.set('keterangan', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                     rows={3}
                     placeholder="Keterangan tambahan"
                   />
@@ -162,31 +162,31 @@ export default function Index() {
           <table className="w-full text-sm text-left rtl:text-right text-body">
             <thead className="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
               <tr>
-                <th scope="col" className="px-6 py-3 font-medium">Siswa</th>
-                <th scope="col" className="px-6 py-3 font-medium">Jenis</th>
-                <th scope="col" className="px-6 py-3 font-medium">Nominal</th>
-                <th scope="col" className="px-6 py-3 font-medium">Periode</th>
-                <th scope="col" className="px-6 py-3 font-medium">Keterangan</th>
-                <th scope="col" className="px-6 py-3 font-medium">Aksi</th>
+                <th scope="col" className="px-4 py-3 font-medium">Siswa</th>
+                <th scope="col" className="px-4 py-3 font-medium">Jenis</th>
+                <th scope="col" className="px-4 py-3 font-medium">Nominal</th>
+                <th scope="col" className="px-4 py-3 font-medium">Periode</th>
+                <th scope="col" className="px-4 py-3 font-medium">Keterangan</th>
+                <th scope="col" className="px-4 py-3 font-medium">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {dispensasi.length > 0 ? (
                 dispensasi.map((d: any) => (
                   <tr key={d.id} className="">
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3">
                       {d.siswa?.nama_lengkap ?? 'Tidak Diketahui'} <br />
                       <span className="text-xs text-gray-500">({d.siswa?.nisn ?? '-'})</span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${d.jenis === 'potongan' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
                         {d.jenis === 'potongan' ? 'Potongan' : 'Penundaan'}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3">
                       Rp {parseFloat(d.nominal).toLocaleString('id-ID')}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3">
                       {d.tanggal_mulai ? (
                         <>
                           {new Date(d.tanggal_mulai).toLocaleDateString('id-ID')}
@@ -197,42 +197,53 @@ export default function Index() {
                         </>
                       ) : '-'}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-3">
                       {d.keterangan ?? '-'}
                     </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                      <span
-                        onClick={() => {
-                          setShowForm(true);
-                          setEditing(true);
-                          setDispensasiId(d.id);
-                          form.set('siswa_id', d.siswa_id);
-                          form.set('jenis', d.jenis);
-                          form.set('nominal', d.nominal);
-                          form.set('tanggal_mulai', d.tanggal_mulai);
-                          form.set('tanggal_selesai', d.tanggal_selesai);
-                          form.set('keterangan', d.keterangan);
-                        }}
-                        className="cursor-pointer hover:text-blue-600 mr-2"
-                      >
-                        <Edit className="h-5 w-5" />
-                      </span>
-                      <span
-                        onClick={() => {
-                          if (window.confirm('Yakin ingin menghapus dispensasi ini?')) {
-                            Inertia.delete(route('dispensasi.destroy', d.id));
-                          }
-                        }}
-                        className="cursor-pointer hover:text-red-600"
-                      >
-                        <Trash className="h-5 w-5" />
-                      </span>
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
+                      <div className="flex items-center justify-center gap-2">
+                        <span
+                          onClick={() => {
+                            // Navigate to detail page
+                            Inertia.visit(route('dispensasi.show', d.id));
+                          }}
+                          className="cursor-pointer hover:text-indigo-600"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </span>
+                        <span
+                          onClick={() => {
+                            setShowForm(true);
+                            setEditing(true);
+                            setDispensasiId(d.id);
+                            form.data.siswa_id = d.siswa_id;
+                            form.data.jenis = d.jenis;
+                            form.data.nominal = String(d.nominal);
+                            form.data.tanggal_mulai = d.tanggal_mulai;
+                            form.data.tanggal_selesai = d.tanggal_selesai;
+                            form.data.keterangan = d.keterangan;
+                          }}
+                          className="cursor-pointer hover:text-blue-600"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </span>
+                        <span
+                          onClick={() => {
+                            if (window.confirm('Yakin ingin menghapus dispensasi ini?')) {
+                              Inertia.delete(route('dispensasi.destroy', d.id));
+                            }
+                          }}
+                          className="cursor-pointer hover:text-red-600"
+                        >
+                          <Trash className="h-4 w-4" />
+                        </span>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                  <td colSpan={6} className="px-4 py-3 text-center text-gray-500">
                     Tidak ada data dispensasi
                   </td>
                 </tr>

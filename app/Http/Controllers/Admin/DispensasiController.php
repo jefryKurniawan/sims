@@ -70,6 +70,16 @@ class DispensasiController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Dispensasi $dispensasi)
+    {
+        return Inertia::render('Admin/Dispensasi/Show', [
+            'dispensasi' => $dispensasi->load('siswa'),
+        ]);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Dispensasi $dispensasi)
