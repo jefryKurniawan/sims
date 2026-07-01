@@ -1,28 +1,28 @@
-import { useForm, usePage } from '@inertiajs/inertia-react';
-import Head from '@/Layout/Head';
-import GuestLayout from '@/Layout/GuestLayout';
-import type { PageProps } from '@/types';
+import { useForm, usePage } from "@inertiajs/inertia-react";
+import Head from "@/Layout/Head";
+import GuestLayout from "@/Layout/GuestLayout";
+import type { PageProps } from "@/types";
 
 export default function Login() {
     const { flash } = usePage().props as unknown as PageProps;
 
     const { data, setData, post, processing, errors } = useForm({
-        email: '',
-        password: '',
+        email: "",
+        password: "",
         remember: false,
     });
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        post('/auth/login');
+        post("/auth/login");
     }
 
     return (
         <>
             <Head title="Login" />
 
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-white text-center mb-6">
+            <div className="bg-yellow-50 dark:bg-gray-800 border-2 border-secondary rounded-2xl shadow-2xl p-8">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white text-center mb-6">
                     Masuk ke Akun Anda
                 </h2>
 
@@ -40,39 +40,51 @@ export default function Login() {
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label
+                            htmlFor="email"
+                            className="block text-sm font-medium text-gray-900 dark:text-white mb-1"
+                        >
                             Email
                         </label>
                         <input
                             id="email"
                             type="email"
                             value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                            onChange={(e) => setData("email", e.target.value)}
+                            className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.email ? "border-red-500" : "border-gray-300"}`}
                             placeholder="admin@sekolahku.sch.id"
                             required
                             autoFocus
                         />
                         {errors.email && (
-                            <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+                            <p className="mt-1 text-xs text-red-500">
+                                {errors.email}
+                            </p>
                         )}
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label
+                            htmlFor="password"
+                            className="block text-sm font-medium text-gray-900 dark:text-white mb-1"
+                        >
                             Password
                         </label>
                         <input
                             id="password"
                             type="password"
                             value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                            onChange={(e) =>
+                                setData("password", e.target.value)
+                            }
+                            className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.password ? "border-red-500" : "border-gray-300"}`}
                             placeholder="••••••••"
                             required
                         />
                         {errors.password && (
-                            <p className="mt-1 text-xs text-red-500">{errors.password}</p>
+                            <p className="mt-1 text-xs text-red-500">
+                                {errors.password}
+                            </p>
                         )}
                     </div>
 
@@ -81,10 +93,15 @@ export default function Login() {
                             id="remember"
                             type="checkbox"
                             checked={data.remember}
-                            onChange={(e) => setData('remember', e.target.checked)}
-                            className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
+                            onChange={(e) =>
+                                setData("remember", e.target.checked)
+                            }
+                            className="w-4 h-4 text-secondary border-gray-300 rounded focus:ring-secondary"
                         />
-                        <label htmlFor="remember" className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                        <label
+                            htmlFor="remember"
+                            className="ml-2 text-sm text-gray-600 dark:text-gray-400"
+                        >
                             Ingat saya
                         </label>
                     </div>
@@ -92,9 +109,9 @@ export default function Login() {
                     <button
                         type="submit"
                         disabled={processing}
-                        className="w-full py-2.5 bg-primary hover:bg-primary-light text-white font-medium rounded-lg text-sm transition duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                        className="w-full py-2.5 bg-primary hover:bg-primary-dark active:bg-primary-dark text-white font-medium rounded-lg text-sm transition duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                        {processing ? 'Memproses...' : 'Masuk'}
+                        {processing ? "Memproses..." : "Masuk"}
                     </button>
                 </form>
             </div>
@@ -103,3 +120,4 @@ export default function Login() {
 }
 
 Login.layout = GuestLayout;
+

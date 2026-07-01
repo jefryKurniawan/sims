@@ -13,9 +13,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // custom colors from the original HTML design
-        primary: "#FFD700",
-        secondary: "#E31E24",
+        // Sekolahku brand colors: merah & kuning
+        primary: {
+          DEFAULT: "#E31E24",   // merah utama
+          light: "#FF6B70",     // merah muda (hover/focus)
+          dark: "#A11618",      // merah tua (gradient/shadow)
+        },
+        secondary: {
+          DEFAULT: "#FFD700",   // kuning utama
+          light: "#FFE666",     // kuning muda
+          dark: "#C9A800",      // kuning tua
+        },
         "on-surface": "#1A1A1A",
         "surface-container-low": "#FFFDE7",
         "surface-container-high": "#FFF9C4",

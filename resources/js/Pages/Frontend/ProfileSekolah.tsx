@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
-import Head from '@/Layout/Head';
-import Header from '@/Components/Frontend/Header';
-import Footer from '@/Components/Frontend/Footer';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef } from "react";
+import Head from "@/Layout/Head";
+import Header from "@/Components/Frontend/Header";
+import Footer from "@/Components/Frontend/Footer";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
     Building2,
     Award,
@@ -12,8 +12,8 @@ import {
     MapPin,
     Phone,
     Mail,
-    Globe
-} from 'lucide-react';
+    Globe,
+} from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,7 +36,9 @@ interface ProfileSekolahProps {
     } | null;
 }
 
-export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) {
+export default function ProfileSekolah({
+    profileSekolah,
+}: ProfileSekolahProps) {
     const sectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
@@ -44,19 +46,26 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: 'top 75%',
-                    toggleActions: 'play none none reverse',
+                    start: "top 75%",
+                    toggleActions: "play none none reverse",
                 },
             });
 
-            tl.fromTo('.profile-header',
+            tl.fromTo(
+                ".profile-header",
                 { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
-            )
-            .fromTo('.profile-card',
+                { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+            ).fromTo(
+                ".profile-card",
                 { opacity: 0, scale: 0.95 },
-                { opacity: 1, scale: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out' },
-                '-=0.3'
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.5,
+                    stagger: 0.1,
+                    ease: "power2.out",
+                },
+                "-=0.3",
             );
         }, sectionRef);
 
@@ -64,17 +73,17 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
     }, []);
 
     const defaultProfile = {
-        nama_sekolah: 'Sekolahku',
-        npsn: '12345678',
-        alamat: 'Jl. Pendidikan No. 123, Jakarta',
-        telepon: '(021) 1234-5678',
-        email: 'info@sekolahku.sch.id',
-        website: 'www.sekolahku.sch.id',
-        kepala_sekolah: 'Dr. Budi Santoso, M.Pd',
-        tahun_berdiri: '1998',
-        akreditasi: 'A',
-        visi: 'Menjadi sekolah unggul yang menghasilkan generasi berkarakter, cerdas, dan berwawasan global',
-        misi: 'Menyelenggarakan pendidikan berkualitas dengan mengedepankan nilai-nilai karakter dan teknologi',
+        nama_sekolah: "SMA Bonavenura Madiun",
+        npsn: "12345678",
+        alamat: "Jl. Pendidikan No. 123, Jakarta",
+        telepon: "(021) 1234-5678",
+        email: "info@sekolahku.sch.id",
+        website: "www.sekolahku.sch.id",
+        kepala_sekolah: "Dr. Budi Santoso, M.Pd",
+        tahun_berdiri: "1998",
+        akreditasi: "A",
+        visi: "Menjadi sekolah unggul yang menghasilkan generasi berkarakter, cerdas, dan berwawasan global",
+        misi: "Menyelenggarakan pendidikan berkualitas dengan mengedepankan nilai-nilai karakter dan teknologi",
         logo: null,
         foto_sekolah: null,
     };
@@ -83,7 +92,7 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
 
     return (
         <>
-            <Head title="Profil Sekolah - SMAS St. Bonaventura" />
+            <Head title="Profil Sekolah - SMA Bonaventura" />
             <Header />
             <div className="min-h-screen bg-gray-50 pt-20">
                 {/* Hero Section */}
@@ -97,8 +106,12 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
                                     Profil Institusi
                                 </span>
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold mb-4">{profile.nama_sekolah}</h1>
-                            <p className="text-xl text-white/90">Mewujudkan Generasi Emas Indonesia</p>
+                            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                                {profile.nama_sekolah}
+                            </h1>
+                            <p className="text-xl text-white/90">
+                                Mewujudkan Generasi Emas Indonesia
+                            </p>
                         </div>
                     </div>
                     {/* Decorative Elements */}
@@ -114,32 +127,48 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
                                 <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
                                     <Building2 className="w-6 h-6 text-emerald-600" />
                                 </div>
-                                <p className="text-sm text-gray-500 mb-1">Tahun Berdiri</p>
-                                <p className="text-2xl font-bold text-primary">{profile.tahun_berdiri}</p>
+                                <p className="text-sm text-gray-500 mb-1">
+                                    Tahun Berdiri
+                                </p>
+                                <p className="text-2xl font-bold text-primary">
+                                    {profile.tahun_berdiri}
+                                </p>
                             </div>
 
                             <div className="profile-card opacity-0 bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
                                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
                                     <Award className="w-6 h-6 text-blue-600" />
                                 </div>
-                                <p className="text-sm text-gray-500 mb-1">Akreditasi</p>
-                                <p className="text-2xl font-bold text-primary">{profile.akreditasi}</p>
+                                <p className="text-sm text-gray-500 mb-1">
+                                    Akreditasi
+                                </p>
+                                <p className="text-2xl font-bold text-primary">
+                                    {profile.akreditasi}
+                                </p>
                             </div>
 
                             <div className="profile-card opacity-0 bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
                                 <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
                                     <Hash className="w-6 h-6 text-purple-600" />
                                 </div>
-                                <p className="text-sm text-gray-500 mb-1">NPSN</p>
-                                <p className="text-2xl font-bold text-primary">{profile.npsn}</p>
+                                <p className="text-sm text-gray-500 mb-1">
+                                    NPSN
+                                </p>
+                                <p className="text-2xl font-bold text-primary">
+                                    {profile.npsn}
+                                </p>
                             </div>
 
                             <div className="profile-card opacity-0 bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
                                 <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-4">
                                     <UserCircle className="w-6 h-6 text-amber-600" />
                                 </div>
-                                <p className="text-sm text-gray-500 mb-1">Kepala Sekolah</p>
-                                <p className="text-lg font-bold text-primary">{profile.kepala_sekolah}</p>
+                                <p className="text-sm text-gray-500 mb-1">
+                                    Kepala Sekolah
+                                </p>
+                                <p className="text-lg font-bold text-primary">
+                                    {profile.kepala_sekolah}
+                                </p>
                             </div>
                         </div>
 
@@ -155,8 +184,12 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
                                         <MapPin className="w-5 h-5 text-emerald-600" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-500 font-medium mb-1">Alamat</p>
-                                        <p className="text-gray-700">{profile.alamat}</p>
+                                        <p className="text-sm text-gray-500 font-medium mb-1">
+                                            Alamat
+                                        </p>
+                                        <p className="text-gray-700">
+                                            {profile.alamat}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -165,8 +198,12 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
                                         <Phone className="w-5 h-5 text-blue-600" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-500 font-medium mb-1">Telepon</p>
-                                        <p className="text-gray-700">{profile.telepon}</p>
+                                        <p className="text-sm text-gray-500 font-medium mb-1">
+                                            Telepon
+                                        </p>
+                                        <p className="text-gray-700">
+                                            {profile.telepon}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -175,8 +212,12 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
                                         <Mail className="w-5 h-5 text-purple-600" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-500 font-medium mb-1">Email</p>
-                                        <p className="text-gray-700">{profile.email}</p>
+                                        <p className="text-sm text-gray-500 font-medium mb-1">
+                                            Email
+                                        </p>
+                                        <p className="text-gray-700">
+                                            {profile.email}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -185,8 +226,12 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
                                         <Globe className="w-5 h-5 text-amber-600" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-500 font-medium mb-1">Website</p>
-                                        <p className="text-gray-700">{profile.website}</p>
+                                        <p className="text-sm text-gray-500 font-medium mb-1">
+                                            Website
+                                        </p>
+                                        <p className="text-gray-700">
+                                            {profile.website}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -198,3 +243,4 @@ export default function ProfileSekolah({ profileSekolah }: ProfileSekolahProps) 
         </>
     );
 }
+

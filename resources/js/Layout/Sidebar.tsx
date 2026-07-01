@@ -24,6 +24,8 @@ interface MenuCategory {
 }
 
 export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
+  const [collapsed, setCollapsed] = useState(false); // ponytail: toggle minimal view
+
   const [isMobile, setIsMobile] = useState(false);
   const { auth } = usePage().props;
   const component = usePage().component as string;

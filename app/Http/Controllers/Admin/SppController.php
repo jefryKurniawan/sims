@@ -48,9 +48,10 @@ class SppController extends Controller
      */
     public function create()
     {
-        // For API, we can return metadata like siswa list for dropdown.
-        $siswa = Siswa::select('id', 'nama_lengkap', 'nisn')->get();
-        return response()->json(['siswa' => $siswa]);
+        $siswaList = Siswa::select('id', 'nama_lengkap', 'nisn')->orderBy('nama_lengkap')->get();
+        return Inertia::render('Admin/Spp/Create', [
+            'siswaList' => $siswaList,
+        ]);
     }
 
     /**
@@ -105,7 +106,7 @@ class SppController extends Controller
             }
         }
 
-        return response()->json($tagihan->load('siswa.user'), 201);
+        return redirect()->route('spp.index')->with('success', 'Tagihan SPP berhasil dibuat.');
     }
 
     /**
@@ -128,8 +129,12 @@ class SppController extends Controller
      */
     public function edit($id)
     {
-        $tagihan = SppTagihan::findOrFail($id);
-        return response()->json($tagihan);
+        $tagihan = SppTagihan::with('siswa')->findOrFail($id);
+        $siswaList = Siswa::select('id', 'nama_lengkap', 'nisn')->orderBy('nama_lengkap')->get();
+        return Inertia::render('Admin/Spp/Edit', [
+            'tagihanItem' => $tagihan,
+            'siswaList' => $siswaList,
+        ]);
     }
 
     /**
@@ -152,7 +157,7 @@ class SppController extends Controller
 
         $tagihan->update($validated);
 
-        return response()->json($tagihan->fresh('siswa.user'));
+        return redirect()->route('spp.index')->with('success', 'Tagihan SPP berhasil diperbarui.');
     }
 
     /**
@@ -166,7 +171,7 @@ class SppController extends Controller
         $tagihan = SppTagihan::findOrFail($id);
         $tagihan->delete();
 
-        return response()->json(['message' => 'Tagihan deleted']);
+        return redirect()->route('spp.index')->with('success', 'Tagihan SPP berhasil dihapus.');
     }
 
     /**
