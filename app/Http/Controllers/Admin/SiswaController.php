@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Siswa;
 use App\Models\Jurusan;
+use App\Models\Jurusan;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
