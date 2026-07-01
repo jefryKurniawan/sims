@@ -27,6 +27,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
 
     // ====== ADMIN-ONLY ROUTES ======
     Route::middleware('role:Admin')->group(function () {
+        // MVP 1 – Siswa CRUD (soft delete)
+        Route::resource('siswa', 'Admin\\SiswaController');
         // PPDB
         Route::get('ppdb/seleksi', 'Admin\CalonSiswaController@seleksiForm')->name('ppdb.seleksi.form');
         Route::get('ppdb/statistik', 'Admin\CalonSiswaController@statistik')->name('ppdb.statistik');

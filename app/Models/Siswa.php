@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Models\AuditLog; // ponytail: added missing import for AuditLog
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Siswa extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'siswa';
 
