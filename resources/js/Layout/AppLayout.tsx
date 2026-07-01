@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Head, usePage, Link, useForm } from '@inertiajs/inertia-react';
 import Sidebar from './Sidebar';
-import { Menu, Bell, Mail, Search, ChevronRight } from 'lucide-react';
+import { Menu, Bell, Mail, Search, ChevronRight, ChevronLeft } from 'lucide-react';
 import type { PageProps } from '@/types';
 
 interface AppLayoutProps {
@@ -20,6 +20,7 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
         component.startsWith('Auth/')
     );
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
     const [toastVisible, setToastVisible] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const { post } = useForm();
@@ -62,7 +63,7 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
             <Head title={title} />
 
             <div className="flex h-screen bg-gray-50 overflow-hidden">
-                <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+                <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={collapsed} />
 
                 <div className="flex-1 flex flex-col overflow-hidden">
                     {/* Topbar */}
@@ -91,8 +92,13 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
 
                             {/* Right */}
                             <div className="flex items-center gap-3">
-                                <button classNameEndPoint>
-  </button>
+                                <button
+                                    onClick={() => setCollapsed(!collapsed)}
+                                    className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all"
+                                    aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                                >
+                                    {collapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+                                </button>
                                 <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all">
                                     <Mail className="w-5 h-5" />
                                 </button>

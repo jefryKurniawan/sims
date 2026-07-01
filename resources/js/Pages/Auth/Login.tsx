@@ -1,10 +1,13 @@
 import { useForm, usePage } from "@inertiajs/inertia-react";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import Head from "@/Layout/Head";
 import GuestLayout from "@/Layout/GuestLayout";
 import type { PageProps } from "@/types";
 
 export default function Login() {
     const { flash } = usePage().props as unknown as PageProps;
+    const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
         email: "",
@@ -70,17 +73,27 @@ export default function Login() {
                         >
                             Password
                         </label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={data.password}
-                            onChange={(e) =>
-                                setData("password", e.target.value)
-                            }
-                            className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.password ? "border-red-500" : "border-gray-300"}`}
-                            placeholder="••••••••"
-                            required
-                        />
+                        <div className="relative">
+                            <input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                value={data.password}
+                                onChange={(e) =>
+                                    setData("password", e.target.value)
+                                }
+                                className={`w-full px-4 py-2.5 pr-10 border rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.password ? "border-red-500" : "border-gray-300"}`}
+                                placeholder="••••••••"
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                        </div>
                         {errors.password && (
                             <p className="mt-1 text-xs text-red-500">
                                 {errors.password}

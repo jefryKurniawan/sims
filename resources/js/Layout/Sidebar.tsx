@@ -9,6 +9,7 @@ import {
 interface SidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
+  collapsed?: boolean;
 }
 
 interface MenuItem {
@@ -23,8 +24,8 @@ interface MenuCategory {
   items: MenuItem[];
 }
 
-export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState(false); // ponytail: toggle minimal view
+export default function Sidebar({ isOpen = true, onClose, collapsed = false }: SidebarProps) {
+  // ponytail: toggle minimal view via prop
 
   const [isMobile, setIsMobile] = useState(false);
   const { auth } = usePage().props;
@@ -152,14 +153,16 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           <div className="w-9 h-9 rounded-lg bg-school-red flex items-center justify-center shadow-lg shadow-school-red/20">
             <span className="text-white font-extrabold text-sm font-heading">S</span>
           </div>
-          <div>
-            <span className="block text-sm font-bold text-white font-heading tracking-tight">
-              SMAK St. Bonaventura
-            </span>
-            <span className="block text-[10px] text-blue-300/70 font-label tracking-wider uppercase">
-              Admin Portal
-            </span>
-          </div>
+          {!collapsed && (
+            <div>
+              <span className="block text-sm font-bold text-white font-heading tracking-tight">
+                SMAK St. Bonaventura
+              </span>
+              <span className="block text-[10px] text-blue-300/70 font-label tracking-wider uppercase">
+                Admin Portal
+              </span>
+            </div>
+          )}
         </Link>
         <button
           onClick={onClose}
@@ -199,8 +202,8 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                     <span className={`flex-shrink-0 ${active ? 'text-school-red' : 'text-blue-300/40 group-hover:text-blue-200/60'}`}>
                       {item.icon}
                     </span>
-                    <span className="flex-1">{item.title}</span>
-                    {item.badge && (
+                    {!collapsed && <span className="flex-1">{item.title}</span>}
+                    {!collapsed && item.badge && (
                       <span className="px-1.5 py-0.5 text-[10px] font-bold bg-school-red text-white rounded-md">
                         {item.badge}
                       </span>
@@ -221,14 +224,16 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
               {auth?.user?.name?.charAt(0).toUpperCase() || 'A'}
             </span>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-white/90 font-body truncate">
-              {auth?.user?.name || 'Admin'}
-            </p>
-            <p className="text-[11px] text-blue-300/50 font-label truncate">
-              {auth?.user?.role || 'Administrator'}
-            </p>
-          </div>
+          {!collapsed && (
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-white/90 font-body truncate">
+                {auth?.user?.name || 'Admin'}
+              </p>
+              <p className="text-[11px] text-blue-300/50 font-label truncate">
+                {auth?.user?.role || 'Administrator'}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -244,7 +249,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           />
         )}
         <aside
-          className={`fixed inset-y-0 left-0 w-72 bg-navy-deep z-50 transform transition-transform duration-300 ease-out xl:hidden ${
+          className={`fixed inset-y-0 left-0 w-[${collapsed ? '4rem' : '18rem'}] bg-navy-deep z-50 transform transition-transform duration-300 ease-out xl:hidden ${
             isOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
@@ -257,8 +262,8 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   }
 
   return (
-    <aside className="hidden xl:flex xl:flex-col xl:w-72 bg-navy-deep overflow-hidden">
-      {sidebarContent}
-    </aside>
-  );
+      <aside className={`hidden xl:flex xl:flex-col xl:w-[${collapsed ? '4rem' : '18rem'}] bg-navy-deep overflow-hidden transition-all duration-300`}>
+        {sidebarContent}
+      </aside>
+    );
 }

@@ -13,9 +13,15 @@ class AddColumnAccountNameInBankAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::table('bank_accounts', function (Blueprint $table) {
-            $table->string('account_name')->after('account_number');
-        });
+        // ponytail: skip if bank_accounts table doesn't exist (legacy module removed)
+        if (!Schema::hasTable('bank_accounts')) {
+            return;
+        }
+        if (!Schema::hasColumn('bank_accounts', 'account_name')) {
+            Schema::table('bank_accounts', function (Blueprint $table) {
+                $table->string('account_name')->after('account_number');
+            });
+        }
     }
 
     /**

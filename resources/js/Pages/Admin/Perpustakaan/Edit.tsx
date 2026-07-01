@@ -106,7 +106,7 @@ export default function PerpustakaanEdit({ perpus }: { perpus: any }) {
                                     <span className="w-32 font-medium text-gray-600">Website</span>
                                     <span className="text-gray-900">{perpus.userDetail?.website ?? '-'}</span>
                                 </div>
-                                <div className="  className="flex">
+                                <div className="flex">
                                     <span className="w-32 font-medium text-gray-600">Facebook</span>
                                     <span className="text-gray-900">{perpus.userDetail?.facebook ?? '-'}</span>
                                 </div>

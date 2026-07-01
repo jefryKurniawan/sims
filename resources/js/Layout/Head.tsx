@@ -1,4 +1,5 @@
-import { Head } from '@inertiajs/inertia-react';
+import { Head as InertiaHead } from '@inertiajs/inertia-react';
+export const Head = InertiaHead;
 
 export default function InertiaHead({ title }) {
     return (

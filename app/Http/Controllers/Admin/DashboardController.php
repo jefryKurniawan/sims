@@ -21,17 +21,17 @@ class DashboardController extends Controller
         $totalAlumni = DB::table('alumni')->count();
         $totalBuku = DB::table('books')->count();
 
-        $pembayaranBulanIni = DB::table('detail_payment_spps')
+        $pembayaranBulanIni = DB::table('spp_pembayaran')
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
-            ->where('status', 'paid')
-            ->sum('amount');
+            ->where('status', 'lunas')
+            ->sum('nominal');
 
-        $pembayaranBulanLalu = DB::table('detail_payment_spps')
+        $pembayaranBulanLalu = DB::table('spp_pembayaran')
             ->whereMonth('created_at', now()->subMonth()->month)
             ->whereYear('created_at', now()->subMonth()->year)
-            ->where('status', 'paid')
-            ->sum('amount');
+            ->where('status', 'lunas')
+            ->sum('nominal');
 
         $pendaftarBulanIni = DB::table('calon_siswa')
             ->whereMonth('tanggal_daftar', now()->month)

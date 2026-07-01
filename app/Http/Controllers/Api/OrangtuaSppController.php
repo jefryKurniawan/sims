@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Siswa;
 use App\Models\SppTagihan;
 use App\Models\PaymentSpp;
-use App\Models\DetailPaymentSpp;
+use App\Models\SppPembayaran;
 use Carbon\Carbon;
 
 class OrangtuaSppController extends Controller
@@ -76,21 +76,22 @@ class OrangtuaSppController extends Controller
             ];
         }
 
-        // Payment history: from detail_payment_spps
+        // Payment history: from spp_pembayaran
         $paymentHistory = [];
         if ($siswa) {
-            $details = DetailPaymentSpp::where('user_id', $siswa->user_id)
-                ->with('payment') // eager load payment to get year etc.
+            $payments = SppPembayaran::where('siswa_id', $siswa->id)
+                ->orderBy('tanggal_pembayaran', 'desc')
                 ->get();
-            foreach ($details as $d) {
+            foreach ($payments as $p) {
+                $paymentDate = \Carbon\Carbon::parse($p->tanggal_pembayaran);
                 $paymentHistory[] = [
-                    'id' => $d->id,
-                    'amount' => $d->amount,
-                    'month' => $d->month,
-                    'year' => $d->payment->year ?? null,
-                    'status' => $d->status,
-                    'payment_date' => $d->updated_at,
-                    'receipt' => $d->file ?? null,
+                    'id' => $p->id,
+                    'amount' => $p->nominal,
+                    'month' => $paymentDate->format('F'), // full month name
+                    'year' => $paymentDate->year,
+                    'status' => $p->status,
+                    'payment_date' => $p->tanggal_pembayaran,
+                    'receipt' => null, // no receipt field in spp_pembayaran
                 ];
             }
         }
