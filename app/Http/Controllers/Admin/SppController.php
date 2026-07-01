@@ -118,7 +118,9 @@ class SppController extends Controller
     public function show($id)
     {
         $tagihan = SppTagihan::with(['siswa.user', 'pembayaran'])->findOrFail($id);
-        return response()->json($tagihan);
+        return Inertia::render('Admin/Spp/Detail', [
+            'tagihan' => $tagihan,
+        ]);
     }
 
     /**
