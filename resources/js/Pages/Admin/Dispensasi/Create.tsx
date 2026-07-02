@@ -116,7 +116,7 @@ export default function Create() {
                         >
                             Batal
                         </button>
-                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
+                        <button type="submit" className="px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 disabled:opacity-50" disabled={processing}>
                             {processing ? 'Menyimpan...' : 'Simpan Dispensasi'}
                         </button>
                     </div>

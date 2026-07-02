@@ -26,7 +26,9 @@
   --color-navy-medium: #132f4c;
   --color-navy-card: #162a44;
   --color-school-red: #ef4444;
-  --color-school-yellow: #facc15;
+  --color-school-yellow: #eab308;
+  --color-school-yellow-light: #fde047;
+  --color-school-yellow-deep: #ca8a04;
   --color-school-orange: #fb923c;
   --color-school-emerald: #28a745;
   --color-surface-low: #eff4ff;
@@ -95,4 +97,12 @@
 }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

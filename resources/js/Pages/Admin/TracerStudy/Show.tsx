@@ -147,7 +147,7 @@ export default function Show({ tracerStudy }: Props) {
                         <div className="mt-8 flex justify-end gap-4">
                             <Link
                                 href={route('admin.tracer-study.edit', tracerStudy.id)}
-                                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
+                                className="px-6 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition font-semibold"
                             >
                                 Edit
                             </Link>

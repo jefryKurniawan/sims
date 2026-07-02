@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { Head, Link } from '@inertiajs/inertia-react';
 import Chart from 'react-apexcharts';
 import type { ApexOptions } from 'apexcharts';
@@ -51,6 +51,23 @@ function formatRupiah(n: number): string {
   return 'Rp ' + formatNumber(n);
 }
 
+// ponytail: count-up animation on first render
+function useCountUp(target: number, duration = 800) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (target <= 0) { setValue(0); return; }
+    let start = 0;
+    const step = Math.max(1, Math.floor(target / (duration / 16)));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { setValue(target); clearInterval(timer); }
+      else setValue(start);
+    }, 16);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+  return value;
+}
+
 interface QuickAccess {
   title: string;
   desc: string;
@@ -62,6 +79,12 @@ interface QuickAccess {
 
 export default function Dashboard({ auth, stats, latestActivities }: DashboardProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  // ponytail: animated counters
+  const countSiswa = useCountUp(stats.siswaAktif);
+  const countPendaftar = useCountUp(stats.totalPendaftar);
+  const countPeminjaman = useCountUp(stats.totalPeminjaman);
+  const countPembayaran = useCountUp(stats.pembayaranBulanIni);
 
   const today = new Date();
   const dateStr = today.toLocaleDateString('id-ID', {
@@ -78,7 +101,7 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
       sparkline: { enabled: true },
       fontFamily: 'inherit',
     },
-    colors: ['#003366'],
+    colors: ['#E31E24'],
     fill: {
       type: 'gradient',
       gradient: {
@@ -105,7 +128,7 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
       toolbar: { show: false },
       fontFamily: 'inherit',
     },
-    colors: ['#003366', '#28a745', '#E31E24', '#f59e0b'],
+    colors: ['#E31E24', '#eab308', '#28a745', '#1e293b'],
     plotOptions: {
       bar: {
         borderRadius: 6,
@@ -136,16 +159,18 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
   const statCards = [
     {
       label: 'Total Siswa Aktif',
-      value: formatNumber(stats.siswaAktif),
+      value: formatNumber(countSiswa),
+      rawTarget: stats.siswaAktif,
       change: '-',
       trend: 'up' as const,
       icon: <Users className="w-6 h-6" />,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-red-600',
+      bgColor: 'bg-red-50',
     },
     {
-      label: 'PPDB Mendaftar',
-      value: formatNumber(stats.totalPendaftar),
+      label: 'SPMB Mendaftar',
+      value: formatNumber(countPendaftar),
+      rawTarget: stats.totalPendaftar,
       change: stats.pendaftarChange > 0
         ? '+' + stats.pendaftarChange + '%'
         : stats.pendaftarChange < 0
@@ -153,21 +178,23 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
           : '-',
       trend: stats.pendaftarChange >= 0 ? ('up' as const) : ('down' as const),
       icon: <UserPlus className="w-6 h-6" />,
+      color: 'text-yellow-600',
+      bgColor: 'bg-yellow-50',
+    },
+    {
+      label: 'Peminjaman Buku',
+      value: formatNumber(countPeminjaman),
+      rawTarget: stats.totalPeminjaman,
+      change: '-',
+      trend: 'up' as const,
+      icon: <BookOpen className="w-6 h-6" />,
       color: 'text-emerald-600',
       bgColor: 'bg-emerald-50',
     },
     {
-      label: 'Peminjaman Buku',
-      value: formatNumber(stats.totalPeminjaman),
-      change: '-',
-      trend: 'up' as const,
-      icon: <BookOpen className="w-6 h-6" />,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-    },
-    {
       label: 'Pembayaran SPP',
-      value: formatRupiah(stats.pembayaranBulanIni),
+      value: formatRupiah(countPembayaran),
+      rawTarget: stats.pembayaranBulanIni,
       change: stats.pembayaranChange > 0
         ? '+' + stats.pembayaranChange + '%'
         : stats.pembayaranChange < 0
@@ -175,8 +202,8 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
           : '-',
       trend: stats.pembayaranChange >= 0 ? ('up' as const) : ('down' as const),
       icon: <CreditCard className="w-6 h-6" />,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-50',
+      color: 'text-yellow-600',
+      bgColor: 'bg-yellow-50',
     },
   ];
 
@@ -186,24 +213,24 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
       desc: 'Kelola data seluruh siswa aktif',
       href: route('users.murid.index'),
       icon: <Users className="w-6 h-6" />,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-red-600',
+      bgColor: 'bg-red-50',
     },
     {
-      title: 'PPDB',
-      desc: 'Pendaftaran & seleksi siswa baru',
+      title: 'SPMB',
+      desc: 'Seleksi & penerimaan murid baru',
       href: route('ppdb.index'),
       icon: <UserPlus className="w-6 h-6" />,
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-50',
+      color: 'text-yellow-600',
+      bgColor: 'bg-yellow-50',
     },
     {
       title: 'SPP & Pembayaran',
       desc: 'Tagihan dan riwayat pembayaran',
       href: route('spp.index'),
       icon: <CreditCard className="w-6 h-6" />,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
+      color: 'text-red-600',
+      bgColor: 'bg-red-50',
     },
     {
       title: 'GTK',
@@ -259,7 +286,7 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
           </div>
           <Link
             href={route('ppdb.index')}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all shadow-lg shadow-primary/20"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-yellow text-white text-sm font-semibold rounded-xl hover:bg-school-yellow-deep transition-all shadow-lg shadow-school-yellow/25"
           >
             <BarChart3 className="w-4 h-4" />
             Lihat Laporan
@@ -324,21 +351,21 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
       </div>
 
       {/* PPDB Promo */}
-      <div className="mb-8 rounded-2xl bg-gradient-to-br from-navy-deep via-navy-medium to-navy-deep border border-blue-800/30 overflow-hidden">
+      <div className="mb-8 rounded-2xl bg-gradient-to-br from-school-red via-red-800 to-yellow-900 border border-yellow-500/20 overflow-hidden">
         <div className="relative p-6 lg:p-8">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-school-red/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-school-yellow/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-yellow-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex-1">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-school-red/15 text-school-red text-xs font-semibold font-label mb-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-school-yellow/20 text-school-yellow text-xs font-semibold font-label mb-3">
                 <BarChart3 className="w-3.5 h-3.5" />
-                PPDB 2025/2026
+                SPMB 2025/2026
               </span>
               <h3 className="text-xl lg:text-2xl font-bold text-white font-heading mb-2">
-                Pendaftaran Peserta Didik Baru
+                Seleksi Penerimaan Murid Baru
               </h3>
-              <p className="text-blue-200/70 text-sm font-body max-w-xl">
+              <p className="text-yellow-200/70 text-sm font-body max-w-xl">
                 Total <span className="text-white font-semibold">{formatNumber(stats.totalPendaftar)}</span> pendaftar telah masuk.
                 Kelola seleksi, verifikasi berkas, dan pengumuman kelulusan dari sini.
               </p>
@@ -347,13 +374,13 @@ export default function Dashboard({ auth, stats, latestActivities }: DashboardPr
             <div className="flex items-center gap-4 flex-shrink-0">
               <div className="text-center px-4 py-2 rounded-xl bg-white/5 border border-white/10">
                 <p className="text-2xl font-bold text-white font-heading">{formatNumber(stats.totalPendaftar)}</p>
-                <p className="text-[10px] text-blue-300/50 font-label uppercase tracking-wider">Pendaftar</p>
+                <p className="text-[10px] text-yellow-300/50 font-label uppercase tracking-wider">Pendaftar</p>
               </div>
               <Link
                 href={route('ppdb.index')}
-                className="inline-flex items-center gap-2 px-5 py-3 bg-school-red text-white text-sm font-bold rounded-xl hover:bg-school-red/90 transition-all shadow-lg shadow-school-red/25"
+                className="inline-flex items-center gap-2 px-5 py-3 bg-school-yellow text-white text-sm font-bold rounded-xl hover:bg-school-yellow/90 transition-all shadow-lg shadow-school-yellow/25"
               >
-                Kelola PPDB
+                Kelola SPMB
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

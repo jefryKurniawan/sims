@@ -90,10 +90,10 @@ export default function Index({ donasis, filters, stats }: Props) {
                             </div>
                             <Link
                                 href={route('admin.donasi.create')}
-                                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-lg hover:bg-emerald-700 transition font-semibold"
+                                className="inline-flex items-center gap-2 bg-school-red text-white px-5 py-2.5 rounded-lg hover:bg-red-700 transition font-semibold"
                             >
                                 <Plus className="w-4 h-4" />
-                                Tambah Donasi
+                                + Donasi Baru
                             </Link>
                         </div>
                     </div>

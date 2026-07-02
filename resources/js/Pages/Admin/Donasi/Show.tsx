@@ -218,7 +218,7 @@ export default function Show({ donasi }: Props) {
                         <div className="bg-gray-50 px-6 py-4 border-t flex items-center justify-end gap-4">
                             <Link
                                 href={route('admin.donasi.edit', donasi.id)}
-                                className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
+                                className="px-5 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition font-semibold"
                             >
                                 Edit Donasi
                             </Link>

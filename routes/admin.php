@@ -133,6 +133,12 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         // GTK
         Route::resource('gtk', 'Admin\GtkController');
 
+        // Kelas
+        Route::resource('kelas', 'Admin\KelasController');
+
+        // Sarana Prasarana
+        Route::resource('sarana', 'Admin\SaranaPrasaranaController');
+
         // SPP
         Route::resource('spp', 'Admin\SppController');
 

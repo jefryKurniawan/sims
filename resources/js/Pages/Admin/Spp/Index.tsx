@@ -1,6 +1,6 @@
 import { Head, usePage, Link } from '@inertiajs/inertia-react';
 import { useState } from 'react';
-import { Edit, Trash } from 'lucide-react';
+import { Edit, Trash, Plus } from 'lucide-react';
 
 interface SiswaData {
   id: number;
@@ -65,9 +65,10 @@ export default function Index({ tagihan }: Props) {
           <h1 className="text-2xl font-bold text-gray-800">SPP & Pembayaran</h1>
           <Link
             href={route('spp.create')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 transition text-sm font-medium"
           >
-            Tambah SPP
+            <Plus className="w-4 h-4" />
+            SPP Baru
           </Link>
         </div>
 

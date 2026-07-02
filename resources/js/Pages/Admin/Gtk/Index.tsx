@@ -1,5 +1,6 @@
 import { Head, Link, usePage } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
+import { Plus } from "lucide-react";
 
 interface GuruItem {
     id: number;
@@ -41,9 +42,10 @@ export default function Index({ guru }: Props) {
                     <h1 className="text-2xl font-bold text-gray-800">GTK</h1>
                     <Link
                         href={route("gtk.create")}
-                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
                     >
-                        Tambah GTK
+                        <Plus className="w-4 h-4" />
+                        GTK Baru
                     </Link>
                 </div>
 

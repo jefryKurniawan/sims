@@ -111,7 +111,7 @@ export default function Index() {
                                 <option value="prestasi">Prestasi</option>
                             </select>
                         </div>
-                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">Filter</button>
+                        <button type="submit" className="px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 text-sm font-medium">Filter</button>
                         <a href="/dashboard/spmb/ranking" className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium inline-block">Reset</a>
                     </div>
                 </form>

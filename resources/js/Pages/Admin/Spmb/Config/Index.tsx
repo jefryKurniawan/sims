@@ -1,6 +1,6 @@
 import { Head, useForm, usePage, Link } from '@inertiajs/inertia-react';
 import { useState } from 'react';
-import { Edit, Trash } from 'lucide-react';
+import { Edit, Trash, Plus } from 'lucide-react';
 
 export default function Index() {
   const { configs, flash } = usePage().props;
@@ -92,9 +92,10 @@ export default function Index() {
               setEditing(false);
               form.reset();
             }}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 transition text-sm font-medium"
           >
-            Tambah Konfigurasi
+            <Plus className="w-4 h-4" />
+            Konfigurasi Baru
           </button>
         </div>
 
@@ -194,7 +195,7 @@ export default function Index() {
                 >
                   Batal
                 </button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium" disabled={form.processing}>
+                <button type="submit" className="px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 text-sm font-medium" disabled={form.processing}>
                   {editing ? 'Update' : 'Simpan'}
                 </button>
               </div>

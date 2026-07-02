@@ -10,7 +10,7 @@ class DispensasiSeeder extends Seeder
 {
     public function run(): void
     {
-        $siswaList = Siswa::inRandomOrder()->limit(10)->get();
+        $siswaList = Siswa::inRandomOrder()->limit(50)->get();
         foreach ($siswaList as $siswa) {
             Dispensasi::create([
                 'siswa_id' => $siswa->id, // foreign key ke siswa.id (sebelumnya pakai user_id, sudah dimigrasi ke siswa.id)

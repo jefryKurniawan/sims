@@ -287,7 +287,7 @@ export default function Edit({ calonSiswa }) {
                         <Link href={route('ppdb.index')} className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
                             Batal
                         </Link>
-                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
+                        <button type="submit" className="px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 disabled:opacity-50" disabled={processing}>
                             {processing ? 'Menyimpan...' : 'Update Data'}
                         </button>
                     </div>

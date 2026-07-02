@@ -2,8 +2,7 @@ import { useForm, usePage, Link } from '@inertiajs/inertia-react';
 import AdminLayout from '@/Layout/AdminLayout';
 
 export default function Edit() {
-    const { data: pageData } = usePage().props;
-    const { dispensasi, siswa } = pageData;
+    const { dispensasi, siswa } = usePage().props;
     const { data, setData, put, processing, errors, reset } = useForm({
         siswa_id: dispensasi.siswa_id || '',
         jenis: dispensasi.jenis || 'potongan',
@@ -116,7 +115,7 @@ export default function Edit() {
                         >
                             Batal
                         </button>
-                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
+                        <button type="submit" className="px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 disabled:opacity-50" disabled={processing}>
                             {processing ? 'Menyimpan...' : 'Update Dispensasi'}
                         </button>
                     </div>

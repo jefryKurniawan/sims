@@ -11,44 +11,7 @@ export default function Show({ dispensasi }: { dispensasi: any }) {
                     <h1 className="text-2xl font-bold text-gray-800">Detail Dispensasi</h1>
                     <div className="flex space-x-3">
                         <Link
-                            route="dispensasi.edit", dispensasi.id
-                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium flex items-center"
-                        >
-                            <Edit className="h-5 w-5 mr-2" />
-                            Edit
-                        </Link>
-                        <form
-                            method="POST"
-                            action={route('dispensasi.destroy', dispensasi.id)}
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                if (window.confirm('Yakin ingin menghapus dispensasi ini?')) {
-                                    // Create a temporary form to send DELETE request
-                                    const form = document.createElement('form');
-                                    form.method = 'POST';
-                                    form.action = action;
-                                    const tokenInput = document.createElement('input');
-                                    tokenInput.type = 'hidden';
-                                    tokenInput.name = '_token';
-                                    tokenInput.value = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-                                    form.appendChild(tokenInput);
-                                    const methodInput = document.createElement('input');
-                                    methodInput.type = 'hidden';
-                                    methodInput.name = '_method';
-                                    methodInput.value = 'DELETE';
-                                    form.appendChild(methodInput);
-                                    document.body.appendChild(form);
-                                    form.submit();
-                                }
-                            }}
-                        >
-                            <button type="submit" className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm font-medium flex items-center">
-                                <Trash className="h-5 w-5 mr-2" />
-                                Hapus
-                            </button>
-                        </form>
-                        <Link
-                            route="dispensasi.index"
+                            href={route('dispensasi.index')}
                             className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-sm font-medium flex items-center"
                         >
                             <ChevronLeft className="h-5 w-5 mr-2" />

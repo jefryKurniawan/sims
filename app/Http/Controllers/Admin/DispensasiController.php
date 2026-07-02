@@ -15,7 +15,10 @@ class DispensasiController extends Controller
      */
     public function index()
     {
-        $dispensasi = Dispensasi::with('siswa')->get();
+        $perPage = (int) request()->query('per_page', 15);
+        $perPage = in_array($perPage, [10, 25, 50, 100], true) ? $perPage : 15;
+
+        $dispensasi = Dispensasi::with('siswa')->paginate($perPage)->withQueryString();
         $siswa = Siswa::select('id', 'nama_lengkap', 'nisn')->get();
 
         return Inertia::render('Admin/Dispensasi/Index', [

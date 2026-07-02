@@ -2,6 +2,7 @@ import { Head, Link, usePage } from "@inertiajs/inertia-react";
 import Pagination from "@/Components/Pagination";
 import { useState } from "react";
 import { Inertia } from "@inertiajs/inertia";
+import { Plus } from "lucide-react";
 
 interface Kategori {
     id: number;
@@ -59,9 +60,10 @@ export default function Index({ berita, kategori, filters }: Props) {
                     <h1 className="text-2xl font-bold text-gray-800">Berita</h1>
                     <Link
                         href={route("berita-admin.create")}
-                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
                     >
-                        Tambah Berita
+                        <Plus className="w-4 h-4" />
+                        Berita Baru
                     </Link>
                 </div>
 

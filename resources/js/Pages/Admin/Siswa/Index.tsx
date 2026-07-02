@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/inertia-react';
-import { Edit, Trash, Eye } from 'lucide-react';
+import { Edit, Trash, Eye, Plus } from 'lucide-react';
 import { Inertia } from '@inertiajs/inertia';
 
 interface SiswaItem {
@@ -44,9 +44,10 @@ export default function Index({ siswa }: Props) {
           <h1 className="text-2xl font-bold text-gray-800">Data Siswa</h1>
           <Link
             href={route('siswa.create')}
-            className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 transition text-sm font-medium"
           >
-            Tambah Siswa
+            <Plus className="w-4 h-4" />
+            + Siswa Baru
           </Link>
         </div>
 

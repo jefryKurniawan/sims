@@ -3,7 +3,7 @@ import { usePage, Link } from '@inertiajs/inertia-react';
 import {
   X, LayoutDashboard, Users, CreditCard, BookOpen, GraduationCap,
   Globe, Settings, Cog, UserPlus, Library, FileText,
-  ScrollText, BarChart3, School, Trophy
+  ScrollText, BarChart3, School, Trophy, Building
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -45,6 +45,8 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
     if (href === '#') return false;
     try {
       const target = new URL(href, window.location.origin).pathname;
+      // ponytail: Dashboard root hanya aktif pada exact match, bukan semua /dashboard/*
+      if (target === '/dashboard') return currentPath === '/dashboard';
       return currentPath === target || currentPath.startsWith(target + '/');
     } catch {
       return false;
@@ -61,10 +63,9 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
           icon: <LayoutDashboard className="w-5 h-5" />
         },
         {
-          title: 'PPDB',
+          title: 'SPMB',
           href: route('ppdb.index'),
-          icon: <UserPlus className="w-5 h-5" />,
-          badge: 'New'
+          icon: <UserPlus className="w-5 h-5" />
         },
         {
           title: 'Konfigurasi SPMB',
@@ -100,6 +101,16 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
           title: 'GTK',
           href: route('gtk.index'),
           icon: <School className="w-5 h-5" />
+        },
+        {
+          title: 'Kelas',
+          href: route('kelas.index'),
+          icon: <BookOpen className="w-5 h-5" />
+        },
+        {
+          title: 'Sarana Prasarana',
+          href: route('sarana.index'),
+          icon: <Building className="w-5 h-5" />
         },
         {
           title: 'Perpustakaan',
@@ -158,7 +169,7 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
               <span className="block text-sm font-bold text-white font-heading tracking-tight">
                 SMAK St. Bonaventura
               </span>
-              <span className="block text-[10px] text-blue-300/70 font-label tracking-wider uppercase">
+              <span className="block text-[10px] text-yellow-300/70 font-label tracking-wider uppercase">
                 Admin Portal
               </span>
             </div>
@@ -166,21 +177,21 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
         </Link>
         <button
           onClick={onClose}
-          className="xl:hidden p-1.5 text-blue-300/60 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+          className="xl:hidden p-1.5 text-yellow-300/60 hover:text-white hover:bg-white/5 rounded-lg transition-all"
         >
           <X className="w-4 h-4" />
         </button>
       </div>
 
       {/* Divider */}
-      <div className="mx-5 mb-2 h-px bg-gradient-to-r from-transparent via-blue-400/10 to-transparent" />
+      <div className="mx-5 mb-2 h-px bg-gradient-to-r from-transparent via-yellow-400/10 to-transparent" />
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 overflow-y-auto space-y-2 py-2 scrollbar-thin">
+      <nav className="flex-1 px-3 overflow-y-auto space-y-2 py-2 scrollbar-none">
         {menuCategories.map((category) => (
           <div key={category.name}>
             {/* Static Category Label */}
-            <div className="px-3 py-1.5 text-[10px] font-label tracking-widest text-blue-300/40 uppercase">
+            <div className="px-3 py-1.5 text-[10px] font-label tracking-widest text-yellow-300/40 uppercase">
               {category.name}
             </div>
 
@@ -196,10 +207,10 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
                     className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                       active
                         ? 'bg-white/10 text-white shadow-sm'
-                        : 'text-blue-200/60 hover:text-white hover:bg-white/5'
+                        : 'text-yellow-200/60 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <span className={`flex-shrink-0 ${active ? 'text-school-red' : 'text-blue-300/40 group-hover:text-blue-200/60'}`}>
+                    <span className={`flex-shrink-0 ${active ? 'text-school-red' : 'text-yellow-300/40 group-hover:text-yellow-200/60'}`}>
                       {item.icon}
                     </span>
                     {!collapsed && <span className="flex-1">{item.title}</span>}
@@ -217,7 +228,7 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
       </nav>
 
       {/* User Footer */}
-      <div className="flex-shrink-0 px-4 py-4 border-t border-blue-400/10">
+      <div className="flex-shrink-0 px-4 py-4 border-t border-yellow-400/10">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-school-red to-school-orange flex items-center justify-center shadow-md">
             <span className="text-sm font-bold text-white font-heading">
@@ -229,7 +240,7 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
               <p className="text-sm font-semibold text-white/90 font-body truncate">
                 {auth?.user?.name || 'Admin'}
               </p>
-              <p className="text-[11px] text-blue-300/50 font-label truncate">
+              <p className="text-[11px] text-yellow-300/50 font-label truncate">
                 {auth?.user?.role || 'Administrator'}
               </p>
             </div>
@@ -249,7 +260,7 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
           />
         )}
         <aside
-          className={`fixed inset-y-0 left-0 w-[${collapsed ? '4rem' : '18rem'}] bg-navy-deep z-50 transform transition-transform duration-300 ease-out xl:hidden ${
+          className={`fixed inset-y-0 left-0 w-[${collapsed ? '4rem' : '18rem'}] bg-yellow-900 z-50 transform transition-transform duration-300 ease-out xl:hidden ${
             isOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
@@ -262,7 +273,7 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
   }
 
   return (
-      <aside className={`hidden xl:flex xl:flex-col xl:w-[${collapsed ? '4rem' : '18rem'}] bg-navy-deep overflow-hidden transition-all duration-300`}>
+      <aside className={`hidden xl:flex xl:flex-col xl:w-[${collapsed ? '4rem' : '18rem'}] bg-yellow-900 overflow-hidden transition-all duration-300`}>
         {sidebarContent}
       </aside>
     );

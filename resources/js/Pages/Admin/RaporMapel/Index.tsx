@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/inertia-react';
 import AdminLayout from '@/Layout/AdminLayout';
 import { Inertia } from '@inertiajs/inertia';
 import { useState } from 'react';
+import { Plus } from 'lucide-react';
 
 interface RaporKelasItem {
     id: number;
@@ -54,9 +55,10 @@ export default function Index({ mapel, filters }: Props) {
                 <h1 className="text-2xl font-bold text-gray-800">Mata Pelajaran Rapor</h1>
                 <Link
                     href={route('rapor-mapel.create')}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
                 >
-                    Tambah Mapel
+                    <Plus className="w-4 h-4" />
+                    + Mapel Baru
                 </Link>
             </div>
 
