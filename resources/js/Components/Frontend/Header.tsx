@@ -11,7 +11,7 @@ const menuItems = [
   { label: 'Berita', href: '/berita' },
   { label: 'Alumni', href: '/alumni' },
   { label: 'Visi Misi', href: '/visi-dan-misi' },
-  { label: 'Mapel', href: '/program/ipa' },
+  { label: 'Mapel', href: route('program.index') },
   { label: 'Guru', href: '/guru' },
 ];
 

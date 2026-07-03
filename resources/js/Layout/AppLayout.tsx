@@ -74,7 +74,7 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
         { label: 'GTK', href: route('gtk.index'), keywords: ['gtk', 'guru', 'tenaga', 'kependidikan'] },
         { label: 'Kelas', href: route('kelas.index'), keywords: ['kelas', 'rombongan', 'belajar'] },
         { label: 'Sarana Prasarana', href: route('sarana.index'), keywords: ['sarana', 'prasarana', 'fasilitas', 'infrastruktur'] },
-        { label: 'Perpustakaan', href: '#', keywords: ['perpustakaan', 'buku', 'peminjaman'] },
+        { label: 'Perpustakaan', href: route('perpustakaan.index'), keywords: ['perpustakaan', 'buku', 'peminjaman'] },
         { label: 'Alumni', href: route('alumni.index'), keywords: ['alumni', 'lulusan'] },
         { label: 'Website / Berita', href: route('berita-admin.index'), keywords: ['website', 'berita', 'konten'] },
         { label: 'Galeri Prestasi', href: route('admin.prestasi.index'), keywords: ['prestasi', 'galeri', 'penghargaan'] },

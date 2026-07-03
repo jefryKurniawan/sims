@@ -1,218 +1,155 @@
-import { Link, usePage } from '@inertiajs/inertia-react';
-import AdminLayout from '@/Layout/AdminLayout';
+import { Head, usePage, Link } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 import { useState } from 'react';
+import AdminTable from '@/Components/AdminTable';
+import type { Column } from '@/Components/AdminTable';
+import ConfirmModal from '@/Components/ConfirmModal';
 
-interface JurusanItem {
-    id: number;
-    singkatan: string;
-}
-
-interface RaporKelasItem {
-    id: number;
-    nama_kelas: string;
-    tingkat: number;
-    jurusan: JurusanItem | null;
-}
-
-interface SiswaItem {
-    id: number;
-    nama_lengkap: string;
-    nisn: string;
-}
-
-interface RaporSiswaItem {
-    id: number;
-    semester: string;
-    tahun_ajaran: string;
-    siswa: SiswaItem | null;
-    rapor_kelas: RaporKelasItem | null;
-    rapor_kelas_id: number;
-}
-
-interface Props {
-    raporSiswa: {
-        data: RaporSiswaItem[];
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        from: number;
-        to: number;
-        total: number;
-        prev_page_url: string | null;
-        next_page_url: string | null;
+export default function Index() {
+    const { raporSiswa, kelas, flash } = usePage().props as {
+        raporSiswa: any;
+        kelas: any[];
+        flash: { success?: string; error?: string };
+        filters: Record<string, string>;
     };
-    kelas: RaporKelasItem[];
-    filters: Record<string, string>;
-}
-
-export default function Index({ raporSiswa, kelas, filters }: Props) {
-    const { flash } = usePage().props;
-    const [kelasFilter, setKelasFilter] = useState(filters.rapor_kelas_id || '');
-    const [semester, setSemester] = useState(filters.semester || '');
-    const [tahunAjaran, setTahunAjaran] = useState(filters.tahun_ajaran || '');
+    const [kelasFilter, setKelasFilter] = useState((usePage().props.filters as any)?.rapor_kelas_id || '');
+    const [semester, setSemester] = useState((usePage().props.filters as any)?.semester || '');
+    const [tahunAjaran, setTahunAjaran] = useState((usePage().props.filters as any)?.tahun_ajaran || '');
+    const [deleteTarget, setDeleteTarget] = useState<any>(null);
 
     const handleFilter = () => {
         const params = new URLSearchParams();
         if (kelasFilter) params.set('rapor_kelas_id', kelasFilter);
         if (semester) params.set('semester', semester);
         if (tahunAjaran) params.set('tahun_ajaran', tahunAjaran);
-        window.location.href = `/dashboard/rapor-siswa?${params.toString()}`;
+        const url = `/dashboard/rapor-siswa${params.toString() ? '?' + params.toString() : ''}`;
+        window.location.href = url;
     };
 
-    const handleDelete = (id: number) => {
-        if (confirm('Apakah anda yakin ingin menghapus data rapor siswa ini?')) {
-            Inertia.delete(route('rapor-siswa.destroy', id));
-        }
+    const handleDelete = () => {
+        if (!deleteTarget) return;
+        Inertia.delete(route('rapor-siswa.destroy', deleteTarget.id));
+        setDeleteTarget(null);
     };
+
+    const columns: Column[] = [
+        { key: 'nama', label: 'Nama Siswa', render: (_v: any, row: any) => row.siswa?.nama_lengkap || '-' },
+        { key: 'nisn', label: 'NISN', render: (_v: any, row: any) => row.siswa?.nisn || '-' },
+        {
+            key: 'kelas',
+            label: 'Kelas',
+            render: (_v: any, row: any) =>
+                row.rapor_kelas
+                    ? `Kelas ${row.rapor_kelas.tingkat} - ${row.rapor_kelas.nama_kelas} (${row.rapor_kelas.jurusan?.singkatan || '-'})`
+                    : '-',
+        },
+        { key: 'semester', label: 'Semester' },
+        { key: 'tahun_ajaran', label: 'Thn Ajaran' },
+    ];
 
     return (
-        <AdminLayout title="Rapor Siswa">
-            <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold text-gray-800">Rapor Siswa</h1>
-                <Link
-                    href={route('rapor-siswa.assign')}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-                >
-                    Assign Siswa
-                </Link>
-            </div>
-
-            {flash.success && (
-                <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
-                    {flash.success}
+        <>
+            <Head title="Rapor Siswa" />
+            <div className="p-4 lg:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                    <div>
+                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Rapor Siswa</h1>
+                        <p className="text-sm text-gray-500 mt-0.5">Kelola data rapor siswa per semester</p>
+                    </div>
+                    <Link
+                        href={route('rapor-siswa.assign')}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+                    >
+                        Assign Siswa
+                    </Link>
                 </div>
-            )}
 
-            <div className="mb-6 bg-white rounded-lg border p-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
-                        <select
-                            value={kelasFilter}
-                            onChange={(e) => setKelasFilter(e.target.value)}
-                            className="w-full px-3 py-2 border rounded-lg text-sm"
-                        >
-                            <option value="">Semua Kelas</option>
-                            {kelas.map((k) => (
-                                <option key={k.id} value={k.id}>
-                                    Kelas {k.tingkat} - {k.nama_kelas} ({k.jurusan?.singkatan || '-'})
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Semester</label>
-                        <select
-                            value={semester}
-                            onChange={(e) => setSemester(e.target.value)}
-                            className="w-full px-3 py-2 border rounded-lg text-sm"
-                        >
-                            <option value="">Semua</option>
-                            <option value="Ganjil">Ganjil</option>
-                            <option value="Genap">Genap</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Tahun Ajaran</label>
-                        <input
-                            type="text"
-                            value={tahunAjaran}
-                            onChange={(e) => setTahunAjaran(e.target.value)}
-                            placeholder="2024/2025"
-                            className="w-full px-3 py-2 border rounded-lg text-sm"
-                        />
-                    </div>
-                    <div className="flex items-end gap-2">
-                        <button onClick={handleFilter} className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                            Filter
-                        </button>
-                        <Link href={route('rapor-siswa.index')} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
-                            Reset
-                        </Link>
-                    </div>
-                </div>
-            </div>
+                {flash?.success && <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>}
+                {flash?.error && <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>}
 
-            <div className="bg-white rounded-lg border overflow-hidden">
-                <table className="w-full">
-                    <thead>
-                        <tr className="bg-gray-50 border-b">
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nama Siswa</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">NISN</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Kelas</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Semester</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Thn Ajaran</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                        {raporSiswa.data.map((item, index) => (
-                            <tr key={item.id} className="hover:bg-gray-50">
-                                <td className="px-4 py-3 text-sm text-gray-700">{raporSiswa.from + index}</td>
-                                <td className="px-4 py-3 text-sm font-medium text-gray-900">{item.siswa?.nama_lengkap || '-'}</td>
-                                <td className="px-4 py-3 text-sm text-gray-700">{item.siswa?.nisn || '-'}</td>
-                                <td className="px-4 py-3 text-sm text-gray-700">
-                                    Kelas {item.rapor_kelas?.tingkat} - {item.rapor_kelas?.nama_kelas} ({item.rapor_kelas?.jurusan?.singkatan || '-'})
-                                </td>
-                                <td className="px-4 py-3 text-sm text-gray-700">{item.semester}</td>
-                                <td className="px-4 py-3 text-sm text-gray-700">{item.tahun_ajaran}</td>
-                                <td className="px-4 py-3">
-                                    <div className="flex gap-2">
-                                        <Link
-                                            href={route('rapor-siswa.input-nilai', item.id)}
-                                            className="px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
-                                        >
-                                            Nilai
-                                        </Link>
-                                        <Link
-                                            href={route('rapor-siswa.show', item.id)}
-                                            className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                        >
-                                            Detail
-                                        </Link>
-                                        <button
-                                            onClick={() => handleDelete(item.id)}
-                                            className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
-                                        >
-                                            Hapus
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        {raporSiswa.data.length === 0 && (
-                            <tr>
-                                <td colSpan={7} className="px-4 py-8 text-center text-sm text-gray-500">
-                                    Tidak ada data rapor siswa
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-
-                {raporSiswa.total > raporSiswa.per_page && (
-                    <div className="p-4 flex justify-between items-center border-t">
-                        <div className="text-sm text-gray-600">
-                            Menampilkan {raporSiswa.from} - {raporSiswa.to} dari {raporSiswa.total} data
+                <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
+                            <select
+                                value={kelasFilter}
+                                onChange={(e) => setKelasFilter(e.target.value)}
+                                className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-school-red/20 focus:border-school-red"
+                            >
+                                <option value="">Semua Kelas</option>
+                                {(kelas || []).map((k: any) => (
+                                    <option key={k.id} value={k.id}>
+                                        Kelas {k.tingkat} - {k.nama_kelas} ({k.jurusan?.singkatan || '-'})
+                                    </option>
+                                ))}
+                            </select>
                         </div>
-                        <div className="flex gap-2">
-                            {raporSiswa.prev_page_url && (
-                                <Link href={raporSiswa.prev_page_url} className="px-3 py-1 text-sm border rounded hover:bg-gray-50">
-                                    Prev
-                                </Link>
-                            )}
-                            <span className="px-3 py-1 text-sm bg-blue-600 text-white rounded">{raporSiswa.current_page}</span>
-                            {raporSiswa.next_page_url && (
-                                <Link href={raporSiswa.next_page_url} className="px-3 py-1 text-sm border rounded hover:bg-gray-50">
-                                    Next
-                                </Link>
-                            )}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+                            <select
+                                value={semester}
+                                onChange={(e) => setSemester(e.target.value)}
+                                className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-school-red/20 focus:border-school-red"
+                            >
+                                <option value="">Semua</option>
+                                <option value="Ganjil">Ganjil</option>
+                                <option value="Genap">Genap</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Tahun Ajaran</label>
+                            <input
+                                type="text"
+                                value={tahunAjaran}
+                                onChange={(e) => setTahunAjaran(e.target.value)}
+                                placeholder="2024/2025"
+                                className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-school-red/20 focus:border-school-red"
+                            />
+                        </div>
+                        <div className="flex items-end gap-2">
+                            <button
+                                onClick={handleFilter}
+                                className="px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700"
+                            >
+                                Filter
+                            </button>
+                            <Link
+                                href={route('rapor-siswa.index')}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+                            >
+                                Reset
+                            </Link>
                         </div>
                     </div>
-                )}
+                </div>
+
+                <AdminTable
+                    columns={columns}
+                    rows={raporSiswa?.data || []}
+                    pagination={{
+                        current_page: raporSiswa?.current_page,
+                        last_page: raporSiswa?.last_page,
+                        per_page: raporSiswa?.per_page,
+                        from: raporSiswa?.from,
+                        to: raporSiswa?.to,
+                        total: raporSiswa?.total,
+                        links: raporSiswa?.links,
+                    }}
+                    actions={(row) => [
+                        { icon: 'edit', onClick: () => Inertia.visit(route('rapor-siswa.input-nilai', row.id)), label: 'Nilai' },
+                        { icon: 'eye', onClick: () => Inertia.visit(route('rapor-siswa.show', row.id)), label: 'Detail' },
+                        { icon: 'delete', onClick: () => setDeleteTarget(row), label: 'Hapus' },
+                    ]}
+                />
+
+                <ConfirmModal
+                    open={!!deleteTarget}
+                    title="Hapus Rapor Siswa"
+                    message={`Yakin ingin menghapus rapor untuk "${deleteTarget?.siswa?.nama_lengkap || 'ini'}"?`}
+                    onConfirm={handleDelete}
+                    onCancel={() => setDeleteTarget(null)}
+                />
             </div>
-        </AdminLayout>
+        </>
     );
 }

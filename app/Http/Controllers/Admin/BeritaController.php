@@ -25,7 +25,7 @@ class BeritaController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $kategori = KategoriBerita::where('is_active', '0')->get();
+        $kategori = KategoriBerita::where('is_active', '1')->get();
 
         return Inertia::render('Admin/Berita/Index', [
             'berita' => $berita,
@@ -36,7 +36,7 @@ class BeritaController extends Controller
 
     public function create()
     {
-        $kategori = KategoriBerita::where('is_active', '0')->get();
+        $kategori = KategoriBerita::where('is_active', '1')->get();
 
         return Inertia::render('Admin/Berita/Create', [
             'kategori' => $kategori,
@@ -67,7 +67,7 @@ class BeritaController extends Controller
     public function edit(string $id)
     {
         $berita = Berita::with('kategori')->findOrFail($id);
-        $kategori = KategoriBerita::where('is_active', '0')->get();
+        $kategori = KategoriBerita::where('is_active', '1')->get();
 
         return Inertia::render('Admin/Berita/Edit', [
             'berita' => $berita,

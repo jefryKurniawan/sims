@@ -1,119 +1,127 @@
-import { Link, usePage } from '@inertiajs/inertia-react';
-import { Inertia } from '@inertiajs/inertia';
-import { Plus } from 'lucide-react';
+import { Head, Link, usePage } from "@inertiajs/inertia-react";
+import { Inertia } from "@inertiajs/inertia";
+import { useState } from "react";
+import { Plus } from "lucide-react";
+import AdminTable from "@/Components/AdminTable";
+import type { Column } from "@/Components/AdminTable";
+import ConfirmModal from "@/Components/ConfirmModal";
 
-interface UserDetail {
-    id: number;
-    user_id: number;
-    nip: string;
-    email: string;
-    linkidln: string | null;
-    instagram: string | null;
-    website: string | null;
-    facebook: string | null;
-    twitter: string | null;
-    youtube: string | null;
-    is_active: number;
-}
+export default function Index() {
+    const { buku, flash } = usePage().props;
+    const [deleteTarget, setDeleteTarget] = useState<any>(null);
 
-interface UserItem {
-    id: number;
-    name: string;
-    email: string;
-    username: string;
-    role: string;
-    status: string;
-    foto_profile: string | null;
-    userDetail: UserDetail | null;
-}
-
-interface Props {
-    perpus: UserItem[];
-}
-
-export default function Index({ perpus }: Props) {
-    const { flash } = usePage().props;
-
-    const handleDelete = (id: number) => {
-        if (confirm('Apakah anda yakin ingin menghapus pengguna Perpustakaan ini?')) {
-            Inertia.delete(route('users.perpus.destroy', id));
-        }
+    const handleDelete = () => {
+        if (!deleteTarget) return;
+        Inertia.delete(route("admin.perpustakaan.destroy", deleteTarget.id));
+        setDeleteTarget(null);
     };
+
+    const columns: Column[] = [
+        { key: "judul", label: "Judul" },
+        { key: "penulis", label: "Penulis" },
+        { key: "kategori", label: "Kategori", render: (v: string) => v || "-" },
+        {
+            key: "tahun_terbit",
+            label: "Tahun",
+            render: (v: number) => v || "-",
+        },
+        { key: "jumalah_stok", label: "Stok" },
+        {
+            key: "tersedia",
+            label: "Status",
+            render: (v: boolean) => (
+                <span
+                    className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${v ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}
+                >
+                    {v ? "Tersedia" : "Dipinjam"}
+                </span>
+            ),
+        },
+        {
+            key: "lokasi_rak",
+            label: "Lokasi Rak",
+            render: (v: string) => v || "-",
+        },
+    ];
 
     return (
         <>
-            <Head title="Pengguna Perpustakaan" />
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">Pengguna Perpustakaan</h1>
+            <Head title="Perpustakaan" />
+            <div className="p-4 lg:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                    <div>
+                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">
+                            Perpustakaan
+                        </h1>
+                        <p className="text-sm text-gray-500 mt-0.5">
+                            Kelola data buku dan stok peminjaman
+                        </p>
+                    </div>
                     <Link
-                        href={route('users.perpus.create')}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
+                        href={route("admin.perpustakaan.create")}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
                     >
-                        <Plus className="w-4 h-4" />
-                        + Perpustakaan Baru
+                        Buku Baru
                     </Link>
                 </div>
 
-                {flash.success && (
-                    <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
+                {flash?.success && (
+                    <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">
                         {flash.success}
                     </div>
                 )}
+                {flash?.error && (
+                    <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">
+                        {flash.error}
+                    </div>
+                )}
 
-                <div className="bg-white rounded-lg border overflow-hidden">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="bg-gray-50 border-b">
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nama</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">NIP</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y">
-                            {perpus.map((item, index) => (
-                                <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="px-4 py-3 text-sm text-gray-700">{index + 1}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.name}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.email}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.userDetail?.nip || '-'}</td>
-                                    <td className="px-4 py-3">
-                                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${item.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                            {item.status === 'active' ? 'Aktif' : 'Nonaktif'}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex gap-2">
-                                            <Link
-                                                href={route('users.perpus.edit', item.id)}
-                                                className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                            >
-                                                Edit
-                                            </Link>
-                                            <button
-                                                onClick={() => handleDelete(item.id)}
-                                                className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
-                                            >
-                                                Hapus
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            {perpus.length === 0 && (
-                                <tr>
-                                    <td colSpan={6} className="px-4 py-8 text-center text-sm text-gray-500">
-                                        Tidak ada data pengguna Perpustakaan
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                <AdminTable
+                    columns={columns}
+                    rows={buku?.data || []}
+                    pagination={{
+                        current_page: buku?.current_page,
+                        last_page: buku?.last_page,
+                        per_page: buku?.per_page,
+                        from: buku?.from,
+                        to: buku?.to,
+                        total: buku?.total,
+                        links: buku?.links,
+                    }}
+                    actions={(row) => [
+                        {
+                            icon: "eye",
+                            onClick: () =>
+                                Inertia.visit(
+                                    route("admin.perpustakaan.show", row.id),
+                                ),
+                            label: "Detail",
+                        },
+                        {
+                            icon: "edit",
+                            onClick: () =>
+                                Inertia.visit(
+                                    route("admin.perpustakaan.edit", row.id),
+                                ),
+                            label: "Edit",
+                        },
+                        {
+                            icon: "delete",
+                            onClick: () => setDeleteTarget(row),
+                            label: "Hapus",
+                        },
+                    ]}
+                />
+
+                <ConfirmModal
+                    open={!!deleteTarget}
+                    title="Hapus Buku"
+                    message={`Yakin ingin menghapus buku \"${deleteTarget?.judul}\"?`}
+                    onConfirm={handleDelete}
+                    onCancel={() => setDeleteTarget(null)}
+                />
             </div>
         </>
     );
 }
+

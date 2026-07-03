@@ -1,263 +1,124 @@
-import { Head, useForm, usePage, Link } from '@inertiajs/inertia-react';
+import { Head, usePage, Link } from '@inertiajs/inertia-react';
+import { Edit, Trash, Plus, Eye } from 'lucide-react';
+import AdminTable from '@/Components/AdminTable';
+import type { Column } from '@/Components/AdminTable';
+import ConfirmModal from '@/Components/ConfirmModal';
 import { useState } from 'react';
-import { Edit, Trash, Plus } from 'lucide-react';
+import { Inertia } from '@inertiajs/inertia';
 
 export default function Index() {
-  const { configs, flash } = usePage().props;
+    const { configs, flash } = usePage().props as any;
+    const [deleteTarget, setDeleteTarget] = useState<any>(null);
 
-  const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [configId, setConfigId] = useState<number | null>(null);
-  const form = useForm({
-    tahun_ajaran: '',
-    tanggal_buka: '',
-    tanggal_tutup: '',
-    kuota_reguler: '',
-    kuota_afirmasi: '',
-    kuota_prestasi: '',
-    biaya_pendaftaran: '',
-    aktif: true,
-  });
+    const handleDelete = () => {
+        if (!deleteTarget) return;
+        Inertia.delete(route('spmb.config.destroy', deleteTarget.id));
+        setDeleteTarget(null);
+    };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editing && configId) {
-      form.put(route('spmb.config.update', configId), {
-        onSuccess: () => {
-          form.reset();
-          setShowForm(false);
-          setEditing(false);
-          setConfigId(null);
+    const getStatusBadge = (config: any) => {
+        const now = new Date();
+        const buka = new Date(config.tanggal_buka);
+        const tutup = new Date(config.tanggal_tutup);
+        if (!config.aktif) return <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700">Nonaktif</span>;
+        if (now < buka) return <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700">Akan Datang</span>;
+        if (now > tutup) return <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-700">Ditutup</span>;
+        return <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">Aktif</span>;
+    };
+
+    const columns: Column[] = [
+        {
+            key: 'tahun_ajaran',
+            label: 'Tahun Ajaran',
+            render: (v: any) => v,
         },
-      });
-    } else {
-      form.post(route('spmb.config.store'), {
-        onSuccess: () => {
-          form.reset();
-          setShowForm(false);
+        {
+            key: 'periode',
+            label: 'Periode',
+            render: (v: any, row: any) => (
+                <div>
+                    {new Date(row.tanggal_buka).toLocaleDateString('id-ID')} -
+                    {new Date(row.tanggal_tutup).toLocaleDateString('id-ID')}
+                </div>
+            ),
         },
-      });
-    }
-  };
+        {
+            key: 'kuota',
+            label: 'Kuota (R/A/P)',
+            render: (_v: any, row: any) => (
+                <div>{row.kuota_reguler} / {row.kuota_afirmasi} / {row.kuota_prestasi}</div>
+            ),
+        },
+        {
+            key: 'biaya',
+            label: 'Biaya',
+            render: (_v: any, row: any) => (
+                <div>Rp {Number(row.biaya_pendaftaran).toLocaleString('id-ID')}</div>
+            ),
+        },
+        {
+            key: 'status',
+            label: 'Status',
+            render: (v: any, row: any) => getStatusBadge(row),
+        },
+    ];
 
-  const handleEdit = (c: any) => {
-    setShowForm(true);
-    setEditing(true);
-    setConfigId(c.id);
-    form.set('tahun_ajaran', c.tahun_ajaran);
-    form.set('tanggal_buka', c.tanggal_buka?.substring(0, 10));
-    form.set('tanggal_tutup', c.tanggal_tutup?.substring(0, 10));
-    form.set('kuota_reguler', c.kuota_reguler);
-    form.set('kuota_afirmasi', c.kuota_afirmasi);
-    form.set('kuota_prestasi', c.kuota_prestasi);
-    form.set('biaya_pendaftaran', c.biaya_pendaftaran);
-    form.set('aktif', c.aktif);
-  };
-
-  const handleDelete = (id: number) => {
-    if (window.confirm('Yakin ingin menghapus konfigurasi ini?')) {
-      form.delete(route('spmb.config.destroy', id));
-    }
-  };
-
-  const getStatusBadge = (config: any) => {
-    const now = new Date();
-    const buka = new Date(config.tanggal_buka);
-    const tutup = new Date(config.tanggal_tutup);
-    if (!config.aktif) return <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700">Nonaktif</span>;
-    if (now < buka) return <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700">Akan Datang</span>;
-    if (now > tutup) return <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-700">Ditutup</span>;
-    return <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">Aktif</span>;
-  };
-
-  return (
-    <>
-      <Head title="Konfigurasi SPMB" />
-      <div className="p-6">
-        {flash?.success && (
-          <div className="mb-4 p-4 bg-green-100 dark:bg-green-900 dark:text-green-300 rounded-lg">
-            {flash.success}
-          </div>
-        )}
-        {flash?.error && (
-          <div className="mb-4 p-4 bg-red-100 dark:bg-red-900 dark:text-red-300 rounded-lg">
-            {flash.error}
-          </div>
-        )}
-
-        <div className="mb-4">
-          <button
-            onClick={() => {
-              setShowForm(true);
-              setEditing(false);
-              form.reset();
-            }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 transition text-sm font-medium"
-          >
-            <Plus className="w-4 h-4" />
-            Konfigurasi Baru
-          </button>
-        </div>
-
-        {showForm && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Tahun Ajaran</label>
-                <input
-                  type="text"
-                  value={form.data.tahun_ajaran}
-                  onChange={e => form.set('tahun_ajaran', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                  placeholder="2025/2026"
-                />
-                {form.errors.tahun_ajaran && <span className="text-red-600 text-sm">{form.errors.tahun_ajaran}</span>}
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Tanggal Buka</label>
-                  <input
-                    type="date"
-                    value={form.data.tanggal_buka}
-                    onChange={e => form.set('tanggal_buka', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  {form.errors.tanggal_buka && <span className="text-red-600 text-sm">{form.errors.tanggal_buka}</span>}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Tanggal Tutup</label>
-                  <input
-                    type="date"
-                    value={form.data.tanggal_tutup}
-                    onChange={e => form.set('tanggal_tutup', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  {form.errors.tanggal_tutup && <span className="text-red-600 text-sm">{form.errors.tanggal_tutup}</span>}
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Kuota Reguler</label>
-                  <input
-                    type="number"
-                    value={form.data.kuota_reguler}
-                    onChange={e => form.set('kuota_reguler', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  {form.errors.kuota_reguler && <span className="text-red-600 text-sm">{form.errors.kuota_reguler}</span>}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Kuota Afirmasi</label>
-                  <input
-                    type="number"
-                    value={form.data.kuota_afirmasi}
-                    onChange={e => form.set('kuota_afirmasi', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  {form.errors.kuota_afirmasi && <span className="text-red-600 text-sm">{form.errors.kuota_afirmasi}</span>}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Kuota Prestasi</label>
-                  <input
-                    type="number"
-                    value={form.data.kuota_prestasi}
-                    onChange={e => form.set('kuota_prestasi', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  {form.errors.kuota_prestasi && <span className="text-red-600 text-sm">{form.errors.kuota_prestasi}</span>}
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Biaya Pendaftaran (Rp)</label>
-                <input
-                  type="number"
-                  value={form.data.biaya_pendaftaran}
-                  onChange={e => form.set('biaya_pendaftaran', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-                {form.errors.biaya_pendaftaran && <span className="text-red-600 text-sm">{form.errors.biaya_pendaftaran}</span>}
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="aktif"
-                  checked={form.data.aktif}
-                  onChange={e => form.set('aktif', e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <label htmlFor="aktif" className="text-sm font-medium">Aktif</label>
-              </div>
-              <div className="flex justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={() => { setShowForm(false); form.reset(); }}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium"
-                >
-                  Batal
-                </button>
-                <button type="submit" className="px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 text-sm font-medium" disabled={form.processing}>
-                  {editing ? 'Update' : 'Simpan'}
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-
-        <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
-          <table className="w-full text-sm text-left rtl:text-right text-body">
-            <thead className="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
-              <tr>
-                <th scope="col" className="px-6 py-3 font-medium">Tahun Ajaran</th>
-                <th scope="col" className="px-6 py-3 font-medium">Periode</th>
-                <th scope="col" className="px-6 py-3 font-medium">Kuota (R/A/P)</th>
-                <th scope="col" className="px-6 py-3 font-medium">Biaya</th>
-                <th scope="col" className="px-6 py-3 font-medium">Status</th>
-                <th scope="col" className="px-6 py-3 font-medium">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {configs.map((c: any) => (
-                <tr key={c.id} className="">
-                  <td className="px-6 py-4 font-medium text-heading whitespace-nowrap">
-                    {c.tahun_ajaran}
-                  </td>
-                  <td className="px-6 py-4">
-                    {new Date(c.tanggal_buka).toLocaleDateString('id-ID')} - {new Date(c.tanggal_tutup).toLocaleDateString('id-ID')}
-                  </td>
-                  <td className="px-6 py-4">
-                    {c.kuota_reguler} / {c.kuota_afirmasi} / {c.kuota_prestasi}
-                  </td>
-                  <td className="px-6 py-4">
-                    Rp {Number(c.biaya_pendaftaran).toLocaleString('id-ID')}
-                  </td>
-                  <td className="px-6 py-4">{getStatusBadge(c)}</td>
-                  <td className="px-6 py-4 text-center whitespace-nowrap">
-                    <span
-                      onClick={() => handleEdit(c)}
-                      className="cursor-pointer hover:text-blue-600 mr-2"
+    return (
+        <>
+            <Head title="Konfigurasi SPMB" />
+            <div className="p-4 lg:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                    <div>
+                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Konfigurasi SPMB</h1>
+                        <p className="text-sm text-gray-500 mt-0.5">Kelola konfigurasi pendaftaran SPMB</p>
+                    </div>
+                    <Link
+                        href={route('spmb.config.create')}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
                     >
-                      <Edit className="h-5 w-5" />
-                    </span>
-                    <span
-                      onClick={() => handleDelete(c.id)}
-                      className="cursor-pointer hover:text-red-600"
-                    >
-                      <Trash className="h-5 w-5" />
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {configs.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                    Tidak ada data konfigurasi
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </>
-  );
+                        <Plus className="w-4 h-4" />
+                        Konfigurasi Baru
+                    </Link>
+                </div>
+
+                {flash?.success && <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>}
+                {flash?.error && <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>}
+
+                <AdminTable
+                    columns={columns}
+                    rows={configs || []}
+                    pagination={{
+                        current_page: configs?.current_page || 1,
+                        last_page: configs?.last_page || 1,
+                        per_page: configs?.per_page || 15,
+                        from: configs?.from || 1,
+                        to: configs?.to || 0,
+                        total: configs?.total || 0,
+                        links: configs?.links || [],
+                    }}
+                    actions={(row) => [
+                        {
+                            icon: 'eye',
+                            onClick: () => Inertia.visit(route('spmb.config.show', row.id)),
+                            label: 'Detail'
+                        },
+                        {
+                            icon: 'edit',
+                            onClick: () => Inertia.visit(route('spmb.config.edit', row.id)),
+                            label: 'Edit'
+                        },
+                        { icon: 'delete', onClick: () => setDeleteTarget(row), label: 'Hapus' },
+                    ]}
+                />
+
+                <ConfirmModal
+                    open={!!deleteTarget}
+                    title="Hapus Konfigurasi SPMB"
+                    message={`Yakin ingin menghapus konfigurasi SPMB untuk tahun ajaran \"${deleteTarget?.tahun_ajaran || ''}\"?`}
+                    onConfirm={handleDelete}
+                    onCancel={() => setDeleteTarget(null)}
+                />
+            </div>
+        </>
+    );
 }

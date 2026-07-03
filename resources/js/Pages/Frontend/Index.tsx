@@ -111,7 +111,7 @@ export default function Index({
               Ruang belajar modern untuk generasi wason depan dengan pondasi karakter yang kuat.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/program/studi" className="inline-flex items-center justify-center gap-2 text-white font-bold px-8 py-4 rounded-lg hover:shadow-xl transition-all" style={{ backgroundColor: secondaryColor }}>
+              <Link href={route('program.index')} className="inline-flex items-center justify-center gap-2 text-white font-bold px-8 py-4 rounded-lg hover:shadow-xl transition-all" style={{ backgroundColor: secondaryColor }}>
                 Jelajahi Program <ArrowRight className="w-4 h-4" />
               </Link>
               <Link href="/spmb/daftar" className="inline-flex items-center justify-center gap-2 bg-white/10 border border-white/40 text-white font-bold px-8 py-4 rounded-lg hover:bg-white/20 transition-all">
@@ -140,7 +140,7 @@ export default function Index({
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Pioneering Academic Excellence</h2>
               <p className="text-gray-600 text-lg">Melatih nilai unggulan dan karakter siswa-siswi dalam bidang akademik maupun non-akademik.</p>
             </div>
-            <Link href="/program/studi" className="text-red-600 font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            <Link href={route('program.index')} className="text-red-600 font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
               Lihat Kurikulum <ChevronRight className="w-4 h-4" />
             </Link>
           </div>

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 interface JurusanItem {
     id: number;
-    nama_jurusan: string;
+    nama: string;
     singkatan: string;
 }
 
@@ -93,7 +93,7 @@ export default function Form({ raporKelas, jurusan }: Props) {
                             <option value="">Pilih Jurusan</option>
                             {jurusan.map((j) => (
                                 <option key={j.id} value={j.id}>
-                                    {j.nama_jurusan} ({j.singkatan})
+                                    {j.nama} ({j.singkatan})
                                 </option>
                             ))}
                         </select>

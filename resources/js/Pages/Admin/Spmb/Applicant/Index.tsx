@@ -113,7 +113,7 @@ export default function Index() {
                             {applicants.data.length > 0 ? (
                                 applicants.data.map((a: any, index: number) => (
                                     <tr key={a.id} className="hover:bg-gray-50">
-                                        <td className="px-4 py-3 text-sm text-gray-700">{(applicants.current_page - 1) * applicants.per_page + index + 1}</td>
+                                        <td className="px-4 py-3 text-sm text-gray-700">{(applicants.current_page - 1) * applicants.per_page +index + 1}</td>
                                         <td className="px-4 py-3 text-sm font-mono text-gray-700">{a.nomor_registrasi}</td>
                                         <td className="px-4 py-3 text-sm text-gray-700">
                                             <div className="font-semibold">{a.nama_lengkap}</div>

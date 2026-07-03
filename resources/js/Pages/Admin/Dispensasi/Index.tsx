@@ -1,17 +1,33 @@
-import { Head, useForm, usePage } from '@inertiajs/inertia-react';
-import { Inertia } from '@inertiajs/inertia';
-import { useState } from 'react';
-import { Plus, X } from 'lucide-react';
-import AdminTable from '@/Components/AdminTable';
-import type { Column } from '@/Components/AdminTable';
-import ConfirmModal from '@/Components/ConfirmModal';
+import { Head, Link, usePage, useForm } from "@inertiajs/inertia-react";
+import { Inertia } from "@inertiajs/inertia";
+import { useState } from "react";
+import { X } from "lucide-react";
+import AdminTable from "@/Components/AdminTable";
+import type { Column } from "@/Components/AdminTable";
+import ConfirmModal from "@/Components/ConfirmModal";
+
+interface DispensasiItem {
+  id: number;
+  siswa: { id: number; nama_lengkap: string; nisn: string } | null;
+  jenis: 'potongan' | 'penundaan';
+  nominal: number;
+  tanggal_mulai: string;
+  tanggal_selesai: string | null;
+  keterangan: string | null;
+}
 
 export default function Index() {
-  const { dispensasi, siswa, flash } = usePage().props;
+  const { dispensasi, siswa, flash } = usePage().props as {
+    dispensasi: any;
+    siswa: any[];
+    flash: { success?: string; error?: string };
+  };
+
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<any>(null);
+
   const form = useForm({
     siswa_id: '',
     jenis: 'potongan',
@@ -28,8 +44,8 @@ export default function Index() {
     form.reset();
   };
 
-  const openEdit = (d: any) => {
-    form.setData('siswa_id', String(d.siswa_id));
+  const openEdit = (d: DispensasiItem) => {
+    form.setData('siswa_id', String((d as any).siswa_id));
     form.setData('jenis', d.jenis);
     form.setData('nominal', String(d.nominal));
     form.setData('tanggal_mulai', d.tanggal_mulai ? d.tanggal_mulai.split('T')[0] : '');
@@ -55,52 +71,50 @@ export default function Index() {
 
   const handleDelete = () => {
     if (!deleteTarget) return;
-    Inertia.delete(route('dispensasi.destroy', deleteTarget.id));
+    Inertia.delete(route("dispensasi.destroy", deleteTarget.id));
     setDeleteTarget(null);
   };
 
   const columns: Column[] = [
     {
-      key: 'siswa',
-      label: 'Siswa',
+      key: "siswa",
+      label: "Siswa",
       render: (_v: any, row: any) => (
         <div>
-          <span className="font-medium">{row.siswa?.nama_lengkap ?? 'Tidak Diketahui'}</span>
-          <span className="text-xs text-gray-400 ml-1.5">({row.siswa?.nisn ?? '-'})</span>
+          <span className="font-medium text-gray-900">{row.siswa?.nama_lengkap || "Tidak Diketahui"}</span>
+          <span className="text-xs text-gray-400 ml-1.5">({row.siswa?.nisn || "-"})</span>
         </div>
       ),
     },
     {
-      key: 'jenis',
-      label: 'Jenis',
+      key: "jenis",
+      label: "Jenis",
       render: (v: string) => (
-        <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-          v === 'potongan' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-        }`}>
-          {v === 'potongan' ? 'Potongan' : 'Penundaan'}
+        <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${v === "potongan" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
+          {v === "potongan" ? "Potongan" : "Penundaan"}
         </span>
       ),
     },
     {
-      key: 'nominal',
-      label: 'Nominal',
-      render: (v: string) => `Rp ${parseFloat(v).toLocaleString('id-ID')}`,
+      key: "nominal",
+      label: "Nominal",
+      render: (v: any) => `Rp ${parseFloat(v).toLocaleString("id-ID")}`,
     },
     {
-      key: 'periode',
-      label: 'Periode',
+      key: "tanggal_mulai",
+      label: "Periode",
       render: (_v: any, row: any) => {
-        if (!row.tanggal_mulai) return '-';
-        const mulai = new Date(row.tanggal_mulai).toLocaleDateString('id-ID');
-        const selesai = row.tanggal_selesai ? new Date(row.tanggal_selesai).toLocaleDateString('id-ID') : null;
-        return selesai ? `${mulai} - ${selesai}` : mulai;
+        if (!row.tanggal_mulai) return "-";
+        const mulai = new Date(row.tanggal_mulai).toLocaleDateString("id-ID");
+        const selesai = row.tanggal_selesai ? new Date(row.tanggal_selesai).toLocaleDateString("id-ID") : "";
+        return `${mulai}${selesai ? " - " + selesai : ""}`;
       },
     },
     {
-      key: 'keterangan',
-      label: 'Keterangan',
-      render: (v: string) => v || '-',
-      wrapClass: 'max-w-[200px] truncate',
+      key: "keterangan",
+      label: "Keterangan",
+      render: (v: string) => v || "-",
+      wrapClass: "max-w-xs",
     },
   ];
 
@@ -108,30 +122,23 @@ export default function Index() {
     <>
       <Head title="Dispensasi SPP" />
       <div className="p-4 lg:p-6">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
           <div>
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Dispensasi SPP</h1>
             <p className="text-sm text-gray-500 mt-0.5">Kelola potongan & penundaan pembayaran SPP</p>
           </div>
           <button
+            type="button"
             onClick={openAdd}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
           >
-            <Plus className="w-4 h-4" />
-            + Dispensasi Baru
+            Dispensasi Baru
           </button>
         </div>
 
-        {/* Flash */}
-        {flash?.success && (
-          <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>
-        )}
-        {flash?.error && (
-          <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>
-        )}
+        {flash?.success && <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>}
+        {flash?.error && <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>}
 
-        {/* Table */}
         <AdminTable
           columns={columns}
           rows={dispensasi?.data || []}
@@ -145,100 +152,123 @@ export default function Index() {
             links: dispensasi?.links,
           }}
           actions={(row) => [
-            { icon: 'eye', onClick: () => Inertia.visit(route('dispensasi.show', row.id)), label: 'Detail' },
-            { icon: 'edit', onClick: () => openEdit(row), label: 'Edit' },
-            { icon: 'delete', onClick: () => setDeleteTarget(row), label: 'Hapus' },
+            { icon: "eye", onClick: () => Inertia.visit(route("dispensasi.show", row.id)), label: "Detail" },
+            { icon: "edit", onClick: () => Inertia.visit(route('dispensasi.edit', row.id)), label: "Edit" },
+            { icon: "delete", onClick: () => setDeleteTarget(row), label: "Hapus" },
           ]}
         />
 
         {/* Form Modal */}
         {showForm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-            <div className="relative bg-white border border-gray-200 rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto mx-4">
-              <div className="flex items-center justify-between px-6 pt-6 pb-4">
-                <h2 className="text-xl font-bold text-gray-900 font-heading">
-                  {editing ? 'Edit Dispensasi' : 'Tambah Dispensasi'}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+              <div className="flex items-start justify-between mb-4">
+                <h2 className="text-xl font-semibold text-gray-900 font-heading">
+                  {editing ? "Edit Dispensasi" : "Tambah Dispensasi"}
                 </h2>
                 <button
+                  type="button"
                   onClick={() => { setShowForm(false); form.reset(); }}
                   className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-4">
+
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Siswa</label>
+                  <label className="block text-sm font-medium mb-1">Siswa <span className="text-red-500">*</span></label>
                   <select
                     value={form.data.siswa_id}
-                    onChange={e => form.setData('siswa_id', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm"
+                    onChange={(e) => form.setData("siswa_id", e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Pilih Siswa</option>
                     {siswa.map((s: any) => (
-                      <option key={s.id} value={s.id}>{s.nama_lengkap} ({s.nisn})</option>
+                      <option key={s.id} value={s.id}>
+                        {s.nama_lengkap} ({s.nisn})
+                      </option>
                     ))}
                   </select>
-                  {form.errors.siswa_id && <span className="text-red-600 text-xs">{form.errors.siswa_id}</span>}
+                  {form.errors.siswa_id && <p className="mt-1 text-sm text-red-600">{form.errors.siswa_id}</p>}
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Jenis</label>
+                  <label className="block text-sm font-medium mb-1">Jenis <span className="text-red-500">*</span></label>
                   <select
                     value={form.data.jenis}
-                    onChange={e => form.setData('jenis', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm"
+                    onChange={(e) => form.setData("jenis", e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="potongan">Potongan</option>
                     <option value="penundaan">Penundaan</option>
                   </select>
+                  {form.errors.jenis && <p className="mt-1 text-sm text-red-600">{form.errors.jenis}</p>}
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Nominal (Rp)</label>
+                  <label className="block text-sm font-medium mb-1">Nominal (Rp) <span className="text-red-500">*</span></label>
                   <input
-                    type="number" step="0.01" min="0"
+                    type="number"
+                    step="0.01"
+                    min="0"
                     value={form.data.nominal}
-                    onChange={e => form.setData('nominal', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm"
+                    onChange={(e) => form.setData("nominal", e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Nominal dispensasi"
                   />
-                  {form.errors.nominal && <span className="text-red-600 text-xs">{form.errors.nominal}</span>}
+                  {form.errors.nominal && <p className="mt-1 text-sm text-red-600">{form.errors.nominal}</p>}
                 </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1.5">Tanggal Mulai</label>
+                    <label className="block text-sm font-medium mb-1">Tanggal Mulai <span className="text-red-500">*</span></label>
                     <input
                       type="date"
                       value={form.data.tanggal_mulai}
-                      onChange={e => form.setData('tanggal_mulai', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm"
+                      onChange={(e) => form.setData("tanggal_mulai", e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
+                    {form.errors.tanggal_mulai && <p className="mt-1 text-sm text-red-600">{form.errors.tanggal_mulai}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5">Tanggal Selesai</label>
+                    <label className="block text-sm font-medium mb-1">Tanggal Selesai</label>
                     <input
                       type="date"
                       value={form.data.tanggal_selesai}
-                      onChange={e => form.setData('tanggal_selesai', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm"
+                      onChange={(e) => form.setData("tanggal_selesai", e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
+                    {form.errors.tanggal_selesai && <p className="mt-1 text-sm text-red-600">{form.errors.tanggal_selesai}</p>}
                   </div>
                 </div>
+
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Keterangan</label>
+                  <label className="block text-sm font-medium mb-1">Keterangan</label>
                   <textarea
                     value={form.data.keterangan}
-                    onChange={e => form.setData('keterangan', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm"
+                    onChange={(e) => form.setData("keterangan", e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     rows={3}
                     placeholder="Keterangan tambahan"
                   />
+                  {form.errors.keterangan && <p className="mt-1 text-sm text-red-600">{form.errors.keterangan}</p>}
                 </div>
+
                 <div className="flex justify-end gap-3 pt-2">
-                  <button type="button" onClick={() => { setShowForm(false); form.reset(); }} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                  <button
+                    type="button"
+                    onClick={() => { setShowForm(false); form.reset(); }}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
                     Batal
                   </button>
-                  <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50" disabled={form.processing}>
-                    {form.processing ? 'Menyimpan...' : editing ? 'Update' : 'Simpan'}
+                  <button
+                    type="submit"
+                    className="px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                    disabled={form.processing}
+                  >
+                    {form.processing ? "Menyimpan..." : editing ? "Update" : "Simpan"}
                   </button>
                 </div>
               </form>
@@ -246,11 +276,10 @@ export default function Index() {
           </div>
         )}
 
-        {/* Delete Confirm */}
         <ConfirmModal
           open={!!deleteTarget}
           title="Hapus Dispensasi"
-          message={`Yakin ingin menghapus dispensasi untuk siswa "${deleteTarget?.siswa?.nama_lengkap}"? Tindakan ini tidak dapat dibatalkan.`}
+          message={`Yakin ingin menghapus dispensasi untuk "${deleteTarget?.siswa?.nama_lengkap || "ini"}"?`}
           onConfirm={handleDelete}
           onCancel={() => setDeleteTarget(null)}
         />

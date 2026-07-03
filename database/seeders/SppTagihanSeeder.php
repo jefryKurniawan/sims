@@ -24,7 +24,7 @@ class SppTagihanSeeder extends Seeder
 
         foreach ($siswa as $s) {
             // Generate tagihan for last 3 months
-            foreach (range(0, 2) as $i) {
+            foreach (range(0, 3) as $i) {
                 $date = now()->subMonths($i);
                 $status = $i === 0 ? 'belum_lunas' : fake()->randomElement(['lunas', 'belum_lunas']);
 

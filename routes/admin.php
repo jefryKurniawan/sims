@@ -52,7 +52,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::resource('website/footer', 'Admin\Website\FooterController');
 
         // Alumni
-        Route::resource('alumni', 'Admin\AlumniController');
+        Route::resource('alumni', 'Admin\AlumniController', ['parameters' => ['alumni' => 'alumni']]);
         Route::resource('alumni/donasi', 'Admin\DonasiController', ['as' => 'alumni']);
         Route::post('alumni/donasi/{donasi}/verify', 'Admin\DonasiController@verify')->name('alumni.donasi.verify');
         Route::resource('alumni/tracer-study', 'Admin\TracerStudyController', ['as' => 'alumni']);
@@ -137,7 +137,10 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::resource('kelas', 'Admin\KelasController');
 
         // Sarana Prasarana
-        Route::resource('sarana', 'Admin\SaranaPrasaranaController');
+            Route::resource('sarana', 'Admin\SaranaPrasaranaController');
+
+    // Perpustakaan
+    Route::resource('perpustakaan', 'Admin\PerpustakaanController', ['as' => 'admin', 'parameters' => ['perpustakaan' => 'buku']]);
 
         // SPP
         Route::resource('spp', 'Admin\SppController');
@@ -151,9 +154,12 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::get('spmb/ranking', 'Admin\SpmbRankingController@index')->name('spmb.ranking.index');
         Route::post('spmb/ranking/proses', 'Admin\SpmbRankingController@proses')->name('spmb.ranking.proses');
         Route::get('spmb/ranking/hitung-skor/{spmbApplicant}', 'Admin\SpmbRankingController@hitungSkorIndividual')->name('spmb.ranking.hitung-skor');
-        Route::get('spmb/config', 'Admin\SpmbConfigController@index')->name('spmb.config.index');
+        Route::get('spmb/config/create', 'Admin\SpmbConfigController@create')->name('spmb.config.create');
+    Route::get('spmb/config', 'Admin\SpmbConfigController@index')->name('spmb.config.index');
         Route::post('spmb/config', 'Admin\SpmbConfigController@store')->name('spmb.config.store');
         Route::put('spmb/config/{spmbConfig}', 'Admin\SpmbConfigController@update')->name('spmb.config.update');
         Route::delete('spmb/config/{spmbConfig}', 'Admin\SpmbConfigController@destroy')->name('spmb.config.destroy');
+    Route::get('spmb/config/{spmbConfig}/edit', 'Admin\SpmbConfigController@edit')->name('spmb.config.edit');
+    Route::get('spmb/config/{spmbConfig}', 'Admin\SpmbConfigController@show')->name('spmb.config.show');
     });
 });

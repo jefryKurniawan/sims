@@ -110,7 +110,7 @@ export default function Create({ alumis }: Props) {
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                                     placeholder="2023"
                                     min="1900"
-                                    max={new Date().getFullYear() + 1}
+                                    max={new Date().getFullYear() +1}
                                 />
                                 {errors.tahun_lulus && (
                                     <p className="text-red-500 text-sm mt-1">{errors.tahun_lulus}</p>

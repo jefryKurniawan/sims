@@ -114,7 +114,7 @@ export default function Sidebar({ isOpen = true, onClose, collapsed = false }: S
         },
         {
           title: 'Perpustakaan',
-          href: '#',
+          href: route('admin.perpustakaan.index'),
           icon: <Library className="w-5 h-5" />
         },
         {

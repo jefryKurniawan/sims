@@ -12,29 +12,28 @@ class SiswaSeeder extends Seeder
     public function run(): void
     {
         // Get users that are role murid and do not have a siswa record
-        $users = User::where('role', 'murid')
-            ->whereDoesntHave('siswa') // Need to define siswa() relation on User model
-            ->limit(20)
+        $users = User::whereIn('role', ['Murid', 'Guest'])
+            ->whereDoesntHave('siswa')
+            ->limit(30)
             ->get();
 
-        // If the relation doesn't exist, we fallback to checking via subquery
         if ($users->isEmpty()) {
-            $users = User::where('role', 'murid')
+            $users = User::whereIn('role', ['Murid', 'Guest'])
                 ->whereNotIn('id', function($query) {
                     $query->select('user_id')->from('siswa');
                 })
-                ->limit(20)
+                ->limit(30)
                 ->get();
         }
 
         if ($users->isEmpty()) {
-            // fallback: create some users
-            $users = User::factory()->count(20)->make([
-                'role' => 'murid',
+            $users = User::factory()->count(30)->make([
+                'role' => 'Murid',
                 'password' => bcrypt('password'),
             ]);
             foreach ($users as $user) {
                 $user->save();
+                $user->assignRole('Murid');
             }
         }
 

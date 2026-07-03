@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             ForumThreadSeeder::class,
             ForumReplySeeder::class,
             FooterSeeder::class,
+            MuridSeeder::class,
             SppTagihanSeeder::class,
         ]);
     }

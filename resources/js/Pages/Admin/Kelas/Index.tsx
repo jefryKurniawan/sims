@@ -62,7 +62,7 @@ export default function Index() {
     {
       key: 'jurusan',
       label: 'Jurusan',
-      render: (_v: any, row: any) => row.jurusan?.nama_jurusan || '-',
+      render: (_v: any, row: any) => row.jurusan?.nama || '-',
     },
     {
       key: 'wali_kelas',
@@ -84,7 +84,7 @@ export default function Index() {
             <p className="text-sm text-gray-500 mt-0.5">Kelola rombongan belajar & wali kelas</p>
           </div>
           <button onClick={openAdd} className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm">
-            <Plus className="w-4 h-4" />+ Kelas Baru
+            Kelas Baru
           </button>
         </div>
 
@@ -134,7 +134,7 @@ export default function Index() {
                   <label className="block text-sm font-medium mb-1.5">Jurusan</label>
                   <select value={form.data.jurusan_id} onChange={e => form.setData('jurusan_id', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm">
                     <option value="">Tanpa Jurusan</option>
-                    {jurusan?.map((j: any) => <option key={j.id} value={j.id}>{j.nama_jurusan}</option>)}
+                    {jurusan?.map((j: any) => <option key={j.id} value={j.id}>{j.nama}</option>)}
                   </select>
                 </div>
                 <div>

@@ -1,164 +1,79 @@
-import { Head, Link, usePage } from "@inertiajs/inertia-react";
-import { Inertia } from "@inertiajs/inertia";
-import { Edit, Trash, Plus } from "lucide-react";
+import { Head, Link, usePage } from '@inertiajs/inertia-react';
+import { Inertia } from '@inertiajs/inertia';
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+import AdminTable from '@/Components/AdminTable';
+import type { Column } from '@/Components/AdminTable';
+import ConfirmModal from '@/Components/ConfirmModal';
 
-interface UserItem {
-    id: number;
-    name: string;
-    email: string;
-    username: string;
-    role: string;
-    status: string;
-    foto_profile: string | null;
+export default function Index() {
+  const { murid, flash } = usePage().props;
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
+
+  const handleDelete = () => {
+    if (!deleteTarget) return;
+    Inertia.delete(route('users.murid.destroy', deleteTarget.id));
+    setDeleteTarget(null);
+  };
+
+  const columns: Column[] = [
+    { key: 'name', label: 'Nama' },
+    { key: 'email', label: 'Email' },
+    { key: 'username', label: 'Username', render: (v: string) => v || '-' },
+    {
+      key: 'role',
+      label: 'Role',
+      render: (v: string) => (
+        <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${v === 'Murid' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>{v}</span>
+      ),
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (v: string) => (
+        <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${v === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>{v === 'active' ? 'Aktif' : 'Nonaktif'}</span>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <Head title="Calon Murid / Murid" />
+      <div className="p-4 lg:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Calon Murid / Murid</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Kelola akun calon murid & murid</p>
+          </div>
+          <Link href={route('users.murid.create')} className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm">
+            Calon Murid Baru
+          </Link>
+        </div>
+
+        {flash?.success && <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>}
+        {flash?.error && <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>}
+
+        <AdminTable
+          columns={columns}
+          rows={murid?.data || []}
+          pagination={{
+            current_page: murid?.current_page,
+            last_page: murid?.last_page,
+            per_page: murid?.per_page,
+            from: murid?.from,
+            to: murid?.to,
+            total: murid?.total,
+            links: murid?.links,
+          }}
+          actions={(row) => [
+            { icon: 'eye', onClick: () => Inertia.visit(route('users.murid.show', row.id)), label: 'Detail' },
+            { icon: 'edit', onClick: () => Inertia.visit(route('users.murid.edit', row.id)), label: 'Edit' },
+            { icon: 'delete', onClick: () => setDeleteTarget(row), label: 'Hapus' },
+          ]}
+        />
+
+        <ConfirmModal open={!!deleteTarget} title="Hapus Murid" message={`Yakin ingin menghapus "${deleteTarget?.name}"?`} onConfirm={handleDelete} onCancel={() => setDeleteTarget(null)} />
+      </div>
+    </>
+  );
 }
-
-interface Props {
-    murid: UserItem[];
-}
-
-export default function Index({ murid }: Props) {
-    const { flash } = usePage().props;
-
-    const handleDelete = (id: number) => {
-        if (confirm("Apakah anda yakin ingin menghapus pengguna ini?")) {
-            Inertia.delete(route("users.murid.destroy", id));
-        }
-    };
-
-    return (
-        <>
-            <Head title="Calon Murid / Murid" />
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">
-                        Calon Murid / Murid
-                    </h1>
-                    <Link
-                        href={route("users.murid.create")}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
-                    >
-                        <Plus className="w-4 h-4" />
-                        Calon Murid Baru
-                    </Link>
-                </div>
-
-                {flash.success && (
-                    <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
-                        {flash.success}
-                    </div>
-                )}
-
-                <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
-                    <table className="w-full text-sm text-left rtl:text-right text-body">
-                        <thead className="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
-                            <tr>
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 font-medium text-left whitespace-nowrap"
-                                >
-                                    No
-                                </th>
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 font-medium text-left whitespace-nowrap"
-                                >
-                                    Nama
-                                </th>
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 font-medium text-left whitespace-nowrap"
-                                >
-                                    Email
-                                </th>
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 font-medium text-left whitespace-nowrap"
-                                >
-                                    Username
-                                </th>
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 font-medium text-left whitespace-nowrap"
-                                >
-                                    Role
-                                </th>
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 font-medium text-left whitespace-nowrap"
-                                >
-                                    Status
-                                </th>
-                                <th
-                                    scope="col"
-                                    className="px-6 py-3 font-medium text-left whitespace-nowrap"
-                                >
-                                    Aksi
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y">
-                            {murid.map((item, index) => (
-                                <tr key={item.id} className="">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        {index + 1}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        {item.name}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {item.email}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {item.username}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {item.role}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <span
-                                            className={`px-2 py-1 text-xs font-medium rounded-full ${item.status === "active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-                                        >
-                                            {item.status === "active"
-                                                ? "Aktif"
-                                                : "Nonaktif"}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 text-center whitespace-nowrap">
-                                        <Link
-                                            href={route(
-                                                "users.murid.edit",
-                                                item.id,
-                                            )}
-                                            className="mr-3"
-                                        >
-                                            <Edit className="h-5 w-5 text-blue-600 hover:text-blue-700" />
-                                        </Link>
-                                        <button
-                                            onClick={() =>
-                                                handleDelete(item.id)
-                                            }
-                                            className="text-red-600 hover:text-red-700"
-                                        >
-                                            <Trash className="h-5 w-5" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            {murid.length === 0 && (
-                                <tr>
-                                    <td
-                                        colSpan={7}
-                                        className="px-6 py-4 text-center text-gray-500"
-                                    >
-                                        Tidak ada data Calon Murid
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </>
-    );
-}
-

@@ -18,7 +18,7 @@ interface KelasInfo {
     id: number;
     nama_kelas: string;
     tingkat: number;
-    jurusan: { id: number; singkatan: string; nama_jurusan: string } | null;
+    jurusan: { id: number; singkatan: string; nama: string } | null;
 }
 
 interface MapelNilai {

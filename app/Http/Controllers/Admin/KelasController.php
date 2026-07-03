@@ -21,7 +21,7 @@ class KelasController extends Controller
             ->withQueryString();
 
         $guru = Guru::select('id', 'nama_lengkap')->get();
-        $jurusan = Jurusan::select('id', 'nama_jurusan')->get();
+        $jurusan = Jurusan::select('id', 'nama')->get();
 
         return Inertia::render('Admin/Kelas/Index', [
             'kelas' => $kelas,
@@ -58,7 +58,7 @@ class KelasController extends Controller
     public function edit(Kelas $kela)
     {
         $guru = Guru::select('id', 'nama_lengkap')->get();
-        $jurusan = Jurusan::select('id', 'nama_jurusan')->get();
+        $jurusan = Jurusan::select('id', 'nama')->get();
 
         return Inertia::render('Admin/Kelas/Edit', [
             'kelas' => $kela,

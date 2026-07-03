@@ -10,6 +10,7 @@ Route::get('/', 'Frontend\PageController@index');
 // Profile Sekolah
 Route::get('profile-sekolah', 'Frontend\PageController@profileSekolah')->name('profile.sekolah');
 Route::get('visi-dan-misi', 'Frontend\PageController@visimisi')->name('visimisi.sekolah');
+Route::get('program', 'Frontend\PageController@programStudiIndex')->name('program.index');
 Route::get('program/{slug}', 'Frontend\PageController@programStudi')->name('program.studi');
 Route::get('kegiatan/{slug}', 'Frontend\PageController@kegiatan')->name('kegiatan');
 

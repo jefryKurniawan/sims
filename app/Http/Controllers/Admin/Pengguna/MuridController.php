@@ -20,9 +20,20 @@ class MuridController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $murid = User::whereIn('role',['Guest','Murid'])->get();
+        $query = User::whereIn('role',['Guest','Murid']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%");
+            });
+        }
+
+        $murid = $query->orderBy('name')->paginate(15);
         return Inertia::render('Admin/Murid/Index', [
             'murid' => $murid,
         ]);
@@ -115,7 +126,10 @@ class MuridController extends Controller
      */
     public function show($id)
     {
-        //
+        $murid = User::whereIn('role',['Guest','Murid'])->findOrFail($id);
+        return Inertia::render('Admin/Murid/Show', [
+            'murid' => $murid,
+        ]);
     }
 
     /**
@@ -196,6 +210,8 @@ class MuridController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $murid = User::findOrFail($id);
+        $murid->delete();
+        return redirect()->route('users.murid.index')->with('success', 'Data murid berhasil dihapus.');
     }
 }

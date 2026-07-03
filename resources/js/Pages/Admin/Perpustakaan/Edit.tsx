@@ -1,128 +1,122 @@
-import { Head } from '@/Layout/Head';
-import { Link } from '@inertiajs/inertia-react';
-import { Avatar } from '@/components/ui/avatar';
+import { Head, useForm, Link } from '@inertiajs/inertia-react';
+import { ChevronLeft } from 'lucide-react';
 
-export default function PerpustakaanEdit({ perpus }: { perpus: any }) {
-    const foto = perpus.foto_profile
-        ? `/images/profile/${perpus.foto_profile}`
-        : '/images/default-avatar.png';
+export default function Edit({ buku }: { buku: any }) {
+  const form = useForm({
+    judul: buku.judul,
+    penulis: buku.penulis,
+    penerbit: buku.penerbit || '',
+    tahun_terbit: buku.tahun_terbit ? String(buku.tahun_terbit) : '',
+    isbn: buku.isbn || '',
+    kategori: buku.kategori || '',
+    deskripsi: buku.deskripsi || '',
+    jumlah_halaman: buku.jumlah_halaman ? String(buku.jumlah_halaman) : '',
+    jumalah_stok: String(buku.jumalah_stok),
+    lokasi_rak: buku.lokasi_rak || '',
+    file_cover: buku.file_cover || '',
+    tersedia: buku.tersedia,
+  });
 
-    return (
-        <>
-            <Head title="Edit Petugas Perpustakaan" />
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                    <h1 className="text-2xl font-bold text-gray-800">Edit Petugas Perpustakaan</h1>
-                    <div className="flex space-x-2">
-                        <Link
-                            href="/dashboard/users/perpus"
-                            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
-                        >
-                            Kembali ke Daftar Perpustakaan
-                        </Link>
-                    </div>
-                </div>
-                <div className="max-w-2xl mx-auto">
-                    <div className="flex items-center space-x-4 mb-6">
-                        <Avatar
-                            src={foto}
-                            alt={perpus.name}
-                            className="h-12 w-12"
-                        />
-                        <div>
-                            <h2 className="font-semibold text-gray-800">{perpus.name}</h2>
-                            <p className="text-sm text-gray-500">
-                                {perpus.email}
-                            </p>
-                        </div>
-                    </div>
-                    <div className="space-y-4">
-                        <div className="bg-white p-4 rounded-lg shadow border">
-                            <h3 className="font-semibold text-gray- text-gray-700 mb-3">Informasi Dasar</h3>
-                            <div className="space-y-2">
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Nama Lengkap</span>
-                                    <span className="text-gray-900">{perpus.name}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Email</span>
-                                    <span className="text-gray-900">{perpus.email}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Username</span>
-                                    <span className="text-gray-900">{perpus.username}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Role</span>
-                                    <span className="text-gray-900 capitalize">{perpus.role}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Status</span>
-                                    <span
-                                        className={`px-2 py-0.5 text-xs font-medium rounded-full ${
-                                            perpus.status === 'Aktif'
-                                                ? 'bg-green-100 text-green-700'
-                                                : 'bg-red-100 text-red-700'
-                                        }`}
-                                    >
-                                        {perpus.status}
-                                    </span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Foto Profile</span>
-                                    <span className="flex items-center">
-                                        <img
-                                            src={foto}
-                                            alt="Foto"
-                                            className="h-8 w-8 object-cover rounded mr-2"
-                                        />
-                                        {perpus.foto_profile ? (
-                                            <span className="text-sm text-gray-600">
-                                                {perpus.foto_profile}
-                                            </span>
-                                        ) : (
-                                            <span className="text-sm text-gray-600">Tidak ada foto</span>
-                                        )}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="bg-white p-4 rounded-lg shadow border">
-                            <h3 className="font-semibold text-gray-700 mb-3">Detail Tambahan</h3>
-                            <div className="space-y-2">
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">NIP</span>
-                                    <span className="text-gray-900">{perpus.userDetail?.nip ?? '-'}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">LinkedIn</span>
-                                    <span className="text-gray-900">{perpus.userDetail?.linkidln ?? '-'}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Instagram</span>
-                                    <span className="text-gray-900">{perpus.userDetail?.instagram ?? '-'}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Website</span>
-                                    <span className="text-gray-900">{perpus.userDetail?.website ?? '-'}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Facebook</span>
-                                    <span className="text-gray-900">{perpus.userDetail?.facebook ?? '-'}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">Twitter</span>
-                                    <span className="text-gray-900">{perpus.userDetail?.twitter ?? '-'}</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="w-32 font-medium text-gray-600">YouTube</span>
-                                    <span className="text-gray-900">{perpus.userDetail?.youtube ?? '-'}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    form.put(route('admin.perpustakaan.update', buku.id));
+  };
+
+  return (
+    <>
+      <Head title={`Edit Buku - ${buku.judul}`} />
+      <div className="p-4 lg:p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Edit Buku</h1>
+            <p className="text-sm text-gray-500 mt-0.5">{buku.judul}</p>
+          </div>
+          <Link href={route('admin.perpustakaan.index')} className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium">
+            <ChevronLeft className="w-4 h-4" />Kembali
+          </Link>
+        </div>
+
+        <div className="bg-white border border-gray-200 shadow-sm p-6 max-w-2xl">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Judul</label>
+              <input type="text" value={form.data.judul} onChange={e => form.setData('judul', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              {form.errors.judul && <span className="text-red-600 text-xs">{form.errors.judul}</span>}
             </div>
-        </>
-    );
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Penulis</label>
+              <input type="text" value={form.data.penulis} onChange={e => form.setData('penulis', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              {form.errors.penulis && <span className="text-red-600 text-xs">{form.errors.penulis}</span>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Penerbit</label>
+              <input type="text" value={form.data.penerbit} onChange={e => form.setData('penerbit', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1.5">Tahun Terbit</label>
+                <input type="number" min="1000" max="2100" value={form.data.tahun_terbit} onChange={e => form.setData('tahun_terbit', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1.5">ISBN</label>
+                <input type="text" value={form.data.isbn} onChange={e => form.setData('isbn', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Kategori</label>
+              <input type="text" value={form.data.kategori} onChange={e => form.setData('kategori', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" placeholder="Fiksi, Non-Fiksi, Sains" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Jumlah Halaman</label>
+              <input type="number" min="1" value={form.data.jumlah_halaman} onChange={e => form.setData('jumlah_halaman', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              {form.errors.jumlah_halaman && <span className="text-red-600 text-xs">{form.errors.jumlah_halaman}</span>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Deskripsi</label>
+              <textarea value={form.data.deskripsi} onChange={e => form.setData('deskripsi', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" rows={3} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1.5">Stok</label>
+                <input type="number" min="1" value={form.data.jumalah_stok} onChange={e => form.setData('jumalah_stok', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1.5">Lokasi Rak</label>
+                <input type="text" value={form.data.lokasi_rak} onChange={e => form.setData('lokasi_rak', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" placeholder="A1, B2" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Status</label>
+              <div className="flex gap-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="tersedia"
+                    checked={form.data.tersedia === true}
+                    onChange={() => form.setData('tersedia', true)}
+                    className="mr-2"
+                  />
+                  Tersedia
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="tersedia"
+                    checked={form.data.tersedia === false}
+                    onChange={() => form.setData('tersedia', false)}
+                    className="mr-2"
+                  />
+                  Dipinjam
+                </label>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <Link href={route('admin.perpustakaan.index')} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">Batal</Link>
+              <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50" disabled={form.processing}>{form.processing ? 'Menyimpan...' : 'Update'}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
 }

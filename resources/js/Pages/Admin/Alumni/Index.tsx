@@ -1,129 +1,77 @@
-import { Head, Link, usePage } from "@inertiajs/inertia-react";
+import { Head, usePage, Link } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
-import { Plus } from "lucide-react";
+import { useState } from "react";
+import AdminTable from "@/Components/AdminTable";
+import type { Column } from "@/Components/AdminTable";
+import ConfirmModal from "@/Components/ConfirmModal";
 
-interface User {
-    id: number;
-    name: string;
-    email: string;
-}
+export default function Index() {
+  const { alumni, flash } = usePage().props as {
+    alumni: any;
+    flash: { success?: string; error?: string };
+  };
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
 
-interface AlumniItem {
-    id: number;
-    user_id: number;
-    user: User;
-    tahun_lulus: number;
-    pekerjaan: string;
-    alamat: string;
-    no_telp: string;
-    linkedin: string | null;
-}
+  const handleDelete = () => {
+    if (!deleteTarget) return;
+    Inertia.delete(route("alumni.destroy", deleteTarget.id));
+    setDeleteTarget(null);
+  };
 
-interface Props {
-    alumni: AlumniItem[];
-}
+  const columns: Column[] = [
+    { key: "user", label: "Nama", render: (_v: any, row: any) => row.user?.name || "Tidak Diketahui" },
+    { key: "tahun_lulus", label: "Tahun Lulus" },
+    { key: "pekerjaan", label: "Pekerjaan", render: (v: string) => v || "-" },
+    { key: "no_telp", label: "No. Telp", render: (v: string) => v || "-" },
+  ];
 
-export default function Index({ alumni }: Props) {
-    const { flash } = usePage().props;
+  return (
+    <>
+      <Head title="Alumni" />
+      <div className="p-4 lg:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Alumni</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Kelola data alumni sekolah</p>
+          </div>
+          <Link
+            href={route("alumni.create")}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+          >
+            Alumni Baru
+          </Link>
+        </div>
 
-    const handleDelete = (id: number) => {
-        if (confirm("Apakah anda yakin ingin menghapus alumni ini?")) {
-            Inertia.delete(route("alumni.destroy", id));
-        }
-    };
+        {flash?.success && <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>}
+        {flash?.error && <div className="mb-4 p-4 bg-red-50 text-red-50 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>}
 
-    return (
-        <>
-            <Head title="Alumni" />
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">Alumni</h1>
-                    <Link
-                        href={route("alumni.create")}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
-                    >
-                        <Plus className="w-4 h-4" />
-                        Alumni Baru
-                    </Link>
-                </div>
+        <AdminTable
+          columns={columns}
+          rows={alumni?.data || []}
+          pagination={{
+            current_page: alumni?.current_page,
+            last_page: alumni?.last_page,
+            per_page: alumni?.per_page,
+            from: alumni?.from,
+            to: alumni?.to,
+            total: alumni?.total,
+            links: alumni?.links,
+          }}
+          actions={(row) => [
+            { icon: "eye", onClick: () => Inertia.visit(route("alumni.show", row.id)), label: "Detail" },
+            { icon: "edit", onClick: () => Inertia.visit(route("alumni.edit", row.id)), label: "Edit" },
+            { icon: "delete", onClick: () => setDeleteTarget(row), label: "Hapus" },
+          ]}
+        />
 
-                {flash.success && (
-                    <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
-                        {flash.success}
-                    </div>
-                )}
-
-                <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
-                    <table className="w-full text-sm text-left rtl:text-right text-body">
-                        <thead className="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
-                            <tr>
-                                <th className="px-6 py-3 font-medium">No</th>
-                                <th className="px-6 py-3 font-medium">Nama</th>
-                                <th className="px-6 py-3 font-medium">
-                                    Tahun Lulus
-                                </th>
-                                <th className="px-6 py-3 font-medium">
-                                    Pekerjaan
-                                </th>
-                                <th className="px-6 py-3 font-medium">
-                                    No. Telp
-                                </th>
-                                <th className="px-6 py-3 font-medium">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y">
-                            {alumni.map((item, index) => (
-                                <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4">{index + 1}</td>
-                                    <td className="px-6 py-4">
-                                        {item.user?.name || "Tidak Diketahui"}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {item.tahun_lulus}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {item.pekerjaan}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {item.no_telp}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex gap-2">
-                                            <Link
-                                                href={route(
-                                                    "alumni.edit",
-                                                    item.id,
-                                                )}
-                                                className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                            >
-                                                Edit
-                                            </Link>
-                                            <button
-                                                onClick={() =>
-                                                    handleDelete(item.id)
-                                                }
-                                                className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
-                                            >
-                                                Hapus
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            {alumni.length === 0 && (
-                                <tr>
-                                    <td
-                                        colSpan={6}
-                                        className="px-4 py-8 text-center text-sm text-gray-500"
-                                    >
-                                        Tidak ada data alumni
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </>
-    );
+        <ConfirmModal
+          open={!!deleteTarget}
+          title="Hapus Alumni"
+          message={`Yakin ingin menghapus alumni "${deleteTarget?.user?.name || "ini"}"?`}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      </div>
+    </>
+  );
 }

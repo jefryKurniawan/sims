@@ -9,9 +9,24 @@ use Inertia\Inertia;
 
 class GtkController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $guru = Guru::all();
+        $query = Guru::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_lengkap', 'like', "%{$search}%")
+                  ->orWhere('nuptk', 'like', "%{$search}%")
+                  ->orWhere('jabatan', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('jenis')) {
+            $query->where('jenis', $request->jenis);
+        }
+
+        $guru = $query->orderBy('nama_lengkap')->paginate(15);
         return Inertia::render('Admin/Gtk/Index', [
             'guru' => $guru,
         ]);
@@ -46,6 +61,13 @@ class GtkController extends Controller
 
         return redirect()->route('gtk.index')
             ->with('success', 'GTK berhasil ditambahkan.');
+    }
+
+    public function show(Guru $gtk)
+    {
+        return Inertia::render('Admin/Gtk/Show', [
+            'guru' => $gtk,
+        ]);
     }
 
     public function edit(Guru $gtk)

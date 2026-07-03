@@ -32,14 +32,14 @@ export default function Index() {
                         onClick={() => setShowForm(true)}
                         className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
                     >
-                        <Plus className="w-4 h-4" />
+                        +
                         Bank Baru
                     </button>
                 </div>
 
                 {flash?.success && (
                     <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
-                        {data.flash.success}
+                        {flash.success}
                     </div>
                 )}
                 {flash?.error && (

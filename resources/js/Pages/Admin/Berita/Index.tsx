@@ -1,8 +1,9 @@
 import { Head, Link, usePage } from "@inertiajs/inertia-react";
-import Pagination from "@/Components/Pagination";
-import { useState } from "react";
+import AdminTable from "@/Components/AdminTable";
+import type { Column } from "@/Components/AdminTable";
+import ConfirmModal from "@/Components/ConfirmModal";
 import { Inertia } from "@inertiajs/inertia";
-import { Plus } from "lucide-react";
+import { useState } from "react";
 
 interface Kategori {
     id: number;
@@ -18,185 +19,112 @@ interface BeritaItem {
     created_at: string;
 }
 
-interface Props {
-    berita: {
-        data: BeritaItem[];
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        total: number;
-        from: number;
-        to: number;
-        links: Array<{ url: string | null; label: string; active: boolean }>;
+export default function Index() {
+    const { berita, kategori, flash, filters } = usePage().props as {
+        berita: any;
+        kategori: Kategori[];
+        flash: { success?: string; error?: string; message?: string; type?: string };
+        filters: { search?: string };
     };
-    kategori: Kategori[];
-    filters: { search?: string };
-}
+    const [deleteTarget, setDeleteTarget] = useState<any>(null);
 
-export default function Index({ berita, kategori, filters }: Props) {
-    const { flash } = usePage().props;
-    const [search, setSearch] = useState(filters.search || "");
-
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        Inertia.get(
-            route("berita-admin.index"),
-            { search },
-            { preserveState: true, replace: true },
-        );
+    const handleDelete = () => {
+        if (!deleteTarget) return;
+        Inertia.delete(route("berita-admin.destroy", deleteTarget.id));
+        setDeleteTarget(null);
     };
 
-    const handleDelete = (id: number) => {
-        if (confirm("Apakah anda yakin ingin menghapus berita ini?")) {
-            Inertia.delete(route("berita-admin.destroy", id));
-        }
-    };
+    const columns: Column[] = [
+        { key: "title", label: "Judul" },
+        {
+            key: "thumbnail",
+            label: "Thumbnail",
+            render: (_v: any, row: any) => (
+                <img
+                    src={`/storage/images/berita/${row.thumbnail}`}
+                    alt={row.title}
+                    className="w-12 h-12 object-cover rounded"
+                />
+            ),
+        },
+        { key: "kategori", label: "Kategori", render: (_v: any, row: any) => row.kategori?.nama || "-" },
+        {
+            key: "is_active",
+            label: "Status",
+            render: (v: string) => (
+                <span
+                    className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+                        v === "0" ? "bg-emerald-100 text-emerald-700" : "bg-yellow-100 text-yellow-700"
+                    }`}
+                >
+                    {v === "0" ? "Publish" : "Draft"}
+                </span>
+            ),
+        },
+    ];
 
     return (
         <>
             <Head title="Berita" />
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">Berita</h1>
+            <div className="p-4 lg:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                    <div>
+                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Berita</h1>
+                        <p className="text-sm text-gray-500 mt-0.5">Kelola berita & pengumuman sekolah</p>
+                    </div>
                     <Link
                         href={route("berita-admin.create")}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
                     >
-                        <Plus className="w-4 h-4" />
                         Berita Baru
                     </Link>
                 </div>
 
-                {flash.message && (
-                    <div
-                        className={`p-4 mb-4 rounded-lg text-sm font-medium ${
-                            flash.type === "success"
-                                ? "bg-green-100 text-green-700"
-                                : "bg-red-100 text-red-700"
-                        }`}
-                    >
-                        {flash.message}
-                    </div>
-                )}
-
                 {kategori.length === 0 ? (
-                    <div className="p-6 text-center text-gray-500 bg-white rounded-lg border">
-                        <h3 className="text-lg font-semibold">
-                            Kategori Masih Kosong!
-                        </h3>
-                        <p className="mt-2">
-                            Silakan tambah kategori berita terlebih dahulu.
-                        </p>
+                    <div className="p-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm">
+                        <h3 className="text-lg font-semibold text-gray-800">Kategori Masih Kosong!</h3>
+                        <p className="mt-2 text-sm text-gray-500">Silakan tambah kategori berita terlebih dahulu.</p>
                     </div>
                 ) : (
                     <>
-                        <form onSubmit={handleSearch} className="mb-4">
-                            <div className="flex gap-2">
-                                <input
-                                    type="text"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Cari berita..."
-                                    className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                />
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700"
-                                >
-                                    Cari
-                                </button>
+                        {(flash?.success || flash?.message) && (
+                            <div className={`mb-4 p-4 rounded-lg text-sm font-medium border ${
+                                flash?.type === "error"
+                                    ? "bg-red-50 text-red-700 border-red-200"
+                                    : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            }`}>
+                                {flash.success || flash.message}
                             </div>
-                        </form>
+                        )}
+                        {flash?.error && (
+                            <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>
+                        )}
 
-                        <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
-                            <table className="w-full text-sm text-left rtl:text-right text-body">
-                                <thead className="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
-                                    <tr>
-                                        <th className="px-6 py-3 font-medium">
-                                            No
-                                        </th>
-                                        <th className="px-6 py-3 font-medium">
-                                            Title
-                                        </th>
-                                        <th className="px-6 py-3 font-medium">
-                                            Thumbnail
-                                        </th>
-                                        <th className="px-6 py-3 font-medium">
-                                            Kategori
-                                        </th>
-                                        <th className="px-6 py-3 font-medium">
-                                            Status
-                                        </th>
-                                        <th className="px-6 py-3 font-medium">
-                                            Aksi
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y">
-                                    {berita.data.map((item, index) => (
-                                        <tr
-                                            key={item.id}
-                                            className="hover:bg-gray-50"
-                                        >
-                                            <td className="px-6 py-4">
-                                                {berita.from + index}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                {item.title}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <img
-                                                    src={`/storage/images/berita/${item.thumbnail}`}
-                                                    alt={item.title}
-                                                    className="w-12 h-12 object-cover rounded"
-                                                />
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                {item.kategori?.nama}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <span
-                                                    className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                                        item.is_active === "0"
-                                                            ? "bg-green-100 text-green-700"
-                                                            : "bg-yellow-100 text-yellow-700"
-                                                    }`}
-                                                >
-                                                    {item.is_active === "0"
-                                                        ? "Publish"
-                                                        : "Draft"}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex gap-2">
-                                                    <Link
-                                                        href={route(
-                                                            "berita-admin.edit",
-                                                            item.id,
-                                                        )}
-                                                        className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                                    >
-                                                        Edit
-                                                    </Link>
-                                                    <button
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                item.id,
-                                                            )
-                                                        }
-                                                        className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
-                                                    >
-                                                        Hapus
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <AdminTable
+                            columns={columns}
+                            rows={berita?.data || []}
+                            pagination={{
+                                current_page: berita?.current_page,
+                                last_page: berita?.last_page,
+                                per_page: berita?.per_page,
+                                from: berita?.from,
+                                to: berita?.to,
+                                total: berita?.total,
+                                links: berita?.links,
+                            }}
+                            actions={(row) => [
+                                { icon: "edit", onClick: () => Inertia.visit(route("berita-admin.edit", row.id)), label: "Edit" },
+                                { icon: "delete", onClick: () => setDeleteTarget(row), label: "Hapus" },
+                            ]}
+                        />
 
-                        <Pagination data={berita} />
+                        <ConfirmModal
+                            open={!!deleteTarget}
+                            title="Hapus Berita"
+                            message={`Yakin ingin menghapus berita "${deleteTarget?.title}"?`}
+                            onConfirm={handleDelete}
+                            onCancel={() => setDeleteTarget(null)}
+                        />
                     </>
                 )}
             </div>

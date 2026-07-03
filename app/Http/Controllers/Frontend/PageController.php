@@ -78,6 +78,11 @@ class PageController extends Controller
         ], $this->commonData()));
     }
 
+    public function programStudiIndex()
+    {
+        return Inertia::render('Frontend/ProgramStudiIndex', $this->commonData());
+    }
+
     public function kegiatan($slug)
     {
         $kegiatan = Kegiatan::where('slug', $slug)->firstOrFail();

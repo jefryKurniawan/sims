@@ -1,6 +1,5 @@
-import { Head, usePage, Link } from '@inertiajs/inertia-react';
+import { Head, useForm, Link } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
-import { useState } from 'react';
 
 interface SiswaOption {
   id: number;
@@ -25,27 +24,44 @@ interface TagihanItem {
 }
 
 interface Props {
-  tagihanItem: TagihanItem;
+  tagihanItem: TagihanItem | null;
   siswaList: SiswaOption[];
 }
 
 export default function Edit({ tagihanItem, siswaList }: Props) {
-  const { errors } = usePage().props;
+  // If data not found, show message
+  if (!tagihanItem) {
+    return (
+      <>
+        <Head title="Tagihan Tidak Ditemukan" />
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold text-gray-800">Tagihan Tidak Ditemukan</h1>
+            <Link
+              href={route('spp.index')}
+              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-sm"
+            >
+              Kembali
+            </Link>
+          </div>
+          <div className="bg-white rounded-lg shadow border p-6 text-center">
+            <p className="text-gray-500">Tagihan dengan ID yang diminta tidak ditemukan.</p>
+          </div>
+        </div>
+      </>
+    );
+  }
 
-  const [values, setValues] = useState({
-    siswa_id: String(tagihanItem.siswa_id),
+  const form = useForm({
+    siswa_id: tagihanItem.siswa_id ? String(tagihanItem.siswa_id) : '',
     nominal: String(tagihanItem.nominal),
     tanggal_jatuh_tempo: tagihanItem.tanggal_jatuh_tempo,
     keterangan: tagihanItem.keterangan ?? '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    Inertia.put(route('spp.update', tagihanItem.id), values);
+    form.put(route('spp.update', tagihanItem.id));
   };
 
   return (
@@ -78,9 +94,9 @@ export default function Edit({ tagihanItem, siswaList }: Props) {
                 <select
                   id="siswa_id"
                   name="siswa_id"
-                  value={values.siswa_id}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"
+                  value={form.data.siswa_id}
+                  onChange={(e) => form.setData('siswa_id', e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">-- Pilih Siswa --</option>
                   {siswaList.map((s) => (
@@ -89,7 +105,7 @@ export default function Edit({ tagihanItem, siswaList }: Props) {
                     </option>
                   ))}
                 </select>
-                {errors.siswa_id && <p className="mt-1 text-sm text-red-600">{errors.siswa_id}</p>}
+                {form.errors.siswa_id && <p className="mt-1 text-sm text-red-600">{form.errors.siswa_id}</p>}
               </div>
 
               {/* Nominal */}
@@ -101,14 +117,14 @@ export default function Edit({ tagihanItem, siswaList }: Props) {
                   type="number"
                   id="nominal"
                   name="nominal"
-                  value={values.nominal}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"
+                  value={form.data.nominal}
+                  onChange={(e) => form.setData('nominal', e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="0"
                   min="0"
                   step="1000"
                 />
-                {errors.nominal && <p className="mt-1 text-sm text-red-600">{errors.nominal}</p>}
+                {form.errors.nominal && <p className="mt-1 text-sm text-red-600">{form.errors.nominal}</p>}
               </div>
 
               {/* Tanggal Jatuh Tempo */}
@@ -120,11 +136,11 @@ export default function Edit({ tagihanItem, siswaList }: Props) {
                   type="date"
                   id="tanggal_jatuh_tempo"
                   name="tanggal_jatuh_tempo"
-                  value={values.tanggal_jatuh_tempo}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"
+                  value={form.data.tanggal_jatuh_tempo}
+                  onChange={(e) => form.setData('tanggal_jatuh_tempo', e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
-                {errors.tanggal_jatuh_tempo && <p className="mt-1 text-sm text-red-600">{errors.tanggal_jatuh_tempo}</p>}
+                {form.errors.tanggal_jatuh_tempo && <p className="mt-1 text-sm text-red-600">{form.errors.tanggal_jatuh_tempo}</p>}
               </div>
 
               {/* Keterangan */}
@@ -135,13 +151,13 @@ export default function Edit({ tagihanItem, siswaList }: Props) {
                 <textarea
                   id="keterangan"
                   name="keterangan"
-                  value={values.keterangan}
-                  onChange={handleChange}
+                  value={form.data.keterangan}
+                  onChange={(e) => form.setData('keterangan', e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   rows={2}
-                  className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"
                   placeholder="Contoh: SPP Bulan Juli"
                 />
-                {errors.keterangan && <p className="mt-1 text-sm text-red-600">{errors.keterangan}</p>}
+                {form.errors.keterangan && <p className="mt-1 text-sm text-red-600">{form.errors.keterangan}</p>}
               </div>
 
               {/* Status */}
@@ -149,7 +165,7 @@ export default function Edit({ tagihanItem, siswaList }: Props) {
                 <span className="w-32 font-medium text-gray-600">Status Saat Ini</span>
                 <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
                   tagihanItem.status === 'lunas'
-                    ? 'bg-green-100 text-green-700'
+                    ? 'bg-emerald-100 text-emerald-700'
                     : tagihanItem.status === 'belum_lunas'
                       ? 'bg-red-100 text-red-700'
                       : 'bg-yellow-100 text-yellow-700'
@@ -162,9 +178,10 @@ export default function Edit({ tagihanItem, siswaList }: Props) {
               <div className="flex gap-3 pt-2">
                 <button
                   type="submit"
-                  className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  disabled={form.processing}
                 >
-                  Perbarui
+                  {form.processing ? 'Menyimpan...' : 'Perbarui'}
                 </button>
                 <Link
                   href={route('spp.index')}

@@ -115,7 +115,7 @@ export default function Detail({ tagihan }: Props) {
               <tbody>
                 {tagihan.pembayaran.map((p, idx) => (
                   <tr key={p.id} className={idx % 2 === 0 ? 'bg-gray-100' : ''}>
-                    <td className="px-4 py-2">{idx + 1}</td>
+                    <td className="px-4 py-2">{idx +1}</td>
                     <td className="px-4 py-2">{p.tanggal_bayar}</td>
                     <td className="px-4 py-2">{formatRupiah(p.nominal)}</td>
                     <td className="px-4 py-2">{p.metode}</td>

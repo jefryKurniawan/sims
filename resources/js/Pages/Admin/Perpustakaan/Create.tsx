@@ -1,281 +1,123 @@
-import { Link, usePage } from '@inertiajs/inertia-react';
-import AdminLayout from '@/Layout/AdminLayout';
-import { useState, useEffect } from 'react';
-import { Inertia } from '@inertiajs/inertia';
+import { Head, useForm } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/inertia-react';
+import { ChevronLeft } from 'lucide-react';
 
-interface UserDetail {
-    id: number;
-    user_id: number;
-    nip: string;
-    email: string;
-    linkidln: string | null;
-    instagram: string | null;
-    website: string | null;
-    facebook: string | null;
-    twitter: string | null;
-    youtube: string | null;
-    is_active: number;
-}
+export default function Create() {
+  const form = useForm({
+    judul: '',
+    penulis: '',
+    penerbit: '',
+    tahun_terbit: '',
+    isbn: '',
+    kategori: '',
+    deskripsi: '',
+    jumlah_halaman: '',
+    jumalah_stok: '1',
+    lokasi_rak: '',
+    file_cover: '',
+    tersedia: true,
+  });
 
-interface UserItem {
-    id: number;
-    name: string;
-    email: string;
-    username: string;
-    role: string;
-    status: string;
-    foto_profile: string | null;
-    userDetail: UserDetail | null;
-}
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    form.post(route('admin.perpustakaan.store'));
+  };
 
-interface Props {
-    users?: UserItem;
-    role?: string;
-}
+  return (
+    <>
+      <Head title="Tambah Buku Baru" />
+      <div className="p-4 lg:p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Tambah Buku Baru</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Masukkan detail buku baru</p>
+          </div>
+          <Link href={route('admin.perpustakaan.index')} className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium">
+            <ChevronLeft className="w-4 h-4" />Kembali
+          </Link>
+        </div>
 
-export default function Create({ users, role }: Props) {
-    const { errors } = usePage().props;
-    const isEdit = !!users;
-
-    const [values, setValues] = useState({
-        name: '',
-        email: '',
-        nip: '',
-        linkidln: '',
-        instagram: '',
-        website: '',
-        facebook: '',
-        twitter: '',
-        youtube: '',
-        foto_profile: null as File | null,
-    });
-
-    const [preview, setPreview] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (isEdit && users?.userDetail) {
-            setValues({
-                name: users.name,
-                email: users.email,
-                nip: users.userDetail.nip || '',
-                linkidln: users.userDetail.linkidln || '',
-                instagram: users.userDetail.instagram || '',
-                website: users.userDetail.website || '',
-                facebook: users.userDetail.facebook || '',
-                twitter: users.userDetail.twitter || '',
-                youtube: users.userDetail.youtube || '',
-                foto_profile: null,
-            });
-            if (users.foto_profile) {
-                setPreview(`/storage/${users.foto_profile}`);
-            }
-        }
-    }, [users, isEdit]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-
-    const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0] || null;
-        setValues((prev) => ({ ...prev, foto_profile: file }));
-        if (file) {
-            setPreview(URL.createObjectURL(file));
-        }
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('name', values.name);
-        formData.append('email', values.email);
-        formData.append('nip', values.nip);
-        formData.append('linkidln', values.linkidln);
-        formData.append('instagram', values.instagram);
-        formData.append('website', values.website);
-        formData.append('facebook', values.facebook);
-        formData.append('twitter', values.twitter);
-        formData.append('youtube', values.youtube);
-        if (values.foto_profile) {
-            formData.append('foto_profile', values.foto_profile);
-        }
-        if (isEdit) {
-            formData.append('_method', 'PUT');
-            Inertia.post(route('users.perpus.update', users.id), formData);
-        } else {
-            Inertia.post(route('users.perpus.store'), formData);
-        }
-    };
-
-    return (
-        <AdminLayout title={isEdit ? 'Edit Pengguna Perpustakaan' : 'Tambah Pengguna Perpustakaan'}>
-            <div className="p-6">
-                <div className="mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">{isEdit ? 'Edit Pengguna Perpustakaan' : 'Tambah Pengguna Perpustakaan'}</h1>
-                </div>
-
-                <div className="bg-white rounded-lg border">
-                    <div className="px-6 py-4 border-b">
-                        <h4 className="text-lg font-semibold text-gray-800">{isEdit ? 'Edit Pengguna Perpustakaan' : 'Tambah Pengguna Perpustakaan'}</h4>
-                    </div>
-                    <div className="p-6">
-                        <form onSubmit={handleSubmit}>
-                            <div className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                                            Nama <span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={values.name}
-                                            onChange={handleChange}
-                                            className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="Nama lengkap"
-                                        />
-                                        {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                                            Email <span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={values.email}
-                                            onChange={handleChange}
-                                            className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="email@sekolah.ac.id"
-                                        />
-                                        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                                            NIP <span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="nip"
-                                            value={values.nip}
-                                            onChange={handleChange}
-                                            className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="Nomor Induk Pegawai"
-                                        />
-                                        {errors.nip && <p className="mt-1 text-sm text-red-600">{errors.nip}</p>}
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                                            Foto Profile {!isEdit && <span className="text-red-500">*</span>}
-                                        </label>
-                                        <input
-                                            type="file"
-                                            name="foto_profile"
-                                            onChange={handleFile}
-                                            accept="image/*"
-                                            className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                        {errors.foto_profile && <p className="mt-1 text-sm text-red-600">{errors.foto_profile}</p>}
-                                        {preview && (
-                                            <img src={preview} alt="Preview" className="mt-2 w-20 h-20 object-cover rounded-lg" />
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="border-t pt-4">
-                                    <h5 className="text-sm font-semibold text-gray-700 mb-3">Media Sosial (Opsional)</h5>
-                                    <div className="grid grid-cols-3 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
-                                            <input
-                                                type="text"
-                                                name="linkidln"
-                                                value={values.linkidln}
-                                                onChange={handleChange}
-                                                className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                placeholder="URL LinkedIn"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Instagram</label>
-                                            <input
-                                                type="text"
-                                                name="instagram"
-                                                value={values.instagram}
-                                                onChange={handleChange}
-                                                className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                placeholder="URL Instagram"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Website</label>
-                                            <input
-                                                type="text"
-                                                name="website"
-                                                value={values.website}
-                                                onChange={handleChange}
-                                                className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                placeholder="URL Website"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Facebook</label>
-                                            <input
-                                                type="text"
-                                                name="facebook"
-                                                value={values.facebook}
-                                                onChange={handleChange}
-                                                className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                placeholder="URL Facebook"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Twitter</label>
-                                            <input
-                                                type="text"
-                                                name="twitter"
-                                                value={values.twitter}
-                                                onChange={handleChange}
-                                                className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                placeholder="URL Twitter"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Youtube</label>
-                                            <input
-                                                type="text"
-                                                name="youtube"
-                                                value={values.youtube}
-                                                onChange={handleChange}
-                                                className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                placeholder="URL Youtube"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-6 flex gap-3">
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-                                >
-                                    {isEdit ? 'Update' : 'Simpan'}
-                                </button>
-                                <Link
-                                    href={route('users.perpus.index')}
-                                    className="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg hover:bg-yellow-600"
-                                >
-                                    Batal
-                                </Link>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+        <div className="bg-white border border-gray-200 shadow-sm p-6 max-w-2xl">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Judul</label>
+              <input type="text" value={form.data.judul} onChange={e => form.setData('judul', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              {form.errors.judul && <span className="text-red-600 text-xs">{form.errors.judul}</span>}
             </div>
-        </AdminLayout>
-    );
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Penulis</label>
+              <input type="text" value={form.data.penulis} onChange={e => form.setData('penulis', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              {form.errors.penulis && <span className="text-red-600 text-xs">{form.errors.penulis}</span>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Penerbit</label>
+              <input type="text" value={form.data.penerbit} onChange={e => form.setData('penerbit', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1.5">Tahun Terbit</label>
+                <input type="number" min="1000" max="2100" value={form.data.tahun_terbit} onChange={e => form.setData('tahun_terbit', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1.5">ISBN</label>
+                <input type="text" value={form.data.isbn} onChange={e => form.setData('isbn', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Kategori</label>
+              <input type="text" value={form.data.kategori} onChange={e => form.setData('kategori', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" placeholder="Fiksi, Non-Fiksi, Sains" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Jumlah Halaman</label>
+              <input type="number" min="1" value={form.data.jumlah_halaman} onChange={e => form.setData('jumlah_halaman', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              {form.errors.jumlah_halaman && <span className="text-red-600 text-xs">{form.errors.jumlah_halaman}</span>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Deskripsi</label>
+              <textarea value={form.data.deskripsi} onChange={e => form.setData('deskripsi', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" rows={3} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1.5">Stok</label>
+                <input type="number" min="1" value={form.data.jumalah_stok} onChange={e => form.setData('jumalah_stok', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1.5">Lokasi Rak</label>
+                <input type="text" value={form.data.lokasi_rak} onChange={e => form.setData('lokasi_rak', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-400 transition text-sm" placeholder="A1, B2" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Status</label>
+              <div className="flex gap-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="tersedia"
+                    checked={form.data.tersedia === true}
+                    onChange={() => form.setData('tersedia', true)}
+                    className="mr-2"
+                  />
+                  Tersedia
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="tersedia"
+                    checked={form.data.tersedia === false}
+                    onChange={() => form.setData('tersedia', false)}
+                    className="mr-2"
+                  />
+                  Dipinjam
+                </label>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <Link href={route('admin.perpustakaan.index')} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">Batal</Link>
+              <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50" disabled={form.processing}>{form.processing ? 'Menyimpan...' : 'Simpan'}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
 }

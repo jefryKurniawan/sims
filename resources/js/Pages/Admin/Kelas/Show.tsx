@@ -27,7 +27,7 @@ export default function Show({ kelas }: { kelas: any }) {
           </div>
           <div className="border-t pt-4">
             <p className="text-xs text-gray-400 uppercase tracking-wider font-label">Jurusan</p>
-            <p className="text-lg font-semibold text-gray-900">{kelas.jurusan?.nama_jurusan || '-'}</p>
+            <p className="text-lg font-semibold text-gray-900">{kelas.jurusan?.nama || '-'}</p>
           </div>
           <div className="border-t pt-4">
             <p className="text-xs text-gray-400 uppercase tracking-wider font-label">Wali Kelas</p>

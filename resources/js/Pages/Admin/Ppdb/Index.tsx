@@ -1,119 +1,84 @@
-import { Link, usePage } from '@inertiajs/inertia-react';
-import AdminLayout from '@/Layout/AdminLayout';
+import { Head, usePage, Link } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
-import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import AdminTable from '@/Components/AdminTable';
+import type { Column } from '@/Components/AdminTable';
+import ConfirmModal from '@/Components/ConfirmModal';
 
-interface UserDetail {
-    id: number;
-    user_id: number;
-    nip: string;
-    email: string;
-    linkidln: string | null;
-    instagram: string | null;
-    website: string | null;
-    facebook: string | null;
-    twitter: string | null;
-    youtube: string | null;
-    is_active: number;
-}
+export default function Index() {
+  const { users, flash } = usePage().props as {
+    users: any;
+    flash: { success?: string; error?: string };
+  };
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
 
-interface UserItem {
-    id: number;
-    name: string;
-    email: string;
-    username: string;
-    role: string;
-    status: string;
-    foto_profile: string | null;
-    userDetail: UserDetail | null;
-}
+  const handleDelete = () => {
+    if (!deleteTarget) return;
+    Inertia.delete(route('users.ppdb.destroy', deleteTarget.id));
+    setDeleteTarget(null);
+  };
 
-interface Props {
-    users: UserItem[];
-}
+  const columns: Column[] = [
+    { key: 'name', label: 'Nama' },
+    { key: 'email', label: 'Email' },
+    { key: 'nip', label: 'NIP', render: (_v: any, row: any) => row.userDetail?.nip || '-' },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (v: string) => (
+        <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${v === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+          {v === 'active' ? 'Aktif' : 'Nonaktif'}
+        </span>
+      ),
+    },
+  ];
 
-export default function Index({ users }: Props) {
-    const { flash } = usePage().props;
+  return (
+    <>
+      <Head title="Pengguna PPDB" />
+      <div className="p-4 lg:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Pengguna PPDB</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Kelola akun panitia PPDB</p>
+          </div>
+          <Link
+            href={route('users.ppdb.create')}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+          >
+            Pengguna PPDB Baru
+          </Link>
+        </div>
 
-    const handleDelete = (id: number) => {
-        if (confirm('Apakah anda yakin ingin menghapus pengguna PPDB ini?')) {
-            Inertia.delete(route('users.ppdb.destroy', id));
-        }
-    };
+        {flash?.success && <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>}
+        {flash?.error && <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>}
 
-    return (
-        <AdminLayout title="Pengguna PPDB">
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">Pengguna PPDB</h1>
-                    <Link
-                        href={route('users.ppdb.create')}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
-                    >
-                        <Plus className="w-4 h-4" />
-                        + Pengguna PPDB Baru
-                    </Link>
-                </div>
+        <AdminTable
+          columns={columns}
+          rows={users?.data || []}
+          pagination={{
+            current_page: users?.current_page,
+            last_page: users?.last_page,
+            per_page: users?.per_page,
+            from: users?.from,
+            to: users?.to,
+            total: users?.total,
+            links: users?.links,
+          }}
+          actions={(row) => [
+            { icon: 'edit', onClick: () => Inertia.visit(route('users.ppdb.edit', row.id)), label: 'Edit' },
+            { icon: 'delete', onClick: () => setDeleteTarget(row), label: 'Hapus' },
+          ]}
+        />
 
-                {flash.success && (
-                    <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
-                        {flash.success}
-                    </div>
-                )}
-
-                <div className="bg-white rounded-lg border overflow-hidden">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="bg-gray-50 border-b">
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nama</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">NIP</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y">
-                            {users.map((item, index) => (
-                                <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="px-4 py-3 text-sm text-gray-700">{index + 1}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.name}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.email}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-700">{item.userDetail?.nip || '-'}</td>
-                                    <td className="px-4 py-3">
-                                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${item.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                            {item.status === 'active' ? 'Aktif' : 'Nonaktif'}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex gap-2">
-                                            <Link
-                                                href={route('users.ppdb.edit', item.id)}
-                                                className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                            >
-                                                Edit
-                                            </Link>
-                                            <button
-                                                onClick={() => handleDelete(item.id)}
-                                                className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
-                                            >
-                                                Hapus
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            {users.length === 0 && (
-                                <tr>
-                                    <td colSpan={6} className="px-4 py-8 text-center text-sm text-gray-500">
-                                        Tidak ada data pengguna PPDB
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </AdminLayout>
-    );
+        <ConfirmModal
+          open={!!deleteTarget}
+          title="Hapus Pengguna PPDB"
+          message={`Yakin ingin menghapus "${deleteTarget?.name}"?`}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      </div>
+    </>
+  );
 }

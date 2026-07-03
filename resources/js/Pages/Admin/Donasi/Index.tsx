@@ -92,8 +92,8 @@ export default function Index({ donasis, filters, stats }: Props) {
                                 href={route('admin.donasi.create')}
                                 className="inline-flex items-center gap-2 bg-school-red text-white px-5 py-2.5 rounded-lg hover:bg-red-700 transition font-semibold"
                             >
-                                <Plus className="w-4 h-4" />
-                                + Donasi Baru
+                                +
+                                +Donasi Baru
                             </Link>
                         </div>
                     </div>
@@ -277,7 +277,7 @@ export default function Index({ donasis, filters, stats }: Props) {
                                     {donasis.links.map((link, index) => (
                                         <Link
                                             key={index}
-                                            href={link.url ? route('admin.donasi.index', { ...filters, page: index + 1 }) : '#'}
+                                            href={link.url ? route('admin.donasi.index', { ...filters, page: index +1 }) : '#'}
                                             className={`px-3 py-1 rounded ${
                                                 link.active
                                                     ? 'bg-primary text-white'

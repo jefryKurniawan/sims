@@ -20,7 +20,7 @@ createInertiaApp({
     title: (title) => `${title ? `${title} - ` : ''}${appName}`,
     resolve: async (name) => {
         const page = await resolvePageComponent(
-            `./Pages/${name}.tsx`,
+            `./Pages/${name.replace(/\//g, '/')}.tsx`,
             import.meta.glob('./Pages/**/*.tsx')
         );
 

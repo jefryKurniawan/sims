@@ -1,131 +1,100 @@
 import { Head, Link, usePage } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
-import { Plus } from "lucide-react";
+import { useState } from "react";
+import AdminTable from "@/Components/AdminTable";
+import type { Column } from "@/Components/AdminTable";
+import ConfirmModal from "@/Components/ConfirmModal";
 
-interface GuruItem {
-    id: number;
-    nama_lengkap: string;
-    nuptk: string | null;
-    jenis: string;
-    jenis_kelamin: string;
-    tempat_lahir: string;
-    tanggal_lahir: string;
-    agama: string;
-    alamat: string;
-    no_telp: string;
-    email: string | null;
-    bidang_studi: string | null;
-    jabatan: string;
-    status_kepegawaian: string;
-    tanggal_masuk: string;
-    foto: string | null;
-}
+export default function Index() {
+  const { guru, flash } = usePage().props as { guru: any; flash: { success?: string; error?: string } };
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
 
-interface Props {
-    guru: GuruItem[];
-}
+  const handleDelete = () => {
+    if (!deleteTarget) return;
+    Inertia.delete(route("gtk.destroy", deleteTarget.id));
+    setDeleteTarget(null);
+  };
 
-export default function Index({ guru }: Props) {
-    const { flash } = usePage().props;
+  const columns: Column[] = [
+    { key: "nama_lengkap", label: "Nama" },
+    { key: "nuptk", label: "NUPTK", render: (v: string) => v || "-" },
+    {
+      key: "jenis",
+      label: "Jenis",
+      render: (v: string) => (
+        <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${v === "Guru" ? "bg-indigo-100 text-indigo-700" : "bg-cyan-100 text-cyan-700"}`}>
+          {v}
+        </span>
+      ),
+    },
+    { key: "jabatan", label: "Jabatan" },
+    { key: "no_telp", label: "No. Telp", render: (v: string) => v || "-" },
+    {
+      key: "status_kepegawaian",
+      label: "Status Kepegawaian",
+      render: (v: string) => {
+        const map: Record<string, string> = {
+          "Tetap Yayasan": "bg-emerald-100 text-emerald-700",
+          Kontrak: "bg-yellow-100 text-yellow-700",
+          Honorer: "bg-gray-100 text-gray-700",
+        };
+        const label: Record<string, string> = {
+          "Tetap Yayasan": "Tetap",
+          Kontrak: "Kontrak",
+          Honorer: "Honorer",
+        };
+        return <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${map[v] || map.Honorer}`}>{label[v] || v}</span>;
+      },
+    },
+  ];
 
-    const handleDelete = (id: number) => {
-        if (confirm("Apakah anda yakin ingin menghapus data GTK ini?")) {
-            Inertia.delete(route("gtk.destroy", id));
-        }
-    };
+  return (
+    <>
+      <Head title="GTK" />
+      <div className="p-4 lg:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">GTK</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Kelola data Guru & Tenaga Kependidikan</p>
+          </div>
+          <Link
+            href={route("gtk.create")}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+          >
+            GTK Baru
+          </Link>
+        </div>
 
-    return (
-        <>
-            <Head title="GTK" />
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-bold text-gray-800">GTK</h1>
-                    <Link
-                        href={route("gtk.create")}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition"
-                    >
-                        <Plus className="w-4 h-4" />
-                        GTK Baru
-                    </Link>
-                </div>
+        {flash?.success && <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>}
+        {flash?.error && <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>}
 
-                {flash.success && (
-                    <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
-                        {flash.success}
-                    </div>
-                )}
+        <AdminTable
+          columns={columns}
+          rows={guru?.data || []}
+          pagination={{
+            current_page: guru?.current_page,
+            last_page: guru?.last_page,
+            per_page: guru?.per_page,
+            from: guru?.from,
+            to: guru?.to,
+            total: guru?.total,
+            links: guru?.links,
+          }}
+          actions={(row) => [
+            { icon: "eye", onClick: () => Inertia.visit(route("gtk.show", row.id)), label: "Detail" },
+            { icon: "edit", onClick: () => Inertia.visit(route("gtk.edit", row.id)), label: "Edit" },
+            { icon: "delete", onClick: () => setDeleteTarget(row), label: "Hapus" },
+          ]}
+        />
 
-                <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
-                    <table className="w-full text-sm text-left rtl:text-right text-body">
-                        <thead className="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
-                            <tr className="bg-gray-50">
-                                <th className="px-6 py-3 font-medium">No</th>
-                                <th className="px-6 py-3 font-medium">Nama</th>
-                                <th className="px-6 py-3 font-medium">NUPTK</th>
-                                <th className="px-6 py-3 font-medium">Jenis</th>
-                                <th className="px-6 py-3 font-medium">
-                                    Jabatan
-                                </th>
-                                <th className="px-6 py-3 font-medium">
-                                    No. Telp
-                                </th>
-                                <th className="px-6 py-3 font-medium">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y">
-                            {guru.map((item, index) => (
-                                <tr key={item.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4">{index + 1}</td>
-                                    <td className="px-6 py-4">
-                                        {item.nama_lengkap}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {item.nuptk || "-"}
-                                    </td>
-                                    <td className="px-6 py-4">{item.jenis}</td>
-                                    <td className="px-6 py-4">
-                                        {item.jabatan}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {item.no_telp}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex gap-2">
-                                            <Link
-                                                href={route(
-                                                    "gtk.edit",
-                                                    item.id,
-                                                )}
-                                                className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                            >
-                                                Edit
-                                            </Link>
-                                            <button
-                                                onClick={() =>
-                                                    handleDelete(item.id)
-                                                }
-                                                className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
-                                            >
-                                                Hapus
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            {guru.length === 0 && (
-                                <tr>
-                                    <td
-                                        colSpan={7}
-                                        className="px-4 py-8 text-center text-sm text-gray-500"
-                                    >
-                                        Tidak ada data GTK
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </>
-    );
+        <ConfirmModal
+          open={!!deleteTarget}
+          title="Hapus GTK"
+          message={`Yakin ingin menghapus "${deleteTarget?.nama_lengkap}"?`}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      </div>
+    </>
+  );
 }
