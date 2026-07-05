@@ -1,13 +1,16 @@
 import { Head, Link, usePage } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import { useState } from "react";
+import { Upload } from "lucide-react";
 import AdminTable from "@/Components/AdminTable";
 import type { Column } from "@/Components/AdminTable";
 import ConfirmModal from "@/Components/ConfirmModal";
+import ImportModal from "@/Components/ImportModal";
 
 export default function Index() {
   const { guru, flash } = usePage().props as { guru: any; flash: { success?: string; error?: string } };
   const [deleteTarget, setDeleteTarget] = useState<any>(null);
+  const [showImport, setShowImport] = useState(false);
 
   const handleDelete = () => {
     if (!deleteTarget) return;
@@ -57,12 +60,21 @@ export default function Index() {
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">GTK</h1>
             <p className="text-sm text-gray-500 mt-0.5">Kelola data Guru & Tenaga Kependidikan</p>
           </div>
-          <Link
-            href={route("gtk.create")}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
-          >
-            GTK Baru
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href={route("gtk.create")}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+            >
+              GTK Baru
+            </Link>
+            <button
+              onClick={() => setShowImport(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm font-semibold shadow-sm"
+            >
+              <Upload className="w-4 h-4" />
+              Import
+            </button>
+          </div>
         </div>
 
         {flash?.success && <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>}
@@ -93,6 +105,15 @@ export default function Index() {
           message={`Yakin ingin menghapus "${deleteTarget?.nama_lengkap}"?`}
           onConfirm={handleDelete}
           onCancel={() => setDeleteTarget(null)}
+        />
+
+        <ImportModal
+          open={showImport}
+          onClose={() => setShowImport(false)}
+          title="Import GTK"
+          templateRouteXlsx={route("gtk.template") + "?format=xlsx"}
+          templateRouteCsv={route("gtk.template") + "?format=csv"}
+          importRoute={route("gtk.import")}
         />
       </div>
     </>

@@ -25,12 +25,12 @@ export default function Index() {
 
     const columns: Column[] = [
         {
-            key: "siswa",
+            key: "siswa_nama",
             label: "Nama Siswa",
             render: (_v: any, row: any) => row.siswa?.nama_lengkap || "-",
         },
         {
-            key: "siswa",
+            key: "siswa_nisn",
             label: "NISN",
             render: (_v: any, row: any) => row.siswa?.nisn || "-",
         },

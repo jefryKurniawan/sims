@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Head from './Head';
+import { Head } from './Head';
 
 interface FrontendLayoutProps {
     children: ReactNode;

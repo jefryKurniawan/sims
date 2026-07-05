@@ -7,6 +7,11 @@ interface JurusanOption {
   nama: string;
 }
 
+interface KelasOption {
+  id: number;
+  nama_kelas: string;
+}
+
 interface SiswaData {
   id: number;
   nama_lengkap: string;
@@ -24,15 +29,25 @@ interface SiswaData {
   status: string;
   tanggal_masuk: string | null;
   jurusan_id: number | null;
+  kelasAktif?: {
+    kelas?: {
+      id: number;
+      nama_kelas: string;
+    } | null;
+  } | null;
 }
 
 interface Props {
   siswa: SiswaData;
   jurusanList: JurusanOption[];
+  kelasList: KelasOption[];
 }
 
-export default function Edit({ siswa, jurusanList }: Props) {
+export default function Edit({ siswa, jurusanList, kelasList }: Props) {
   const { errors } = usePage().props;
+
+  // Determine current kelas id from siswa.kelasAktif?.kelas?.id
+  const currentKelasId = siswa.kelasAktif?.kelas?.id ?? null;
 
   const [values, setValues] = useState({
     nama_lengkap: siswa.nama_lengkap ?? '',
@@ -50,6 +65,7 @@ export default function Edit({ siswa, jurusanList }: Props) {
     status: siswa.status ?? 'Aktif',
     tanggal_masuk: siswa.tanggal_masuk ?? '',
     jurusan_id: siswa.jurusan_id ? String(siswa.jurusan_id) : '',
+    kelas_id: currentKelasId ? String(currentKelasId) : '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -58,7 +74,7 @@ export default function Edit({ siswa, jurusanList }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    Inertia.put(route('siswa.update', siswa.id), values);
+    Inertia.put(route('users.murid.update', siswa.id), values);
   };
 
   return (
@@ -67,7 +83,7 @@ export default function Edit({ siswa, jurusanList }: Props) {
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Edit Siswa</h1>
-          <Link href={route('siswa.index')} className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+          <Link href={route('users.murid.index')} className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
             Kembali
           </Link>
         </div>
@@ -271,6 +287,23 @@ export default function Edit({ siswa, jurusanList }: Props) {
                 </div>
               </div>
 
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
+                  <select
+                    name="kelas_id"
+                    value={values.kelas_id}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"
+                  >
+                    <option value="">-- Pilih Kelas --</option>
+                    {kelasList.map((k) => (
+                      <option key={k.id} value={k.id}>{k.nama_kelas}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               {/* Buttons */}
               <div className="flex space-x-3 mt-4">
                 <button
@@ -280,7 +313,7 @@ export default function Edit({ siswa, jurusanList }: Props) {
                   Simpan Perubahan
                 </button>
                 <Link
-                  href={route('siswa.index')}
+                  href={route('users.murid.index')}
                   className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
                 >
                   Batal

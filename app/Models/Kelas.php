@@ -30,4 +30,16 @@ class Kelas extends Model
     {
         return $this->belongsTo(Guru::class, 'wali_kelas_id');
     }
+
+    public function siswa()
+    {
+        return $this->hasMany(SiswaKelas::class)->with('siswa');
+    }
+
+    public function siswaAktif()
+    {
+        return $this->hasMany(SiswaKelas::class)
+            ->where('siswa_kelas.status', 'aktif')
+            ->with('siswa');
+    }
 }

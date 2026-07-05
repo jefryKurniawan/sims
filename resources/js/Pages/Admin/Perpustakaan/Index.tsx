@@ -1,14 +1,16 @@
 import { Head, Link, usePage } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import AdminTable from "@/Components/AdminTable";
 import type { Column } from "@/Components/AdminTable";
 import ConfirmModal from "@/Components/ConfirmModal";
+import ImportModal from "@/Components/ImportModal";
 
 export default function Index() {
     const { buku, flash } = usePage().props;
     const [deleteTarget, setDeleteTarget] = useState<any>(null);
+    const [showImport, setShowImport] = useState(false);
 
     const handleDelete = () => {
         if (!deleteTarget) return;
@@ -57,12 +59,21 @@ export default function Index() {
                             Kelola data buku dan stok peminjaman
                         </p>
                     </div>
-                    <Link
-                        href={route("admin.perpustakaan.create")}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
-                    >
-                        Buku Baru
-                    </Link>
+                    <div className="flex items-center gap-2">
+                        <Link
+                            href={route("admin.perpustakaan.create")}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+                        >
+                            Buku Baru
+                        </Link>
+                        <button
+                            onClick={() => setShowImport(true)}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm font-semibold shadow-sm"
+                        >
+                            <Upload className="w-4 h-4" />
+                            Import
+                        </button>
+                    </div>
                 </div>
 
                 {flash?.success && (
@@ -119,6 +130,15 @@ export default function Index() {
                     message={`Yakin ingin menghapus buku \"${deleteTarget?.judul}\"?`}
                     onConfirm={handleDelete}
                     onCancel={() => setDeleteTarget(null)}
+                />
+
+                <ImportModal
+                    open={showImport}
+                    onClose={() => setShowImport(false)}
+                    title="Import Buku Perpustakaan"
+                    templateRouteXlsx={route("admin.perpustakaan.template") + "?format=xlsx"}
+                    templateRouteCsv={route("admin.perpustakaan.template") + "?format=csv"}
+                    importRoute={route("admin.perpustakaan.import")}
                 />
             </div>
         </>

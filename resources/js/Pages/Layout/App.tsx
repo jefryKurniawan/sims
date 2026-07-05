@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "@inertiajs/inertia-react";
 import { usePage } from "@inertiajs/inertia-react";
-import Head from "@/Layout/Head";
+import { Head } from "@/Layout/Head";
 import Header from "@/Layout/Header";
 import Sidebar from "@/Layout/Sidebar";
 import Footer from "@/Layout/Footer";

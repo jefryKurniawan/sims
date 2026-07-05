@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesImport;
 use App\Http\Controllers\Controller;
 use App\Models\SaranaPrasarana;
 use Illuminate\Http\Request;
@@ -9,6 +10,66 @@ use Inertia\Inertia;
 
 class SaranaPrasaranaController extends Controller
 {
+    use HandlesImport;
+
+    /** Header template import Sarana & Prasarana. */
+    protected function saranaHeaders(): array
+    {
+        return ['nama', 'kategori', 'deskripsi', 'lokasi', 'kapasitas', 'kondisi', 'tahun_pengadaan', 'sumber_dana'];
+    }
+
+    public function template(Request $request)
+    {
+        $sample = [
+            'nama' => 'Laboratorium Kimia',
+            'kategori' => 'laboratorium',
+            'deskripsi' => 'Lab kimia lengkap dengan peralatan standar',
+            'lokasi' => 'Gedung Science Lab Lantai 2',
+            'kapasitas' => '20',
+            'kondisi' => 'baik',
+            'tahun_pengadaan' => '2020',
+            'sumber_dana' => 'BOS',
+        ];
+
+        return $this->downloadTemplate('sarana', $this->saranaHeaders(), $sample, $request->get('format', 'xlsx'));
+    }
+
+    public function import(Request $request)
+    {
+        $kategoriValid = ['ruangan', 'laboratorium', 'perpustakaan', 'olahraga', 'ibadah', 'sanitasi', 'teknologi', 'lainnya'];
+        $kondisiValid = ['baik', 'rusak_ringan', 'rusak_berat'];
+
+        $result = $this->runImport($request, SaranaPrasarana::class, function ($row) use ($kategoriValid, $kondisiValid) {
+            $nama = trim((string) ($row['nama'] ?? ''));
+            if ($nama === '') {
+                return null;
+            }
+
+            $kategori = strtolower(trim((string) ($row['kategori'] ?? '')));
+            $kondisi = strtolower(trim((string) ($row['kondisi'] ?? '')));
+            $kapasitas = (int) ($row['kapasitas'] ?? 0);
+
+            return [
+                'nama'         => $nama,
+                'kategori'     => in_array($kategori, $kategoriValid, true) ? $kategori : 'lainnya',
+                'deskripsi'    => $this->nullable($row['deskripsi'] ?? null),
+                'lokasi'       => $this->nullable($row['lokasi'] ?? null),
+                'kapasitas'    => $kapasitas > 0 ? $kapasitas : null,
+                'kondisi'      => in_array($kondisi, $kondisiValid, true) ? $kondisi : 'baik',
+                'tahun_pengadaan' => (int) ($row['tahun_pengadaan'] ?? 0) ?: null,
+                'sumber_dana'  => $this->nullable($row['sumber_dana'] ?? null),
+            ];
+        });
+
+        return back()->with($this->importFlash($result));
+    }
+
+    private function nullable($v)
+    {
+        $v = trim((string) $v);
+        return $v === '' ? null : $v;
+    }
+
     public function index()
     {
         $perPage = (int) request()->query('per_page', 15);

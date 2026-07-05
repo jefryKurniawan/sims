@@ -8,10 +8,8 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->call([
             RoleSeeder::class,
@@ -23,12 +21,16 @@ class DatabaseSeeder extends Seeder
             KategoriBeritaSeeder::class,
             BeritaSeeder::class,
             GuruSeeder::class,
+            KelasSeeder::class, // added
+            SiswaKelasSeeder::class, // added
             GelombangSeeder::class,
             PengumumanPpdbSeeder::class,
             AlumniSeeder::class,
             TracerStudySeeder::class,
             SiswaSeeder::class,
+            SaranaPrasaranaSeeder::class, // added
             DispensasiSeeder::class,
+            BukuSeeder::class, // added (perpustakaan buku)
             EventSeeder::class,
             SpmbApplicantSeeder::class,
             SpmbAfirmasiSeeder::class,

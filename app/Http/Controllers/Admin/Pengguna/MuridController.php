@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Pengguna;
 
+use App\Http\Controllers\Concerns\HandlesImport;
 use App\Http\Controllers\Controller;
 use App\Models\dataMurid;
 use App\Models\User;
@@ -15,6 +16,70 @@ use Inertia\Inertia;
 
 class MuridController extends Controller
 {
+    use HandlesImport;
+
+    /** Header template import Murid. */
+    protected function muridHeaders(): array
+    {
+        return ['name', 'email', 'username', 'password'];
+    }
+
+    public function template(Request $request)
+    {
+        $sample = [
+            'name' => 'Budi Santoso',
+            'email' => 'budi.santoso@example.com',
+            'username' => 'budi123',
+            'password' => 'rahasia123',
+        ];
+
+        return $this->downloadTemplate('murid', $this->muridHeaders(), $sample, $request->get('format', 'xlsx'));
+    }
+
+    public function import(Request $request)
+    {
+        $result = $this->runImport($request, User::class, function ($row) {
+            $name = trim((string) ($row['name'] ?? ''));
+            $email = trim(strtolower((string) ($row['email'] ?? '')));
+            if ($name === '' || $email === '' || User::where('email', $email)->exists()) {
+                return null;
+            }
+
+            $username = trim((string) ($row['username'] ?? ''));
+            if ($username === '') {
+                $username = strtolower(str_replace(' ', '.', $name)) . mt_rand(10, 99);
+            }
+
+            $password = (string) ($row['password'] ?? '');
+            if ($password === '') {
+                $password = 'password123';
+            }
+
+            $user = User::create([
+                'name'     => $name,
+                'email'    => $email,
+                'username' => $username,
+                'password' => bcrypt($password),
+                'role'     => 'Guest',
+                'status'   => 'Aktif',
+            ]);
+
+            $user->assignRole('Guest');
+            $detail = new dataMurid();
+            $detail->user_id = $user->id;
+            $detail->save();
+
+            return ['_done' => true]; // dummy — actual create happens above
+        });
+
+        return back()->with($this->importFlash($result));
+    }
+
+    private function nullable($v)
+    {
+        $v = trim((string) $v);
+        return $v === '' ? null : $v;
+    }
     /**
      * Display a listing of the resource.
      *

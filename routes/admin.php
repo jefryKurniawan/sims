@@ -52,6 +52,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::resource('website/footer', 'Admin\Website\FooterController');
 
         // Alumni
+        Route::get('alumni/template', 'Admin\AlumniController@template')->name('alumni.template');
+        Route::post('alumni/import', 'Admin\AlumniController@import')->name('alumni.import');
         Route::resource('alumni', 'Admin\AlumniController', ['parameters' => ['alumni' => 'alumni']]);
         Route::resource('alumni/donasi', 'Admin\DonasiController', ['as' => 'alumni']);
         Route::post('alumni/donasi/{donasi}/verify', 'Admin\DonasiController@verify')->name('alumni.donasi.verify');
@@ -61,7 +63,12 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         // User Management
         Route::resource('users/pengajar', 'Admin\Pengguna\PengajarController', ['as' => 'users']);
         Route::resource('users/staf', 'Admin\Pengguna\StafController', ['as' => 'users']);
-        Route::resource('users/murid', 'Admin\Pengguna\MuridController', ['as' => 'users']);
+        Route::get('users/murid/template', 'Admin\SiswaController@template')->name('users.murid.template');
+        Route::post('users/murid/import', 'Admin\SiswaController@import')->name('users.murid.import');
+        Route::get('users/murid/tingkat/{tingkat}', 'Admin\SiswaController@tingkat')
+            ->whereNumber('tingkat')->name('users.murid.tingkat');
+        Route::post('users/murid/promote', 'Admin\SiswaController@promote')->name('users.murid.promote');
+        Route::resource('users/murid', 'Admin\SiswaController', ['as' => 'users']);
         Route::resource('users/ppdb', 'Admin\Pengguna\PPDBController', ['as' => 'users']);
         Route::resource('users/perpus', 'Admin\Pengguna\PerpusController', ['as' => 'users']);
         Route::resource('users/bendahara', 'Admin\Pengguna\BendaharaController', ['as' => 'users']);
@@ -131,15 +138,23 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         });
 
         // GTK
+        Route::get('gtk/template', 'Admin\GtkController@template')->name('gtk.template');
+        Route::post('gtk/import', 'Admin\GtkController@import')->name('gtk.import');
         Route::resource('gtk', 'Admin\GtkController');
 
         // Kelas
+        Route::get('kelas/template', 'Admin\KelasController@template')->name('kelas.template');
+        Route::post('kelas/import', 'Admin\KelasController@import')->name('kelas.import');
         Route::resource('kelas', 'Admin\KelasController');
 
         // Sarana Prasarana
+            Route::get('sarana/template', 'Admin\SaranaPrasaranaController@template')->name('sarana.template');
+            Route::post('sarana/import', 'Admin\SaranaPrasaranaController@import')->name('sarana.import');
             Route::resource('sarana', 'Admin\SaranaPrasaranaController');
 
     // Perpustakaan
+    Route::get('perpustakaan/template', 'Admin\PerpustakaanController@template')->name('admin.perpustakaan.template');
+    Route::post('perpustakaan/import', 'Admin\PerpustakaanController@import')->name('admin.perpustakaan.import');
     Route::resource('perpustakaan', 'Admin\PerpustakaanController', ['as' => 'admin', 'parameters' => ['perpustakaan' => 'buku']]);
 
         // SPP

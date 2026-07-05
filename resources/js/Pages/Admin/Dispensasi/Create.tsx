@@ -1,127 +1,156 @@
-import { useForm, usePage, Link } from '@inertiajs/inertia-react';
-import AdminLayout from '@/Layout/AdminLayout';
+import { Head, useForm, Link } from "@inertiajs/inertia-react";
+import { ChevronLeft } from "lucide-react";
 
-export default function Create() {
-    const { data: pageData } = usePage().props;
-    const { siswa } = pageData;
+interface Props {
+    siswa: { id: number; nama_lengkap: string; nisn: string }[];
+}
+
+export default function Create({ siswa }: Props) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        siswa_id: '',
-        jenis: 'potongan',
-        nominal: '',
-        tanggal_mulai: '',
-        tanggal_selesai: '',
-        keterangan: '',
+        siswa_id: "",
+        jenis: "potongan",
+        nominal: "",
+        tanggal_mulai: "",
+        tanggal_selesai: "",
+        keterangan: "",
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('dispensasi.store'), {
+        post(route("dispensasi.store"), {
             onSuccess: () => reset(),
         });
     };
 
     return (
-        <AdminLayout title="Dispensasi SPP - Tambah">
-            <div className="p-6">
-                <div className="mb-6">
-                    <h1 className="text-2xl font-bold">Tambah Dispensasi Baru</h1>
+        <>
+            <Head title="Tambah Dispensasi" />
+            <div className="p-4 lg:p-6">
+                <div className="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Tambah Dispensasi</h1>
+                        <p className="text-sm text-gray-500 mt-0.5">Buat potongan atau penundaan SPP untuk siswa</p>
+                    </div>
                     <Link
-                        href={route('dispensasi.index')}
-                        className="inline-block px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 mt-2"
+                        href={route("dispensasi.index")}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
                     >
-                        Kembali ke Daftar Dispensasi
+                        <ChevronLeft className="w-4 h-4" />
+                        Kembali
                     </Link>
                 </div>
 
-                <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Siswa</label>
-                        <select
-                            value={data.siswa_id}
-                            onChange={e => setData('siswa_id', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                        >
-                            <option value="">Pilih Siswa</option>
-                            {siswa?.map((s) => (
-                                <option key={s.id} value={s.id}>
-                                    {s.nama_lengkap} ({s.nisn})
-                                </option>
-                            ))}
-                        </select>
-                        {errors.siswa_id && <span className="text-red-600 text-sm">{errors.siswa_id}</span>}
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Jenis Dispensasi</label>
-                        <select
-                            value={data.jenis}
-                            onChange={e => setData('jenis', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                        >
-                            <option value="potongan">Potongan</option>
-                            <option value="penundaan">Penundaan</option>
-                        </select>
-                        {errors.jenis && <span className="text-red-600 text-sm">{errors.jenis}</span>}
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Nominal (Rp)</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            value={data.nominal}
-                            onChange={e => setData('nominal', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                            placeholder="Nominal dispensasi"
-                        />
-                        {errors.nominal && <span className="text-red-600 text-sm">{errors.nominal}</span>}
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white border border-gray-200 shadow-sm p-6 max-w-3xl">
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium mb-2">Tanggal Mulai</label>
-                            <input
-                                type="date"
-                                value={data.tanggal_mulai}
-                                onChange={e => setData('tanggal_mulai', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            {errors.tanggal_mulai && <span className="text-red-600 text-sm">{errors.tanggal_mulai}</span>}
+                            <label htmlFor="siswa_id" className="block text-sm font-medium mb-1 text-gray-700">Siswa</label>
+                            <select
+                                id="siswa_id"
+                                value={data.siswa_id}
+                                onChange={(e) => setData("siswa_id", e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm"
+                                required
+                            >
+                                <option value="">Pilih Siswa</option>
+                                {siswa.map((s) => (
+                                    <option key={s.id} value={s.id}>
+                                        {s.nama_lengkap} ({s.nisn})
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.siswa_id && <p className="mt-1 text-sm text-red-600">{errors.siswa_id}</p>}
                         </div>
+
                         <div>
-                            <label className="block text-sm font-medium mb-2">Tanggal Selesai</label>
-                            <input
-                                type="date"
-                                value={data.tanggal_selesai}
-                                onChange={e => setData('tanggal_selesai', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            {errors.tanggal_selesai && <span className="text-red-600 text-sm">{errors.tanggal_selesai}</span>}
+                            <label htmlFor="jenis" className="block text-sm font-medium mb-1 text-gray-700">Jenis Dispensasi</label>
+                            <select
+                                id="jenis"
+                                value={data.jenis}
+                                onChange={(e) => setData("jenis", e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm"
+                                required
+                            >
+                                <option value="potongan">Potongan</option>
+                                <option value="penundaan">Penundaan</option>
+                            </select>
+                            {errors.jenis && <p className="mt-1 text-sm text-red-600">{errors.jenis}</p>}
                         </div>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Keterangan</label>
-                        <textarea
-                            value={data.keterangan}
-                            onChange={e => setData('keterangan', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                            rows={3}
-                            placeholder="Keterangan tambahan"
-                        />
-                        {errors.keterangan && <span className="text-red-600 text-sm">{errors.keterangan}</span>}
-                    </div>
-                    <div className="flex justify-end space-x-2">
-                        <button
-                            type="button"
-                            onClick={() => reset()}
-                            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-                        >
-                            Batal
-                        </button>
-                        <button type="submit" className="px-4 py-2 bg-school-red text-white rounded-md hover:bg-red-700 disabled:opacity-50" disabled={processing}>
-                            {processing ? 'Menyimpan...' : 'Simpan Dispensasi'}
-                        </button>
-                    </div>
-                </form>
+
+                        <div>
+                            <label htmlFor="nominal" className="block text-sm font-medium mb-1 text-gray-700">Nominal</label>
+                            <input
+                                id="nominal"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                value={data.nominal}
+                                onChange={(e) => setData("nominal", e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm"
+                                placeholder="Nominal dispensasi"
+                                required
+                            />
+                            {errors.nominal && <p className="mt-1 text-sm text-red-600">{errors.nominal}</p>}
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label htmlFor="tanggal_mulai" className="block text-sm font-medium mb-1 text-gray-700">Tanggal Mulai</label>
+                                <input
+                                    id="tanggal_mulai"
+                                    type="date"
+                                    value={data.tanggal_mulai}
+                                    onChange={(e) => setData("tanggal_mulai", e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm"
+                                    required
+                                />
+                                {errors.tanggal_mulai && <p className="mt-1 text-sm text-red-600">{errors.tanggal_mulai}</p>}
+                            </div>
+
+                            <div>
+                                <label htmlFor="tanggal_selesai" className="block text-sm font-medium mb-1 text-gray-700">Tanggal Selesai</label>
+                                <input
+                                    id="tanggal_selesai"
+                                    type="date"
+                                    value={data.tanggal_selesai}
+                                    onChange={(e) => setData("tanggal_selesai", e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm"
+                                />
+                                {errors.tanggal_selesai && <p className="mt-1 text-sm text-red-600">{errors.tanggal_selesai}</p>}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label htmlFor="keterangan" className="block text-sm font-medium mb-1 text-gray-700">Keterangan</label>
+                            <textarea
+                                id="keterangan"
+                                value={data.keterangan}
+                                onChange={(e) => setData("keterangan", e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm"
+                                rows={3}
+                                placeholder="Keterangan tambahan"
+                            />
+                            {errors.keterangan && <p className="mt-1 text-sm text-red-600">{errors.keterangan}</p>}
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-2">
+                            <button
+                                type="button"
+                                onClick={() => reset()}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                type="submit"
+                                className="px-4 py-2 text-sm font-medium text-white bg-school-red rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                                disabled={processing}
+                            >
+                                {processing ? "Menyimpan..." : "Simpan"}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }

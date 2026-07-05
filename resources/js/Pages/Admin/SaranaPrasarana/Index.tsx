@@ -1,10 +1,11 @@
 import { Head, useForm, usePage } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import { useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus, Upload, X } from "lucide-react";
 import AdminTable from "@/Components/AdminTable";
 import type { Column } from "@/Components/AdminTable";
 import ConfirmModal from "@/Components/ConfirmModal";
+import ImportModal from "@/Components/ImportModal";
 
 const KATEGORI_OPTIONS = [
     { value: "ruangan", label: "Ruangan" },
@@ -29,6 +30,7 @@ export default function Index() {
     const [editing, setEditing] = useState(false);
     const [editId, setEditId] = useState<number | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<any>(null);
+    const [showImport, setShowImport] = useState(false);
     const form = useForm({
         nama: "",
         kategori: "ruangan",
@@ -145,12 +147,21 @@ export default function Index() {
                             Kelola fasilitas & infrastruktur sekolah
                         </p>
                     </div>
-                    <button
-                        onClick={openAdd}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
-                    >
-                        Sarana Baru
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={openAdd}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+                        >
+                            Sarana Baru
+                        </button>
+                        <button
+                            onClick={() => setShowImport(true)}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm font-semibold shadow-sm"
+                        >
+                            <Upload className="w-4 h-4" />
+                            Import
+                        </button>
+                    </div>
                 </div>
 
                 {flash?.success && (
@@ -411,6 +422,15 @@ export default function Index() {
                     message={`Yakin ingin menghapus "${deleteTarget?.nama}"?`}
                     onConfirm={handleDelete}
                     onCancel={() => setDeleteTarget(null)}
+                />
+
+                <ImportModal
+                    open={showImport}
+                    onClose={() => setShowImport(false)}
+                    title="Import Sarana & Prasarana"
+                    templateRouteXlsx={route("sarana.template") + "?format=xlsx"}
+                    templateRouteCsv={route("sarana.template") + "?format=csv"}
+                    importRoute={route("sarana.import")}
                 />
             </div>
         </>

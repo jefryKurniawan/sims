@@ -1,9 +1,11 @@
 import { Head, usePage, Link } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import { useState } from "react";
+import { Upload } from "lucide-react";
 import AdminTable from "@/Components/AdminTable";
 import type { Column } from "@/Components/AdminTable";
 import ConfirmModal from "@/Components/ConfirmModal";
+import ImportModal from "@/Components/ImportModal";
 
 export default function Index() {
   const { alumni, flash } = usePage().props as {
@@ -11,6 +13,7 @@ export default function Index() {
     flash: { success?: string; error?: string };
   };
   const [deleteTarget, setDeleteTarget] = useState<any>(null);
+  const [showImport, setShowImport] = useState(false);
 
   const handleDelete = () => {
     if (!deleteTarget) return;
@@ -34,12 +37,21 @@ export default function Index() {
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Alumni</h1>
             <p className="text-sm text-gray-500 mt-0.5">Kelola data alumni sekolah</p>
           </div>
-          <Link
-            href={route("alumni.create")}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
-          >
-            Alumni Baru
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href={route("alumni.create")}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+            >
+              Alumni Baru
+            </Link>
+            <button
+              onClick={() => setShowImport(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm font-semibold shadow-sm"
+            >
+              <Upload className="w-4 h-4" />
+              Import
+            </button>
+          </div>
         </div>
 
         {flash?.success && <div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">{flash.success}</div>}
@@ -70,6 +82,15 @@ export default function Index() {
           message={`Yakin ingin menghapus alumni "${deleteTarget?.user?.name || "ini"}"?`}
           onConfirm={handleDelete}
           onCancel={() => setDeleteTarget(null)}
+        />
+
+        <ImportModal
+          open={showImport}
+          onClose={() => setShowImport(false)}
+          title="Import Alumni"
+          templateRouteXlsx={route("alumni.template") + "?format=xlsx"}
+          templateRouteCsv={route("alumni.template") + "?format=csv"}
+          importRoute={route("alumni.import")}
         />
       </div>
     </>

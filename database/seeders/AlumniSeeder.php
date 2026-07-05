@@ -14,9 +14,10 @@ class AlumniSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        // Create users for alumni if not exist
+        $total = 750; // between 500-1000
         $alumniUsers = [];
-        for ($i = 0; $i < 3; $i++) {
+
+        for ($i = 0; $i < $total; $i++) {
             $name = $faker->name();
             $email = $faker->unique()->safeEmail();
             $username = strtolower(str_replace(' ', '.', $name)) . mt_rand(10,99);
@@ -25,7 +26,7 @@ class AlumniSeeder extends Seeder
                 'email' => $email,
                 'username' => $username,
                 'password' => bcrypt('password'),
-                'role' => 'murid',
+                'role' => 'alumni',
                 'status' => 'Aktif',
             ]);
             $alumniUsers[] = $user;
@@ -34,12 +35,14 @@ class AlumniSeeder extends Seeder
         foreach ($alumniUsers as $user) {
             Alumni::create([
                 'user_id' => $user->id,
-                'tahun_lulus' => now()->subYear(rand(1,5))->year,
+                'tahun_lulus' => now()->subYear(rand(1,20))->year,
                 'pekerjaan' => $faker->jobTitle(),
                 'alamat' => $faker->address(),
                 'no_telp' => $faker->phoneNumber(),
-                'linkedin' => $faker->url(),
+                'linkedin' => $faker->optional()->url,
             ]);
         }
+
+        $this->command->info("Alumni seeder completed: {$total} alumni created.");
     }
 }

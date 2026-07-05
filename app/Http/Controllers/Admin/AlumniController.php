@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesImport;
 use App\Http\Controllers\Controller;
 use App\Models\Alumni;
 use App\Models\User;
@@ -10,12 +11,63 @@ use Inertia\Inertia;
 
 class AlumniController extends Controller
 {
+    use HandlesImport;
+
+    /** Header template import Alumni. */
+    protected function alumniHeaders(): array
+    {
+        return ['user_email', 'tahun_lulus', 'pekerjaan', 'alamat', 'no_telp', 'linkedin'];
+    }
+
+    public function template(Request $request)
+    {
+        $sample = [
+            'user_email' => 'andi@example.com',
+            'tahun_lulus' => '2022',
+            'pekerjaan' => 'Software Engineer',
+            'alamat' => 'Jl. Sudirman No. 12, Jakarta',
+            'no_telp' => '081234567890',
+            'linkedin' => 'linkedin.com/in/andiwijaya',
+        ];
+
+        return $this->downloadTemplate('alumni', $this->alumniHeaders(), $sample, $request->get('format', 'xlsx'));
+    }
+
+    public function import(Request $request)
+    {
+        $userMap = User::pluck('id', 'email');
+
+        $result = $this->runImport($request, Alumni::class, function ($row) use ($userMap) {
+            $email = trim(strtolower((string) ($row['user_email'] ?? '')));
+            if ($email === '' || !isset($userMap[$email])) {
+                return null;
+            }
+            $tahun = (int) ($row['tahun_lulus'] ?? 0);
+
+            return [
+                'user_id'    => $userMap[$email],
+                'tahun_lulus' => $tahun > 1900 ? $tahun : null,
+                'pekerjaan'  => (string) ($row['pekerjaan'] ?? ''),
+                'alamat'     => (string) ($row['alamat'] ?? ''),
+                'no_telp'    => (string) ($row['no_telp'] ?? ''),
+                'linkedin'   => $this->nullable($row['linkedin'] ?? null),
+            ];
+        });
+
+        return back()->with($this->importFlash($result));
+    }
+
+    private function nullable($v)
+    {
+        $v = trim((string) $v);
+        return $v === '' ? null : $v;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $alumni = Alumni::with('user')->get();
+        $alumni = Alumni::with('user')->paginate(15);
 
         return Inertia::render('Admin/Alumni/Index', [
             'alumni' => $alumni,
@@ -28,7 +80,7 @@ class AlumniController extends Controller
     public function create()
     {
         $assignedUserIds = Alumni::pluck('user_id');
-        $users = User::where('role', 'Alumni')
+        $users = User::where('role', 'alumni')
             ->orWhereNotIn('id', $assignedUserIds)
             ->get(['id', 'name', 'email']);
 
@@ -64,7 +116,10 @@ class AlumniController extends Controller
     {
         $assignedUserIds = Alumni::where('id', '!=', $alumni->id)->pluck('user_id');
         $users = User::where('id', $alumni->user_id)
-            ->orWhereNotIn('id', $assignedUserIds)
+            ->orWhere(function ($query) use ($assignedUserIds) {
+                $query->whereNotIn('id', $assignedUserIds)
+                      ->where('role', 'alumni');
+            })
             ->get(['id', 'name', 'email']);
 
         return Inertia::render('Admin/Alumni/Edit', [

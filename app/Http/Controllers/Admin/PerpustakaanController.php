@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\HandlesImport;
 use App\Http\Controllers\Controller;
 use App\Models\PerpustakaanBuku;
 use Illuminate\Http\Request;
@@ -9,6 +10,69 @@ use Inertia\Inertia;
 
 class PerpustakaanController extends Controller
 {
+    use HandlesImport;
+
+    /** Header template import Buku. */
+    protected function bukuHeaders(): array
+    {
+        return ['judul', 'penulis', 'penerbit', 'tahun_terbit', 'isbn', 'kategori', 'deskripsi', 'jumlah_halaman', 'jumalah_stok', 'lokasi_rak', 'tersedia'];
+    }
+
+    public function template(Request $request)
+    {
+        $sample = [
+            'judul' => 'Dasar Pemrograman Web',
+            'penulis' => 'Andi Wijaya',
+            'penerbit' => 'Pusat Pendidikan',
+            'tahun_terbit' => '2023',
+            'isbn' => '978-602-1234-56-7',
+            'kategori' => 'Teknologi',
+            'deskripsi' => 'Buku pengantar Pemrograman Web menggunakan HTML, CSS, dan JavaScript.',
+            'jumlah_halaman' => '250',
+            'jumalah_stok' => '10',
+            'lokasi_rak' => 'Rak A1',
+            'tersedia' => 'Ya',
+        ];
+
+        return $this->downloadTemplate('perpustakaan-buku', $this->bukuHeaders(), $sample, $request->get('format', 'xlsx'));
+    }
+
+    public function import(Request $request)
+    {
+        $result = $this->runImport($request, PerpustakaanBuku::class, function ($row) {
+            $judul = trim((string) ($row['judul'] ?? ''));
+            if ($judul === '') {
+                return null;
+            }
+
+            $stok = (int) ($row['jumalah_stok'] ?? 0);
+            $tersedia = strtolower(trim((string) ($row['tersedia'] ?? '')));
+
+            return [
+                'judul'          => $judul,
+                'penulis'        => (string) ($row['penulis'] ?? ''),
+                'penerbit'       => $this->nullable($row['penerbit'] ?? null),
+                'tahun_terbit'   => (int) ($row['tahun_terbit'] ?? 0) ?: null,
+                'isbn'           => $this->nullable($row['isbn'] ?? null),
+                'kategori'       => $this->nullable($row['kategori'] ?? null),
+                'deskripsi'      => $this->nullable($row['deskripsi'] ?? null),
+                'jumlah_halaman' => (int) ($row['jumlah_halaman'] ?? 0) ?: null,
+                'jumalah_stok'   => $stok > 0 ? $stok : 1,
+                'lokasi_rak'     => $this->nullable($row['lokasi_rak'] ?? null),
+                'file_cover'     => $this->nullable($row['file_cover'] ?? null),
+                'tersedia'       => in_array($tersedia, ['0', 'false', 'tidak'], true) ? false : true,
+            ];
+        });
+
+        return back()->with($this->importFlash($result));
+    }
+
+    private function nullable($v)
+    {
+        $v = trim((string) $v);
+        return $v === '' ? null : $v;
+    }
+
     public function index(Request $request)
     {
         $query = PerpustakaanBuku::query();
@@ -27,7 +91,7 @@ class PerpustakaanController extends Controller
         }
 
         if ($request->filled('tersedia')) {
-            $query->where('tersedia', $request->tersavailable == 'yes');
+            $query->where('tersedia', $request->boolean('tersedia'));
         }
 
         $buku = $query->orderBy('judul')->paginate(15);

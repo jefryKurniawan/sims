@@ -80,6 +80,18 @@ class Siswa extends Model
         return $this->belongsTo(Jurusan::class);
     }
 
+    public function kelasHistory()
+    {
+        return $this->hasMany(SiswaKelas::class)->with('kelas');
+    }
+
+    public function kelasAktif()
+    {
+        return $this->hasOne(SiswaKelas::class)
+            ->where('siswa_kelas.status', 'aktif')
+            ->with('kelas');
+    }
+
     public function auditLogs()
     {
         return $this->morphMany(AuditLog::class, 'auditable');

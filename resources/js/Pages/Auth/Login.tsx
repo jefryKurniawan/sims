@@ -1,7 +1,7 @@
 import { useForm, usePage } from "@inertiajs/inertia-react";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import Head from "@/Layout/Head";
+import { Head } from "@/Layout/Head";
 import GuestLayout from "@/Layout/GuestLayout";
 import type { PageProps } from "@/types";
 

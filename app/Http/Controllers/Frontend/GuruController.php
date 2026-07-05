@@ -22,13 +22,12 @@ class GuruController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Guru::with('user')
-            ->whereNotNull('user_id'); // hanya yang punya akun
+        $query = Guru::with('user');
 
         // Filter by jenis (Guru / Tenaga Kependidikan)
         if ($request->filled('jenis')) {
             $jenis = $request->input('jenis');
-            if (in_array($jenis, ['guru', 'tenaga_kependidikan'])) {
+            if (in_array($jenis, ['Guru', 'Tenaga Kependidikan'], true)) {
                 $query->where('jenis', $jenis);
             }
         }
@@ -70,10 +69,10 @@ class GuruController extends Controller
             ->distinct()
             ->pluck('bidang_studi');
 
-        // Stats
-        $totalGuru = Guru::whereNotNull('user_id')->count();
-        $guruCount = Guru::where('jenis', 'guru')->whereNotNull('user_id')->count();
-        $tendikCount = Guru::where('jenis', 'tenaga_kependidikan')->whereNotNull('user_id')->count();
+        // Stats (ponytail: match Admin GtkController — no user_id gate, DB-native values)
+        $totalGuru = Guru::count();
+        $guruCount = Guru::where('jenis', 'Guru')->count();
+        $tendikCount = Guru::where('jenis', 'Tenaga Kependidikan')->count();
 
         return inertia('Frontend/Guru', [
             'gurus' => $gurus,

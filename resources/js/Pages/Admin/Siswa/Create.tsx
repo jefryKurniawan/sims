@@ -7,11 +7,17 @@ interface JurusanOption {
   nama: string;
 }
 
-interface Props {
-  jurusanList: JurusanOption[];
+interface KelasOption {
+  id: number;
+  nama_kelas: string;
 }
 
-export default function Create({ jurusanList }: Props) {
+interface Props {
+  jurusanList: JurusanOption[];
+  kelasList: KelasOption[];
+}
+
+export default function Create({ jurusanList, kelasList }: Props) {
   const { errors } = usePage().props;
 
   const [values, setValues] = useState({
@@ -30,6 +36,7 @@ export default function Create({ jurusanList }: Props) {
     status: 'Aktif',
     tanggal_masuk: '',
     jurusan_id: '',
+    kelas_id: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -38,7 +45,7 @@ export default function Create({ jurusanList }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    Inertia.post(route('siswa.store'), values);
+    Inertia.post(route('users.murid.store'), values);
   };
 
   return (
@@ -47,7 +54,7 @@ export default function Create({ jurusanList }: Props) {
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Tambah Siswa</h1>
-          <Link href={route('siswa.index')} className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+          <Link href={route('users.murid.index')} className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
             Kembali
           </Link>
         </div>
@@ -195,7 +202,7 @@ export default function Create({ jurusanList }: Props) {
                 </div>
               </div>
 
-              {/* Asal Sekolah, Status, Tanggal Masuk */}
+              {/* Asal Sekolah, Status, Tanggal Masuk, Jurusan, Kelas */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Asal Sekolah</label>
@@ -250,6 +257,23 @@ export default function Create({ jurusanList }: Props) {
                 </div>
               </div>
 
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
+                  <select
+                    name="kelas_id"
+                    value={values.kelas_id}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"
+                  >
+                    <option value="">-- Pilih Kelas --</option>
+                    {kelasList.map((k) => (
+                      <option key={k.id} value={k.id}>{k.nama_kelas}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               {/* Buttons */}
               <div className="flex space-x-3 mt-4">
                 <button
@@ -259,7 +283,7 @@ export default function Create({ jurusanList }: Props) {
                   Simpan
                 </button>
                 <Link
-                  href={route('siswa.index')}
+                  href={route('users.murid.index')}
                   className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
                 >
                   Batal

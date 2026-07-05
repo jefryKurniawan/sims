@@ -6,16 +6,23 @@
       "resources/js/app.jsx"
     ]
   },
+  "_AdminTable.js": {
+    "file": "assets/AdminTable.js",
+    "name": "AdminTable",
+    "imports": [
+      "_jsx-runtime.js",
+      "_createLucideIcon.js",
+      "_chevron-left.js",
+      "_eye.js",
+      "resources/js/app.jsx"
+    ]
+  },
   "_ConfirmModal.js": {
     "file": "assets/ConfirmModal.js",
     "name": "ConfirmModal",
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "_createLucideIcon.js",
       "_triangle-alert.js",
-      "_chevron-left.js",
-      "_eye.js",
       "resources/js/app.jsx"
     ]
   },
@@ -48,8 +55,17 @@
     "name": "Header",
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_user.js",
+      "resources/js/app.jsx"
+    ]
+  },
+  "_ImportModal.js": {
+    "file": "assets/ImportModal.js",
+    "name": "ImportModal",
+    "imports": [
+      "_jsx-runtime.js",
+      "_createLucideIcon.js",
+      "_download.js",
       "resources/js/app.jsx"
     ]
   },
@@ -57,13 +73,8 @@
     "file": "assets/Pagination.js",
     "name": "Pagination",
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
-  },
-  "_ScrollTrigger.js": {
-    "file": "assets/ScrollTrigger.js",
-    "name": "ScrollTrigger"
   },
   "_arrow-left.js": {
     "file": "assets/arrow-left.js",
@@ -103,6 +114,13 @@
   "_calendar.js": {
     "file": "assets/calendar.js",
     "name": "calendar",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_chart-column.js": {
+    "file": "assets/chart-column.js",
+    "name": "chart-column",
     "imports": [
       "_createLucideIcon.js"
     ]
@@ -156,16 +174,16 @@
       "_jsx-runtime.js"
     ]
   },
-  "_dist.js": {
-    "file": "assets/dist.js",
-    "name": "dist",
-    "imports": [
-      "_jsx-runtime.js"
-    ]
-  },
   "_dollar-sign.js": {
     "file": "assets/dollar-sign.js",
     "name": "dollar-sign",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_download.js": {
+    "file": "assets/download.js",
+    "name": "download",
     "imports": [
       "_createLucideIcon.js"
     ]
@@ -177,27 +195,27 @@
       "_createLucideIcon.js"
     ]
   },
-  "_fa.js": {
-    "file": "assets/fa.js",
-    "name": "fa",
+  "_funnel.js": {
+    "file": "assets/funnel.js",
+    "name": "funnel",
     "imports": [
-      "_jsx-runtime.js"
+      "_createLucideIcon.js"
     ]
   },
   "_gsap.js": {
     "file": "assets/gsap.js",
     "name": "gsap"
   },
-  "_heart.js": {
-    "file": "assets/heart.js",
-    "name": "heart",
+  "_hash.js": {
+    "file": "assets/hash.js",
+    "name": "hash",
     "imports": [
       "_createLucideIcon.js"
     ]
   },
-  "_image.js": {
-    "file": "assets/image.js",
-    "name": "image",
+  "_heart.js": {
+    "file": "assets/heart.js",
+    "name": "heart",
     "imports": [
       "_createLucideIcon.js"
     ]
@@ -220,11 +238,32 @@
       "_createLucideIcon.js"
     ]
   },
+  "_newspaper.js": {
+    "file": "assets/newspaper.js",
+    "name": "newspaper",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
   "_phone.js": {
     "file": "assets/phone.js",
     "name": "phone",
     "imports": [
       "_createLucideIcon.js"
+    ]
+  },
+  "_plus.js": {
+    "file": "assets/plus.js",
+    "name": "plus",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_proxy.js": {
+    "file": "assets/proxy.js",
+    "name": "proxy",
+    "imports": [
+      "_jsx-runtime.js"
     ]
   },
   "_save.js": {
@@ -244,6 +283,13 @@
   "_triangle-alert.js": {
     "file": "assets/triangle-alert.js",
     "name": "triangle-alert",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_upload.js": {
+    "file": "assets/upload.js",
+    "name": "upload",
     "imports": [
       "_createLucideIcon.js"
     ]
@@ -275,9 +321,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Alumni/Edit.tsx": {
@@ -287,7 +331,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -298,7 +341,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_ImportModal.js",
+      "_AdminTable.js",
+      "_upload.js",
       "_ConfirmModal.js"
     ]
   },
@@ -309,7 +354,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -320,7 +364,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -332,7 +375,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_Head.js",
       "_utils.js"
@@ -345,7 +387,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -356,9 +398,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Berita/Edit.tsx": {
@@ -368,9 +408,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Berita/Index.tsx": {
@@ -380,7 +418,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -391,7 +429,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -403,7 +440,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -415,7 +451,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -426,7 +462,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_Head.js"
     ]
   },
@@ -447,7 +482,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_Head.js"
     ]
   },
@@ -458,9 +492,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Dispensasi/Edit.tsx": {
@@ -470,7 +502,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -481,9 +512,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "_ConfirmModal.js",
-      "resources/js/app.jsx"
+      "_AdminTable.js",
+      "resources/js/app.jsx",
+      "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/Dispensasi/Show.tsx": {
@@ -493,7 +524,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -504,7 +534,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_arrow-left.js",
       "_save.js"
     ]
@@ -516,7 +545,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_arrow-left.js",
       "_save.js"
     ]
@@ -528,10 +556,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "_createLucideIcon.js",
       "_circle-check-big.js",
       "_circle-x.js",
+      "_funnel.js",
       "_clock.js",
       "_dollar-sign.js"
     ]
@@ -543,7 +570,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_circle-check-big.js",
       "_arrow-left.js",
       "_calendar.js",
@@ -560,7 +586,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -571,7 +596,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -582,7 +606,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_ImportModal.js",
+      "_AdminTable.js",
+      "_upload.js",
       "_ConfirmModal.js"
     ]
   },
@@ -593,7 +619,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -604,7 +629,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -615,9 +639,11 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "_ConfirmModal.js",
-      "resources/js/app.jsx"
+      "_ImportModal.js",
+      "_AdminTable.js",
+      "_upload.js",
+      "resources/js/app.jsx",
+      "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/Kelas/Show.tsx": {
@@ -627,7 +653,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -637,10 +662,7 @@
     "src": "resources/js/Pages/Admin/Murid/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js",
-      "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Admin/Murid/Edit.tsx": {
@@ -649,10 +671,7 @@
     "src": "resources/js/Pages/Admin/Murid/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js",
-      "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Admin/Murid/Index.tsx": {
@@ -662,7 +681,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -673,7 +692,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -684,7 +702,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -695,7 +712,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -706,7 +722,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_ImportModal.js",
+      "_AdminTable.js",
+      "_upload.js",
       "_ConfirmModal.js"
     ]
   },
@@ -717,7 +735,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -728,7 +745,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -740,7 +756,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -751,10 +767,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "_createLucideIcon.js",
       "_arrow-left.js",
-      "_save.js"
+      "_save.js",
+      "_upload.js"
     ]
   },
   "resources/js/Pages/Admin/Prestasi/Edit.tsx": {
@@ -764,7 +779,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_arrow-left.js",
       "_save.js"
     ]
@@ -776,7 +790,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -787,7 +801,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_arrow-left.js",
       "_calendar.js",
       "_map-pin.js",
@@ -802,7 +815,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -814,7 +826,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -825,7 +837,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -837,7 +848,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -848,7 +859,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -860,7 +870,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -871,7 +881,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -883,7 +892,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -895,7 +903,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -907,7 +914,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -918,9 +924,11 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "_ConfirmModal.js",
-      "resources/js/app.jsx"
+      "_ImportModal.js",
+      "_AdminTable.js",
+      "_upload.js",
+      "resources/js/app.jsx",
+      "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/SaranaPrasarana/Show.tsx": {
@@ -930,7 +938,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_chevron-left.js"
     ]
   },
@@ -940,8 +947,7 @@
     "src": "resources/js/Pages/Admin/Setting/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Admin/Siswa/Create.tsx": {
@@ -950,8 +956,7 @@
     "src": "resources/js/Pages/Admin/Siswa/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Admin/Siswa/Detail.tsx": {
@@ -960,8 +965,7 @@
     "src": "resources/js/Pages/Admin/Siswa/Detail.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Admin/Siswa/Edit.tsx": {
@@ -970,8 +974,7 @@
     "src": "resources/js/Pages/Admin/Siswa/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Admin/Siswa/Index.tsx": {
@@ -981,8 +984,38 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_ImportModal.js",
+      "_AdminTable.js",
+      "_upload.js",
       "_ConfirmModal.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Siswa/Landing.tsx": {
+    "file": "assets/Landing.js",
+    "name": "Landing",
+    "src": "resources/js/Pages/Admin/Siswa/Landing.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_jsx-runtime.js",
+      "_createLucideIcon.js",
+      "_arrow-right.js",
+      "resources/js/app.jsx"
+    ]
+  },
+  "resources/js/Pages/Admin/Siswa/Tingkat.tsx": {
+    "file": "assets/Tingkat.js",
+    "name": "Tingkat",
+    "src": "resources/js/Pages/Admin/Siswa/Tingkat.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_jsx-runtime.js",
+      "_createLucideIcon.js",
+      "_ImportModal.js",
+      "_funnel.js",
+      "_AdminTable.js",
+      "_chevron-left.js",
+      "_plus.js",
+      "_upload.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Applicant/Edit.tsx": {
@@ -992,7 +1025,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -1004,7 +1036,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -1016,7 +1047,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -1028,10 +1058,19 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_arrow-left.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Spmb/Config/Edit.tsx": {
+    "file": "assets/Edit15.js",
+    "name": "Edit",
+    "src": "resources/js/Pages/Admin/Spmb/Config/Edit.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_jsx-runtime.js",
+      "_arrow-left.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Config/Index.tsx": {
@@ -1041,7 +1080,8 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
+      "_plus.js",
       "_ConfirmModal.js"
     ]
   },
@@ -1052,10 +1092,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "_arrow-left.js",
-      "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_arrow-left.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Ranking/Index.tsx": {
@@ -1065,7 +1102,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
@@ -1076,8 +1112,7 @@
     "src": "resources/js/Pages/Admin/Spp/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Admin/Spp/Detail.tsx": {
@@ -1086,18 +1121,16 @@
     "src": "resources/js/Pages/Admin/Spp/Detail.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Admin/Spp/Edit.tsx": {
-    "file": "assets/Edit15.js",
+    "file": "assets/Edit16.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Spp/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Admin/Spp/Index.tsx": {
@@ -1107,7 +1140,7 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
@@ -1118,19 +1151,17 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_arrow-left.js",
       "_save.js"
     ]
   },
   "resources/js/Pages/Admin/TracerStudy/Edit.tsx": {
-    "file": "assets/Edit16.js",
+    "file": "assets/Edit17.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/TracerStudy/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_arrow-left.js",
       "_save.js"
     ]
@@ -1142,11 +1173,11 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "_ConfirmModal.js",
+      "_AdminTable.js",
       "_briefcase.js",
       "_trending-up.js",
-      "resources/js/app.jsx"
+      "resources/js/app.jsx",
+      "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/TracerStudy/Show.tsx": {
@@ -1156,7 +1187,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_arrow-left.js",
       "_briefcase.js",
       "_user.js"
@@ -1169,7 +1199,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_createLucideIcon.js",
       "_eye.js",
       "_Head.js",
@@ -1183,7 +1212,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_Head.js",
       "_GuestLayout.js"
     ]
@@ -1195,8 +1223,8 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_createLucideIcon.js",
+      "_chart-column.js",
       "_arrow-right.js",
       "_book-open.js",
       "_calendar.js",
@@ -1223,7 +1251,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx"
     ]
   },
@@ -1234,7 +1261,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx"
     ]
   },
@@ -1245,18 +1271,16 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Erapor/P5/Edit.tsx": {
-    "file": "assets/Edit17.js",
+    "file": "assets/Edit18.js",
     "name": "Edit",
     "src": "resources/js/Pages/Erapor/P5/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx"
     ]
   },
@@ -1267,7 +1291,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx"
     ]
   },
@@ -1278,7 +1301,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx"
     ]
   },
@@ -1289,7 +1311,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx"
     ]
   },
@@ -1300,7 +1321,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx"
     ]
   },
@@ -1311,16 +1331,17 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_chart-column.js",
       "_briefcase.js",
+      "_heart.js",
       "_map-pin.js",
       "_message-circle.js",
       "_user.js",
       "resources/js/app.jsx",
+      "_proxy.js",
       "_Header.js",
       "_Footer.js",
-      "_Pagination.js",
-      "_fa.js"
+      "_Pagination.js"
     ]
   },
   "resources/js/Pages/Frontend/Berita.tsx": {
@@ -1330,15 +1351,14 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_calendar.js",
-      "_image.js",
+      "_hash.js",
+      "_newspaper.js",
       "resources/js/app.jsx",
+      "_proxy.js",
       "_Header.js",
       "_Footer.js",
-      "_Pagination.js",
-      "_gsap.js",
-      "_ScrollTrigger.js"
+      "_Pagination.js"
     ]
   },
   "resources/js/Pages/Frontend/DetailBerita.tsx": {
@@ -1348,9 +1368,13 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_createLucideIcon.js",
       "_arrow-left.js",
-      "_image.js",
+      "_calendar.js",
+      "_clock.js",
+      "_newspaper.js",
+      "_user.js",
+      "_proxy.js",
       "_Header.js",
       "_Footer.js"
     ]
@@ -1362,15 +1386,13 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_createLucideIcon.js",
       "_arrow-left.js",
       "_calendar.js",
       "_clock.js",
       "_map-pin.js",
       "_Header.js",
-      "_Footer.js",
-      "_fa.js"
+      "_Footer.js"
     ]
   },
   "resources/js/Pages/Frontend/Donasi.tsx": {
@@ -1380,7 +1402,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_createLucideIcon.js",
       "_arrow-right.js",
       "_heart.js",
@@ -1396,7 +1417,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_calendar.js",
       "_map-pin.js",
       "_Header.js",
@@ -1411,10 +1431,10 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_createLucideIcon.js",
       "_calendar.js",
       "_eye.js",
+      "_plus.js",
       "_user.js",
       "resources/js/app.jsx",
       "_Header.js",
@@ -1428,11 +1448,13 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
+      "_funnel.js",
       "_book-open.js",
       "_briefcase.js",
+      "_hash.js",
       "_user.js",
       "resources/js/app.jsx",
+      "_proxy.js",
       "_Header.js",
       "_Footer.js",
       "_Pagination.js"
@@ -1445,7 +1467,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_createLucideIcon.js",
       "_arrow-right.js",
       "_heart.js",
@@ -1463,7 +1484,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_calendar.js",
       "_clock.js",
       "_Header.js",
@@ -1479,14 +1499,15 @@
       "_jsx-runtime.js",
       "_createLucideIcon.js",
       "_award.js",
+      "_hash.js",
       "_map-pin.js",
       "_phone.js",
       "resources/js/app.jsx",
       "_Head.js",
+      "_proxy.js",
       "_Header.js",
       "_Footer.js",
-      "_gsap.js",
-      "_ScrollTrigger.js"
+      "_gsap.js"
     ]
   },
   "resources/js/Pages/Frontend/ProgramStudi.tsx": {
@@ -1496,7 +1517,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_arrow-left.js",
       "_book-open.js",
       "_Header.js",
@@ -1510,7 +1530,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_Header.js",
       "_Footer.js"
     ]
@@ -1522,7 +1541,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_createLucideIcon.js",
       "_circle-check-big.js",
       "_clipboard-list.js",
@@ -1541,10 +1559,9 @@
       "_eye.js",
       "resources/js/app.jsx",
       "_Head.js",
+      "_proxy.js",
       "_Header.js",
-      "_Footer.js",
-      "_gsap.js",
-      "_ScrollTrigger.js"
+      "_Footer.js"
     ]
   },
   "resources/js/Pages/Layout/App.tsx": {
@@ -1554,7 +1571,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "resources/js/app.jsx",
       "_Head.js"
     ]
@@ -1565,18 +1581,16 @@
     "src": "resources/js/Pages/Ppdb/CheckStatus.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Ppdb/Edit.tsx": {
-    "file": "assets/Edit18.js",
+    "file": "assets/Edit19.js",
     "name": "Edit",
     "src": "resources/js/Pages/Ppdb/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Ppdb/Register.tsx": {
@@ -1586,7 +1600,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_Head.js"
     ]
   },
@@ -1596,8 +1609,7 @@
     "src": "resources/js/Pages/Ppdb/Success.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
+      "_jsx-runtime.js"
     ]
   },
   "resources/js/Pages/Spmb/CheckStatus.tsx": {
@@ -1607,7 +1619,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_circle-alert.js",
       "_circle-check-big.js",
       "_circle-x.js",
@@ -1627,7 +1638,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_createLucideIcon.js",
       "_circle-check-big.js",
       "_arrow-right.js",
@@ -1649,7 +1659,6 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_circle-alert.js",
       "_circle-check-big.js",
       "_book-open.js",
@@ -1669,10 +1678,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
-      "_createLucideIcon.js",
       "_circle-check-big.js",
       "_triangle-alert.js",
+      "_download.js",
       "resources/js/app.jsx",
       "_Header.js",
       "_Footer.js",
@@ -1686,7 +1694,6 @@
     "isEntry": true,
     "imports": [
       "_jsx-runtime.js",
-      "_dist.js",
       "_createLucideIcon.js",
       "_book-open.js"
     ],
@@ -1753,10 +1760,13 @@
       "resources/js/Pages/Admin/Siswa/Detail.tsx",
       "resources/js/Pages/Admin/Siswa/Edit.tsx",
       "resources/js/Pages/Admin/Siswa/Index.tsx",
+      "resources/js/Pages/Admin/Siswa/Landing.tsx",
+      "resources/js/Pages/Admin/Siswa/Tingkat.tsx",
       "resources/js/Pages/Admin/Spmb/Applicant/Edit.tsx",
       "resources/js/Pages/Admin/Spmb/Applicant/Index.tsx",
       "resources/js/Pages/Admin/Spmb/Applicant/Show.tsx",
       "resources/js/Pages/Admin/Spmb/Config/Create.tsx",
+      "resources/js/Pages/Admin/Spmb/Config/Edit.tsx",
       "resources/js/Pages/Admin/Spmb/Config/Index.tsx",
       "resources/js/Pages/Admin/Spmb/Config/Show.tsx",
       "resources/js/Pages/Admin/Spmb/Ranking/Index.tsx",

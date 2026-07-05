@@ -13,6 +13,7 @@ use App\Models\Jurusan;
 use App\Models\Kegiatan;
 use App\Models\User;
 use App\Models\Alumni;
+use App\Models\ProfileSekolah;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -59,12 +60,27 @@ class PageController extends Controller
 
     public function profileSekolah()
     {
-        return Inertia::render('Frontend/ProfileSekolah', $this->commonData());
+        $profile = \App\Models\ProfileSekolah::first(); // retrieve the single profile record
+
+        return Inertia::render('Frontend/ProfileSekolah', array_merge(
+            $this->commonData(),
+            ['profileSekolah' => $profile]
+        ));
     }
 
     public function visimisi()
     {
-        return Inertia::render('Frontend/Visimisi', $this->commonData());
+        $profile = \App\Models\ProfileSekolah::first();
+        $visimisi = $profile ? [
+            'visi' => $profile->visi,
+            'misi' => $profile->misi,
+            'moto' => $profile->moto ?? null,
+        ] : null;
+
+        return Inertia::render('Frontend/Visimisi', array_merge(
+            $this->commonData(),
+            ['visimisi' => $visimisi]
+        ));
     }
 
     public function programStudi($slug)
