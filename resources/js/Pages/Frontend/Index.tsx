@@ -1,10 +1,12 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/inertia-react';
+import { Head, Link, usePage } from '@inertiajs/inertia-react';
 import Header from '@/Components/Frontend/Header';
 import {
   Monitor, Globe, FlaskConical, ArrowRight, ChevronRight, ChevronDown,
   Phone, Mail, MapPin, MessageCircle, Heart
 } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 function useCountUp(target: number, duration = 2000, inView = false) {
   const [count, setCount] = React.useState(0);
@@ -42,7 +44,7 @@ function StatCounter({ target, label, suffix = '' }: { target: number; label: st
   }, []);
   const count = useCountUp(target, 2000, inView);
   return (
-    <div ref={ref} className="text-center">
+    <div ref={ref} className="text-center StatCounter">
       <p className="text-3xl md:text-4xl font-extrabold text-white">{count.toLocaleString('id-ID')}{suffix}</p>
       <p className="text-sm mt-1 text-white/80">{label}</p>
     </div>
@@ -59,6 +61,7 @@ interface FrontendIndexProps {
   footer: { logo: string | null; desc: string; telp: string; email: string; linkedln: string; twitter: string; facebook: string; instagram: string; alamat: string } | null;
   jurusanM: Array<{ slug: string; nama: string }>;
   kegiatanM: Array<{ slug: string; nama: string }>;
+  pengajar: Array<{ id: number; name: string; userDetail: { mengajar: string } | null }>;
 }
 
 export default function Index({
@@ -68,7 +71,160 @@ export default function Index({
 }: FrontendIndexProps) {
   const [faqOpen, setFaqOpen] = React.useState(0);
 
-  // Hero slideshow
+  // Initialize GSAP ScrollTrigger
+  React.useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+  }, []);
+
+  // Hero image refs for parallax effect
+  const heroRef1 = React.useRef(null);
+  const heroRef2 = React.useRef(null);
+  const heroRef3 = React.useRef(null);
+
+  // Hero animations
+  React.useEffect(() => {
+    // Animate hero text elements
+    const tl = gsap.timeline();
+
+    tl.from('.hero-badge', {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'out'
+    })
+    .from('h1', {
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      ease: 'out'
+    }, '-=0.5')
+    .from('p', {
+      y: 40,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'out'
+    }, '-=0.5')
+    .from('.btn-primary, .btn-outline', {
+      y: 30,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.2,
+      ease: 'out'
+    }, '-=0.3');
+
+    // Parallax effect for hero images on scroll
+    if (typeof window !== 'undefined') {
+      gsap.to([heroRef1.current, heroRef2.current, heroRef3.current].filter(Boolean), {
+        y: () => `-${window.innerHeight * 0.3}px`,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.hero-section',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+
+      // Animate sections on scroll
+      gsap.utils.toArray(".animate-on-scroll").forEach((section) => {
+        gsap.from(section, {
+          scrollTrigger: {
+            trigger: section,
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: true,
+          },
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+        });
+      });
+    }
+  }, []);
+
+  // Additional animations for sections
+  React.useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate stat counters
+    gsap.utils.toArray(".StatCounter").forEach((counter, i) => {
+      gsap.from(counter, {
+        scrollTrigger: {
+          trigger: counter,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        delay: i * 0.2,
+      });
+    });
+
+    // Animate pillar cards
+    gsap.utils.toArray(".pillar-card").forEach((card) => {
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: "top 85%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse",
+        },
+        y: 40,
+        opacity: 0,
+        duration: 0.6,
+      });
+    });
+
+    // Animate staff avatars
+    gsap.utils.toArray(".staff-avatar").forEach((avatar, i) => {
+      gsap.from(avatar, {
+        scrollTrigger: {
+          trigger: avatar,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse",
+        },
+        scale: 0.8,
+        opacity: 0,
+        duration: 0.6,
+        delay: i * 0.1,
+      });
+    });
+
+    // Animate news image
+    gsap.utils.toArray(".news-image").forEach((img) => {
+      gsap.from(img, {
+        scrollTrigger: {
+          trigger: img,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse",
+        },
+        scale: 1.1,
+        opacity: 0,
+        duration: 0.8,
+      });
+    });
+
+    // Animate FAQ items
+    gsap.utils.toArray(".faq-item").forEach((item, i) => {
+      gsap.from(item, {
+        scrollTrigger: {
+          trigger: item,
+          start: "top 85%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse",
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.5,
+        delay: i * 0.1,
+      });
+    });
+  }, []);
+
   const heroImages = [
     'https://smabona.sch.id/wp-content/uploads/2023/05/WhatsApp-Image-2023-05-03-at-13.19.00.jpg',
     'https://smabona.sch.id/wp-content/uploads/2025/11/WhatsApp-Image-2025-10-17-at-08.19.29_b0ba88d9.jpg',
@@ -90,10 +246,15 @@ export default function Index({
       <Header />
 
       {/* ── HERO ── */}
-      <section className="relative h-screen min-h-[600px] flex items-center overflow-hidden pt-20" style={{ backgroundColor: '#1a1a1a' }}>
+      <section className="relative h-screen min-h-[600px] flex items-center overflow-hidden pt-20 hero-section" style={{ backgroundColor: '#1a1a1a' }}>
         <div className="absolute inset-0 z-0">
           {heroImages.map((img, idx) => (
-            <div key={idx} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${idx === currentSlide ? 'opacity-100' : 'opacity-0'}`} style={{ backgroundImage: `url(${img})` }} />
+            <div
+              key={idx}
+              ref={idx === 0 ? heroRef1 : idx === 1 ? heroRef2 : heroRef3}
+              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${idx === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+              style={{ backgroundImage: `url(${img})` }}
+            />
           ))}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/80" />
           <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full opacity-20" style={{ background: `radial-gradient(circle, ${secondaryColor}40 0%, transparent 70%)` }} />
@@ -101,7 +262,7 @@ export default function Index({
         </div>
         <div className="relative z-10 px-6 md:px-12 max-w-7xl mx-auto w-full">
           <div className="max-w-2xl">
-            <span className="inline-block px-4 py-2 rounded-full uppercase text-xs font-bold tracking-widest mb-6 shadow-sm text-gray-900" style={{ backgroundColor: primaryColor }}>
+            <span className="hero-badge inline-block px-4 py-2 rounded-full uppercase text-xs font-bold tracking-widest mb-6 shadow-sm text-gray-900" style={{ backgroundColor: primaryColor }}>
               Madiun's Digital Vanguard
             </span>
             <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-8">
@@ -111,10 +272,10 @@ export default function Index({
               Ruang belajar modern untuk generasi wason depan dengan pondasi karakter yang kuat.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href={route('program.index')} className="inline-flex items-center justify-center gap-2 text-white font-bold px-8 py-4 rounded-lg hover:shadow-xl transition-all" style={{ backgroundColor: secondaryColor }}>
+              <Link href={route('program.index')} className="btn-primary inline-flex items-center justify-center gap-2 text-white font-bold px-8 py-4 rounded-lg hover:shadow-xl transition-all" style={{ backgroundColor: secondaryColor }}>
                 Jelajahi Program <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link href="/spmb/daftar" className="inline-flex items-center justify-center gap-2 bg-white/10 border border-white/40 text-white font-bold px-8 py-4 rounded-lg hover:bg-white/20 transition-all">
+              <Link href="/spmb/daftar" className="btn-outline inline-flex items-center justify-center gap-2 bg-white/10 border border-white/40 text-white font-bold px-8 py-4 rounded-lg hover:bg-white/20 transition-all">
                 Daftar SPMB
               </Link>
             </div>
@@ -123,7 +284,7 @@ export default function Index({
       </section>
 
       {/* ── DATA STATS ── */}
-      <section className="py-16" style={{ backgroundColor: secondaryColor }}>
+      <section className="py-16 animate-on-scroll" style={{ backgroundColor: secondaryColor }}>
         <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           <StatCounter target={1954} label="Tahun Berdiri" />
           <StatCounter target={1200} suffix="+" label="Siswa Aktif" />
@@ -133,7 +294,7 @@ export default function Index({
       </section>
 
       {/* ── PILLARS ── */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 animate-on-scroll bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div className="max-w-2xl">
@@ -150,7 +311,7 @@ export default function Index({
               { icon: Globe, title: 'Kurikulum Merdeka Berbasis Karakter', desc: 'Fokus pada pengembangan bakat alami, penalaran kritis, dan iman yang teguh.' },
               { icon: FlaskConical, title: 'Ruang Tumbuh Bakat & Potensi Siswa', desc: 'Program pembelajaran untuk kesiapan studi lanjut dan masa depan.' },
             ].map((f, i) => (
-              <div key={i} className="bg-white p-10 border border-yellow-200 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg border-l-4 border-l-yellow-400">
+              <div key={i} className={`bg-white p-10 border border-yellow-200 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg border-l-4 border-l-yellow-400 pillar-card`}>
                 <div className="w-14 h-14 bg-yellow-50 flex items-center justify-center rounded-lg mb-8" style={{ color: secondaryColor }}>
                   <f.icon className="w-7 h-7" />
                 </div>
@@ -172,7 +333,7 @@ export default function Index({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {berita[0] && (
               <div className="lg:col-span-8 lg:row-span-2 group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all h-[400px] lg:h-[600px]">
-                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('http://smabona.sch.id/wp-content/uploads/2023/04/smabona1.png')` }} />
+                <div className="absolute inset-0 bg-cover bg-center news-image" style={{ backgroundImage: `url('http://smabona.sch.id/wp-content/uploads/2023/04/smabona1.png')` }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-red-900/90 via-gray-900/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 w-full">
                   <div className="flex gap-3 mb-4">
@@ -188,7 +349,7 @@ export default function Index({
             )}
             <div className="lg:col-span-4 bg-white border border-yellow-200 rounded-2xl p-8 flex flex-col shadow-sm">
               <div className="mb-6 rounded-lg overflow-hidden h-48 bg-gray-100">
-                <img src="https://smabona.sch.id/wp-content/uploads/2025/11/WhatsApp-Image-2025-10-17-at-08.19.29_b0ba88d9.jpg" alt="SPMB" className="w-full h-full object-cover" />
+                <img src="https://smabona.sch.id/wp-content/uploads/2025/11/WhatsApp-Image-2025-10-17-at-08.19.29_b0ba88d9.jpg" alt="SPMB" className="w-full h-full object-cover" loading="lazy" />
               </div>
               <div className="flex justify-between items-center mb-4">
                 <span className="text-red-600 font-bold text-xs uppercase">Admisi</span>
@@ -233,7 +394,7 @@ export default function Index({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {pengajar?.slice(0, 4).map((g: any, i: number) => (
               <div key={i} className="text-center group">
-                <div className="relative w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-yellow-300 shadow-lg transition-transform group-hover:scale-105 bg-gray-200 flex items-center justify-center">
+                <div className="relative w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-yellow-300 shadow-lg transition-transform group-hover:scale-105 bg-gray-200 flex items-center justify-center staff-avatar">
                   <span className="text-4xl font-bold text-gray-400">{g.name.charAt(0)}</span>
                 </div>
                 <h4 className="text-lg font-bold text-gray-900">{g.name}</h4>
@@ -251,7 +412,7 @@ export default function Index({
             <div className="lg:col-span-4">
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Pertanyaan yang Sering Diajukan</h2>
               <p className="text-white/80 mb-8">Temukan jawaban atas pertanyaan umum mengenai kurikulum, pendaftaran, dan fasilitas kami</p>
-              <Link href="/spmb/daftar" className="inline-flex items-center gap-2 bg-yellow-400 text-grayScheme-900 font-bold px-8 py-4 rounded-lg hover:bg-yellow-300 transition-all shadow-lg">
+              <Link href="/spmb/daftar" className="inline-flex items-center gap-2 bg-yellow-400 text-gray-900 font-bold px-8 py-4 rounded-lg hover:bg-yellow-300 transition-all shadow-lg">
                 <MessageCircle className="w-5 h-5" /> Hubungi Admin
               </Link>
             </div>
@@ -261,7 +422,7 @@ export default function Index({
                 { q: 'Apa saja syarat pendaftaran tahun ajaran baru?', a: 'Calon siswa diwajibkan mengikuti tes potensi akademik berbasis digital, wawancara, serta melampirkan nilai rapor SMP.' },
                 { q: 'Apakah ada program beasiswa?', a: 'Ya, kami memiliki program beasiswa prestasi akademik dan non-akademik melalui kemitraan dengan Yayasan Anak-Anak Terang.' },
               ].map((item, i) => (
-                <div key={i} className="bg-white/10 border border-white/20 rounded-2xl p-6 cursor-pointer transition-all hover:border-yellow-300" onClick={() => setFaqOpen(faqOpen === i ? -1 : i)}>
+                <div key={i} className={`bg-white/10 border border-white/20 rounded-2xl p-6 cursor-pointer transition-all hover:border-yellow-300 faq-item`} onClick={() => setFaqOpen(faqOpen === i ? -1 : i)}>
                   <div className="flex justify-between items-center">
                     <h4 className="text-xl font-bold pr-4">{item.q}</h4>
                     <ChevronDown className={`w-5 h-5 text-yellow-300 transition-transform ${faqOpen === i ? 'rotate-180' : ''}`} />
@@ -282,7 +443,7 @@ export default function Index({
             Pendaftaran Tahun Ajaran {new Date().getFullYear()}/{new Date().getFullYear() + 1} telah dibuka. Bergabunglah dengan komunitas unggul kami.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link href="/spmb/daftar" className="inline-flex items-center justify-center gap-2 text alleged text-white font-bold px-10 py-5 rounded-lg hover:shadow-xl transition-all" style={{ backgroundColor: secondaryColor }}>
+            <Link href="/spmb/daftar" className="inline-flex items-center justify-center gap-2 text-white font-bold px-10 py-5 rounded-lg hover:shadow-xl transition-all" style={{ backgroundColor: secondaryColor }}>
               Daftar Online Sekarang
             </Link>
             <Link href="/profile-sekolah" className="inline-flex items-center justify-center gap-2 bg-white border-2 border-yellow-400 text-gray-900 font-bold px-10 py-5 rounded-lg hover:bg-yellow-50 transition-all">

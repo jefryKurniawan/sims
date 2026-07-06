@@ -54,11 +54,16 @@ class GuruController extends Controller
                 'jabatan' => $guru->jabatan ?? '-',
                 'bidang_studi' => $guru->bidang_studi ?? '-',
                 'foto' => $guru->foto,
-                'user' => [
+                'user' => $guru->user ? [
                     'id' => $guru->user->id,
                     'name' => $guru->user->name,
                     'email' => $guru->user->email,
                     'foto_profile' => $guru->user->foto_profile,
+                ] : [
+                    'id' => null,
+                    'name' => null,
+                    'email' => null,
+                    'foto_profile' => null,
                 ],
             ];
         });

@@ -63,4 +63,15 @@ class LoginController extends Controller
             return redirect('auth/login');
         }
     }
+
+    /**
+     * The user has been logged out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    protected function loggedOut(Request $request)
+    {
+        return redirect('/auth/login');
+    }
 }

@@ -1,4 +1,4 @@
-import { usePage, Link } from '@inertiajs/inertia-react';
+import { usePage, Link, useForm } from '@inertiajs/inertia-react';
 import { useState } from 'react';
 import AdminLayout from '@/Layout/AdminLayout';
 
@@ -7,6 +7,7 @@ export default function Index() {
     const { rankings, configs, filters, statistik, flash } = data;
     const [jalurFilter, setJalurFilter] = useState(filters.jalur || '');
     const [selectedConfig, setSelectedConfig] = useState('');
+    const { post } = useForm();
 
     const handleFilter = (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,15 +23,9 @@ export default function Index() {
         }
         if (!window.confirm('Proses scoring & ranking akan memproses semua pendaftar pada periode ini. Lanjutkan?')) return;
 
-        fetch(`/dashboard/spmb/ranking/proses`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ config_id: parseInt(selectedConfig) }),
-        }).then(() => window.location.reload());
+        post('/dashboard/spmb/ranking/proses', {
+            data: { config_id: parseInt(selectedConfig) },
+        });
     };
 
     const getStatusBadge = (lulus: boolean) => {

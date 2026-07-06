@@ -48,8 +48,8 @@ function useCountUp(target: number, duration = 2000) {
 // ─── Types ───
 interface GuruUser {
   id: number;
-  name: string;
-  email: string;
+  name: string | null;
+  email: string | null;
   foto_profile: string | null;
 }
 
@@ -344,19 +344,19 @@ export default function Guru({ gurus, filters, bidangStudiList, stats }: Props) 
                             {guru.user.foto_profile ? (
                               <img
                                 src={`/storage/images/profile/${guru.user.foto_profile}`}
-                                alt={guru.user.name}
+                                alt={guru.user.name || ''}
                                 className="w-full h-full object-cover"
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-white text-2xl font-bold"
                                 style={{ background: `linear-gradient(135deg, ${secondaryColor}, ${primaryColor})` }}>
-                                {guru.user.name.charAt(0).toUpperCase()}
+                                {(guru.user.name ?? '').charAt(0).toUpperCase()}
                               </div>
                             )}
                           </div>
 
                           <h3 className="text-lg font-bold text-gray-900 text-center mt-3 mb-1">
-                            {guru.user.name}
+                            {guru.user.name ?? '-'}
                           </h3>
 
                           {/* Type badge */}

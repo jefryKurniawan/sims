@@ -25,16 +25,22 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchIndex, setSearchIndex] = useState(-1);
+    const [logoutPending, setLogoutPending] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const { post } = useForm();
+    const { post } = useForm({});
 
     const handleLogout = () => {
-        post('/auth/logout', {
-            onSuccess: () => {
-                // Inertia will handle the redirect to /login
-            },
-        });
+        // Prevent multiple simultaneous logout attempts
+        if (logoutPending) {
+            console.log('[Logout] Logout already in progress, ignoring');
+            return;
+        }
+        setLogoutPending(true);
+        console.log('[Logout] handleLogout called');
+
+        // Use Inertia.js form post method for proper CSRF handling and page transition
+        post('/auth/logout');
     };
 
     useEffect(() => {
@@ -141,7 +147,6 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
     return (
         <>
             <Head title={title} />
-
             <div className="flex h-screen bg-gray-50 overflow-hidden">
                 <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -204,103 +209,87 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
                                         </div>
                                     )}
                                 </div>
-                            </div>
+                                </div>
 
-                            {/* Right */}
-                            <div className="flex items-center gap-3">
-                                <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all">
-                                    <Mail className="w-5 h-5" />
-                                </button>
-
-                                <div className="relative">
-                                    <button
-                                        onClick={() => setUserMenuOpen(!userMenuOpen)}
-                                        className="flex items-center gap-3 pl-3 border-l border-gray-200"
-                                    >
-                                        <div className="text-right hidden sm:block">
-                                            <p className="text-sm font-semibold text-gray-800 font-body">
-                                                {auth?.user?.name || 'Admin'}
-                                            </p>
-                                            <p className="text-xs text-gray-500 font-label">
-                                                {auth?.user?.role || 'Administrator'}
-                                            </p>
-                                        </div>
-                                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-sm flex-shrink-0">
-                                            <span className="text-sm font-bold text-white font-heading">
-                                                {auth?.user?.name?.charAt(0).toUpperCase() || 'A'}
-                                            </span>
-                                        </div>
+                                {/* Right */}
+                                <div className="flex items-center gap-3">
+                                    <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all">
+                                        <Mail className="w-5 h-5" />
                                     </button>
-                                    {userMenuOpen && (
-                                        <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-xl z-50">
-                                            <div className="py-1">
-                                                <button
-                                                    onClick={handleLogout}
-                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                                                >
-                                                    Logout
-                                                </button>
+
+                                    <div className="relative">
+                                        <button
+                                            onClick={() => {
+                                                console.log('[UserMenu] toggle menu');
+                                                setUserMenuOpen(!userMenuOpen);
+                                            }}
+                                            className="flex items-center gap-3 pl-3 border-l border-gray-200"
+                                        >
+                                            <div className="text-right hidden sm:block">
+                                                <p className="text-sm font-semibold text-gray-800 font-body">
+                                                    {auth?.user?.name || 'Admin'}
+                                                </p>
+                                                <p className="text-xs text-gray-500 font-label">
+                                                    {auth?.user?.role || 'Administrator'}
+                                                </p>
                                             </div>
-                                        </div>
-                                    )}
+                                            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-sm flex-shrink-0">
+                                                <span className="text-sm font-bold text-white font-heading">
+                                                    {auth?.user?.name?.charAt(0).toUpperCase() || 'A'}
+                                                </span>
+                                            </div>
+                                        </button>
+                                        {userMenuOpen && (
+                                            <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-xl z-50">
+                                                <div className="py-1">
+                                                    <button
+                                                        onClick={handleLogout}
+                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                                                    >
+                                                        Logout
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </header>
 
-                        {/* Breadcrumb */}
-                        {crumbs.length > 0 && (
-                            <div className="px-4 lg:px-6 pb-3">
-                                <nav className="flex items-center gap-1.5 text-xs text-gray-500 font-label">
-                                    <Link href={route('dashboard')} className="hover:text-blue-600 transition-colors">
-                                        Dashboard
-                                    </Link>
-                                    {crumbs.map((crumb, i) => (
-                                        <span key={i} className="flex items-center gap-1.5">
-                                            <ChevronRight className="w-3 h-3 text-gray-300" />
-                                            <span className={i === crumbs.length - 1 ? 'text-gray-800 font-semibold' : ''}>
-                                                {crumb.replace(/-/g, ' ')}
-                                            </span>
-                                        </span>
-                                    ))}
-                                </nav>
+                        {/* Toast Notification */}
+                        {toastVisible && (flash?.success || flash?.error) && (
+                            <div className="fixed bottom-6 right-6 z-50 animate-fade-in-up">
+                                <div className={`px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 backdrop-blur-sm ${
+                                    flash?.success
+                                        ? 'bg-school-emerald/10 text-school-emerald border border-school-emerald/20'
+                                        : 'bg-school-red/10 text-school-red border border-school-red/20'
+                                }`}>
+                                    <div className={`w-2 h-2 rounded-full ${
+                                        flash?.success ? 'bg-school-emerald' : 'bg-school-red'
+                                    }`} />
+                                    <span className="text-sm font-semibold font-body">
+                                        {flash?.success || flash?.error}
+                                    </span>
+                                    <button
+                                        onClick={() => setToastVisible(false)}
+                                        className="ml-2 opacity-60 hover:opacity-100 transition-opacity"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         )}
-                    </header>
 
-                    {/* Toast Notification */}
-                    {toastVisible && (flash?.success || flash?.error) && (
-                        <div className="fixed bottom-6 right-6 z-50 animate-fade-in-up">
-                            <div className={`px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 backdrop-blur-sm ${
-                                flash?.success
-                                    ? 'bg-school-emerald/10 text-school-emerald border border-school-emerald/20'
-                                    : 'bg-school-red/10 text-school-red border border-school-red/20'
-                            }`}>
-                                <div className={`w-2 h-2 rounded-full ${
-                                    flash?.success ? 'bg-school-emerald' : 'bg-school-red'
-                                }`} />
-                                <span className="text-sm font-semibold font-body">
-                                    {flash?.success || flash?.error}
-                                </span>
-                                <button
-                                    onClick={() => setToastVisible(false)}
-                                    className="ml-2 opacity-60 hover:opacity-100 transition-opacity"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
+                        {/* Main content */}
+                        <main className="flex-1 overflow-auto">
+                            <div className="p-4 lg:p-6">
+                                {children}
                             </div>
-                        </div>
-                    )}
-
-                    {/* Main content */}
-                    <main className="flex-1 overflow-auto">
-                        <div className="p-4 lg:p-6">
-                            {children}
-                        </div>
-                    </main>
+                        </main>
+                    </div>
                 </div>
-            </div>
-        </>
-    );
-}
+            </>
+        );
+    }
