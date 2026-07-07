@@ -6,6 +6,7 @@ use App\Models\Siswa;
 use App\Models\Kelas;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class SiswaKelasSeeder extends Seeder
 {
@@ -35,12 +36,15 @@ class SiswaKelasSeeder extends Seeder
                 'siswa_id' => $siswaItem->id,
                 'kelas_id' => $kelasItem->id,
                 'status' => 'aktif',
-                'tanggal_masuk_kelas' => $siswaItem->tanggal_masuk ?: now()->toDateString(),
+                'tanggal_masuk_kelas' => $siswaItem->tanggal_masuk ?: Carbon::now()->toDateString(),
                 'tanggal_keluar_kelas' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ];
         }
+
+        // Truncate table to avoid duplicate entries when seeder is run multiple times
+        DB::table('siswa_kelas')->truncate();
 
         // Insert in chunks to avoid memory issues
         foreach (array_chunk($data, 500) as $chunk) {

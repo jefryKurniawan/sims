@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Head, Link, usePage } from '@inertiajs/inertia-react';
+import { useEffect, useRef } from 'react';
+import { Head, Link, usePage, useForm } from '@inertiajs/inertia-react';
 import gsap from 'gsap';
 import Header from '@/Components/Frontend/Header';
 import Footer from '@/Components/Frontend/Footer';
@@ -31,8 +31,9 @@ interface Props {
 
 export default function CheckStatus({ applicant, error }: Props) {
     const { errors } = usePage().props as any;
-    const [nomorRegistrasi, setNomorRegistrasi] = useState('');
-    const [searching, setSearching] = useState(false);
+    const { data, setData, post, processing, reset } = useForm({
+        nomor_registrasi: '',
+    });
     const resultRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -94,29 +95,31 @@ export default function CheckStatus({ applicant, error }: Props) {
                         </div>
 
                         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 mb-8">
-                            <form method="POST" action="/spmb/cek-status" className="flex gap-3">
-                                <input type="hidden" name="_token" value={(usePage().props as any).csrf_token} />
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                post(route('spmb.cek-status.post'));
+                            }} className="flex gap-3">
                                 <div className="flex-1">
                                     <input
                                         type="text"
                                         name="nomor_registrasi"
-                                        value={nomorRegistrasi}
-                                        onChange={(e) => setNomorRegistrasi(e.target.value)}
+                                        value={data.nomor_registrasi}
+                                        onChange={(e) => setData({ nomor_registrasi: e.target.value })}
                                         placeholder="Masukkan nomor registrasi..."
-                                        className={`w-full px-4 py-3 border ${errors?.nomor_registrasi ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-xl focus:outline-none focus:ring-2 transition-all`}
+                                        className={`w-full px-4 py-3 border ${errors.nomor_registrasi ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-xl focus:outline-none focus:ring-2 transition-all`}
                                         required
                                     />
-                                    {errors?.nomor_registrasi && (
+                                    {errors.nomor_registrasi && (
                                         <p className="text-red-500 text-xs mt-1">{errors.nomor_registrasi}</p>
                                     )}
                                 </div>
                                 <button
                                     type="submit"
-                                    disabled={searching}
+                                    disabled={processing}
                                     className="px-6 py-3 bg-emerald-500 hover:bg-emerald-400 disabled:bg-emerald-300 text-white font-semibold rounded-xl transition-all hover:shadow-lg hover:shadow-emerald-500/30 flex items-center gap-2"
                                 >
                                     <Search className="w-5 h-5" />
-                                    Cari
+                                    {processing ? 'Mencari...' : 'Cari'}
                                 </button>
                             </form>
                         </div>

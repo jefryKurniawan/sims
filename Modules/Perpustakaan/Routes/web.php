@@ -35,7 +35,7 @@ Route::prefix('perpus')->middleware('role:Perpustakaan')->group(function() {
     // Member
     '/member' => MemberController::class
   ]);
-  Route::get('/update-peminjam','PeminjamController@updates'); // Update Peminjam Buku
+  Route::post('/update-peminjam','PeminjamController@updates'); // Update Peminjam Buku
   Route::get('/history-peminjam','PeminjamController@history'); // History Peminjam Buku
 
 });

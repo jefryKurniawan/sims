@@ -6,133 +6,152 @@ use App\Http\Controllers\Controller;
 use App\Models\Footer;
 use Illuminate\Http\Request;
 use App\Http\Requests\FooterRequest;
-use ErrorException;
-use Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class FooterController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $footer = Footer::first();
-        return view('backend.website.content.footer.index',compact('footer'));
+
+        return Inertia::render('Admin/Website/Footer/Index', [
+            'footer' => $footer,
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/Website/Footer/Create');
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(FooterRequest $request)
     {
         try {
-            $image = $request->file('logo');
-            $nama_image = time()."_".$image->getClientOriginalName();
-            // isi dengan nama folder tempat kemana file diupload
-            $tujuan_upload = 'public/images/logo';
-            $image->storeAs($tujuan_upload,$nama_image);
+            $nama_logo = null;
+            if ($request->hasFile('logo')) {
+                $image = $request->file('logo');
+                $nama_logo = time() . '_' . $image->getClientOriginalName();
+                $tujuan_upload = 'public/images/logo';
+                $image->storeAs($tujuan_upload, $nama_logo);
+            }
 
-            $footer = new Footer;
-            $footer->facebook   = $request->facebook;
-            $footer->instagram  = $request->instagram;
-            $footer->twitter    = $request->twitter;
-            $footer->youtube    = $request->youtube;
-            $footer->logo       = $nama_image;
-            $footer->email      = $request->email;
-            $footer->telp       = $request->telp;
-            $footer->whatsapp   = $request->whatsapp;
-            $footer->desc       = $request->desc;
-            $footer->save();
+            $footer = Footer::create([
+                'facebook' => $request->facebook,
+                'instagram' => $request->instagram,
+                'twitter' => $request->twitter,
+                'youtube' => $request->youtube,
+                'logo' => $nama_logo,
+                'email' => $request->email,
+                'telp' => $request->telp,
+                'whatsapp' => $request->whatsapp,
+                'desc' => $request->desc,
+            ]);
 
-            Session::flash('success','Data Berhasil dibuat !');
-            return redirect()->route('backend-footer.index');
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+            Session::flash('success', 'Footer Berhasil dibuat !');
+
+            return redirect()->route('website-footer.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $footer = Footer::findOrFail($id);
+
+        return Inertia::render('Admin/Website/Footer/Show', [
+            'footer' => $footer,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        $footer = Footer::findOrFail($id);
+
+        return Inertia::render('Admin/Website/Footer/Edit', [
+            'footer' => $footer,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(FooterRequest $request, $id)
     {
         try {
-            if ($request->logo) {
+            $footer = Footer::findOrFail($id);
+
+            $nama_logo = $footer->logo;
+            if ($request->hasFile('logo')) {
+                // Delete old logo
+                if ($footer->logo) {
+                    Storage::delete('public/images/logo/' . $footer->logo);
+                }
                 $image = $request->file('logo');
-                $nama_image = time()."_".$image->getClientOriginalName();
-                // isi dengan nama folder tempat kemana file diupload
+                $nama_logo = time() . '_' . $image->getClientOriginalName();
                 $tujuan_upload = 'public/images/logo';
-                $image->storeAs($tujuan_upload,$nama_image);
+                $image->storeAs($tujuan_upload, $nama_logo);
             }
 
-            $footer = Footer::find($id);
-            $footer->facebook   = $request->facebook;
-            $footer->instagram  = $request->instagram;
-            $footer->twitter    = $request->twitter;
-            $footer->youtube    = $request->youtube;
-            $footer->logo       = $nama_image ?? $footer->logo;
-            $footer->email      = $request->email;
-            $footer->telp       = $request->telp;
-            $footer->whatsapp   = $request->whatsapp;
-            $footer->desc       = $request->desc;
-            $footer->save();
+            $footer->update([
+                'facebook' => $request->facebook,
+                'instagram' => $request->instagram,
+                'twitter' => $request->twitter,
+                'youtube' => $request->youtube,
+                'logo' => $nama_logo,
+                'email' => $request->email,
+                'telp' => $request->telp,
+                'whatsapp' => $request->whatsapp,
+                'desc' => $request->desc,
+            ]);
 
-            Session::flash('success','Data Berhasil diupdate !');
-            return redirect()->route('backend-footer.index');
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+            Session::flash('success', 'Footer Berhasil diupdate !');
+
+            return redirect()->route('website-footer.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        try {
+            $footer = Footer::findOrFail($id);
+
+            if ($footer->logo) {
+                Storage::delete('public/images/logo/' . $footer->logo);
+            }
+
+            $footer->delete();
+
+            Session::flash('success', 'Footer Berhasil dihapus !');
+
+            return redirect()->route('website-footer.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

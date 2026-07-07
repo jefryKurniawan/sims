@@ -21,16 +21,18 @@ class AlumniObserver
         $nama = optional($alumni->user)->name ?? 'Alumni';
         // Assign a system user (admin) as the creator if exists
         $admin = \App\Models\User::role('Admin')->first();
-        Berita::create([
-            'title' => 'Alumni Baru Tambah Daftar: ' . $nama . ' Lulus ' . $tahunLulus,
-            'slug' => \Illuminate\Support\Str::slug('Alumni ' . $nama . ' ' . $tahunLulus),
-            'content' => '<p>Selamat kepada ' . $nama . ' yang telah lulus tahun ' . $tahunLulus . ' dan resmi bergabung sebagai alumni sekolah.</p>',
-            'is_active' => '0',
-            'kategori_id' => \App\Models\KategoriBerita::first()->id ?? 1,
-            'sumber' => 'alumni',
-            'thumbnail' => 'default.jpg',
-            'created_by' => $admin ? $admin->id : null,
-            'status' => 'published',
-        ]);
+        Berita::firstOrCreate(
+            ['title' => 'Alumni Baru Tambah Daftar: ' . $nama . ' Lulus ' . $tahunLulus],
+            [
+                'slug' => \Illuminate\Support\Str::slug('Alumni ' . $nama . ' ' . $tahunLulus),
+                'content' => '<p>Selamat kepada ' . $nama . ' yang telah lulus tahun ' . $tahunLulus . ' dan resmi bergabung sebagai alumni sekolah.</p>',
+                'is_active' => '0',
+                'kategori_id' => \App\Models\KategoriBerita::first()->id ?? 1,
+                'sumber' => 'alumni',
+                'thumbnail' => 'default.jpg',
+                'created_by' => $admin ? $admin->id : null,
+                'status' => 'published',
+            ]
+        );
     }
 }

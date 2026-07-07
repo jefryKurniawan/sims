@@ -3,31 +3,31 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProfileSettingsRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\ProfileSettingsRequest;
-use App\Http\Requests\ChangePasswordRequest;
-use ErrorException;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $profile = User::whereId(Auth::id())->first();
-        return view('backend.profile.index', compact('profile'));
+
+        return Inertia::render('Admin/Profile/Index', [
+            'profile' => $profile,
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -36,9 +36,6 @@ class ProfileController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -47,9 +44,6 @@ class ProfileController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -58,9 +52,6 @@ class ProfileController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -69,53 +60,52 @@ class ProfileController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(ProfileSettingsRequest $request, $id)
     {
         try {
+            $nama_image = null;
             if ($request->foto_profile) {
                 $image = $request->file('foto_profile');
-                $nama_image = time()."_".$image->getClientOriginalName();
+                $nama_image = time() . '_' . $image->getClientOriginalName();
                 // isi dengan nama folder tempat kemana file diupload
                 $tujuan_upload = 'public/images/profile';
-                $image->storeAs($tujuan_upload,$nama_image);
+                $image->storeAs($tujuan_upload, $nama_image);
             }
 
             $profile = User::find($id);
-            $profile->name          = $request->name;
-            $profile->username      = $request->username;
-            $profile->email         = $request->email;
-            $profile->foto_profile  = $nama_image ?? $profile->foto_profile;
+            $profile->name = $request->name;
+            $profile->username = $request->username;
+            $profile->email = $request->email;
+            $profile->foto_profile = $nama_image ?? $profile->foto_profile;
             if ($request->email) {
-                $profile->email_verified_at  = NULL;
+                $profile->email_verified_at = null;
             }
             $profile->save();
 
-            Session::flash('success','Profile Berhasil diupdate !');
-            return back();
+            Session::flash('success', 'Profile Berhasil diupdate !');
 
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     // Ubah Password
     public function changePassword(ChangePasswordRequest $request, $id)
     {
-       try {
+        try {
             $profile = User::find($id);
-            $profile->password   = bcrypt($request->password);
+            $profile->password = bcrypt($request->password);
             $profile->save();
 
-            Session::flash('success','Password Berhasil diudate !');
-            return back();
+            Session::flash('success', 'Password Berhasil diupdate !');
 
-       } catch (ErrorException $e) {
-           throw new ErrorException($e->getMessage());
-       }
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 }

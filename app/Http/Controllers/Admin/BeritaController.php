@@ -25,7 +25,7 @@ class BeritaController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $kategori = KategoriBerita::where('is_active', '1')->get();
+        $kategori = KategoriBerita::get();
 
         return Inertia::render('Admin/Berita/Index', [
             'berita' => $berita,

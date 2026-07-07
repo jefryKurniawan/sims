@@ -3,146 +3,145 @@
 namespace App\Http\Controllers\Admin\Website;
 
 use App\Http\Controllers\Controller;
-use ErrorException;
 use App\Models\About;
 use Illuminate\Http\Request;
 use App\Http\Requests\AboutRequest;
-use Session;
-use DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class AboutController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $about = About::all();
-        return view('backend.website.content.about.index', compact('about'));
+
+        return Inertia::render('Admin/Website/About/Index', [
+            'about' => $about,
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/Website/About/Create');
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(AboutRequest $request)
     {
         try {
-            DB::beginTransaction();
-            $image = $request->file('image');
-            $nama_image = time()."_".$image->getClientOriginalName();
-            // isi dengan nama folder tempat kemana file diupload
-            $tujuan_upload = 'public/images/about';
-            $image->storeAs($tujuan_upload,$nama_image);
-
-            if ($request->is_active == '0') {
-               $about = About::where('is_active','0')->update([
-                   'is_active'  => '1'
-               ]);
+            $nama_image = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $nama_image = time() . '_' . $image->getClientOriginalName();
+                $tujuan_upload = 'public/images/about';
+                $image->storeAs($tujuan_upload, $nama_image);
             }
-            $about = new About;
-            $about->title       = $request->title;
-            $about->desc        = $request->desc;
-            $about->is_active   = $request->is_active;
-            $about->image       = $nama_image;
-            $about->save();
 
-            DB::commit();
-            Session::flash('success','About Berhasil ditambah !');
-            return redirect()->route('backend-about.index');
+            $about = About::create([
+                'title' => $request->title,
+                'desc' => $request->desc,
+                'image' => $nama_image,
+                'is_active' => $request->input('is_active', '0'),
+            ]);
 
-        } catch (ErrorException $e) {
-            DB::rollback();
-            throw new ErrorException($e->getMessage());
+            Session::flash('success', 'About Berhasil ditambah !');
+
+            return redirect()->route('about.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $about = About::findOrFail($id);
+
+        return Inertia::render('Admin/Website/About/Show', [
+            'about' => $about,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $about = About::find($id);
-        return view('backend.website.content.about.edit', compact('about'));
+        $about = About::findOrFail($id);
+
+        return Inertia::render('Admin/Website/About/Edit', [
+            'about' => $about,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AboutRequest $request, $id)
     {
         try {
-            DB::beginTransaction();
-            if ($request->image) {
+            $about = About::findOrFail($id);
+
+            $nama_image = $about->image;
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($about->image) {
+                    Storage::delete('public/images/about/' . $about->image);
+                }
                 $image = $request->file('image');
-                $nama_image = time()."_".$image->getClientOriginalName();
-                // isi dengan nama folder tempat kemana file diupload
+                $nama_image = time() . '_' . $image->getClientOriginalName();
                 $tujuan_upload = 'public/images/about';
-                $image->storeAs($tujuan_upload,$nama_image);
+                $image->storeAs($tujuan_upload, $nama_image);
             }
 
-            if ($request->is_active == '0') {
-               $about = About::where('is_active','0')->update([
-                   'is_active'  => '1'
-               ]);
-            }
-            $about = About::find($id);
-            $about->title       = $request->title ?? $about->title;
-            $about->desc        = $request->desc ?? $about->desc;
-            $about->is_active   = $request->is_active;
-            $about->image       = $nama_image ?? $about->image;
-            $about->save();
+            $about->update([
+                'title' => $request->title,
+                'desc' => $request->desc,
+                'image' => $nama_image,
+                'is_active' => $request->input('is_active', $about->is_active),
+            ]);
 
-            DB::commit();
-            Session::flash('success','About Berhasil ditambah !');
-            return redirect()->route('backend-about.index');
+            Session::flash('success', 'About Berhasil diupdate !');
 
-        } catch (ErrorException $e) {
-            DB::rollback();
-            throw new ErrorException($e->getMessage());
+            return redirect()->route('about.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        try {
+            $about = About::findOrFail($id);
+
+            if ($about->image) {
+                Storage::delete('public/images/about/' . $about->image);
+            }
+
+            $about->delete();
+
+            Session::flash('success', 'About Berhasil dihapus !');
+
+            return redirect()->route('about.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

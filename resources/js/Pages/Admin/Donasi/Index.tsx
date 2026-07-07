@@ -1,5 +1,8 @@
 import { Head, Link, router } from '@inertiajs/inertia-react';
+import { useMemo } from 'react';
+import { useReactTable } from '@tanstack/react-table';
 import { DollarSign, CheckCircle, Clock, XCircle, Search, Filter, Plus } from 'lucide-react';
+import Pagination from '@/Components/Pagination';
 
 interface Donasi {
     id: number;
@@ -24,6 +27,9 @@ interface Props {
         current_page: number;
         last_page: number;
         per_page: number;
+        from: number;
+        to: number;
+        total: number;
         links: { url: string | null; label: string; active: boolean }[];
     };
     filters: {
@@ -74,6 +80,93 @@ export default function Index({ donasis, filters, stats }: Props) {
             minimumFractionDigits: 0
         }).format(amount);
     };
+
+    // Define columns for the table
+    const columns = useMemo(() => [
+        {
+            accessorKey: 'tanggal_donasi',
+            header: 'Tanggal',
+            cell: ({ row }: { row: { original: Donasi } }) => (
+                <div className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {new Date(row.original.tanggal_donasi).toLocaleDateString('id-ID')}
+                </div>
+            )
+        },
+        {
+            accessorKey: 'nama_pendonor',
+            header: 'Pendonor',
+            cell: ({ row }: { row: { original: Donasi } }) => (
+                <div className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-semibold text-gray-900">{row.original.nama_pendonor}</div>
+                    {row.original.email && <div className="text-sm text-gray-500">{row.original.email}</div>}
+                </div>
+            )
+        },
+        {
+            accessorKey: 'nominal',
+            header: 'Nominal',
+            cell: ({ row }: { row: { original: Donasi } }) => (
+                <div className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-primary">
+                    {formatRupiah(row.original.nominal)}
+                </div>
+            )
+        },
+        {
+            accessorKey: 'metode_pembayaran',
+            header: 'Metode',
+            cell: ({ row }: { row: { original: Donasi } }) => (
+                <div className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {row.original.metode_pembayaran.toUpperCase()}
+                </div>
+            )
+        },
+        {
+            accessorKey: 'status',
+            header: 'Status',
+            cell: ({ row }: { row: { original: Donasi } }) => (
+                <div className="px-6 py-4 whitespace-nowrap">
+                    {getStatusBadge(row.original.status)}
+                </div>
+            )
+        },
+        {
+            accessorKey: 'alumni',
+            header: 'Alumni',
+            cell: ({ row }: { row: { original: Donasi } }) => (
+                <div className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {row.original.alumni?.user.name || '-'}
+                </div>
+            )
+        },
+        {
+            accessorKey: 'id',
+            header: 'Aksi',
+            cell: ({ row }: { row: { original: Donasi } }) => (
+                <div className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex items-center gap-2">
+                        <Link
+                            href={route('admin.donasi.show', row.original.id)}
+                            className="text-primary hover:text-primary-dark"
+                        >
+                            Detail
+                        </Link>
+                        <Link
+                            href={route('admin.donasi.edit', row.original.id)}
+                            className="text-blue-600 hover:text-blue-800"
+                        >
+                            Edit
+                        </Link>
+                    </div>
+                </div>
+            )
+        },
+    ], []);
+
+    const table = useReactTable({
+        columns,
+        data: donasis.data,
+        pagination: true,
+    });
 
     return (
         <>
@@ -205,87 +298,92 @@ export default function Index({ donasis, filters, stats }: Props) {
                     {/* Table */}
                     <div className="bg-white rounded-xl shadow overflow-hidden">
                         <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
-                                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Pendonor</th>
-                                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nominal</th>
-                                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Metode</th>
-                                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Alumni</th>
-                                        <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {donasis.data.map((donasi) => (
-                                        <tr key={donasi.id} className="hover:bg-gray-50">
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {new Date(donasi.tanggal_donasi).toLocaleDateString('id-ID')}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm font-semibold text-gray-900">{donasi.nama_pendonor}</div>
-                                                {donasi.email && <div className="text-sm text-gray-500">{donasi.email}</div>}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-primary">
-                                                {formatRupiah(donasi.nominal)}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                {donasi.metode_pembayaran.toUpperCase()}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                {getStatusBadge(donasi.status)}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                {donasi.alumni?.user.name || '-'}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <div className="flex items-center gap-2">
-                                                    <Link
-                                                        href={route('admin.donasi.show', donasi.id)}
-                                                        className="text-primary hover:text-primary-dark"
-                                                    >
-                                                        Detail
-                                                    </Link>
-                                                    <Link
-                                                        href={route('admin.donasi.edit', donasi.id)}
-                                                        className="text-blue-600 hover:text-blue-800"
-                                                    >
-                                                        Edit
-                                                    </Link>
-                                                </div>
-                                            </td>
+                            <table {...table.getTableProps()} className="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    {table.getHeaderGroups().map(headerGroup => (
+                                        <tr {...headerGroup.getHeaderGroupProps()}>
+                                            {headerGroup.headers.map(header => (
+                                                <th {...header.getHeaderProps()} className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                    {header.render('Header')}
+                                                </th>
+                                            ))}
                                         </tr>
                                     ))}
+                                </thead>
+                                <tbody {...table.getTableBodyProps()}>
+                                    {table.getRowModel().rows.map((row, index) => {
+                                        // Note: In v8, we don't need to call prepareRow because the row is already prepared.
+                                        return (
+                                            <tr {...row.getRowProps()} key={row.id} className="hover:bg-gray-50">
+                                                {row.cells.map(cell => (
+                                                    <td {...cell.getCellProps()} className="px-6 py-4 whitespace-nowrap">
+                                                        {cell.render('Cell')}
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>
 
                         {/* Pagination */}
-                        {donasis.data.length === 0 && (
-                            <div className="p-12 text-center text-gray-500">
-                                Belum ada data donasi.
-                            </div>
-                        )}
-
                         {donasis.data.length > 0 && (
                             <div className="bg-gray-50 px-6 py-4 flex items-center justify-between">
                                 <div className="text-sm text-gray-600">
-                                    Menampilkan {donasis.from} - {donasis.to} dari {donasis.data.length} data
+                                    Menampilkan {donasis.from} - {donasis.to} dari {donasis.total} data
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    {donasis.links.map((link, index) => (
-                                        <Link
-                                            key={index}
-                                            href={link.url ? route('admin.donasi.index', { ...filters, page: index +1 }) : '#'}
-                                            className={`px-3 py-1 rounded ${
-                                                link.active
-                                                    ? 'bg-primary text-white'
-                                                    : 'bg-white text-gray-600 hover:bg-gray-100'
-                                            }`}
-                                            dangerouslySetInnerHTML={{ __html: link.label }}
-                                        />
+                                <div className="flex items-center space-x-2">
+                                    {/* Previous page link */}
+                                    {table.getState().pagination.pageIndex > 0 ? (
+                                        <button
+                                            onClick={() => {
+                                                const params = new URLSearchParams(window.location.search);
+                                                params.set('page', (donasis.current_page - 1).toString());
+                                                router.get(route('admin.donasi.index'), params.toString());
+                                            }}
+                                            className="px-3 py-1 mr-2 text-sm font-medium text-primary border border-primary/20 rounded-md hover:bg-primary/10"
+                                        >
+                                            Prev
+                                        </button>
+                                    ) : (
+                                        <span className="px-3 py-1 mr-2 text-sm font-medium text-primary border border-primary/20 rounded-md hover:bg-primary/10 opacity-50">
+                                            Prev
+                                        </span>
+                                    )}
+
+                                    {/* Page numbers */}
+                                    {Array.from({ length: donasis.last_page }, (_, i) => i + 1).map(pageNumber => (
+                                        <button
+                                            key={pageNumber}
+                                            onClick={() => {
+                                                const params = new URLSearchParams(window.location.search);
+                                                params.set('page', pageNumber.toString());
+                                                router.get(route('admin.donasi.index'), params.toString());
+                                            }}
+                                            className={`px-3 py-1 mx-1 text-sm font-medium ${pageNumber === donasis.current_page ? 'bg-primary/20 text-primary' : 'bg-white text-gray-500 hover:bg-primary/10'} rounded-md`}
+                                        >
+                                            {pageNumber}
+                                        </button>
                                     ))}
+
+                                    {/* Next page link */}
+                                    {table.getState().pagination.pageIndex < table.getState().pagination.pageCount - 1 ? (
+                                        <button
+                                            onClick={() => {
+                                                const params = new URLSearchParams(window.location.search);
+                                                params.set('page', (donasis.current_page + 1).toString());
+                                                router.get(route('admin.donasi.index'), params.toString());
+                                            }}
+                                            className="px-3 py-1 ml-2 text-sm font-medium text-primary border border-primary/20 rounded-md hover:bg-primary/10"
+                                        >
+                                            Next
+                                        </button>
+                                    ) : (
+                                        <span className="px-3 py-1 ml-2 text-sm font-medium text-primary border border-primary/20 rounded-md hover:bg-primary/10 opacity-50">
+                                            Next
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         )}

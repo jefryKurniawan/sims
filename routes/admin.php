@@ -12,7 +12,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::middleware('role:Alumni')->group(function () {});
 
     // ====== MAIN DASHBOARD ======
-    Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
+    Route::get('/', 'Admin\HomeController@index')->name('dashboard');
 
     // ====== PROFILE SETTINGS ======
     Route::resource('profile-settings', 'Admin\ProfileController');

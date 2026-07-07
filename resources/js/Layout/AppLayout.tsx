@@ -8,9 +8,10 @@ import type { PageProps } from '@/types';
 interface AppLayoutProps {
     children: React.ReactNode;
     title?: string;
+    header?: React.ReactNode;
 }
 
-export default function AppLayout({ children, title }: AppLayoutProps) {
+export default function AppLayout({ children, title, header }: AppLayoutProps) {
     const { auth, flash } = usePage().props as unknown as PageProps;
     const component = usePage().component as string | undefined;
     // ponytail: Halaman ini self-contained (punya Header/Footer sendiri) — bypass admin chrome.
@@ -80,7 +81,7 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
         { label: 'GTK', href: route('gtk.index'), keywords: ['gtk', 'guru', 'tenaga', 'kependidikan'] },
         { label: 'Kelas', href: route('kelas.index'), keywords: ['kelas', 'rombongan', 'belajar'] },
         { label: 'Sarana Prasarana', href: route('sarana.index'), keywords: ['sarana', 'prasarana', 'fasilitas', 'infrastruktur'] },
-        { label: 'Perpustakaan', href: route('perpustakaan.index'), keywords: ['perpustakaan', 'buku', 'peminjaman'] },
+        { label: 'Perpustakaan', href: route('admin.perpustakaan.index'), keywords: ['perpustakaan', 'buku', 'peminjaman'] },
         { label: 'Alumni', href: route('alumni.index'), keywords: ['alumni', 'lulusan'] },
         { label: 'Website / Berita', href: route('berita-admin.index'), keywords: ['website', 'berita', 'konten'] },
         { label: 'Galeri Prestasi', href: route('admin.prestasi.index'), keywords: ['prestasi', 'galeri', 'penghargaan'] },
@@ -151,64 +152,68 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
                 <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
                 <div className="flex-1 flex flex-col overflow-hidden">
-                    {/* Topbar */}
-                    <header className="flex-shrink-0 bg-white border-b border-gray-200">
-                        <div className="flex items-center justify-between h-16 px-4 lg:px-6">
-                            {/* Left */}
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => setSidebarOpen(true)}
-                                    className="xl:hidden p-2 -ml-2 text-gray-500 hover:text-gray-700 rounded-xl hover:bg-gray-100 transition-all"
-                                    aria-label="Open menu"
-                                >
-                                    <Menu className="w-5 h-5" />
-                                </button>
+                    {header ? (
+                        <>
+                            {header}
+                        </>
+                    ) : (
+                        <header className="flex-shrink-0 bg-white border-b border-gray-200">
+                            <div className="flex items-center justify-between h-16 px-4 lg:px-6">
+                                {/* Left */}
+                                <div className="flex items-center gap-4">
+                                    <button
+                                        onClick={() => setSidebarOpen(true)}
+                                        className="xl:hidden p-2 -ml-2 text-gray-500 hover:text-gray-700 rounded-xl hover:bg-gray-100 transition-all"
+                                        aria-label="Open menu"
+                                    >
+                                        <Menu className="w-5 h-5" />
+                                    </button>
 
-                                {/* Search */}
-                                <div className="relative hidden md:block" ref={searchRef}>
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                                    <input
-                                        ref={inputRef}
-                                        type="text"
-                                        placeholder="Cari menu..."
-                                        value={searchQuery}
-                                        onChange={(e) => { setSearchQuery(e.target.value); setSearchOpen(true); }}
-                                        onKeyDown={handleSearchKeyDown}
-                                        onFocus={() => { if (searchQuery.trim()) setSearchOpen(true); }}
-                                        className="pl-9 pr-4 py-2 w-64 text-sm bg-gray-50 border border-gray-200 rounded-xl text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-200 focus:border-yellow-400 transition-all"
-                                        role="combobox"
-                                        aria-expanded={searchOpen}
-                                        aria-controls="search-results"
-                                        aria-activedescendant={searchIndex >= 0 ? `search-item-${searchIndex}` : undefined}
-                                        autoComplete="off"
-                                    />
-                                    {searchOpen && filteredItems.length > 0 && (
-                                        <div
-                                            id="search-results"
-                                            role="listbox"
-                                            className="absolute top-full mt-1.5 left-0 w-72 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden"
-                                        >
-                                            {filteredItems.map((item, idx) => (
-                                                <Link
-                                                    key={item.href + item.label}
-                                                    id={`search-item-${idx}`}
-                                                    role="option"
-                                                    aria-selected={idx === searchIndex}
-                                                    href={item.href}
-                                                    onClick={() => navigateToItem(item.href)}
-                                                    className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors first:rounded-t-xl last:rounded-b-xl ${
-                                                        idx === searchIndex
-                                                            ? 'bg-yellow-50 text-yellow-800'
-                                                            : 'text-gray-700 hover:bg-yellow-50 hover:text-yellow-800'
-                                                    }`}
-                                                >
-                                                    <Search className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
-                                                    <span>{item.label}</span>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                    {/* Search */}
+                                    <div className="relative hidden md:block" ref={searchRef}>
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                                        <input
+                                            ref={inputRef}
+                                            type="text"
+                                            placeholder="Cari menu..."
+                                            value={searchQuery}
+                                            onChange={(e) => { setSearchQuery(e.target.value); setSearchOpen(true); }}
+                                            onKeyDown={handleSearchKeyDown}
+                                            onFocus={() => { if (searchQuery.trim()) setSearchOpen(true); }}
+                                            className="pl-9 pr-4 py-2 w-64 text-sm bg-gray-50 border border-gray-200 rounded-xl text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-200 focus:border-yellow-400 transition-all"
+                                            role="combobox"
+                                            aria-expanded={searchOpen}
+                                            aria-controls="search-results"
+                                            aria-activedescendant={searchIndex >= 0 ? `search-item-${searchIndex}` : undefined}
+                                            autoComplete="off"
+                                        />
+                                        {searchOpen && filteredItems.length > 0 && (
+                                            <div
+                                                id="search-results"
+                                                role="listbox"
+                                                className="absolute top-full mt-1.5 left-0 w-72 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden"
+                                            >
+                                                {filteredItems.map((item, idx) => (
+                                                    <Link
+                                                        key={item.href + item.label}
+                                                        id={`search-item-${idx}`}
+                                                        role="option"
+                                                        aria-selected={idx === searchIndex}
+                                                        href={item.href}
+                                                        onClick={() => navigateToItem(item.href)}
+                                                        className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors first:rounded-t-xl last:rounded-b-xl ${
+                                                            idx === searchIndex
+                                                                ? 'bg-yellow-50 text-yellow-800'
+                                                                : 'text-gray-700 hover:bg-yellow-50 hover:text-yellow-800'
+                                                        }`}
+                                                    >
+                                                        <Search className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+                                                        <span>{item.label}</span>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Right */}
@@ -255,41 +260,42 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
                                 </div>
                             </div>
                         </header>
+                    )}
 
-                        {/* Toast Notification */}
-                        {toastVisible && (flash?.success || flash?.error) && (
-                            <div className="fixed bottom-6 right-6 z-50 animate-fade-in-up">
-                                <div className={`px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 backdrop-blur-sm ${
-                                    flash?.success
-                                        ? 'bg-school-emerald/10 text-school-emerald border border-school-emerald/20'
-                                        : 'bg-school-red/10 text-school-red border border-school-red/20'
-                                }`}>
-                                    <div className={`w-2 h-2 rounded-full ${
-                                        flash?.success ? 'bg-school-emerald' : 'bg-school-red'
-                                    }`} />
-                                    <span className="text-sm font-semibold font-body">
-                                        {flash?.success || flash?.error}
-                                    </span>
-                                    <button
-                                        onClick={() => setToastVisible(false)}
-                                        className="ml-2 opacity-60 hover:opacity-100 transition-opacity"
-                                    >
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
+                    {/* Toast Notification */}
+                    {toastVisible && (flash?.success || flash?.error) && (
+                        <div className="fixed bottom-6 right-6 z-50 animate-fade-in-up">
+                            <div className={`px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 backdrop-blur-sm ${
+                                flash?.success
+                                    ? 'bg-school-emerald/10 text-school-emerald border border-school-emerald/20'
+                                    : 'bg-school-red/10 text-school-red border border-school-red/20'
+                            }`}>
+                                <div className={`w-2 h-2 rounded-full ${
+                                    flash?.success ? 'bg-school-emerald' : 'bg-school-red'
+                                }`} />
+                                <span className="text-sm font-semibold font-body">
+                                    {flash?.success || flash?.error}
+                                </span>
+                                <button
+                                    onClick={() => setToastVisible(false)}
+                                    className="ml-2 opacity-60 hover:opacity-100 transition-opacity"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6 6M6 6l12 12" />
+                                    </svg>
+                                </button>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Main content */}
-                        <main className="flex-1 overflow-auto">
-                            <div className="p-4 lg:p-6">
-                                {children}
-                            </div>
-                        </main>
-                    </div>
+                    {/* Main content */}
+                    <main className="flex-1 overflow-auto">
+                        <div className="p-4 lg:p-6">
+                            {children}
+                        </div>
+                    </main>
                 </div>
-            </>
-        );
-    }
+            </div>
+        </>
+    );
+}

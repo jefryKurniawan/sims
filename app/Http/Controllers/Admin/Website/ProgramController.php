@@ -4,136 +4,154 @@ namespace App\Http\Controllers\Admin\Website;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jurusan;
+use App\Models\DataJurusan;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProgramRequest;
-use App\Models\DataJurusan;
-use ErrorException;
-use Session;
-use DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class ProgramController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $jurusan = Jurusan::all();
-        return view('backend.website.program.index', compact('jurusan'));
+        $jurusan = Jurusan::with('dataJurusan')->get();
+
+        return Inertia::render('Admin/Website/Program/Index', [
+            'jurusan' => $jurusan,
+        ]);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view('backend.website.program.create');
+        return Inertia::render('Admin/Website/Program/Create');
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(ProgramRequest $request)
     {
         try {
-            DB::beginTransaction();
-            $url                = \Str::slug($request->nama);
-            $jurusan = new Jurusan;
-            $jurusan->nama      = $request->nama;
-            $jurusan->slug      = $url;
-            $jurusan->singkatan = $request->singkatan;
-            $jurusan->is_active = '0';
-            $jurusan->save();
-
-            if ($jurusan) {
-                $foto = $request->file('image');
-                $nama_foto = time()."_".$foto->getClientOriginalName();
-                // isi dengan nama folder tempat kemana file diupload
+            $nama_image = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $nama_image = time() . '_' . $image->getClientOriginalName();
                 $tujuan_upload = 'public/images/jurusan';
-                $foto->storeAs($tujuan_upload,$nama_foto);
-
-                $dataJurusan = new DataJurusan;
-                $dataJurusan->jurusan_id    = $jurusan->id;
-                $dataJurusan->content       = $request->content;
-                $dataJurusan->image         = $nama_foto;
-                $dataJurusan->save();
+                $image->storeAs($tujuan_upload, $nama_image);
             }
 
-            DB::commit();
-            Session::flash('success','Program Studi Berhasil ditambah !');
-            return redirect()->route('program-studi.index');
+            $jurusan = Jurusan::create([
+                'nama' => $request->nama,
+                'singkatan' => $request->singkatan,
+                'is_active' => $request->input('is_active', '0'),
+            ]);
 
-        } catch (ErrorException $e) {
-            DB::rollback();
-            throw new ErrorException($e->getMessage());
+            $jurusan->dataJurusan()->create([
+                'content' => $request->content,
+                'image' => $nama_image,
+            ]);
+
+            Session::flash('success', 'Program Studi Berhasil ditambah !');
+
+            return redirect()->route('program-studi.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $jurusan = Jurusan::with('dataJurusan')->findOrFail($id);
+
+        return Inertia::render('Admin/Website/Program/Show', [
+            'jurusan' => $jurusan,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $jurusan = Jurusan::with('dataJurusan')->findOrFail($id);
-        return view('backend.website.program.edit', compact('jurusan'));
+
+        return Inertia::render('Admin/Website/Program/Edit', [
+            'jurusan' => $jurusan,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProgramRequest $request, $id)
     {
         try {
-            DB::beginTransaction();
-            $jurusan = Jurusan::findOrFail($id);
-            $jurusan->nama      = $request->nama;
-            $jurusan->singkatan = $request->singkatan;
-            $jurusan->is_active = $request->is_active;
-            $jurusan->save();
+            $jurusan = Jurusan::with('dataJurusan')->findOrFail($id);
 
-            if ($jurusan) {
-                if ($request->image) {
-                    $foto = $request->file('image');
-                    $nama_foto = time()."_".$foto->getClientOriginalName();
-                    // isi dengan nama folder tempat kemana file diupload
-                    $tujuan_upload = 'public/images/jurusan';
-                    $foto->storeAs($tujuan_upload,$nama_foto);
-
-                    $dataJurusan = DataJurusan::where('jurusan_id', $id)->first();
-                    $dataJurusan->content       = $request->content;
-                    $dataJurusan->image         = $nama_foto;
-                    $dataJurusan->save();
+            $nama_image = $jurusan->dataJurusan->image ?? null;
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($jurusan->dataJurusan->image) {
+                    Storage::delete('public/images/jurusan/' . $jurusan->dataJurusan->image);
                 }
+                $image = $request->file('image');
+                $nama_image = time() . '_' . $image->getClientOriginalName();
+                $tujuan_upload = 'public/images/jurusan';
+                $image->storeAs($tujuan_upload, $nama_image);
             }
 
-            DB::commit();
-            Session::flash('success','Program Studi Berhasil diupdate !');
+            $jurusan->update([
+                'nama' => $request->nama,
+                'singkatan' => $request->singkatan,
+                'is_active' => $request->input('is_active', $jurusan->is_active),
+            ]);
+
+            $jurusan->dataJurusan()->update([
+                'content' => $request->content,
+                'image' => $nama_image,
+            ]);
+
+            Session::flash('success', 'Program Studi Berhasil diupdate !');
+
             return redirect()->route('program-studi.index');
-            
-        } catch (ErrorException $e) {
-            DB::rollback();
-            Session::flash('error','Program Studi Gagal diupdate !');
-            throw new ErrorException($e->getMessage());
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        try {
+            $jurusan = Jurusan::with('dataJurusan')->findOrFail($id);
+
+            // Delete image if exists
+            if ($jurusan->dataJurusan && $jurusan->dataJurusan->image) {
+                Storage::delete('public/images/jurusan/' . $jurusan->dataJurusan->image);
+            }
+
+            $jurusan->delete();
+
+            Session::flash('success', 'Program Studi Berhasil dihapus !');
+
+            return redirect()->route('program-studi.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
         }
     }
 }

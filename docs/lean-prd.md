@@ -64,7 +64,6 @@ Untuk mendukung fokus pada MVP ini:
 1. **Prioritaskan fungsi dasar**: pastikan fitur CRUD untuk siswa, SPP, dan pengguna bekerja sempurna sebelum menambahkan fitur kompleks
    - **SPP CRUD lengkap**: tambahkan tampilan detail (`Detail`), edit (`Edit`), create (`Create`), dan hapus (soft‑delete) dengan flash‑message serta tampilan riwayat pembayaran.
    - **Siswa menu lengkap**: pastikan sidebar menampilkannya dengan sub‑menu **Data Siswa → List, Detail, Tambah, Edit, Hapus** (soft‑delete) sehingga tim dapat mengelola data inti secara penuh.
-
 2. **Sederhanakan antarmuka**: untuk tampilan awal, fokus pada kegunaan bukan estetika
 3. **Minimalkan dependensi eksternal**: hindari integrasi dengan sistem pihak ketiga dalam fase MVP kecuali mutlak diperlukan
 4. **Bangkitkan dasar yang kuat**: pastikan struktur database, API, dan autentikasi solide sebagai fondasi untuk fitur masa depan
@@ -147,3 +146,36 @@ Dengan fokus pada daerah-danah ini, sekolah dapat mulai digitalisasi operasi int
 | Bottom fade `from-gray-50 to-transparent` | Semua hero section | Transisi mulus dari hero berwarna ke konten abu-abu |
 | Glass-morphism badge | Semua hero | `bg-white/10 backdrop-blur-sm border border-white/20` — badge di hero |
 | Empty state animasi | Berita, Alumni, Guru | `motion.div` dengan `animate: { rotate: [...] }` infinite gentle wobble |
+
+#### 16.7 Modernisasi Frontend Panel Admin dengan Inertia.js + React (TSX)
+
+Semua kontroler admin yang terkait dengan modul website (Kegiatan, Events, Video, KategoriBerita, VisidanMisi, Program, About, ImageSlider, Footer), serta HomeController, ProfileController, dan SettingController telah berhasil di-migrasi ke stack Inertia.js dengan React dan TypeScript, mengikuti prinsip Ponytail dan panduan frontend yang tercantum dalam CLAUDE.md. Implementasi mencakup:
+
+- Penggunaan `Inertia::render('Admin/Modul/Page', [data...])` di semua controllere.
+- Penggantian semua permintaan AJAX/fetch/jQuery dengan `useForm`, `router.post/put/delete`, dan `Inertia.post()` untuk upload file.
+- Penggunaan `useState` + `FormData` untuk handling file upload.
+- Pagination menggunakan `@tanstack/react-table` dengan komponen `Components/Pagination.tsx`.
+- Flash message otomatis disediakan oleh Inertia melalui `props.flash`.
+- Navigasi menggunakan `Link` untuk tautan dan `router.visit` dengan `preserveScroll` untuk mempertahankan scroll.
+- Penggunaan komponen shadcn/ui (Button, Input, Card, Badge, dll.) dan ikon lucide-react.
+- Semua form menggunakan validasi melalui Form Request yang sudah ada (mis. `KegiatanRequest`, `FooterRequest` dll.).
+- Penggunaan Zustand untuk state global bila diperlukan (belum diperlukan di modul-modul ini).
+- Pastikan semua halaman admin otomatis dibungkus oleh `AppLayout` (sidebar + topbar) sesuai konvensi `Pages/Admin/*`.
+
+Dengan ini, seluruh panel admin sekarang menggunakan stack teknologi yang sama dengan frontend publik, meminimalkan konteks switching dan meningkatkan konsistensi kode.
+
+#### 16.8 Prinsip Ponytail dan Standar Pengembangan untuk Agen AI
+Semua pengembangan frontend baru WAJIB mengikuti Prinsip Ponytail: pilihlah solusi sederhana yang bekerja; hindari abstraksi yang tidak diperlukan. Khususnya untuk agen AI (termasuk laravel-specialist dan frontend-design), pastikan:
+
+- **WAJIB** menggunakan `useForm` dari `@inertiajs/inertia-react` untuk semua penanganan form. DILARANG menggunakan React Hook Form, Formik, atau `fetch()` langsung.
+- **WAJIB** mengambil data hanya melalui Inertia props. Kontroller harus mengirim `Inertia::render('Page', [...])`, halaman terima melalui destructured props. Props bersama melalui `usePage().props`.
+- **WAJIB** menggunakan `@tanstack/react-table` untuk semua tabel baru. DILARANG menggunakan `<table>` manual.
+- **WAJIB** menggunakan komponen `Components/Pagination.tsx` (admin) atau `Components/Frontend/Pagination.tsx` (public) untuk semua pagination.
+- **WAJIG** menggunakan `lucide-react` untuk semua ikon, dengan impor spesifik untuk tree-shaking (Contoh: `import { User } from 'lucide-react'`). DILARANG menggunakan FontAwesome, Heroicons, @iconify/react, atau react-icons.
+- **WAJIB** menggunakan komponen shadcn/ui yang tersedia (Button, Input, Card, Badge, Checkbox, DropdownMenu, Label, Separator, Avatar, Sheet).
+- **WAJIB** mengikuti resolusi layout: `Pages/Admin/*` otomatis dibungkus `AppLayout` (sidebar + topbar); `Pages/Frontend/*`, `Pages/Spmb/*`, `Pages/Auth/*` TIDAK dibungkus `AppLayout` (self-contained).
+- **WAJIB** setiap `<input>` harus memiliki `<label>` dengan `htmlFor`.
+- **WAJIB** tombol harus memiliki `type` eksplisit (`button`, `submit`, `reset`).
+- **WAJIB** icon-only button harus memiliki `aria-label`.
+
+Prastawa ini memastikan konsistensi, kesederhanaan, dan kepatuhan terhadap arsitektur Inertia.js + React yang telah diadopsi secara penuh sejak Juli 2026.

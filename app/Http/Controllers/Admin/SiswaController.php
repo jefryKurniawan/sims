@@ -220,7 +220,7 @@ class SiswaController extends Controller
 
         $kelasIds = $kelas->pluck('id');
 
-        $query = Siswa::with(['kelasAktif', 'jurusan'])
+        $query = Siswa::with(['kelasAktif.kelas', 'jurusan'])
             ->whereHas('kelasAktif.kelas', fn ($q) => $q->whereIn('kelas_id', $kelasIds));
 
         // Filter variant (first character of kelas.nama_kelas)

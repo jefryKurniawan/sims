@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 use Modules\Perpustakaan\Entities\Book;
 use Modules\Perpustakaan\Entities\Borrowing;
 use Modules\Perpustakaan\Entities\Member;
@@ -17,7 +18,14 @@ use Modules\Perpustakaan\Http\Requests\UpdatePeminjamRequest;
 
 class PeminjamController extends Controller
 {
-  use GlobalHelpers;
+    use GlobalHelpers;
+    /**
+     * Display a listing oformRequest;
+use Modules\Perpustakaan\Http\Requests\UpdatePeminjamRequest;
+
+class PeminjamController extends Controller
+{
+    use GlobalHelpers;
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -25,7 +33,9 @@ class PeminjamController extends Controller
     public function index()
     {
       $peminjam = Borrowing::with('members','books')->whereNull('lateness')->orderBy('created_at','desc')->get();
-      return view('perpustakaan::backend.peminjam.index', compact('peminjam'));
+      return Inertia::render('Admin/Perpustakaan/Peminjam/Index', [
+          'peminjam' => $peminjam,
+      ]);
     }
 
     /**
@@ -113,7 +123,7 @@ class PeminjamController extends Controller
 
         DB::commit();
         Session::flash('success','Data Peminjam berhasil di update.');
-        return $update;
+        return redirect('perpus/peminjam');
 
       } catch (\ErrorException $e) {
         DB::rollback();

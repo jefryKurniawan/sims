@@ -22,12 +22,13 @@ class DatabaseSeeder extends Seeder
             BeritaSeeder::class,
             GuruSeeder::class,
             KelasSeeder::class, // added
+            SiswaSeeder::class,
             SiswaKelasSeeder::class, // added
             GelombangSeeder::class,
             PengumumanPpdbSeeder::class,
             AlumniSeeder::class,
             TracerStudySeeder::class,
-            SiswaSeeder::class,
+            PopulateNisSeeder::class, // populate NIS for existing siswa
             SaranaPrasaranaSeeder::class, // added
             DispensasiSeeder::class,
             BukuSeeder::class, // added (perpustakaan buku)

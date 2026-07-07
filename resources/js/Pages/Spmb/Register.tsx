@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, FormEvent } from 'react';
-import { Head, Link, usePage } from '@inertiajs/inertia-react';
+import { useEffect, useRef } from 'react';
+import { Head, Link, usePage, useForm } from '@inertiajs/inertia-react';
 import gsap from 'gsap';
 import Header from '@/Components/Frontend/Header';
 import Footer from '@/Components/Frontend/Footer';
@@ -27,11 +27,10 @@ interface Props {
 }
 
 export default function Register({ config, error }: Props) {
-    const { errors, flash } = usePage().props as any;
-    const [submitting, setSubmitting] = useState(false);
-    const formRef = useRef<HTMLDivElement>(null);
-
-    const [form, setForm] = useState({
+    const { props } = usePage();
+const errors = props.errors ?? {};
+const flash = props.flash ?? {};
+    const { data, setData, post, processing, reset } = useForm({
         nisn: '',
         nama_lengkap: '',
         tempat_lahir: '',
@@ -53,23 +52,24 @@ export default function Register({ config, error }: Props) {
         no_hp_ortu: '',
     });
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.fromTo('.form-section',
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
-            );
-        }, formRef);
+    const formRef = useRef<HTMLDivElement>(null);
 
-        return () => ctx.revert();
-    }, []);
+    useEffect(() => {
+        // Only run animation when form is actually visible (config loaded and no error)
+        if (config && !error) {
+            const ctx = gsap.context(() => {
+                gsap.fromTo('.form-section',
+                    { opacity: 0, y: 20 },
+                    { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
+                );
+            }, formRef);
+
+            return () => ctx.revert();
+        }
+    }, [config, error]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-
-    const handleSubmit = (e: FormEvent) => {
-        setSubmitting(true);
+        setData({ [e.target.name]: e.target.value });
     };
 
     if (error) {
@@ -193,9 +193,10 @@ export default function Register({ config, error }: Props) {
                         </div>
 
                         <div className="form-section">
-                            <form method="POST" action="/spmb/daftar" onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 lg:p-10">
-                                <input type="hidden" name="_token" value={(usePage().props as any).csrf_token} />
-
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                post(route('spmb.store'));
+                            }} className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 lg:p-10">
                                 {flash?.error && (
                                     <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-2">
                                         <AlertCircle className="w-5 h-5" />
@@ -216,13 +217,13 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="text"
                                                 name="nisn"
-                                                value={form.nisn}
+                                                value={data.nisn}
                                                 onChange={handleChange}
                                                 maxLength={20}
-                                                className={`w-full px-4 py-2.5 border ${errors?.nisn ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.nisn ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                                 required
                                             />
-                                            {errors?.nisn && <p className="text-red-500 text-xs mt-1">{errors.nisn}</p>}
+                                            {errors.nisn && <p className="text-red-500 text-xs mt-1">{errors.nisn}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -231,13 +232,13 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="text"
                                                 name="nama_lengkap"
-                                                value={form.nama_lengkap}
+                                                value={data.nama_lengkap}
                                                 onChange={handleChange}
                                                 maxLength={255}
-                                                className={`w-full px-4 py-2.5 border ${errors?.nama_lengkap ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.nama_lengkap ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                                 required
                                             />
-                                            {errors?.nama_lengkap && <p className="text-red-500 text-xs mt-1">{errors.nama_lengkap}</p>}
+                                            {errors.nama_lengkap && <p className="text-red-500 text-xs mt-1">{errors.nama_lengkap}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -246,27 +247,13 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="text"
                                                 name="tempat_lahir"
-                                                value={form.tempat_lahir}
+                                                value={data.tempat_lahir}
                                                 onChange={handleChange}
                                                 maxLength={255}
-                                                className={`w-full px-4 py-2.5 border ${errors?.tempat_lahir ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.tempat_lahir ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                                 required
                                             />
-                                            {errors?.tempat_lahir && <p className="text-red-500 text-xs mt-1">{errors.tempat_lahir}</p>}
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                Tanggal Lahir <span className="text-red-500">*</span>
-                                            </label>
-                                            <input
-                                                type="date"
-                                                name="tanggal_lahir"
-                                                value={form.tanggal_lahir}
-                                                onChange={handleChange}
-                                                className={`w-full px-4 py-2.5 border ${errors?.tanggal_lahir ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
-                                                required
-                                            />
-                                            {errors?.tanggal_lahir && <p className="text-red-500 text-xs mt-1">{errors.tanggal_lahir}</p>}
+                                            {errors.tempat_lahir && <p className="text-red-500 text-xs mt-1">{errors.tempat_lahir}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -274,16 +261,16 @@ export default function Register({ config, error }: Props) {
                                             </label>
                                             <select
                                                 name="jenis_kelamin"
-                                                value={form.jenis_kelamin}
+                                                value={data.jenis_kelamin}
                                                 onChange={handleChange}
-                                                className={`w-full px-4 py-2.5 border ${errors?.jenis_kelamin ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.jenis_kelamin ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                                 required
                                             >
                                                 <option value="">Pilih Jenis Kelamin</option>
                                                 <option value="L">Laki-laki</option>
                                                 <option value="P">Perempuan</option>
                                             </select>
-                                            {errors?.jenis_kelamin && <p className="text-red-500 text-xs mt-1">{errors.jenis_kelamin}</p>}
+                                            {errors.jenis_kelamin && <p className="text-red-500 text-xs mt-1">{errors.jenis_kelamin}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -292,12 +279,12 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="email"
                                                 name="email"
-                                                value={form.email}
+                                                value={data.email}
                                                 onChange={handleChange}
                                                 maxLength={255}
-                                                className={`w-full px-4 py-2.5 border ${errors?.email ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.email ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                                            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -306,13 +293,13 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="tel"
                                                 name="no_hp"
-                                                value={form.no_hp}
+                                                value={data.no_hp}
                                                 onChange={handleChange}
                                                 maxLength={20}
-                                                className={`w-full px-4 py-2.5 border ${errors?.no_hp ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.no_hp ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                                 required
                                             />
-                                            {errors?.no_hp && <p className="text-red-500 text-xs mt-1">{errors.no_hp}</p>}
+                                            {errors.no_hp && <p className="text-red-500 text-xs mt-1">{errors.no_hp}</p>}
                                         </div>
                                         <div className="md:col-span-2">
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -320,13 +307,13 @@ export default function Register({ config, error }: Props) {
                                             </label>
                                             <textarea
                                                 name="alamat"
-                                                value={form.alamat}
+                                                value={data.alamat}
                                                 onChange={handleChange}
                                                 rows={3}
-                                                className={`w-full px-4 py-2.5 border ${errors?.alamat ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.alamat ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                                 required
                                             />
-                                            {errors?.alamat && <p className="text-red-500 text-xs mt-1">{errors.alamat}</p>}
+                                            {errors.alamat && <p className="text-red-500 text-xs mt-1">{errors.alamat}</p>}
                                         </div>
                                     </div>
                                 </div>
@@ -344,13 +331,13 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="text"
                                                 name="asal_sekolah"
-                                                value={form.asal_sekolah}
+                                                value={data.asal_sekolah}
                                                 onChange={handleChange}
                                                 maxLength={255}
-                                                className={`w-full px-4 py-2.5 border ${errors?.asal_sekolah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.asal_sekolah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                                 required
                                             />
-                                            {errors?.asal_sekolah && <p className="text-red-500 text-xs mt-1">{errors.asal_sekolah}</p>}
+                                            {errors.asal_sekolah && <p className="text-red-500 text-xs mt-1">{errors.asal_sekolah}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -359,12 +346,12 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="text"
                                                 name="npsn_sekolah"
-                                                value={form.npsn_sekolah}
+                                                value={data.npsn_sekolah}
                                                 onChange={handleChange}
                                                 maxLength={20}
-                                                className={`w-full px-4 py-2.5 border ${errors?.npsn_sekolah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.npsn_sekolah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.npsn_sekolah && <p className="text-red-500 text-xs mt-1">{errors.npsn_sekolah}</p>}
+                                            {errors.npsn_sekolah && <p className="text-red-500 text-xs mt-1">{errors.npsn_sekolah}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -373,12 +360,12 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="text"
                                                 name="jurusan_sekolah"
-                                                value={form.jurusan_sekolah}
+                                                value={data.jurusan_sekolah}
                                                 onChange={handleChange}
                                                 maxLength={255}
-                                                className={`w-full px-4 py-2.5 border ${errors?.jurusan_sekolah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.jurusan_sekolah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.jurusan_sekolah && <p className="text-red-500 text-xs mt-1">{errors.jurusan_sekolah}</p>}
+                                            {errors.jurusan_sekolah && <p className="text-red-500 text-xs mt-1">{errors.jurusan_sekolah}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -387,13 +374,13 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="number"
                                                 name="tahun_lulus"
-                                                value={form.tahun_lulus}
+                                                value={data.tahun_lulus}
                                                 onChange={handleChange}
                                                 min={2020}
                                                 max={2030}
-                                                className={`w-full px-4 py-2.5 border ${errors?.tahun_lulus ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.tahun_lulus ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.tahun_lulus && <p className="text-red-500 text-xs mt-1">{errors.tahun_lulus}</p>}
+                                            {errors.tahun_lulus && <p className="text-red-500 text-xs mt-1">{errors.tahun_lulus}</p>}
                                         </div>
                                     </div>
                                 </div>
@@ -408,7 +395,7 @@ export default function Register({ config, error }: Props) {
                                             <label
                                                 key={key}
                                                 className={`relative block p-4 border-2 rounded-xl cursor-pointer transition-all ${
-                                                    form.jalur_pendaftaran === key
+                                                    data.jalur_pendaftaran === key
                                                         ? 'border-emerald-500 bg-emerald-50 shadow-md'
                                                         : 'border-gray-200 hover:border-emerald-200 hover:bg-emerald-50/50'
                                                 }`}
@@ -417,7 +404,7 @@ export default function Register({ config, error }: Props) {
                                                     type="radio"
                                                     name="jalur_pendaftaran"
                                                     value={key}
-                                                    checked={form.jalur_pendaftaran === key}
+                                                    checked={data.jalur_pendaftaran === key}
                                                     onChange={handleChange}
                                                     className="sr-only"
                                                     required
@@ -427,7 +414,7 @@ export default function Register({ config, error }: Props) {
                                             </label>
                                         ))}
                                     </div>
-                                    {errors?.jalur_pendaftaran && <p className="text-red-500 text-xs mt-1">{errors.jalur_pendaftaran}</p>}
+                                    {errors.jalur_pendaftaran && <p className="text-red-500 text-xs mt-1">{errors.jalur_pendaftaran}</p>}
                                 </div>
 
                                 <div className="mb-8 pt-8 border-t border-gray-100">
@@ -441,110 +428,85 @@ export default function Register({ config, error }: Props) {
                                             <input
                                                 type="text"
                                                 name="nama_ayah"
-                                                value={form.nama_ayah}
+                                                value={data.nama_ayah}
                                                 onChange={handleChange}
-                                                maxLength={255}
-                                                className={`w-full px-4 py-2.5 border ${errors?.nama_ayah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.nama_ayah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.nama_ayah && <p className="text-red-500 text-xs mt-1">{errors.nama_ayah}</p>}
+                                            {errors.nama_ayah && <p className="text-red-500 text-xs mt-1">{errors.nama_ayah}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">Nama Ibu</label>
                                             <input
                                                 type="text"
                                                 name="nama_ibu"
-                                                value={form.nama_ibu}
+                                                value={data.nama_ibu}
                                                 onChange={handleChange}
-                                                maxLength={255}
-                                                className={`w-full px-4 py-2.5 border ${errors?.nama_ibu ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.nama_ibu ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.nama_ibu && <p className="text-red-500 text-xs mt-1">{errors.nama_ibu}</p>}
+                                            {errors.nama_ibu && <p className="text-red-500 text-xs mt-1">{errors.nama_ibu}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">Pekerjaan Ayah</label>
                                             <input
                                                 type="text"
                                                 name="pekerjaan_ayah"
-                                                value={form.pekerjaan_ayah}
+                                                value={data.pekerjaan_ayah}
                                                 onChange={handleChange}
-                                                maxLength={255}
-                                                className={`w-full px-4 py-2.5 border ${errors?.pekerjaan_ayah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.pekerjaan_ayah ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.pekerjaan_ayah && <p className="text-red-500 text-xs mt-1">{errors.pekerjaan_ayah}</p>}
+                                            {errors.pekerjaan_ayah && <p className="text-red-500 text-xs mt-1">{errors.pekerjaan_ayah}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">Pekerjaan Ibu</label>
                                             <input
                                                 type="text"
                                                 name="pekerjaan_ibu"
-                                                value={form.pekerjaan_ibu}
+                                                value={data.pekerjaan_ibu}
                                                 onChange={handleChange}
-                                                maxLength={255}
-                                                className={`w-full px-4 py-2.5 border ${errors?.pekerjaan_ibu ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.pekerjaan_ibu ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.pekerjaan_ibu && <p className="text-red-500 text-xs mt-1">{errors.pekerjaan_ibu}</p>}
+                                            {errors.pekerjaan_ibu && <p className="text-red-500 text-xs mt-1">{errors.pekerjaan_ibu}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">Penghasilan Orang Tua</label>
                                             <input
                                                 type="text"
                                                 name="penghasilan_ortu"
-                                                value={form.penghasilan_ortu}
+                                                value={data.penghasilan_ortu}
                                                 onChange={handleChange}
-                                                maxLength={255}
-                                                placeholder="Contoh: Rp 2.000.000 - Rp 5.000.000"
-                                                className={`w-full px-4 py-2.5 border ${errors?.penghasilan_ortu ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.penghasilan_ortu ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.penghasilan_ortu && <p className="text-red-500 text-xs mt-1">{errors.penghasilan_ortu}</p>}
+                                            {errors.penghasilan_ortu && <p className="text-red-500 text-xs mt-1">{errors.penghasilan_ortu}</p>}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">No. HP Orang Tua</label>
                                             <input
                                                 type="tel"
                                                 name="no_hp_ortu"
-                                                value={form.no_hp_ortu}
+                                                value={data.no_hp_ortu}
                                                 onChange={handleChange}
                                                 maxLength={20}
-                                                className={`w-full px-4 py-2.5 border ${errors?.no_hp_ortu ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
+                                                className={`w-full px-4 py-2.5 border ${errors.no_hp_ortu ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-emerald-500'} rounded-lg focus:outline-none focus:ring-2 transition-all`}
                                             />
-                                            {errors?.no_hp_ortu && <p className="text-red-500 text-xs mt-1">{errors.no_hp_ortu}</p>}
+                                            {errors.no_hp_ortu && <p className="text-red-500 text-xs mt-1">{errors.no_hp_ortu}</p>}
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="pt-6 border-t border-gray-100">
-                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                                        <p className="text-xs text-gray-400">
-                                            <span className="text-red-500">*</span> Field wajib diisi
-                                        </p>
-                                        <div className="flex gap-3">
-                                            <Link
-                                                href="/"
-                                                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all font-medium"
-                                            >
-                                                Batal
-                                            </Link>
-                                            <button
-                                                type="submit"
-                                                disabled={submitting}
-                                                className="px-8 py-3 bg-emerald-500 hover:bg-emerald-400 disabled:bg-emerald-300 text-white font-semibold rounded-xl transition-all hover:shadow-lg hover:shadow-emerald-500/30 flex items-center gap-2"
-                                            >
-                                                {submitting ? 'Menyimpan...' : (
-                                                    <>
-                                                        Daftar Sekarang
-                                                        <ChevronRight className="w-4 h-4" />
-                                                    </>
-                                                )}
-                                            </button>
-                                        </div>
-                                    </div>
+                                <div className="flex justify-end">
+                                    <button
+                                        type="submit"
+                                        disabled={processing}
+                                        className="px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark disabled:opacity-50 transition-all"
+                                    >
+                                        {processing ? 'Mengirim...' : 'Daftar Sekarang'}
+                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </main>
-
             <Footer footer={null as any} />
         </>
     );

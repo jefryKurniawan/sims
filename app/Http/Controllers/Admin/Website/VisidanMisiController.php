@@ -4,125 +4,141 @@ namespace App\Http\Controllers\Admin\Website;
 
 use App\Http\Controllers\Controller;
 use App\Models\Visimisi;
-use Illuminate\Http\Request;
 use App\Http\Requests\VisidanMisiRequest;
-use ErrorException;
-use Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class VisidanMisiController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $visimisi = Visimisi::first();
-        return view('backend.website.tentang.visiMisi', compact('visimisi'));
+
+        return Inertia::render('Admin/Website/VisidanMisi/Index', [
+            'visimisi' => $visimisi,
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/Website/VisidanMisi/Create');
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(VisidanMisiRequest $request)
     {
         try {
-            $image = $request->file('image');
-            $nama_img = time()."_".$image->getClientOriginalName();
-            // isi dengan nama folder tempat kemana file diupload
-            $tujuan_upload = 'public/images/visimisi';
-            $image->storeAs($tujuan_upload,$nama_img);
+            $nama_img = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $nama_img = time() . '_' . $image->getClientOriginalName();
+                $tujuan_upload = 'public/images/visimisi';
+                $image->storeAs($tujuan_upload, $nama_img);
+            }
 
             $visimisi = new Visimisi();
-            $visimisi->visi     = $request->visi;
-            $visimisi->misi     = $request->misi;
-            $visimisi->image    = $nama_img;
+            $visimisi->visi = $request->visi;
+            $visimisi->misi = $request->misi;
+            $visimisi->image = $nama_img;
             $visimisi->save();
 
-            Session::flash('success','Visi dan Misi Berhasil dibuat!');
-            return redirect()->route('backend-visimisi.index');
+            Session::flash('success', 'Visi dan Misi Berhasil dibuat!');
 
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+            return redirect()->route('website.visimisi.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $visimisi = Visimisi::findOrFail($id);
+
+        return Inertia::render('Admin/Website/VisidanMisi/Show', [
+            'visimisi' => $visimisi,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        $visimisi = Visimisi::findOrFail($id);
+
+        return Inertia::render('Admin/Website/VisidanMisi/Edit', [
+            'visimisi' => $visimisi,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(VisidanMisiRequest $request, $id)
     {
         try {
-            if ($request->image) {
+            $visimisi = Visimisi::findOrFail($id);
+
+            $nama_img = $visimisi->image;
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($visimisi->image) {
+                    Storage::delete('public/images/visimisi/' . $visimisi->image);
+                }
                 $image = $request->file('image');
-                $nama_img = time()."_".$image->getClientOriginalName();
-                // isi dengan nama folder tempat kemana file diupload
+                $nama_img = time() . '_' . $image->getClientOriginalName();
                 $tujuan_upload = 'public/images/visimisi';
-                $image->storeAs($tujuan_upload,$nama_img);
+                $image->storeAs($tujuan_upload, $nama_img);
             }
 
-            $visimisi = Visimisi::find($id);
-            $visimisi->visi     = $request->visi;
-            $visimisi->misi     = $request->misi;
-            $visimisi->image    = $nama_img ?? $visimisi->image;
-            $visimisi->update();
+            $visimisi->visi = $request->visi;
+            $visimisi->misi = $request->misi;
+            $visimisi->image = $nama_img ?? $visimisi->image;
+            $visimisi->save();
 
-            Session::flash('success','Visi dan Misi Berhasil diupdate!');
-            return redirect()->route('backend-visimisi.index');
+            Session::flash('success', 'Visi dan Misi Berhasil diupdate!');
 
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+            return redirect()->route('website.visimisi.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        try {
+            $visimisi = Visimisi::findOrFail($id);
+
+            if ($visimisi->image) {
+                Storage::delete('public/images/visimisi/' . $visimisi->image);
+            }
+
+            $visimisi->delete();
+
+            Session::flash('success', 'Visi dan Misi Berhasil dihapus!');
+
+            return redirect()->route('website.visimisi.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

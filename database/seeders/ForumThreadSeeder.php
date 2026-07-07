@@ -23,15 +23,17 @@ class ForumThreadSeeder extends Seeder
         foreach ($alumni as $index => $alumniRecord) {
             // create 1-2 threads per alumni
             for ($i = 0; $i < rand(1,2); $i++) {
-                ForumThread::create([
+                $slug = Str::slug(fake()->sentence(3));
+                $attributes = [
                     'alumni_id' => $alumniRecord->id,
-                    'slug' => Str::slug(fake()->sentence(3)),
+                    'slug' => $slug,
                     'judul' => fake()->sentence(4),
                     'isi' => fake()->paragraphs(3, true),
                     'kategori' => $categories[array_rand($categories)],
                     'status' => $statuses[array_rand($statuses)],
                     'views' => rand(0, 100),
-                ]);
+                ];
+                ForumThread::firstOrCreate(['slug' => $slug], $attributes);
             }
         }
     }

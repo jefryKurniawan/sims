@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bank;
-use App\Models\Setting;
 use App\Models\BankAccount;
+use App\Models\Setting;
 use App\Models\SppSetting;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -39,7 +39,7 @@ class SettingController extends Controller
             'is_primary' => 1
         ]);
 
-        return redirect()->back()->with('success', 'Akun Bank Berhasil Ditambah.');
+        return redirect()->route('settings')->with('success', 'Akun Bank Berhasil Ditambah.');
     }
 
     // Setting Notification
@@ -52,11 +52,11 @@ class SettingController extends Controller
         $setting = Setting::where('user_id', auth()->id())->first();
         if (!$setting) {
             $setting = new Setting();
-            $setting->user_id = auth()->id();
+            $setgt->user_id = auth()->id();
         }
         $setting->isEmail = $request->isEmail ?? 0;
         $setting->save();
 
-        return redirect()->back()->with('success', 'Berhasil meng update setting notifikasi.');
+        return redirect()->route('settings')->with('success', 'Berhasil mengupdate setting notifikasi.');
     }
 }

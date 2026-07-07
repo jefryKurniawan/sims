@@ -4,132 +4,146 @@ namespace App\Http\Controllers\Admin\Website;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
-use Illuminate\Http\Request;
 use App\Http\Requests\KegiatanRequest;
-use ErrorException;
-use Session;
-use DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class KegiatanController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $kegiatan = Kegiatan::all();
-        return view('backend.website.kegiatan.index', compact('kegiatan'));
+
+        return Inertia::render('Admin/Website/Kegiatan/Index', [
+            'kegiatan' => $kegiatan,
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        return view('backend.website.kegiatan.create');
+        return Inertia::render('Admin/Website/Kegiatan/Create');
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(KegiatanRequest $request)
     {
         try {
-            if ($request->image) {
+            $nama_image = null;
+            if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $nama_img = time()."_".$image->getClientOriginalName();
-                // isi dengan nama folder tempat kemana file diupload
+                $nama_image = time() . '_' . $image->getClientOriginalName();
                 $tujuan_upload = 'public/images/kegiatan';
-                $image->storeAs($tujuan_upload,$nama_img);
+                $image->storeAs($tujuan_upload, $nama_image);
             }
 
-            $url = \Str::slug($request->nama);
             $kegiatan = new Kegiatan();
-            $kegiatan->nama     = $request->nama;
-            $kegiatan->slug     = $url;
-            $kegiatan->image    = $nama_img ?? NULL;
-            $kegiatan->content  = $request->content;
+            $kegiatan->nama = $request->nama;
+            $kegiatan->slug = $request->slug ?: Str::slug($request->nama);
+            $kegiatan->image = $nama_image;
+            $kegiatan->content = $request->content;
+            $kegiatan->is_active = $request->input('is_active', '0');
             $kegiatan->save();
 
-            Session::flash('success','Kegiatan Berhasil ditambah !');
-            return redirect()->route('backend-kegiatan.index');
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
-        }
+            Session::flash('success', 'Kegiatan Berhasil ditambah !');
 
+            return redirect()->route('backend-kegiatan.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
+        $kegiatan = Kegiatan::findOrFail($id);
+
+        return Inertia::render('Admin/Website/Kegiatan/Show', [
+            'kegiatan' => $kegiatan,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $kegiatan = Kegiatan::find($id);
-        return view('backend.website.kegiatan.edit', compact('kegiatan'));
+        $kegiatan = Kegiatan::findOrFail($id);
+
+        return Inertia::render('Admin/Website/Kegiatan/Edit', [
+            'kegiatan' => $kegiatan,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         try {
-            if ($request->image) {
+            $kegiatan = Kegiatan::findOrFail($id);
+
+            $nama_image = $kegiatan->image;
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($kegiatan->image) {
+                    Storage::delete('public/images/kegiatan/' . $kegiatan->image);
+                }
                 $image = $request->file('image');
-                $nama_img = time()."_".$image->getClientOriginalName();
-                // isi dengan nama folder tempat kemana file diupload
+                $nama_image = time() . '_' . $image->getClientOriginalName();
                 $tujuan_upload = 'public/images/kegiatan';
-                $image->storeAs($tujuan_upload,$nama_img);
+                $image->storeAs($tujuan_upload, $nama_image);
             }
 
-            $url = \Str::slug($request->nama);
-            $kegiatan = Kegiatan::findOrFail($id);
-            $kegiatan->nama         = $request->nama;
-            $kegiatan->slug         = $url;
-            $kegiatan->image        = $nama_img ?? $kegiatan->image;
-            $kegiatan->is_active    = $request->is_active;
-            $kegiatan->content      = $request->content;
+            $kegiatan->nama = $request->nama;
+            $kegiatan->slug = $request->slug ?: $kegiatan->slug;
+            $kegiatan->image = $nama_image ?? $kegiatan->image;
+            $kegiatan->content = $request->content;
+            $kegiatan->is_active = $request->input('is_active', $kegiatan->is_active);
             $kegiatan->save();
 
-            Session::flash('success','Kegiatan Berhasil diupdate !');
+            Session::flash('success', 'Kegiatan Berhasil diupdate !');
+
             return redirect()->route('backend-kegiatan.index');
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        try {
+            $kegiatan = Kegiatan::findOrFail($id);
+
+            if ($kegiatan->image) {
+                Storage::delete('public/images/kegiatan/' . $kegiatan->image);
+            }
+
+            $kegiatan->delete();
+
+            Session::flash('success', 'Kegiatan Berhasil dihapus !');
+
+            return redirect()->route('backend-kegiatan.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

@@ -293,4 +293,80 @@ The UI should reflect a clean, professional, and trustworthy school‑management
 - **Policies**: `SiswaPolicy` and `BeritaPolicy` enforce model‑level access.
 - **Tests**: Feature test `RoleAuthTest` validates route protection.
 
+## Guidelines for AI Agents (Ponytail & Inertia+React)
+
+When contributing to the Sekolahku codebase, whether you are a human developer or an AI agent (e.g., laravel-specialist, frontend-design, or any other), please adhere to the following guidelines to maintain consistency, simplicity, and adherence to the Ponytail principle.
+
+### Frontend (Inertia + React + TypeScript)
+- **Form handling**: WAJIB `useForm` dari `@inertiajs/inertia-react`. Jangan React Hook Form, Formik, atau `fetch()`.
+- **Data fetching**: hanya via Inertia props. Controller kirim `Inertia::render('Page', [...])`, halaman terima via destructured props. Shared props via `usePage().props`.
+- **File upload**: `useState` + `FormData` + `Inertia.post()`.
+- **Tables**: WAJIB `@tanstack/react-table` untuk semua tabel baru. Jangan `<table>` manual.
+- **Pagination**: WAJIB menggunakan komponen `Components/Pagination.tsx` (admin) atau `Components/Frontend/Pagination.tsx` (public) untuk semua pagination.
+- **Layout resolution**: 
+  - `Pages/Admin/*` → otomatis dibungkus `AppLayout` (sidebar + topbar).
+  - `Pages/Frontend/*`, `Pages/Spmb/*`, `Pages/Auth/*` → TIDAK dibungkus `AppLayout` (self-contained).
+  - Override: export `.layout = GuestLayout` pada halaman.
+- **Icons**: WAJIB `lucide-react`, import spesifik untuk tree-shaking `import { User } from 'lucide-react'`. Dinamis: `<Icon name="User" />` dari `@/lib/icons`. Jangan gunakan FontAwesome, Heroicons, @iconify/react, atau react-icons.
+- **Components**: gunakan shadcn/ui yang sudah tersedia (Button, Input, Card, Badge, Checkbox, DropdownMenu, Label, Separator, Avatar, Sheet). Radix primitives (Accordion, Collapsible, Popover, Progress, RadioGroup, Select, Switch, Tabs, Tooltip) tersedia tetapi belum di-wrap.
+- **State & Validation**: 
+  - Zustand untuk global state. Buat store di `resources/js/store/`.
+  - Arktype untuk runtime validation (opsional, belum dipakai di halaman).
+- **Flash Messages**: Controller beri `->with('success', '...')` atau `->with('error', '...')` → otomatis di-render oleh `AppLayout`. Tidak perlu render manual.
+- **Aksesibilitas**:
+  - Setiap `<input>` harus punya `<label>`<|`htmlFor`.
+  - Tombol harus punya `type` eksplisit (`button`, `submit`, `reset`).
+  - Icon-only button harus punya `aria-label`.
+  - Pastikan kontras ≥ 4.5:1 untuk teks normal, ≥ 3:1 untuk teks besar.
+  - Pastikan navigasi keyboard logis; jangan perforasi fokus.
+  - Beri label ARIA untuk komponen khusus (modals, dropdowns).
+- **Micro‑interactions** (opsional tetapi disarankan):
+  - Hover button: skala ringan (1.02) dan bayangan meningkat.
+  - Fokus input: glow menggunakan `box-shadow`.
+  - Klik baris tabel (untuk baris yang dapat dipilih): ubah latar belakang menjadi navy sangat terang.
+  - Notifikasi toast: geser dari kanan atas, hilang otomatis setelah 5 detik.
+
+### Backend (Laravel)
+- **Inertia Controllers**: Untuk halaman Inertia, kembali dengan `Inertia::render('Page', [...])`. Jangan gunakan `view()` untuk halaman yang menggunakan Inertia.
+- **Form Request**: Validasi dengan Form Request classes (mis. `KegiatanRequest`). Re‑gunakan yang ada; jangan duplikasikan aturan validasi.
+- **Flash Messages**: Gunakan `Session::flash('success', 'pesan')` atau `Session::flash('error', 'pesan')`.
+- **Redirects**: Setelah POST/PUT/DELETE sukses, alihkan dengan `redirect()->route('...')->with('success', '...')`.
+- **File Upload**: Simpan di `public/images/<module>/` lewat `$request->storeAs()`; simpan nama file di model.
+- **Transaksi**: Jika perubahan melibatkan beberapa tabel, bungkus dalam database transaction.
+- **Observer/Listener**: Manfaatkan Eloquent events untuk efek samping otomatis (mis. membuat Siswa saat pemohon PPDB dinyatakan lulus).
+
+### Routing & API
+- **Web routes**: 
+  - `routes/web.php` → publik
+  - `routes/admin.php` → admin (middleware `auth`, `role:admin` dst.)
+  - `routes/frontend.php` → frontend
+  - `routes/spmb.php` → bila diperlukan untuk SPMB
+- **API routes** (Orang Tua portal): `routes/api.php` dengan autentikasi Sanctum; kembalikan resource yang dipaginate.
+- Selalu periksa route setelah perubahan dengan `php artisan route:list`.
+
+### Database & Migrasi
+- Migrasi harus dapat dibalik; sediakan metode `down()` yang sesuai.
+- Saat menambah foreign key, riferensikan tabel secara eksplisit: `$table->foreignId('user_id')->constrained('users')`.
+- Seed data: sediakan seeder untuk tabel baru; uji dengan `php artisan db:seed`.
+
+### Testing
+- Tulis minimal satu test (unit atau fitur) untuk logika backend baru.
+- Untuk frontend, lakukan uji manual setiap fitur; pertimbangkan menulis pengujian komponen dengan Vitest jika kompleksitas membutuhkan.
+- Jalankan rangkaian test sebelum push: `phpunit` dan `npm test`.
+
+### Kualitas Kode
+- Hapus kode yang dikomentari dan impor yang tidak digunakan.
+- Ikuti konvensi penamaan Laravel (model tunggal, tabel jamak, dst.).
+- Gunakan tipe data (type‑hinting) dalam metode PHP bila memungkinkan.
+- Simpan perubahan yang fokus dan atomik; setiap PR sebaiknya menyelesaikan satu masalah saja.
+- Jalankan linter: `npm run lint` (jika dikonfigurasikan) dan `phpcs` (jika dikonfigurasikan).
+
+### PWA & Offline (modul Perpustakaan)
+- Service worker: `public/sw.js`.
+- Manifest: `public/manifest.json`.
+- Halaman offline: `public/offline.html`.
+- Pastikan aset inti di‑cache dan halaman offline ditampilkan saat offline.
+
+Semua pedoman di atas menjaga agar kode tetap koheren, mudah dipelihara, dan selaras dengan prinsip Ponytail teruwaga dari siapa pun yang berkontribusi—baik manusia maupun agen AI.
+
 *This document is a living guideline; update it as the project evolves or when new decisions are made.*

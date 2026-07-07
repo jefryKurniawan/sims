@@ -4,135 +4,152 @@ namespace App\Http\Controllers\Admin\Website;
 
 use App\Http\Controllers\Controller;
 use App\Models\Events;
-use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
-use ErrorException;
-use Session;
-use Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class EventsController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $event = Events::all();
-        return view('backend.website.content.event.index', compact('event'));
+
+        return Inertia::render('Admin/Website/Events/Index', [
+            'event' => $event,
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        return view('backend.website.content.event.create');
+        return Inertia::render('Admin/Website/Events/Create');
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(EventRequest $request)
     {
         try {
-            $image = $request->file('thumbnail');
-            $nama_image = time()."_".$image->getClientOriginalName();
-            // isi dengan nama folder tempat kemana file diupload
-            $tujuan_upload = 'public/images/event';
-            $image->storeAs($tujuan_upload,$nama_image);
+            $nama_image = null;
+            if ($request->hasFile('thumbnail')) {
+                $image = $request->file('thumbnail');
+                $nama_image = time() . '_' . $image->getClientOriginalName();
+                $tujuan_upload = 'public/images/event';
+                $image->storeAs($tujuan_upload, $nama_image);
+            }
 
-            // Create Slug
-            $slug = Str::slug($request->title);
-
-            $event = new Events;
-            $event->title       = $request->title;
-            $event->slug        = $slug;
-            $event->desc        = $request->desc;
-            $event->content     = $request->content;
-            $event->thumbnail   = $nama_image;
-            $event->acara       = $request->acara;
-            $event->lokasi      = $request->lokasi;
+            $event = new Events();
+            $event->title = $request->title;
+            $event->slug = $request->slug ?: Str::slug($request->title);
+            $event->desc = $request->desc;
+            $event->content = $request->content;
+            $event->thumbnail = $nama_image;
+            $event->acara = $request->acara;
+            $event->lokasi = $request->lokasi;
+            $event->is_Active = $request->input('is_Active', '0');
             $event->save();
 
-            Session::flash('success','Event Berhasil ditambah !');
-            return redirect()->route('backend-event.index');
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+            Session::flash('success', 'Event Berhasil ditambah !');
+
+            return redirect()->route('website.event.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $event = Events::findOrFail($id);
+
+        return Inertia::render('Admin/Website/Events/Show', [
+            'event' => $event,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $event = Events::find($id);
-        return view('backend.website.content.event.edit', compact('event'));
+        $event = Events::findOrFail($id);
+
+        return Inertia::render('Admin/Website/Events/Edit', [
+            'event' => $event,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(EventRequest $request, $id)
     {
         try {
-            if ($request->thumbnail) {
+            $event = Events::findOrFail($id);
+
+            $nama_image = $event->thumbnail;
+            if ($request->hasFile('thumbnail')) {
+                // Delete old image
+                if ($event->thumbnail) {
+                    Storage::delete('public/images/event/' . $event->thumbnail);
+                }
                 $image = $request->file('thumbnail');
-                $nama_image = time()."_".$image->getClientOriginalName();
-                // isi dengan nama folder tempat kemana file diupload
+                $nama_image = time() . '_' . $image->getClientOriginalName();
                 $tujuan_upload = 'public/images/event';
-                $image->storeAs($tujuan_upload,$nama_image);
+                $image->storeAs($tujuan_upload, $nama_image);
             }
-            $event = Events::find($id);
-            $event->title       = $request->title;
-            $event->desc        = $request->desc;
-            $event->content     = $request->content;
-            $event->thumbnail   = $nama_image ?? $event->thumbnail;
-            $event->acara       = $request->acara ?? $event->acara;
-            $event->is_Active   = $request->is_Active;
-            $event->lokasi      = $request->lokasi;
+
+            $event->title = $request->title;
+            $event->slug = $request->slug ?: $event->slug;
+            $event->desc = $request->desc;
+            $event->content = $request->content;
+            $event->thumbnail = $nama_image ?? $event->thumbnail;
+            $event->acara = $request->acara;
+            $event->lokasi = $request->lokasi;
+            $event->is_Active = $request->input('is_Active', $event->is_Active);
             $event->save();
 
-            Session::flash('success','Event Berhasil diupdate !');
-            return redirect()->route('backend-event.index');
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+            Session::flash('success', 'Event Berhasil diupdate !');
+
+            return redirect()->route('website.event.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        try {
+            $event = Events::findOrFail($id);
+
+            if ($event->thumbnail) {
+                Storage::delete('public/images/event/' . $event->thumbnail);
+            }
+
+            $event->delete();
+
+            Session::flash('success', 'Event Berhasil dihapus !');
+
+            return redirect()->route('website.event.index');
+        } catch (\Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

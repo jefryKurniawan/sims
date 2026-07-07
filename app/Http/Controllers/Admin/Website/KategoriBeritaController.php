@@ -4,106 +4,99 @@ namespace App\Http\Controllers\Admin\Website;
 
 use App\Http\Controllers\Controller;
 use App\Models\KategoriBerita;
-use Illuminate\Http\Request;
 use App\Http\Requests\KategoriBeritaRequest;
-use ErrorException;
-use Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class KategoriBeritaController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $kategori = KategoriBerita::withCount('beritas')->get();
-        return view('backend.website.content.kategoriBerita.index', compact('kategori'));
+
+        return Inertia::render('Admin/Website/KategoriBerita/Index', [
+            'kategori' => $kategori,
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/Website/KategoriBerita/Create');
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(KategoriBeritaRequest $request)
     {
         try {
             $kategori = new KategoriBerita();
-            $kategori->nama         = $request->nama;
-            $kategori->is_active    = $request->is_active;
+            $kategori->nama = $request->nama;
+            $kategori->is_active = $request->is_active;
             $kategori->save();
 
-            Session::flash('success','Kategori Berhasil ditambah !');
-            return redirect()->route('backend-kategori-berita.index');
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+            Session::flash('success', 'Kategori Berhasil ditambah !');
+
+            return redirect()->route('website.kategori-berita.index');
+        } catch (Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $kategori = KategoriBerita::withCount('beritas')->findOrFail($id);
-        return view('backend.website.content.kategoriBerita.show', compact('kategori'));
+
+        return Inertia::render('Admin/Website/KategoriBerita/Show', [
+            'kategori' => $kategori,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $kategori = KategoriBerita::find($id);
-        return view('backend.website.content.kategoriBerita.edit', compact('kategori'));
+        $kategori = KategoriBerita::findOrFail($id);
+
+        return Inertia::render('Admin/Website/KategoriBerita/Edit', [
+            'kategori' => $kategori,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(KategoriBeritaRequest $request, $id)
     {
         try {
-            $kategori = KategoriBerita::find($id);
-            $kategori->nama         = $request->nama;
-            $kategori->is_active    = $request->is_active;
+            $kategori = KategoriBerita::findOrFail($id);
+            $kategori->nama = $request->nama;
+            $kategori->is_active = $request->is_active;
             $kategori->save();
 
-            Session::flash('success','Kategori Berhasil diupdate !');
-            return redirect()->route('backend-kategori-berita.index');
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+            Session::flash('success', 'Kategori Berhasil diupdate !');
+
+            return redirect()->route('website.kategori-berita.index');
+        } catch (Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
@@ -112,15 +105,17 @@ class KategoriBeritaController extends Controller
 
             if ($kategori->beritas()->count() > 0) {
                 Session::flash('error', 'Kategori tidak dapat dihapus karena masih memiliki berita terkait !');
-                return redirect()->route('backend-kategori-berita.index');
+                return redirect()->route('website.kategori-berita.index');
             }
 
             $kategori->delete();
 
             Session::flash('success', 'Kategori Berhasil dihapus !');
-            return redirect()->route('backend-kategori-berita.index');
-        } catch (ErrorException $e) {
-            throw new ErrorException($e->getMessage());
+
+            return redirect()->route('website.kategori-berita.index');
+        } catch (Exception $e) {
+            Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back();
         }
     }
 }
