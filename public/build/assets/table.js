@@ -1,0 +1,1 @@
+import{i as e,t}from"./jsx-runtime.js";e();var n=t(),r=({className:e,children:t})=>(0,n.jsx)(`table`,{className:e,children:t});export{r as t};

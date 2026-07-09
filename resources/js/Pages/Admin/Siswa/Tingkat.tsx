@@ -12,6 +12,7 @@ interface SiswaRow {
     nisn: string;
     nis?: string;
     kelasAktif?: { kelas?: { nama_kelas: string } } | null;
+    kelas_aktif?: { kelas?: { nama_kelas: string } } | null;
     status: string;
 }
 
@@ -93,7 +94,7 @@ export default function Tingkat({ tingkat, variants, kelasList }: Props) {
         {
             key: 'kelas',
             label: 'Kelas',
-            render: (_v: any, row: SiswaRow) => row.kelasAktif?.kelas?.nama_kelas || '-',
+            render: (_v: any, row: SiswaRow) => row.kelas_aktif?.kelas?.nama_kelas || '-',
         },
         {
             key: 'status',

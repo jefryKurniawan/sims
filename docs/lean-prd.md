@@ -133,6 +133,8 @@ Dengan fokus pada daerah-danah ini, sekolah dapat mulai digitalisasi operasi int
 | **Kelas** | `dashboard/kelas` | CRUD Kelas (nama_kelas, tingkat, jurusan_id, wali_kelas_id, ruangan, kapasitas, tahun_ajaran) |
 | **Sarana Prasarana** | `dashboard/sarana` | Inventarisasi fasilitas sekolah |
 | **Dispensasi** | `dashboard/dispensasi` | Manajemen dispensasi/keringanan SPP (siswa_id, jenis, nilai, mulai, sampai, keterangan) |
+| **Master Bank** | `dashboard/master-bank` | CRUD master bank (nama_bank, kode_bank, cabang, rekening_default, dsb) |
+| **Pengaturan Sistem (Settings)** | `dashboard/settings` | Card berisi Data Instansi (nama sekolah, alamat, map iframe, upload logo, media sosial, Legalitas Instansi: NPSN, Akreditasi, Nama Kepala Sekolah, NIP Kepala Sekolah), tema warna, serta konfigurasi Hero (upload foto atau video; foto: webp/avif 1920x1080 atau 2560x1440 max 150‑200KB; video: mp4(H.264)/webm(VP9/AV1) 1920x1080 max 2‑5MB, 5‑10detik, tanpa suara, loop otomatis; hanya satu jenis media dapat dipilih — foto atau video, tidak keduanya sekaligus) |
 
 #### 16.6 UI/UX Patterns yang Sudah Diterapkan
 

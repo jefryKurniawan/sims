@@ -89,8 +89,7 @@ class Siswa extends Model
     public function kelasAktif()
     {
         return $this->hasOne(SiswaKelas::class)
-            ->where('siswa_kelas.status', 'aktif')
-            ->with('kelas');
+            ->where('siswa_kelas.status', 'aktif');
     }
 
     public function auditLogs()

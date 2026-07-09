@@ -2,6 +2,27 @@
 
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you register web routes for the application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::middleware('guest')->group(function () {
+    Route::get('/', function () {
+        return view('auth.login');
+    });
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
+});
+
 // ======= DASHBOARD & ADMIN (Authenticated) =======
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     // ====== ROLE SCOPE GROUPS (currently empty; available for future use) ======
@@ -10,6 +31,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::middleware('role:Murid')->group(function () {});
     Route::middleware('role:Orang Tua')->group(function () {});
     Route::middleware('role:Alumni')->group(function () {});
+    Route::middleware('role:Guest')->group(function () {});
 
     // ====== MAIN DASHBOARD ======
     Route::get('/', 'Admin\HomeController@index')->name('dashboard');
@@ -23,6 +45,12 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::get('/', 'Admin\SettingController@index')->name('settings');
         Route::post('add-bank', 'Admin\SettingController@addBank')->name('settings.add.bank');
         Route::put('notifications/{id}', 'Admin\SettingController@notifications')->name('settings.notifications');
+        Route::put('/', 'Admin\SettingController@update')->name('settings.update');
+
+        // New sub-pages for settings cards
+        Route::get('data-instansi', 'Admin\SettingController@dataInstansi')->name('settings.data-instansi');
+        Route::get('legalitas', 'Admin\SettingController@legalitas')->name('settings.legalitas');
+        Route::get('konfigurasi', 'Admin\SettingController@konfigurasi')->name('settings.konfigurasi');
     });
 
     // ====== ADMIN-ONLY ROUTES ======
@@ -78,6 +106,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
 
         // SPP - Dispensi
         Route::resource('dispensasi', 'Admin\DispensasiController');
+
+        // Master Bank
+        Route::resource('master-bank', 'Admin\MasterBankController');
 
         // Rapor
         Route::get('rapor-kelas/create', 'Admin\RaporKelasController@create')->name('rapor-kelas.create');
@@ -148,33 +179,18 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::resource('kelas', 'Admin\KelasController');
 
         // Sarana Prasarana
-            Route::get('sarana/template', 'Admin\SaranaPrasaranaController@template')->name('sarana.template');
-            Route::post('sarana/import', 'Admin\SaranaPrasaranaController@import')->name('sarana.import');
-            Route::resource('sarana', 'Admin\SaranaPrasaranaController');
+        Route::get('sarana/template', 'Admin\SaranaPrasaranaController@template')->name('sarana.template');
+        Route::post('sarana/import', 'Admin\SaranaPrasaranaController@import')->name('sarana.import');
+        Route::resource('sarana', 'Admin\SaranaPrasaranaController');
 
-    // Perpustakaan
-    Route::get('perpustakaan/template', 'Admin\PerpustakaanController@template')->name('admin.perpustakaan.template');
-    Route::post('perpustakaan/import', 'Admin\PerpustakaanController@import')->name('admin.perpustakaan.import');
-    Route::resource('perpustakaan', 'Admin\PerpustakaanController', ['as' => 'admin', 'parameters' => ['perpustakaan' => 'buku']]);
+        // Perpustakaan
+        Route::get('perpustakaan/template', 'Admin\PerpustakaanController@template')->name('admin.perpustakaan.template');
+        Route::post('perpustakaan/import', 'Admin\PerpustakaanController@import')->name('admin.perpustakaan.import');
+        Route::resource('perpustakaan', 'Admin\PerpustakaanController', ['as' => 'admin', 'parameters' => ['perpustakaan' => 'buku']]);
 
         // SPP
         Route::resource('spp', 'Admin\SppController');
-
-        // SPMB Admin
-        Route::get('spmb/applicant', 'Admin\SpmbApplicantController@index')->name('spmb.applicant.index');
-        Route::get('spmb/applicant/{spmbApplicant}', 'Admin\SpmbApplicantController@show')->name('spmb.applicant.show');
-        Route::get('spmb/applicant/{spmbApplicant}/edit', 'Admin\SpmbApplicantController@edit')->name('spmb.applicant.edit');
-        Route::put('spmb/applicant/{spmbApplicant}', 'Admin\SpmbApplicantController@update')->name('spmb.applicant.update');
-        Route::delete('spmb/applicant/{spmbApplicant}', 'Admin\SpmbApplicantController@destroy')->name('spmb.applicant.destroy');
-        Route::get('spmb/ranking', 'Admin\SpmbRankingController@index')->name('spmb.ranking.index');
-        Route::post('spmb/ranking/proses', 'Admin\SpmbRankingController@proses')->name('spmb.ranking.proses');
-        Route::get('spmb/ranking/hitung-skor/{spmbApplicant}', 'Admin\SpmbRankingController@hitungSkorIndividual')->name('spmb.ranking.hitung-skor');
-        Route::get('spmb/config/create', 'Admin\SpmbConfigController@create')->name('spmb.config.create');
-    Route::get('spmb/config', 'Admin\SpmbConfigController@index')->name('spmb.config.index');
-        Route::post('spmb/config', 'Admin\SpmbConfigController@store')->name('spmb.config.store');
-        Route::put('spmb/config/{spmbConfig}', 'Admin\SpmbConfigController@update')->name('spmb.config.update');
-        Route::delete('spmb/config/{spmbConfig}', 'Admin\SpmbConfigController@destroy')->name('spmb.config.destroy');
-    Route::get('spmb/config/{spmbConfig}/edit', 'Admin\SpmbConfigController@edit')->name('spmb.config.edit');
-    Route::get('spmb/config/{spmbConfig}', 'Admin\SpmbConfigController@show')->name('spmb.config.show');
+        // SPMB Config
+        Route::resource('spmb.config', 'Admin\SpmbConfigController');
     });
 });
