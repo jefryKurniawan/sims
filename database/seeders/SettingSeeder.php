@@ -18,6 +18,7 @@ class SettingSeeder extends Seeder
         $user = User::where('role','Admin')->first();
         Setting::create([
             'isEmail'   => false,
+            'tema'      => 'navy',
             'user_id'   => $user->id
         ]);
 

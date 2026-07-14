@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             SaranaPrasaranaSeeder::class, // added
             DispensasiSeeder::class,
             BukuSeeder::class, // added (perpustakaan buku)
+            PrestasiSeeder::class,
             EventSeeder::class,
             SpmbApplicantSeeder::class,
             SpmbAfirmasiSeeder::class,

@@ -102,9 +102,30 @@ class Siswa extends Model
         return $this->hasMany(SppTagihan::class);
     }
 
-    public function raporSiswa()
+   public function raporSiswa()
+   {
+       return $this->hasMany(RaporSiswa::class, 'siswa_id');
+    }
+
+   // === Buku Induk Digital (PRD Section 23) ===
+    public function bukuInduk()
     {
-        return $this->hasMany(RaporSiswa::class, 'siswa_id');
+        return $this->hasOne(BukuIndukSiswa::class);
+    }
+
+    public function rekamMedis()
+    {
+        return $this->hasOne(RekamMedisSiswa::class);
+    }
+
+    public function orangTuaDetails()
+    {
+        return $this->hasMany(OrangTuaDetail::class);
+    }
+
+    public function mutasis()
+    {
+        return $this->hasMany(MutasiSiswa::class);
     }
 
     public function scopeFilter($query, $filters)
