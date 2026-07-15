@@ -44,8 +44,20 @@ class SpmbConfigController extends Controller
 
     public function show(Request $request, SpmbConfig $spmbConfig)
     {
+        $config = [
+            'id' => $spmbConfig->id,
+            'tahun_ajaran' => $spmbConfig->tahun_ajaran,
+            'tanggal_buka' => $spmbConfig->tanggal_buka ? $spmbConfig->tanggal_buka->format('Y-m-d') : '',
+            'tanggal_tutup' => $spmbConfig->tanggal_tutup ? $spmbConfig->tanggal_tutup->format('Y-m-d') : '',
+            'kuota_reguler' => $spmbConfig->kuota_reguler,
+            'kuota_afirmasi' => $spmbConfig->kuota_afirmasi,
+            'kuota_prestasi' => $spmbConfig->kuota_prestasi,
+            'biaya_pendaftaran' => $spmbConfig->biaya_pendaftaran,
+            'aktif' => (bool) $spmbConfig->aktif,
+        ];
+
         return Inertia::render('Admin/Spmb/Config/Show', [
-            'config' => $spmbConfig,
+            'config' => $config,
         ]);
     }
 
@@ -56,11 +68,11 @@ class SpmbConfigController extends Controller
             'tahun_ajaran' => $spmbConfig->tahun_ajaran,
             'tanggal_buka' => $spmbConfig->tanggal_buka ? $spmbConfig->tanggal_buka->format('Y-m-d') : '',
             'tanggal_tutup' => $spmbConfig->tanggal_tutup ? $spmbConfig->tanggal_tutup->format('Y-m-d') : '',
-            'kuota_reguler' => $spmbConfig->kuota_reguler,
-            'kuota_afirmasi' => $spmbConfig->kuota_afirmasi,
-            'kuota_prestasi' => $spmbConfig->kuota_prestasi,
-            'biaya_pendaftaran' => $spmbConfig->biaya_pendaftaran,
-            'aktif' => $spmbConfig->aktif,
+            'kuota_reguler' => (int) $spmbConfig->kuota_reguler,
+            'kuota_afirmasi' => (int) $spmbConfig->kuota_afirmasi,
+            'kuota_prestasi' => (int) $spmbConfig->kuota_prestasi,
+            'biaya_pendaftaran' => (int) $spmbConfig->biaya_pendaftaran,
+            'aktif' => (bool) $spmbConfig->aktif,
         ];
 
         return Inertia::render('Admin/Spmb/Config/Edit', [

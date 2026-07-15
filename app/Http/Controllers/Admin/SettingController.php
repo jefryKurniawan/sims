@@ -68,51 +68,43 @@ class SettingController extends Controller
     {
         $request->validate([
             // Profile Sekolah
-            'nama_sekolah' => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
+            'nama_sekolah' => 'sometimes|required|string|max:255',
+            'alamat' => 'sometimes|required|string|max:255',
             'logo_url' => 'nullable|string|max:255',
             'facebook' => 'nullable|string|max:255',
             'twitter' => 'nullable|string|max:255',
             'instagram' => 'nullable|string|max:255',
             // Legalitas
-            'npsn' => 'required|string|max:255',
-            'akreditasi' => 'required|string|max:50',
-            'nama_kepala_sekolah' => 'required|string|max:255',
-            'nip_kepala_sekolah' => 'required|string|max:255',
+            'npsn' => 'sometimes|required|string|max:255',
+            'akreditasi' => 'sometimes|required|string|max:50',
+            'nama_kepala_sekolah' => 'sometimes|required|string|max:255',
+            'nip_kepala_sekolah' => 'sometimes|required|string|max:255',
             // Tema
-            'tema' => 'required|in:navy,emerald',
+            'tema' => 'sometimes|required|in:navy,emerald,amber,rose,indigo',
             // Hero
-            'hero_media_type' => 'required|in:foto,video',
+            'hero_media_type' => 'sometimes|required|in:foto,video',
             'hero_media_url' => 'nullable|string|max:255',
         ]);
 
-        // Update Profile Sekolah
-        $profile = ProfileSekolah::first();
-        if (!$profile) {
-            $profile = new ProfileSekolah();
+        // Update Profile Sekolah — only if fields present
+        $profileFields = ['nama_sekolah', 'alamat', 'logo_url', 'facebook', 'twitter', 'instagram'];
+        if ($request->hasAny($profileFields)) {
+            $profile = ProfileSekolah::first() ?? new ProfileSekolah();
+            foreach ($profileFields as $f) {
+                if ($request->has($f)) $profile->{$f} = $request->{$f};
+            }
+            $profile->save();
         }
-        $profile->nama_sekolah = $request->nama_sekolah;
-        $profile->alamat = $request->alamat;
-        $profile->logo = $request->logo_url;
-        $profile->facebook = $request->facebook;
-        $profile->twitter = $request->twitter;
-        $profile->instagram = $request->instagram;
-        $profile->save();
 
-        // Update Setting
-        $setting = Setting::where('user_id', auth()->id())->first();
-        if (!$setting) {
-            $setting = new Setting();
-            $setting->user_id = auth()->id();
+        // Update Setting — only if fields present
+        $settingFields = ['npsn', 'akreditasi', 'nama_kepala_sekolah', 'nip_kepala_sekolah', 'tema', 'hero_media_type', 'hero_media_url'];
+        if ($request->hasAny($settingFields)) {
+            $setting = Setting::where('user_id', auth()->id())->first() ?? new Setting(['user_id' => auth()->id()]);
+            foreach ($settingFields as $f) {
+                if ($request->has($f)) $setting->{$f} = $request->{$f};
+            }
+            $setting->save();
         }
-        $setting->npsn = $request->npsn;
-        $setting->akreditasi = $request->akreditasi;
-        $setting->nama_kepala_sekolah = $request->nama_kepala_sekolah;
-        $setting->nip_kepala_sekolah = $request->nip_kepala_sekolah;
-        $setting->tema = $request->tema;
-        $setting->hero_media_type = $request->hero_media_type;
-        $setting->hero_media_url = $request->hero_media_url;
-        $setting->save();
 
         return redirect()->route('settings')->with('success', 'Pengaturan berhasil disimpan.');
     }

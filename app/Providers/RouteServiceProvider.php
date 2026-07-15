@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Models\SpmbConfig;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Explicit binding: {config} route param -> SpmbConfig model
+        Route::bind('config', fn ($value) => SpmbConfig::findOrFail($value));
+
         $this->configureRateLimiting();
 
         $this->routes(function () {

@@ -1,8 +1,8 @@
-import { Head, Link, usePage } from '@inertiajs/inertia-react';
-import { Inertia } from '@inertiajs/inertia';
-import AdminTable from '@/Components/AdminTable';
-import type { Column } from '@/Components/AdminTable';
-import { Search, BookOpen, CheckCircle2, XCircle } from 'lucide-react';
+import { Head, Link, usePage } from "@inertiajs/inertia-react";
+import { Inertia } from "@inertiajs/inertia";
+import AdminTable from "@/Components/AdminTable";
+import type { Column } from "@/Components/AdminTable";
+import { Search, BookOpen, CheckCircle2, XCircle } from "lucide-react";
 
 interface BukuStatus {
     has_profil: boolean;
@@ -26,50 +26,85 @@ export default function Index() {
 
     const columns: Column[] = [
         {
-            key: 'nama_lengkap',
-            label: 'Nama Siswa',
+            key: "nama_lengkap",
+            label: "Nama Siswa",
             render: (_v: unknown, row: SiswaItem) => (
-                <Link href={route('buku-induk.show', row.id)} className="font-medium text-primary hover:underline">
+                <Link
+                    href={route("buku-induk.show", row.id)}
+                    className="font-medium text-primary hover:underline"
+                >
                     {row.nama_lengkap}
                 </Link>
             ),
         },
-        { key: 'nisn', label: 'NISN', render: (v: string) => v || '-', className: 'w-28' },
-        { key: 'nis', label: 'NIS', render: (v: string) => v || '-', className: 'w-28' },
         {
-            key: 'status',
-            label: 'Status',
-            className: 'w-24',
+            key: "nisn",
+            label: "NISN",
+            render: (v: string) => v || "-",
+            className: "w-28",
+        },
+        {
+            key: "nis",
+            label: "NIS",
+            render: (v: string) => v || "-",
+            className: "w-28",
+        },
+        {
+            key: "status",
+            label: "Status",
+            className: "w-24",
             render: (_v: unknown, row: SiswaItem) => {
                 const colors: Record<string, string> = {
-                    aktif: 'bg-emerald-100 text-emerald-700',
-                    lulus: 'bg-blue-100 text-blue-700',
-                    pindah: 'bg-amber-100 text-amber-700',
-                    keluar: 'bg-destructive/10 text-destructive',
+                    aktif: "bg-emerald-100 text-emerald-700",
+                    lulus: "bg-blue-100 text-blue-700",
+                    pindah: "bg-amber-100 text-amber-700",
+                    keluar: "bg-destructive/10 text-destructive",
                 };
                 return (
-                    <span className={'inline-flex px-2 py-0.5 text-xs font-medium rounded-full ' + (colors[row.status] || 'bg-gray-100 text-gray-700')}>
+                    <span
+                        className={
+                            "inline-flex px-2 py-0.5 text-xs font-medium rounded-full " +
+                            (colors[row.status] || "bg-gray-100 text-gray-700")
+                        }
+                    >
                         {row.status}
                     </span>
                 );
             },
         },
         {
-            key: 'kelengkapan',
-            label: 'Kelengkapan',
-            className: 'w-48',
+            key: "kelengkapan",
+            label: "Kelengkapan",
+            className: "w-48",
             render: (_v: unknown, row: SiswaItem) => {
-                const b: BukuStatus = row.buku_induk || { has_profil: false, has_rekam_medis: false, has_orang_tua: false, has_mutasi: false };
+                const b: BukuStatus = row.buku_induk || {
+                    has_profil: false,
+                    has_rekam_medis: false,
+                    has_orang_tua: false,
+                    has_mutasi: false,
+                };
                 const items = [
-                    { label: 'P', ok: b.has_profil },
-                    { label: 'M', ok: b.has_rekam_medis },
-                    { label: 'O', ok: b.has_orang_tua },
+                    { label: "P", ok: b.has_profil },
+                    { label: "M", ok: b.has_rekam_medis },
+                    { label: "O", ok: b.has_orang_tua },
                 ];
                 return (
                     <div className="flex gap-1">
                         {items.map((it) => (
-                            <span key={it.label} className={'inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium rounded ' + (it.ok ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-400')}>
-                                {it.ok ? <CheckCircle2 className="h-2.5 w-2.5" /> : <XCircle className="h-2.5 w-2.5" />}
+                            <span
+                                key={it.label}
+                                className={
+                                    "inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium rounded " +
+                                    (it.ok
+                                        ? "bg-emerald-50 text-emerald-700"
+                                        : "bg-gray-100 text-gray-400")
+                                }
+                            >
+                                {it.ok ? (
+                                    <CheckCircle2 className="h-2.5 w-2.5" />
+                                ) : (
+                                    <XCircle className="h-2.5 w-2.5" />
+                                )}
                                 {it.label}
                             </span>
                         ))}
@@ -85,8 +120,13 @@ export default function Index() {
             <div className="p-4 lg:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                     <div>
-                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Buku Induk Digital</h1>
-                        <p className="text-sm text-gray-500 mt-0.5">Profil lengkap, rekam medis, data orang tua, dan riwayat mutasi siswa</p>
+                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">
+                            Buku Induk Digital
+                        </h1>
+                        <p className="text-sm text-gray-500 mt-0.5">
+                            Profil lengkap, rekam medis, data orang tua, dan
+                            riwayat mutasi siswa
+                        </p>
                     </div>
                 </div>
 
@@ -107,8 +147,21 @@ export default function Index() {
                             <form
                                 onSubmit={(e) => {
                                     e.preventDefault();
-                                    const q = (e.currentTarget.querySelector('input[name=search]') as HTMLInputElement).value;
-                                    Inertia.get(route('buku-induk.index', { search: q }), {}, { preserveState: true, preserveScroll: true });
+                                    const q = (
+                                        e.currentTarget.querySelector(
+                                            "input[name=search]",
+                                        ) as HTMLInputElement
+                                    ).value;
+                                    Inertia.get(
+                                        route("buku-induk.index", {
+                                            search: q,
+                                        }),
+                                        {},
+                                        {
+                                            preserveState: true,
+                                            preserveScroll: true,
+                                        },
+                                    );
                                 }}
                                 className="flex gap-2"
                             >
@@ -117,12 +170,15 @@ export default function Index() {
                                     <input
                                         type="search"
                                         name="search"
-                                        defaultValue={filters?.search ?? ''}
+                                        defaultValue={filters?.search ?? ""}
                                         placeholder="Cari nama / NIS / NISN..."
                                         className="w-full pl-10 pr-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
                                     />
                                 </div>
-                                <button type="submit" className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition shadow-sm">
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition shadow-sm"
+                                >
                                     Cari
                                 </button>
                             </form>

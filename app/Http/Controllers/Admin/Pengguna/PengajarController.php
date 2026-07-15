@@ -18,7 +18,7 @@ class PengajarController extends Controller
      */
     public function index()
     {
-        $pengajar = User::with('userDetail')->where('role', 'Guru')->get();
+        $pengajar = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['guru'])->get();
 
         return Inertia::render('Admin/Pengguna/Pengajar/Index', [
             'pengajar' => $pengajar,
@@ -89,7 +89,7 @@ class PengajarController extends Controller
      */
     public function show($id)
     {
-        $pengajar = User::with('userDetail')->where('role', 'Guru')->findOrFail($id);
+        $pengajar = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['guru'])->findOrFail($id);
 
         return Inertia::render('Admin/Pengguna/Pengajar/Show', [
             'pengajar' => $pengajar,
@@ -101,7 +101,7 @@ class PengajarController extends Controller
      */
     public function edit($id)
     {
-        $pengajar = User::with('userDetail')->where('role', 'Guru')->findOrFail($id);
+        $pengajar = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['guru'])->findOrFail($id);
 
         return Inertia::render('Admin/Pengguna/Pengajar/Edit', [
             'pengajar' => $pengajar,
@@ -114,7 +114,7 @@ class PengajarController extends Controller
     public function update(PengajarRequest $request, $id)
     {
         try {
-            $pengajar = User::with('userDetail')->where('role', 'Guru')->findOrFail($id);
+            $pengajar = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['guru'])->findOrFail($id);
 
             $nama_img = $pengajar->foto_profile;
             if ($request->hasFile('foto_profile')) {
@@ -169,7 +169,7 @@ class PengajarController extends Controller
     public function destroy($id)
     {
         try {
-            $pengajar = User::with('userDetail')->where('role', 'Guru')->findOrFail($id);
+            $pengajar = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['guru'])->findOrFail($id);
 
             if ($pengajar->foto_profile) {
                 Storage::delete('public/images/profile/' . $pengajar->foto_profile);

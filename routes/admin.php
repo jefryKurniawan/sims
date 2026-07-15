@@ -13,15 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('guest')->group(function () {
-    Route::get('/', function () {
-        return view('auth.login');
-    });
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/home', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
-});
 
 // ======= DASHBOARD & ADMIN (Authenticated) =======
 Route::middleware('auth')->prefix('dashboard')->group(function () {
@@ -34,14 +25,14 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::middleware('role:Guest')->group(function () {});
 
     // ====== MAIN DASHBOARD ======
-    Route::get('/', 'Admin\HomeController@index')->name('dashboard');
+    Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
 
     // ====== PROFILE SETTINGS ======
     Route::resource('profile-settings', 'Admin\ProfileController');
     Route::put('profile-settings/change-password/{id}', 'Admin\ProfileController@changePassword')->name('profile.change-password');
 
     // ====== SETTINGS ======
-    Route::prefix('settings')->group(function () {
+    Route::middleware('role:Admin')->prefix('settings')->group(function () {
         Route::get('/', 'Admin\SettingController@index')->name('settings');
         Route::post('add-bank', 'Admin\SettingController@addBank')->name('settings.add.bank');
         Route::put('notifications/{id}', 'Admin\SettingController@notifications')->name('settings.notifications');
@@ -56,7 +47,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     // ====== ADMIN-ONLY ROUTES ======
     Route::middleware('role:Admin')->group(function () {
         // MVP 1 – Siswa CRUD (soft delete)
-        Route::resource('siswa', 'Admin\\SiswaController');
+        Route::resource('siswa', 'Admin\SiswaController');
         // PPDB
         Route::get('ppdb/seleksi', 'Admin\CalonSiswaController@seleksiForm')->name('ppdb.seleksi.form');
         Route::get('ppdb/statistik', 'Admin\CalonSiswaController@statistik')->name('ppdb.statistik');
@@ -100,6 +91,19 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::resource('users/ppdb', 'Admin\Pengguna\PPDBController', ['as' => 'users']);
         Route::resource('users/perpus', 'Admin\Pengguna\PerpusController', ['as' => 'users']);
         Route::resource('users/bendahara', 'Admin\Pengguna\BendaharaController', ['as' => 'users']);
+
+
+        // === Buku Induk Digital (PRD Section 23) ===
+        Route::get('buku-induk', 'Admin\BukuIndukController@index')->name('buku-induk.index');
+        Route::get('buku-induk/{siswa}', 'Admin\BukuIndukController@show')->name('buku-induk.show');
+        Route::get('buku-induk/{siswa}/cetak', 'Admin\BukuIndukController@cetak')->name('buku-induk.cetak');
+        Route::post('buku-induk/{siswa}/profil', 'Admin\BukuIndukController@updateProfil')->name('buku-induk.update-profil');
+        Route::post('buku-induk/{siswa}/rekam-medis', 'Admin\BukuIndukController@updateRekamMedis')->name('buku-induk.update-rekam-medis');
+        Route::post('buku-induk/{siswa}/orang-tua', 'Admin\BukuIndukController@storeOrangTua')->name('buku-induk.store-orang-tua');
+        Route::put('buku-induk/{siswa}/orang-tua/{orangTua}', 'Admin\BukuIndukController@updateOrangTua')->name('buku-induk.update-orang-tua');
+        Route::delete('buku-induk/{siswa}/orang-tua/{orangTua}', 'Admin\BukuIndukController@destroyOrangTua')->name('buku-induk.destroy-orang-tua');
+        Route::post('buku-induk/{siswa}/mutasi', 'Admin\BukuIndukController@storeMutasi')->name('buku-induk.store-mutasi');
+        Route::delete('buku-induk/{siswa}/mutasi/{mutasi}', 'Admin\BukuIndukController@destroyMutasi')->name('buku-induk.destroy-mutasi');
 
         // Prestasi Siswa
         Route::resource('prestasi', 'Admin\PrestasiController', ['as' => 'admin']);
@@ -191,6 +195,45 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         // SPP
         Route::resource('spp', 'Admin\SppController');
         // SPMB Config
-        Route::resource('spmb.config', 'Admin\SpmbConfigController');
+        // Laporan (Reports)
+        Route::prefix("laporan")->name("laporan.")->group(function () {
+            Route::get("/", "Admin\LaporanController@index")->name("index");
+            Route::get("siswa", "Admin\LaporanController@siswa")->name("siswa");
+            Route::get("spp", "Admin\LaporanController@spp")->name("spp");
+            Route::get("alumni", "Admin\LaporanController@alumni")->name("alumni");
+            Route::get("gtk", "Admin\LaporanController@gtk")->name("gtk");
+            Route::get("perpustakaan", "Admin\LaporanController@perpustakaan")->name("perpustakaan");
+            Route::get("sarana", "Admin\LaporanController@sarana")->name("sarana");
+            Route::get("spmb", "Admin\LaporanController@spmb")->name("spmb");
+            Route::get("prestasi", "Admin\LaporanController@prestasi")->name("prestasi");
+            Route::get("dispensasi", "Admin\LaporanController@dispensasi")->name("dispensasi");
+            Route::get("erapor", "Admin\LaporanController@erapor")->name("erapor");
+            Route::get("{report}/export", "Admin\\LaporanController@export")->name("export");
+            Route::get("{report}/print", "Admin\\LaporanController@print")->name("print");
+        });
+        Route::prefix('spmb')->as('spmb.')->group(function () {
+            Route::resource('config', 'Admin\SpmbConfigController');
+        });
+    });
+
+    // ====== TU MANAGEMENT (Admin & Staf TU) ======
+    Route::middleware('role:Admin|TU|Staf')->prefix('tu')->name('tu.')->group(function () {
+        Route::resource('surat-masuk', 'Admin\SuratMasukController')->names('surat-masuk');
+        Route::post('surat-masuk/{suratMasuk}/disposisi', 'Admin\SuratMasukController@disposisiStore')->name('surat-masuk.disposisi');
+        Route::put('surat-masuk/{suratMasuk}/arsipkan', 'Admin\SuratMasukController@arsipkan')->name('surat-masuk.arsipkan');
+
+        Route::resource('surat-keluar', 'Admin\SuratKeluarController')->names('surat-keluar');
+        Route::put('surat-keluar/{suratKeluar}/arsipkan', 'Admin\SuratKeluarController@arsipkan')->name('surat-keluar.arsipkan');
+
+        Route::resource('arsip-akreditasi', 'Admin\ArsipAkreditasiController')->names('arsip-akreditasi');
+        Route::get('arsip-akreditasi/tree/{tahunAjaran}', 'Admin\ArsipAkreditasiController@tree')->name('arsip-akreditasi.tree');
+
+        // NISN Management
+        Route::get('nisn-management', 'Admin\NisnManagementController@index')->name('nisn-management.index');
+        Route::get('nisn-management/{siswa}', 'Admin\NisnManagementController@show')->name('nisn-management.show');
+        Route::post('nisn-management/{siswa}/verify', 'Admin\NisnManagementController@verify')->name('nisn-management.verify');
+        Route::post('nisn-management/{siswa}/regenerate', 'Admin\NisnManagementController@regenerate')->name('nisn-management.regenerate');
+        Route::post('nisn-management/bulk-regenerate', 'Admin\NisnManagementController@bulkRegenerate')->name('nisn-management.bulk-regenerate');
+        Route::post('nisn-management/sync-dapodik', 'Admin\NisnManagementController@syncDapodik')->name('nisn-management.sync-dapodik');
     });
 });

@@ -20,7 +20,7 @@ class PPDBController extends Controller
      */
     public function index()
     {
-        $users = User::with('userDetail')->where('role','PPDB')->get();
+        $users = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['ppdb'])->get();
         return Inertia::render('Admin/Ppdb/Index', [
             'users' => $users,
         ]);

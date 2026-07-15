@@ -45,7 +45,7 @@ class PageController extends Controller
         $video = Video::first();
         $pengajar = User::with('userDetail')
             ->whereHas('userDetail')
-            ->where('role', 'guru')
+            ->whereRaw('LOWER(role) = ?', ['guru'])
             ->get();
 
         return Inertia::render('Frontend/Index', array_merge([

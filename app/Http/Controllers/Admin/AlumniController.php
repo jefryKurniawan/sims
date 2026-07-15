@@ -80,7 +80,7 @@ class AlumniController extends Controller
     public function create()
     {
         $assignedUserIds = Alumni::pluck('user_id');
-        $users = User::where('role', 'alumni')
+        $users = User::whereRaw('LOWER(role) = ?', ['alumni'])
             ->orWhereNotIn('id', $assignedUserIds)
             ->get(['id', 'name', 'email']);
 
@@ -118,7 +118,7 @@ class AlumniController extends Controller
         $users = User::where('id', $alumni->user_id)
             ->orWhere(function ($query) use ($assignedUserIds) {
                 $query->whereNotIn('id', $assignedUserIds)
-                      ->where('role', 'alumni');
+                      ->whereRaw('LOWER(role) = ?', ['alumni']);
             })
             ->get(['id', 'name', 'email']);
 

@@ -20,7 +20,7 @@ class PerpusController extends Controller
      */
     public function index()
     {
-        $perpus = User::with('userDetail')->where('role','Perpustakaan')->get();
+        $perpus = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['perpustakaan'])->get();
         return Inertia::render('Admin/Perpustakaan/Index', [
             'perpus' => $perpus,
         ]);

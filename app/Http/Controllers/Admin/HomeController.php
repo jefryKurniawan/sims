@@ -17,24 +17,24 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $role = $user->role ?? '';
+        $role = strtolower($user->role ?? '');
 
         // Redirect Guest/PPDB to dashboard
-        if ($role == 'Guest' || $role == 'PPDB') {
+        if ($role == 'guest' || $role == 'ppdb') {
             return redirect()->route('dashboard');
         }
 
         $data = [];
 
         if ($role == 'admin') {
-            $data['guru'] = User::where('role', 'guru')->count();
-            $data['murid'] = User::where('role', 'murid')->count();
-            $data['alumni'] = User::where('role', 'alumni')->count();
+            $data['guru'] = User::whereRaw('LOWER(role) = ?', ['guru'])->count();
+            $data['murid'] = User::whereRaw('LOWER(role) = ?', ['murid'])->count();
+            $data['alumni'] = User::whereRaw('LOWER(role) = ?', ['alumni'])->count();
             $data['event'] = Events::where('is_active', '0')->first();
             $data['acara'] = Events::where('is_active', '0')->count(); // total active events
-            $data['book'] = Book::sum('stock');
-            $data['borrow'] = Borrowing::whereNull('lateness')->count();
-            $data['member'] = Member::where('is_active', 0)->count();
+            $data['book'] = Book::sum('stok');
+            $data['borrow'] = Borrowing::whereNull('tanggal_kembali')->count();
+            $data['member'] = Member::where('status', 'nonaktif')->count();
         } elseif ($role == 'murid') {
             $authId = Auth::id();
             $data['event'] = Events::where('is_active', '0')->first();
@@ -44,7 +44,7 @@ class HomeController extends Controller
                         $a->where('user_id', $authId);
                     });
                 })
-                ->whereNull('lateness')
+                ->whereNull('tanggal_kembali')
                 ->count();
             $data['pinjam'] = Borrowing::with('members')
                 ->when($authId, function ($q) use ($authId) {
@@ -56,9 +56,9 @@ class HomeController extends Controller
         } elseif ($role == 'guru' || $role == 'staf') {
             $data['event'] = Events::where('is_active', '0')->first();
         } elseif ($role == 'perpustakaan') {
-            $data['book'] = Book::sum('stock');
-            $data['borrow'] = Borrowing::whereNull('lateness')->count();
-            $data['member'] = Member::where('is_active', 0)->count();
+            $data['book'] = Book::sum('stok');
+            $data['borrow'] = Borrowing::whereNull('tanggal_kembali')->count();
+            $data['member'] = Member::where('status', 'nonaktif')->count();
             $data['members'] = Member::count();
         }
         // For other roles (including empty role), we pass empty data

@@ -7,6 +7,12 @@ use App\Models\CalonSiswa;
 use App\Observers\CalonSiswaObserver;
 use App\Models\Alumni;
 use App\Observers\AlumniObserver;
+use App\Models\Siswa;
+use App\Observers\SiswaObserver;
+use App\Models\SuratMasuk;
+use App\Observers\SuratMasukObserver;
+use App\Models\SuratKeluar;
+use App\Observers\SuratKeluarObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +31,8 @@ class AppServiceProvider extends ServiceProvider
     {
         CalonSiswa::observe(CalonSiswaObserver::class);
         Alumni::observe(AlumniObserver::class);
+        Siswa::observe(SiswaObserver::class);
+        SuratMasuk::observe(SuratMasukObserver::class);
+        SuratKeluar::observe(SuratKeluarObserver::class);
     }
 }

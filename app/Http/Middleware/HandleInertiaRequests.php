@@ -13,6 +13,8 @@ class HandleInertiaRequests extends Middleware
 
     public function handle($request, Closure $next)
     {
+        $setting = $request->user() ? \App\Models\Setting::where('user_id', $request->user()->id)->first() : null;
+
         Inertia::share([
             'auth' => [
                 'user' => $request->user()
@@ -24,6 +26,17 @@ class HandleInertiaRequests extends Middleware
                 'error' => $request->session()->get('error'),
                 'warning' => $request->session()->get('warning'),
                 'info' => $request->session()->get('info'),
+            ],
+            'setting' => $setting ? [
+                'tema' => $setting->tema ?? 'navy',
+                'hero_media_type' => $setting->hero_media_type ?? 'foto',
+                'hero_media_url' => $setting->hero_media_url ?? '',
+                'npsn' => $setting->npsn,
+                'akreditasi' => $setting->akreditasi,
+            ] : [
+                'tema' => 'navy',
+                'hero_media_type' => 'foto',
+                'hero_media_url' => '',
             ],
         ]);
 

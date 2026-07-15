@@ -21,7 +21,7 @@ class BendaharaController extends Controller
      */
     public function index()
     {
-        $bendahara = User::with('userDetail')->where('role','Bendahara')->get();
+        $bendahara = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['bendahara'])->get();
         return Inertia::render('Admin/Bendahara/Index', [
             'bendahara' => $bendahara,
         ]);
@@ -113,7 +113,7 @@ class BendaharaController extends Controller
      */
     public function edit($id)
     {
-        $bendahara = User::with('userDetail')->where('role','Bendahara')->find($id);
+        $bendahara = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['bendahara'])->find($id);
         return Inertia::render('Admin/Bendahara/Edit', [
             'bendahara' => $bendahara,
         ]);

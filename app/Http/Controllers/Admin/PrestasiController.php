@@ -41,9 +41,9 @@ class PrestasiController extends Controller
         return inertia('Admin/Prestasi/Index', [
             'prestasis' => $prestasis,
             'filters' => [
-                'jenis' => $request->jenis,
-                'tingkat' => $request->tingkat,
-                'search' => $request->search,
+                'jenis' => $request->jenis ?? '',
+                'tingkat' => $request->tingkat ?? '',
+                'search' => $request->search ?? '',
             ],
             'jenisList' => $jenisList,
         ]);

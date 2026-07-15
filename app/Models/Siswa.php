@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\AuditLog; // ponytail: added missing import for AuditLog
+use App\Models\AuditLog;
+use App\Models\NisnSyncLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,8 +11,7 @@ use Illuminate\Support\Str;
 
 class Siswa extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'siswa';
 
@@ -44,9 +44,18 @@ class Siswa extends Model
         parent::boot();
 
         static::creating(function ($siswa) {
-            // Generate unique student ID if not provided
             if (!$siswa->user_id) {
                 $siswa->user_id = null;
+            }
+
+            // Auto-generate NISN if empty
+            if (empty($siswa->nisn)) {
+                $siswa->nisn = static::generateNisn();
+            }
+
+            // Auto-generate NIS if empty
+            if (empty($siswa->nis)) {
+                $siswa->nis = static::generateNis();
             }
         });
 
@@ -69,6 +78,41 @@ class Siswa extends Model
                 'Data siswa diperbarui: ' . $siswa->nama_lengkap
             );
         });
+    }
+
+    /**
+     * Generate unique 10-digit NISN
+     * Format: 4-digit year + 6-digit sequence
+     * Example: 2025000001
+     */
+    public static function generateNisn(): string
+    {
+        $year = now()->format('Y');
+        $prefix = $year;
+        
+        $last = static::where('nisn', 'like', $prefix . '%')
+            ->orderBy('nisn', 'desc')
+            ->first();
+        
+        if ($last) {
+            $lastNumber = (int) substr($last->nisn, 4);
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1;
+        }
+        
+        return $prefix . Str::padLeft((string) $nextNumber, 6, '0');
+    }
+
+    /**
+     * Generate unique NIS (local school number)
+     * Format: 6-digit sequence
+     */
+    public static function generateNis(): string
+    {
+        $last = static::max('nis');
+        $nextNumber = $last ? (int) $last + 1 : 1;
+        return Str::padLeft((string) $nextNumber, 6, '0');
     }
 
     public function user()
@@ -102,12 +146,12 @@ class Siswa extends Model
         return $this->hasMany(SppTagihan::class);
     }
 
-   public function raporSiswa()
-   {
-       return $this->hasMany(RaporSiswa::class, 'siswa_id');
+    public function raporSiswa()
+    {
+        return $this->hasMany(RaporSiswa::class, 'siswa_id');
     }
 
-   // === Buku Induk Digital (PRD Section 23) ===
+    // === Buku Induk Digital (PRD Section 23) ===
     public function bukuInduk()
     {
         return $this->hasOne(BukuIndukSiswa::class);
@@ -126,6 +170,11 @@ class Siswa extends Model
     public function mutasis()
     {
         return $this->hasMany(MutasiSiswa::class);
+    }
+
+    public function nisnSyncLogs()
+    {
+        return $this->hasMany(NisnSyncLog::class);
     }
 
     public function scopeFilter($query, $filters)

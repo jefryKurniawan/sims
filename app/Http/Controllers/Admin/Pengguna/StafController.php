@@ -18,7 +18,7 @@ class StafController extends Controller
      */
     public function index()
     {
-        $staf = User::with('userDetail')->where('role', 'Staf')->get();
+        $staf = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['staf'])->get();
 
         return Inertia::render('Admin/Pengguna/Staf/Index', [
             'staf' => $staf,
@@ -88,7 +88,7 @@ class StafController extends Controller
      */
     public function show($id)
     {
-        $staf = User::with('userDetail')->where('role', 'Staf')->findOrFail($id);
+        $staf = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['staf'])->findOrFail($id);
 
         return Inertia::render('Admin/Pengguna/Staf/Show', [
             'staf' => $staf,
@@ -100,7 +100,7 @@ class StafController extends Controller
      */
     public function edit($id)
     {
-        $staf = User::with('userDetail')->where('role', 'Staf')->findOrFail($id);
+        $staf = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['staf'])->findOrFail($id);
 
         return Inertia::render('Admin/Pengguna/Staf/Edit', [
             'staf' => $staf,
@@ -113,7 +113,7 @@ class StafController extends Controller
     public function update(StafRequest $request, $id)
     {
         try {
-            $staf = User::with('userDetail')->where('role', 'Staf')->findOrFail($id);
+            $staf = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['staf'])->findOrFail($id);
 
             $nama_img = $staf->foto_profile;
             if ($request->hasFile('foto_profile')) {
@@ -167,7 +167,7 @@ class StafController extends Controller
     public function destroy($id)
     {
         try {
-            $staf = User::with('userDetail')->where('role', 'Staf')->findOrFail($id);
+            $staf = User::with('userDetail')->whereRaw('LOWER(role) = ?', ['staf'])->findOrFail($id);
 
             if ($staf->foto_profile) {
                 Storage::delete('public/images/profile/' . $staf->foto_profile);

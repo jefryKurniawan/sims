@@ -82,6 +82,11 @@ class SaranaPrasaranaController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return Inertia::render('Admin/SaranaPrasarana/Create');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
