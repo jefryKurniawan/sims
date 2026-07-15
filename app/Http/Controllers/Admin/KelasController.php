@@ -88,6 +88,17 @@ class KelasController extends Controller
             'jurusan' => $jurusan,
         ]);
     }
+    public function create()
+    {
+        $guru = Guru::select('id', 'nama_lengkap')->get();
+        $jurusan = Jurusan::select('id', 'nama')->get();
+
+        return Inertia::render('Admin/Kelas/Create', [
+            'guru' => $guru,
+            'jurusan' => $jurusan,
+        ]);
+    }
+
 
     public function store(Request $request)
     {
