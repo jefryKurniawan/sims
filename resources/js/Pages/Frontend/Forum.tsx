@@ -1,8 +1,16 @@
 /// <reference types="vite/client" />
-import { Head, Link } from '@inertiajs/inertia-react';
-import Header from '@/Components/Frontend/Header';
-import Footer from '@/Components/Frontend/Footer';
-import { Tags, Plus, Search, User, MessageSquare, Eye, Calendar } from 'lucide-react';
+import { Head, Link } from "@inertiajs/inertia-react";
+import Header from "@/Components/Frontend/Header";
+import Footer from "@/Components/Frontend/Footer";
+import {
+    Tags,
+    Plus,
+    Search,
+    User,
+    MessageSquare,
+    Eye,
+    Calendar,
+} from "lucide-react";
 
 interface ForumTopic {
     id: number;
@@ -20,42 +28,42 @@ export default function Forum() {
     const topics: ForumTopic[] = [
         {
             id: 1,
-            title: 'Tips sukses kuliah di jurusan Teknik Informatika',
-            category: 'Pendidikan',
-            author: 'Ahmad Rizki',
+            title: "Tips sukses kuliah di jurusan Teknik Informatika",
+            category: "Pendidikan",
+            author: "Ahmad Rizki",
             replies: 23,
             views: 456,
-            created_at: '2024-01-15',
-            last_activity: '2024-01-20',
+            created_at: "2024-01-15",
+            last_activity: "2024-01-20",
         },
         {
             id: 2,
-            title: 'Lowongan kerja di Jakarta untuk fresh graduate',
-            category: 'Karir',
-            author: 'Siti Nurhaliza',
+            title: "Lowongan kerja di Jakarta untuk fresh graduate",
+            category: "Karir",
+            author: "Siti Nurhaliza",
             replies: 15,
             views: 328,
-            created_at: '2024-01-18',
-            last_activity: '2024-01-19',
+            created_at: "2024-01-18",
+            last_activity: "2024-01-19",
         },
         {
             id: 3,
-            title: 'Pengalaman memulai bisnis startup di bidang edukasi',
-            category: 'Bisnis',
-            author: 'Budi Santoso',
+            title: "Pengalaman memulai bisnis startup di bidang edukasi",
+            category: "Bisnis",
+            author: "Budi Santoso",
             replies: 31,
             views: 512,
-            created_at: '2024-01-10',
-            last_activity: '2024-01-20',
+            created_at: "2024-01-10",
+            last_activity: "2024-01-20",
         },
     ];
 
     const categories = [
-        { name: 'Semua', count: 156, icon: '📌' },
-        { name: 'Pendidikan', count: 45, icon: '🎓' },
-        { name: 'Karir', count: 38, icon: '💼' },
-        { name: 'Bisnis', count: 27, icon: '💡' },
-        { name: 'Umum', count: 46, icon: '💬' },
+        { name: "Semua", count: 156, icon: "📌" },
+        { name: "Pendidikan", count: 45, icon: "🎓" },
+        { name: "Karir", count: 38, icon: "💼" },
+        { name: "Bisnis", count: 27, icon: "💡" },
+        { name: "Umum", count: 46, icon: "💬" },
     ];
 
     return (
@@ -73,8 +81,13 @@ export default function Forum() {
                                     💬 Forum Diskusi
                                 </span>
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold mb-4">Forum Alumni</h1>
-                            <p className="text-xl text-white/90">Berbagi pengalaman, peluang, dan inspirasi dengan sesama alumni</p>
+                            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                                Forum Alumni
+                            </h1>
+                            <p className="text-xl text-white/90">
+                                Berbagi pengalaman, peluang, dan inspirasi
+                                dengan sesama alumni
+                            </p>
                         </div>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent" />
@@ -124,8 +137,12 @@ export default function Forum() {
                                             <li key={cat.name}>
                                                 <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 transition">
                                                     <span className="flex items-center gap-2">
-                                                        <span className="text-xl">{cat.icon}</span>
-                                                        <span className="text-gray-700">{cat.name}</span>
+                                                        <span className="text-xl">
+                                                            {cat.icon}
+                                                        </span>
+                                                        <span className="text-gray-700">
+                                                            {cat.name}
+                                                        </span>
                                                     </span>
                                                     <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
                                                         {cat.count}
@@ -190,18 +207,31 @@ export default function Forum() {
                                                         </span>
                                                         <span className="flex items-center gap-1">
                                                             <Calendar className="w-4 h-4" />
-                                                            {new Date(topic.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                            {new Date(
+                                                                topic.created_at,
+                                                            ).toLocaleDateString(
+                                                                "id-ID",
+                                                                {
+                                                                    day: "numeric",
+                                                                    month: "short",
+                                                                    year: "numeric",
+                                                                },
+                                                            )}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div className="text-center flex-shrink-0">
                                                     <div className="flex items-center gap-1 text-gray-600 mb-2">
                                                         <MessageSquare className="w-4 h-4" />
-                                                        <span className="font-semibold">{topic.replies}</span>
+                                                        <span className="font-semibold">
+                                                            {topic.replies}
+                                                        </span>
                                                     </div>
                                                     <div className="flex items-center gap-1 text-gray-600">
                                                         <Eye className="w-4 h-4" />
-                                                        <span className="font-semibold">{topic.views}</span>
+                                                        <span className="font-semibold">
+                                                            {topic.views}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>

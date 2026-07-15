@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { usePage } from '@inertiajs/inertia-react';
-import { Link } from '@inertiajs/inertia-react';
+import { useState } from "react";
+import { usePage } from "@inertiajs/inertia-react";
+import { Link } from "@inertiajs/inertia-react";
 
 export default function Header() {
     const { auth } = usePage().props;
@@ -8,11 +8,11 @@ export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const navLinks = [
-        { href: '/', label: 'Beranda' },
-        { href: '/profile-sekolah', label: 'Profile' },
-        { href: '/visi-dan-misi', label: 'Visi & Misi' },
-        { href: '/berita', label: 'Berita' },
-        { href: '/event', label: 'Event' },
+        { href: "/", label: "Beranda" },
+        { href: "/profile-sekolah", label: "Profile" },
+        { href: "/visi-dan-misi", label: "Visi & Misi" },
+        { href: "/berita", label: "Berita" },
+        { href: "/event", label: "Event" },
     ];
 
     return (
@@ -42,14 +42,14 @@ export default function Header() {
                     <div className="flex items-center space-x-3">
                         {auth?.user ? (
                             <Link
-                                href="/home"
+                                href="/dashboard"
                                 className="hidden sm:inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-[#003366] hover:bg-[#002244] transition-colors"
                             >
                                 Dashboard
                             </Link>
                         ) : (
                             <Link
-                                href="/login"
+                                href="/auth/login"
                                 className="hidden sm:inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-[#003366] bg-gray-100 hover:bg-gray-200 transition-colors"
                             >
                                 Login
@@ -60,11 +60,26 @@ export default function Header() {
                             onClick={() => setMenuOpen(!menuOpen)}
                             className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                         >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg
+                                className="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
                                 {menuOpen ? (
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
                                 ) : (
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    />
                                 )}
                             </svg>
                         </button>
@@ -85,7 +100,7 @@ export default function Header() {
                         ))}
                         {auth?.user ? (
                             <Link
-                                href="/home"
+                                href="/dashboard"
                                 className="block px-3 py-2 rounded-md text-sm font-medium text-white bg-[#003366] mt-1"
                                 onClick={() => setMenuOpen(false)}
                             >
@@ -93,7 +108,7 @@ export default function Header() {
                             </Link>
                         ) : (
                             <Link
-                                href="/login"
+                                href="/auth/login"
                                 className="block px-3 py-2 rounded-md text-sm font-medium text-[#003366] bg-gray-100 mt-1"
                                 onClick={() => setMenuOpen(false)}
                             >

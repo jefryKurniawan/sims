@@ -1,38 +1,51 @@
-import { Head, useForm, router } from '@inertiajs/inertia-react';
-import { Button } from '@/components/ui/button';
-import { Table } from '@/components/ui/table';
-import { Tbody,Td, Th, Tr } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
-import { DropdownMenu } from '@/components/ui/dropdown-menu';
-import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal } from 'lucide-react';
-import { Pagination } from '@/Components/Frontend/Pagination';
-import { useState } from 'react';
+import { Head, useForm } from "@inertiajs/inertia-react";
+import { Inertia as router } from "@inertiajs/inertia";
+import { Button } from "@/components/ui/button";
+import { Table } from "@/components/ui/table";
+import { Tbody, Td, Th, Tr } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
+import {
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { Pagination } from "@/Components/Frontend/Pagination";
+import { useState } from "react";
 
 export default function PengajarIndex({ pengajar }) {
-    const { data: formData, setData, post, processing, reset, errors } = useForm({
-        nama: '',
-        email: '',
-        username: '',
-        role: '',
-        status: '',
+    const {
+        data: formData,
+        setData,
+        post,
+        processing,
+        reset,
+        errors,
+    } = useForm({
+        nama: "",
+        email: "",
+        username: "",
+        role: "",
+        status: "",
         foto_profile: null,
-        nip: '',
-        mengajar: '',
-        linkidln: '',
-        instagram: '',
-        website: '',
-        facebook: '',
-        twitter: '',
-        youtube: '',
+        nip: "",
+        mengajar: "",
+        linkidln: "",
+        instagram: "",
+        website: "",
+        facebook: "",
+        twitter: "",
+        youtube: "",
     });
 
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState("");
 
-    const filteredPengajar = pengajar.filter(p =>
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.email.toLowerCase().includes(search.toLowerCase())
+    const filteredPengajar = pengajar.filter(
+        (p) =>
+            p.name.toLowerCase().includes(search.toLowerCase()) ||
+            p.email.toLowerCase().includes(search.toLowerCase()),
     );
 
     const handleSearchChange = (e) => {
@@ -40,14 +53,18 @@ export default function PengajarIndex({ pengajar }) {
     };
 
     const handleDelete = (id) => {
-        if (window.confirm('Apakah Anda yakin ingin menghapus data pengajar ini?')) {
-            router.delete(route('users.pengajar.destroy', id), {
+        if (
+            window.confirm(
+                "Apakah Anda yakin ingin menghapus data pengajar ini?",
+            )
+        ) {
+            router.delete(route("users.pengajar.destroy", id), {
                 onSuccess: () => {
                     // Optionally show a success message
                 },
                 onError: (error) => {
-                    console.error('Delete error:', error);
-                }
+                    console.error("Delete error:", error);
+                },
             });
         }
     };
@@ -58,7 +75,9 @@ export default function PengajarIndex({ pengajar }) {
             <div className="pb-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                     <div>
-                        <h1 className="text-xl font-bold text-gray-800">Data Pengajar</h1>
+                        <h1 className="text-xl font-bold text-gray-800">
+                            Data Pengajar
+                        </h1>
                     </div>
                     <div className="flex flex-wrap items-center gap-4">
                         <div className="flex items-center gap-2">
@@ -67,11 +86,11 @@ export default function PengajarIndex({ pengajar }) {
                                 placeholder="Cari nama atau email..."
                                 value={search}
                                 onChange={handleSearchChange}
-                                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-[200px] sm:w-auto"
+                                className="px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-[200px] sm:w-auto"
                             />
                         </div>
                         <Link
-                            href={route('users.pengajar.create')}
+                            href={route("users.pengajar.create")}
                             className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
                         >
                             Tambah Pengajar
@@ -84,19 +103,38 @@ export default function PengajarIndex({ pengajar }) {
                 <Table className="w-full">
                     <thead>
                         <tr className="bg-gray-50">
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">No</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">Nama</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">Email</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">NIP</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">Mengajar</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">Status</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">Aksi</th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                                No
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                                Nama
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                                Email
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                                NIP
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                                Mengajar
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                                Status
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                                Aksi
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredPengajar.map((peng, index) => (
-                            <tr key={peng.id} className="border-t hover:bg-gray-50">
-                                <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{index + 1}</td>
+                            <tr
+                                key={peng.id}
+                                className="border-t hover:bg-gray-50"
+                            >
+                                <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
+                                    {index + 1}
+                                </td>
                                 <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap flex items-center gap-3">
                                     {peng.foto_profile ? (
                                         <img
@@ -111,12 +149,22 @@ export default function PengajarIndex({ pengajar }) {
                                     )}
                                     <div>{peng.name}</div>
                                 </td>
-                                <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{peng.email}</td>
-                                <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{peng.userDetail?.nip ?? '-'}</td>
-                                <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{peng.userDetail?.mengajar ?? '-'}</td>
+                                <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
+                                    {peng.email}
+                                </td>
+                                <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
+                                    {peng.userDetail?.nip ?? "-"}
+                                </td>
+                                <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
+                                    {peng.userDetail?.mengajar ?? "-"}
+                                </td>
                                 <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
                                     <Badge
-                                        variant={peng.status === 'Aktif' ? 'default' : 'destructive'}
+                                        variant={
+                                            peng.status === "Aktif"
+                                                ? "default"
+                                                : "destructive"
+                                        }
                                         className="text-xs px-2.5 py-0.5"
                                     >
                                         {peng.status}
@@ -129,13 +177,22 @@ export default function PengajarIndex({ pengajar }) {
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent className="w-48 right-0">
                                             <DropdownMenuItem
-                                                onClick={() => router.visit(route('users.pengajar.edit', peng.id))}
+                                                onClick={() =>
+                                                    router.visit(
+                                                        route(
+                                                            "users.pengajar.edit",
+                                                            peng.id,
+                                                        ),
+                                                    )
+                                                }
                                                 className="px-4 py-2 text-sm hover:bg-primary/10"
                                             >
                                                 Edit
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
-                                                onClick={() => handleDelete(peng.id)}
+                                                onClick={() =>
+                                                    handleDelete(peng.id)
+                                                }
                                                 className="px-4 py-2 text-sm text-destructive hover:bg-destructive/10"
                                             >
                                                 Hapus
@@ -147,7 +204,10 @@ export default function PengajarIndex({ pengajar }) {
                         ))}
                         {filteredPengajar.length === 0 ? (
                             <tr>
-                                <td colSpan="7" className="px-4 py-3 text-center text-gray-500">
+                                <td
+                                    colSpan="7"
+                                    className="px-4 py-3 text-center text-gray-500"
+                                >
                                     Tidak ada data pengajar.
                                 </td>
                             </tr>

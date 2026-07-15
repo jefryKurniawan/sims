@@ -1,30 +1,37 @@
-import { Head, usePage, Link, useForm, router } from '@inertiajs/inertia-react';
-import { useState } from 'react';
-import AdminLayout from '@/Layout/AdminLayout';
+import { Head, usePage, Link, useForm } from "@inertiajs/inertia-react";
+import { Inertia as router } from "@inertiajs/inertia";
+import { useState } from "react";
+import AdminLayout from "@/Layout/AdminLayout";
 
 export default function Edit() {
     const { data } = usePage();
     const { event } = data;
-    const { data: formData, put, processing, reset, errors } = useForm({
-        title: event?.title ?? '',
-        slug: event?.slug ?? '',
-        desc: event?.desc ?? '',
-        content: event?.content ?? '',
+    const {
+        data: formData,
+        put,
+        processing,
+        reset,
+        errors,
+    } = useForm({
+        title: event?.title ?? "",
+        slug: event?.slug ?? "",
+        desc: event?.desc ?? "",
+        content: event?.content ?? "",
         thumbnail: null,
-        acara: event?.acara ?? '',
-        lokasi: event?.lokasi ?? '',
-        is_active: event?.is_Active === '1' ? '1' : '0',
+        acara: event?.acara ?? "",
+        lokasi: event?.lokasi ?? "",
+        is_active: event?.is_Active === "1" ? "1" : "0",
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(route('website.event.update', event.id), {
+        put(route("website.event.update", event.id), {
             onSuccess: () => {
-                router.visit(route('website.event.index'), {
+                router.visit(route("website.event.index"), {
                     preserveScroll: true,
-                    only: ['event']
+                    only: ["event"],
                 });
-            }
+            },
         });
     };
 
@@ -40,10 +47,12 @@ export default function Edit() {
             header={
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h1 className="text-xl font-bold text-gray-800">Edit Event</h1>
+                        <h1 className="text-xl font-bold text-gray-800">
+                            Edit Event
+                        </h1>
                     </div>
                     <Link
-                        href={route('website.event.index')}
+                        href={route("website.event.index")}
                         className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
                     >
                         Kembali
@@ -53,95 +62,153 @@ export default function Edit() {
         >
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Title
+                    </label>
                     <input
                         type="text"
                         value={formData.title}
-                        onChange={(e) => { formData.title = e.target.value; }}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.title ? 'border-red-500' : ''}`}
+                        onChange={(e) => {
+                            formData.title = e.target.value;
+                        }}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.title ? "border-destructive" : ""}`}
                         disabled={processing}
                     />
-                    {errors.title && (<p className="mt-1 text-xs text-red-500">{errors.title}</p>)}
+                    {errors.title && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.title}
+                        </p>
+                    )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Slug (opsional)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Slug (opsional)
+                    </label>
                     <input
                         type="text"
                         value={formData.slug}
-                        onChange={(e) => { formData.slug = e.target.value; }}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.slug ? 'border-red-500' : ''}`}
+                        onChange={(e) => {
+                            formData.slug = e.target.value;
+                        }}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.slug ? "border-destructive" : ""}`}
                         disabled={processing}
                     />
-                    {errors.slug && (<p className="mt-1 text-xs text-red-500">{errors.slug}</p>)}
+                    {errors.slug && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.slug}
+                        </p>
+                    )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Deskripsi Singkat</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Deskripsi Singkat
+                    </label>
                     <textarea
                         value={formData.desc}
-                        onChange={(e) => { formData.desc = e.target.value; }}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.desc ? 'border-red-500' : ''}`}
+                        onChange={(e) => {
+                            formData.desc = e.target.value;
+                        }}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.desc ? "border-destructive" : ""}`}
                         rows={3}
                         disabled={processing}
                     />
-                    {errors.desc && (<p className="mt-1 text-xs text-red-500">{errors.desc}</p>)}
+                    {errors.desc && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.desc}
+                        </p>
+                    )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Konten</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Konten
+                    </label>
                     <textarea
                         value={formData.content}
-                        onChange={(e) => { formData.content = e.target.value; }}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.content ? 'border-red-500' : ''}`}
+                        onChange={(e) => {
+                            formData.content = e.target.value;
+                        }}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.content ? "border-destructive" : ""}`}
                         rows={8}
                         disabled={processing}
                     />
-                    {errors.content && (<p className="mt-1 text-xs text-red-500">{errors.content}</p>)}
+                    {errors.content && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.content}
+                        </p>
+                    )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Thumbnail (biarkan kosong jika tidak ingin mengganti)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Thumbnail (biarkan kosong jika tidak ingin mengganti)
+                    </label>
                     <input
                         type="file"
                         accept="image/*"
                         onChange={handleThumbnailChange}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.thumbnail ? 'border-red-500' : ''}`}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.thumbnail ? "border-destructive" : ""}`}
                         disabled={processing}
                     />
-                    {errors.thumbnail && (<p className="mt-1 text-xs text-red-500">{errors.thumbnail}</p>)}
+                    {errors.thumbnail && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.thumbnail}
+                        </p>
+                    )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Acara</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Acara
+                    </label>
                     <input
                         type="text"
                         value={formData.acara}
-                        onChange={(e) => { formData.acara = e.target.value; }}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.acara ? 'border-red-500' : ''}`}
+                        onChange={(e) => {
+                            formData.acara = e.target.value;
+                        }}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.acara ? "border-destructive" : ""}`}
                         disabled={processing}
                     />
-                    {errors.acara && (<p className="mt-1 text-xs text-red-500">{errors.acara}</p>)}
+                    {errors.acara && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.acara}
+                        </p>
+                    )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Lokasi
+                    </label>
                     <input
                         type="text"
                         value={formData.lokasi}
-                        onChange={(e) => { formData.lokasi = e.target.value; }}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.lokasi ? 'border-red-500' : ''}`}
+                        onChange={(e) => {
+                            formData.lokasi = e.target.value;
+                        }}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.lokasi ? "border-destructive" : ""}`}
                         disabled={processing}
                     />
-                    {errors.lokasi && (<p className="mt-1 text-xs text-red-500">{errors.lokasi}</p>)}
+                    {errors.lokasi && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.lokasi}
+                        </p>
+                    )}
                 </div>
 
                 <div className="flex items-center space-x-4">
                     <label className="flex items-center text-sm font-medium text-gray-700">
                         <input
                             type="checkbox"
-                            checked={formData.is_active === '1'}
-                            onChange={(e) => { formData.is_active = e.target.checked ? '1' : '0'; }}
+                            checked={formData.is_active === "1"}
+                            onChange={(e) => {
+                                formData.is_active = e.target.checked
+                                    ? "1"
+                                    : "0";
+                            }}
                         />
                         Aktif
                     </label>
@@ -150,7 +217,9 @@ export default function Edit() {
                 <div className="flex justify-end space-x-6">
                     <button
                         type="button"
-                        onClick={() => router.visit(route('website.event.index'))}
+                        onClick={() =>
+                            router.visit(route("website.event.index"))
+                        }
                         className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
                     >
                         Batal
@@ -160,7 +229,7 @@ export default function Edit() {
                         className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
                         disabled={processing}
                     >
-                        {processing ? 'Mengupdate...' : 'Update'}
+                        {processing ? "Mengupdate..." : "Update"}
                     </button>
                 </div>
             </form>

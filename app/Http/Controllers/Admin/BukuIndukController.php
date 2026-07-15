@@ -12,6 +12,8 @@ use App\Models\MutasiSiswa;
 use App\Models\OrangTuaDetail;
 use App\Models\RekamMedisSiswa;
 use App\Models\Siswa;
+use App\Models\ProfileSekolah;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -88,12 +90,18 @@ class BukuIndukController extends Controller
             'jurusan',
         ]);
 
+        // ponytail: browser-native print-to-PDF, bukan dompdf (YAGNI). Upgrade: pasang dompdf saat butuh batch-email/otomasi server-side.
+        $profile = ProfileSekolah::first();
+        $setting = Setting::where('user_id', auth()->id())->first();
+
         return Inertia::render('Admin/BukuInduk/Cetak', [
             'siswa' => $siswa,
             'bukuInduk' => $siswa->bukuInduk,
             'rekamMedis' => $siswa->rekamMedis,
             'orangTua' => $siswa->orangTuaDetails,
             'mutasi' => $siswa->mutasis,
+            'namaSekolah' => $profile?->nama_sekolah,
+            'namaKepalaSekolah' => $setting?->nama_kepala_sekolah,
         ]);
     }
 

@@ -1,0 +1,1 @@
+import{f as e,r as t,s as n}from"./app2.js";var r=t();function i({className:e,children:t,...n}){return(0,r.jsx)(`label`,{className:e,...n,children:t})}var a=e(n()).forwardRef(({className:e,...t},n)=>(0,r.jsx)(`textarea`,{ref:n,className:e,...t}));a.displayName=`Textarea`;export{i as n,a as t};

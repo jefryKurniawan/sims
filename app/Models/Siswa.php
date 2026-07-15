@@ -177,6 +177,16 @@ class Siswa extends Model
         return $this->hasMany(NisnSyncLog::class);
     }
 
+    public function absensis()
+    {
+        return $this->hasMany(Absensi::class);
+    }
+
+    public function absensiToday()
+    {
+        return $this->hasOne(Absensi::class)->where('tanggal', now()->toDateString());
+    }
+
     public function scopeFilter($query, $filters)
     {
         if (isset($filters['status']) && $filters['status']) {

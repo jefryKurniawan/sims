@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/inertia-react';
+import { Link } from "@inertiajs/inertia-react";
 
 interface PaginationLink {
     url: string | null;
@@ -41,7 +41,7 @@ export default function Pagination({ data }: { data: PaginationProps }) {
                             key={i}
                             href={link.url}
                             className={`join-item btn btn-sm ${
-                                link.active ? 'btn-active' : ''
+                                link.active ? "btn-active" : ""
                             }`}
                             dangerouslySetInnerHTML={{ __html: link.label }}
                             preserveScroll

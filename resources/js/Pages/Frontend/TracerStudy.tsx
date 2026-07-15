@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
-import { Head, Link } from '@inertiajs/inertia-react';
-import Header from '@/Components/Frontend/Header';
-import { ClipboardList, Info, CheckCircle, ArrowRight } from 'lucide-react';
+import { Head, Link } from "@inertiajs/inertia-react";
+import Header from "@/Components/Frontend/Header";
+import { ClipboardList, Info, CheckCircle, ArrowRight } from "lucide-react";
 
 export default function TracerStudy() {
     return (
@@ -19,8 +19,13 @@ export default function TracerStudy() {
                                     📊 Tracer Study
                                 </span>
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold mb-4">Tracer Study Alumni</h1>
-                            <p className="text-xl text-white/90">Bantu kami meningkatkan kualitas pendidikan dengan feedback Anda</p>
+                            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                                Tracer Study Alumni
+                            </h1>
+                            <p className="text-xl text-white/90">
+                                Bantu kami meningkatkan kualitas pendidikan
+                                dengan feedback Anda
+                            </p>
                         </div>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent" />
@@ -64,9 +69,12 @@ export default function TracerStudy() {
                                     <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <ClipboardList className="w-10 h-10 text-emerald-600" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Kuesioner Tracer Study</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                                        Kuesioner Tracer Study
+                                    </h2>
                                     <p className="text-gray-600">
-                                        Partisipasi Anda sangat berharga untuk peningkatan kualitas pendidikan
+                                        Partisipasi Anda sangat berharga untuk
+                                        peningkatan kualitas pendidikan
                                     </p>
                                 </div>
 
@@ -79,19 +87,44 @@ export default function TracerStudy() {
                                     <ul className="space-y-2 text-emerald-700">
                                         <li className="flex items-start gap-2">
                                             <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                                            <span><strong>Status Pekerjaan:</strong> Apakah Anda saat ini bekerja, melanjutkan studi, atau berwirausaha?</span>
+                                            <span>
+                                                <strong>
+                                                    Status Pekerjaan:
+                                                </strong>{" "}
+                                                Apakah Anda saat ini bekerja,
+                                                melanjutkan studi, atau
+                                                berwirausaha?
+                                            </span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                                            <span><strong>Relevansi Kompetensi:</strong> Sejauh mana kompetensi yang dipelajari di sekolah relevan dengan pekerjaan Anda saat ini?</span>
+                                            <span>
+                                                <strong>
+                                                    Relevansi Kompetensi:
+                                                </strong>{" "}
+                                                Sejauh mana kompetensi yang
+                                                dipelajari di sekolah relevan
+                                                dengan pekerjaan Anda saat ini?
+                                            </span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                                            <span><strong>Kepuasan Kerja:</strong> Tingkat kepuasan Anda terhadap pekerjaan saat ini</span>
+                                            <span>
+                                                <strong>Kepuasan Kerja:</strong>{" "}
+                                                Tingkat kepuasan Anda terhadap
+                                                pekerjaan saat ini
+                                            </span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                                            <span><strong>Saran & Masukan:</strong> Rekomendasi Anda untuk peningkatan kualitas pendidikan di sekolah</span>
+                                            <span>
+                                                <strong>
+                                                    Saran & Masukan:
+                                                </strong>{" "}
+                                                Rekomendasi Anda untuk
+                                                peningkatan kualitas pendidikan
+                                                di sekolah
+                                            </span>
                                         </li>
                                     </ul>
                                 </div>
@@ -111,16 +144,28 @@ export default function TracerStudy() {
                             {/* Stats */}
                             <div className="grid md:grid-cols-3 gap-6">
                                 <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl shadow-lg p-6 text-white text-center">
-                                    <div className="text-4xl font-bold mb-2">85%</div>
-                                    <div className="text-sm opacity-90">Alumni Bekerja</div>
+                                    <div className="text-4xl font-bold mb-2">
+                                        85%
+                                    </div>
+                                    <div className="text-sm opacity-90">
+                                        Alumni Bekerja
+                                    </div>
                                 </div>
                                 <div className="bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl shadow-lg p-6 text-white text-center">
-                                    <div className="text-4xl font-bold mb-2">10%</div>
-                                    <div className="text-sm opacity-90">Melanjutkan Studi</div>
+                                    <div className="text-4xl font-bold mb-2">
+                                        10%
+                                    </div>
+                                    <div className="text-sm opacity-90">
+                                        Melanjutkan Studi
+                                    </div>
                                 </div>
                                 <div className="bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl shadow-lg p-6 text-white text-center">
-                                    <div className="text-4xl font-bold mb-2">5%</div>
-                                    <div className="text-sm opacity-90">Berwirausaha</div>
+                                    <div className="text-4xl font-bold mb-2">
+                                        5%
+                                    </div>
+                                    <div className="text-sm opacity-90">
+                                        Berwirausaha
+                                    </div>
                                 </div>
                             </div>
                         </div>

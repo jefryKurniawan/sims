@@ -34,4 +34,14 @@ class Guru extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function absensis()
+    {
+        return $this->hasMany(AbsensiGuru::class);
+    }
+
+    public function absensiToday()
+    {
+        return $this->hasOne(AbsensiGuru::class)->where('tanggal', now()->toDateString());
+    }
 }

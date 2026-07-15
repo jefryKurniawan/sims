@@ -23,7 +23,12 @@ export default function Index() {
     const { berita, kategori, flash, filters } = usePage().props as {
         berita: any;
         kategori: Kategori[];
-        flash: { success?: string; error?: string; message?: string; type?: string };
+        flash: {
+            success?: string;
+            error?: string;
+            message?: string;
+            type?: string;
+        };
         filters: { search?: string };
     };
     const [deleteTarget, setDeleteTarget] = useState<any>(null);
@@ -47,14 +52,20 @@ export default function Index() {
                 />
             ),
         },
-        { key: "kategori", label: "Kategori", render: (_v: any, row: any) => row.kategori?.nama || "-" },
+        {
+            key: "kategori",
+            label: "Kategori",
+            render: (_v: any, row: any) => row.kategori?.nama || "-",
+        },
         {
             key: "is_active",
             label: "Status",
             render: (v: string) => (
                 <span
                     className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                        v === "0" ? "bg-emerald-100 text-emerald-700" : "bg-yellow-100 text-yellow-700"
+                        v === "0"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-yellow-100 text-yellow-700"
                     }`}
                 >
                     {v === "0" ? "Publish" : "Draft"}
@@ -69,12 +80,16 @@ export default function Index() {
             <div className="p-4 lg:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                     <div>
-                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">Berita</h1>
-                        <p className="text-sm text-gray-500 mt-0.5">Kelola berita & pengumuman sekolah</p>
+                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">
+                            Berita
+                        </h1>
+                        <p className="text-sm text-gray-500 mt-0.5">
+                            Kelola berita & pengumuman sekolah
+                        </p>
                     </div>
                     <Link
                         href={route("berita-admin.create")}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition text-sm font-semibold shadow-sm"
                     >
                         Berita Baru
                     </Link>
@@ -82,22 +97,30 @@ export default function Index() {
 
                 {kategori.length === 0 ? (
                     <div className="p-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm">
-                        <h3 className="text-lg font-semibold text-gray-800">Kategori Masih Kosong!</h3>
-                        <p className="mt-2 text-sm text-gray-500">Silakan tambah kategori berita terlebih dahulu.</p>
+                        <h3 className="text-lg font-semibold text-gray-800">
+                            Kategori Masih Kosong!
+                        </h3>
+                        <p className="mt-2 text-sm text-gray-500">
+                            Silakan tambah kategori berita terlebih dahulu.
+                        </p>
                     </div>
                 ) : (
                     <>
                         {(flash?.success || flash?.message) && (
-                            <div className={`mb-4 p-4 rounded-lg text-sm font-medium border ${
-                                flash?.type === "error"
-                                    ? "bg-red-50 text-red-700 border-red-200"
-                                    : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                            }`}>
+                            <div
+                                className={`mb-4 p-4 rounded-lg text-sm font-medium border ${
+                                    flash?.type === "error"
+                                        ? "bg-destructive/10 text-destructive border-destructive/20"
+                                        : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                }`}
+                            >
                                 {flash.success || flash.message}
                             </div>
                         )}
                         {flash?.error && (
-                            <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">{flash.error}</div>
+                            <div className="mb-4 p-4 bg-destructive/10 text-destructive border-destructive/20 rounded-lg text-sm font-medium">
+                                {flash.error}
+                            </div>
                         )}
 
                         <AdminTable
@@ -113,8 +136,19 @@ export default function Index() {
                                 links: berita?.links,
                             }}
                             actions={(row) => [
-                                { icon: "edit", onClick: () => Inertia.visit(route("berita-admin.edit", row.id)), label: "Edit" },
-                                { icon: "delete", onClick: () => setDeleteTarget(row), label: "Hapus" },
+                                {
+                                    icon: "edit",
+                                    onClick: () =>
+                                        Inertia.visit(
+                                            route("berita-admin.edit", row.id),
+                                        ),
+                                    label: "Edit",
+                                },
+                                {
+                                    icon: "delete",
+                                    onClick: () => setDeleteTarget(row),
+                                    label: "Hapus",
+                                },
                             ]}
                         />
 

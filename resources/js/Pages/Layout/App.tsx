@@ -42,11 +42,10 @@ function Flash() {
                 </div>
             )}
             {page.props.flank?.error && (
-                <div className="mb-4 p-4 bg-red-100 dark:bg-red-900 dark:text-red-300 rounded-lg">
+                <div className="mb-4 p-4 bg-destructive/10 dark:bg-destructive/20 dark:text-destructive rounded-lg">
                     {page.props.flank.error}
                 </div>
             )}
         </>
     );
 }
-

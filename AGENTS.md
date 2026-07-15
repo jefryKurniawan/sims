@@ -19,32 +19,32 @@ Sistem manajemen sekolah (Laravel + Inertia.js React). ERP internal yang migrasi
 
 ## Commands
 
-| Task | Command |
-|------|---------|
-| Install PHP deps | `composer install` |
-| Install JS deps | `pnpm install` |
-| Dev server | `pnpm run dev` (Vite HMR) |
-| Build (prod) | `pnpm run build` to public/build/ |
-| Test backend | `php artisan test` |
-| Test frontend | `pnpm test` (Vitest) |
-| Migrate | `php artisan migrate` |
-| Fresh + seed | `php artisan migrate:fresh --seed` |
-| Route check | `php artisan route:list` |
-| Cache (prod) | `php artisan config:cache && php artisan route:cache && php artisan view:cache` |
-| Optimize autoload | `composer install --optimize-autoloader --no-dev` |
+| Task              | Command                                                                         |
+| ----------------- | ------------------------------------------------------------------------------- |
+| Install PHP deps  | `composer install`                                                              |
+| Install JS deps   | `pnpm install`                                                                  |
+| Dev server        | `pnpm run dev` (Vite HMR)                                                       |
+| Build (prod)      | `pnpm run build` to public/build/                                               |
+| Test backend      | `php artisan test`                                                              |
+| Test frontend     | `pnpm test` (Vitest)                                                            |
+| Migrate           | `php artisan migrate`                                                           |
+| Fresh + seed      | `php artisan migrate:fresh --seed`                                              |
+| Route check       | `php artisan route:list`                                                        |
+| Cache (prod)      | `php artisan config:cache && php artisan route:cache && php artisan view:cache` |
+| Optimize autoload | `composer install --optimize-autoloader --no-dev`                               |
 
 ## Structure
 
-| Directory | Purpose |
-|-----------|---------|
-| `app/` | Laravel backend (Models, Controllers, Policies, Observers) |
-| `resources/js/` | React/TSX frontend (Inertia pages, components, store) |
-| `routes/` | Route files per domain (web, admin, frontend, api) |
-| `database/` | Migrations + seeders (must be reversible) |
-| `Modules/` | Legacy nWidart Blade modules coexisting with Inertia |
-| `tests/` | PHPUnit feature/unit tests |
-| `docs/` | Dokumentasi (lean-prd.md = roadmap MVP) |
-| `public/` | Compiled assets, sw.js, manifest.json, offline.html |
+| Directory       | Purpose                                                    |
+| --------------- | ---------------------------------------------------------- |
+| `app/`          | Laravel backend (Models, Controllers, Policies, Observers) |
+| `resources/js/` | React/TSX frontend (Inertia pages, components, store)      |
+| `routes/`       | Route files per domain (web, admin, frontend, api)         |
+| `database/`     | Migrations + seeders (must be reversible)                  |
+| `Modules/`      | Legacy nWidart Blade modules coexisting with Inertia       |
+| `tests/`        | PHPUnit feature/unit tests                                 |
+| `docs/`         | Dokumentasi (lean-prd.md = roadmap MVP)                    |
+| `public/`       | Compiled assets, sw.js, manifest.json, offline.html        |
 
 ## Key Entry Points
 
@@ -71,3 +71,97 @@ Project roadmap: **docs/lean-prd.md**
 GitHub summary: **README.md**
 
 <!-- MANUAL: -->
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+
+Rules:
+
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+## Codex Skills & Context Boundary (Added 2026-07-15)
+
+### Skill Paths
+
+Codex skills loaded from:
+
+```
+.codex-skills/
+├── context-boundary/          # DISABLED: terlalu restriktif, ganti explore bebas
+├── prd-tracker/               # Reads/writes docs/lean-prd.md progress
+├── systematic-debugging/      # Root cause analysis workflow
+├── executing-plans/           # Step-by-step plan execution
+├── verification-before-completion/ # Quality gate before done
+├── writing-plans/             # Break down features into steps
+├── to-issues/                 # Track progress via issues/TASKS.md
+└── codex-review/              # Self-review checklist
+```
+
+### Hooks (when .codex writable)
+
+```
+.codex/hooks/pre_task.sh  → Runs `graphify update .` + context reminder
+```
+
+### Context Boundary (Flexible — proven faster)
+
+**Reference files (auto-read saat start task):**
+
+1. `docs/lean-prd.md` — Roadmap, MVP priorities, success metrics
+2. `AGENTS.md` — Commands, structure, conventions pointer
+
+**Source code — BEBAS explore:**
+
+- ✅ `app/`, `resources/`, `routes/`, `database/`, `Modules/` — baca bebas
+- ✅ Migrations, seeders, models, controllers, views — baca bebas
+- ✅ `graphify query` — pakai saat perlu orientasi arsitektur cepat
+- ✅ `grep` / `find` — gunakan untuk locate file dengan cepat
+- ✅ AI yang tentukan kapan perlu baca apa — tidak perlu izin
+
+**Prinsip:** Requirement → PRD. Implementation → explore bebas. Quality → skills auto-trigger.
+
+### File Editing
+
+- **`apply_patch` sering gagal** karena line number mismatch → jangan retry > 1x
+- **Fallback:** `sed -i` untuk edit kecil, `cat <<'EOF' > file` untuk rewrite
+- `heredoc` (`<<'ENDOFFILE'`) lebih reliable untuk file baru/lengkap
+
+### Workflow
+
+```
+User request
+    │
+    ▼
+Baca lean-prd.md + AGENTS.md (orientasi)
+    │
+    ▼
+graphify query / grep / baca source → pahami existing code
+    │
+    ▼
+Skill: prd-tracker → Find next MVP item (jika perlu)
+    │
+    ▼
+Skill: writing-plans + to-issues → Break down (jika fitur besar)
+    │
+    ▼
+Implement → edit dengan sed/heredoc (hindari apply_patch)
+    │
+    ▼
+Skill: systematic-debugging (if error)
+    │
+    ▼
+Skill: verification-before-completion → build + test
+    │
+    ▼
+Skill: codex-review → self-check
+    │
+    ▼
+Update lean-prd.md: - [x] #N — Done DATE — PR #XX
+```

@@ -19,7 +19,7 @@ class CreateBeritasTable extends Migration
             $table->string('slug');
             $table->text('content');
             $table->integer('kategori_id');
-            $table->string('thumbnail');
+            $table->string('thumbnail')->nullable();
             $table->enum('is_active',[0,1])->default(0);
             $table->integer('created_by');
             $table->timestamps();

@@ -3,60 +3,99 @@
     "file": "assets/AdminLayout.js",
     "name": "AdminLayout",
     "imports": [
-      "resources/js/app.jsx"
+      "_AppLayout.js"
     ]
   },
   "_AdminTable.js": {
     "file": "assets/AdminTable.js",
     "name": "AdminTable",
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
+      "_square-pen.js",
       "_chevron-left.js",
       "_chevron-right.js",
       "_eye.js"
+    ]
+  },
+  "_AnimatePresence.js": {
+    "file": "assets/AnimatePresence.js",
+    "name": "AnimatePresence",
+    "imports": [
+      "resources/js/app.jsx",
+      "_proxy.js"
+    ]
+  },
+  "_AppLayout.js": {
+    "file": "assets/AppLayout.js",
+    "name": "AppLayout",
+    "imports": [
+      "resources/js/app.jsx",
+      "_utils.js",
+      "_createLucideIcon.js",
+      "_house.js",
+      "_award.js",
+      "_book-open.js",
+      "_building-2.js",
+      "_settings.js",
+      "_credit-card.js",
+      "_file-text.js",
+      "_folder-tree.js",
+      "_globe.js",
+      "_graduation-cap.js",
+      "_image.js",
+      "_library.js",
+      "_mail.js",
+      "_menu.js",
+      "_school.js",
+      "_search.js",
+      "_send.js",
+      "_shield.js",
+      "_user-plus.js",
+      "_users.js"
     ]
   },
   "_ConfirmModal.js": {
     "file": "assets/ConfirmModal.js",
     "name": "ConfirmModal",
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_triangle-alert.js",
-      "resources/js/app.jsx"
+      "_x.js"
     ]
   },
   "_Footer.js": {
     "file": "assets/Footer.js",
     "name": "Footer",
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
+      "_mail.js",
       "_map-pin.js",
-      "_phone.js",
-      "resources/js/app.jsx"
+      "_phone.js"
     ]
   },
   "_GuestLayout.js": {
     "file": "assets/GuestLayout.js",
     "name": "GuestLayout",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "_Head.js": {
     "file": "assets/Head.js",
     "name": "Head",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "_Header.js": {
     "file": "assets/Header.js",
     "name": "Header",
     "imports": [
-      "_jsx-runtime.js",
-      "_user.js",
       "resources/js/app.jsx",
+      "_menu.js",
+      "_user.js",
+      "_x.js",
       "_gsap.js"
     ]
   },
@@ -64,17 +103,36 @@
     "file": "assets/ImportModal.js",
     "name": "ImportModal",
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_download.js",
-      "resources/js/app.jsx"
+      "_x.js"
     ]
   },
   "_Pagination.js": {
     "file": "assets/Pagination.js",
     "name": "Pagination",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
+    ]
+  },
+  "_SimpleFilterDropdown.js": {
+    "file": "assets/SimpleFilterDropdown.js",
+    "name": "SimpleFilterDropdown",
+    "imports": [
+      "resources/js/app.jsx",
+      "_funnel.js",
+      "_download.js",
+      "_printer.js",
+      "_search.js",
+      "_gsap.js"
+    ]
+  },
+  "_archive.js": {
+    "file": "assets/archive.js",
+    "name": "archive",
+    "imports": [
+      "_createLucideIcon.js"
     ]
   },
   "_arrow-left.js": {
@@ -102,7 +160,14 @@
     "file": "assets/badge.js",
     "name": "badge",
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx"
+    ]
+  },
+  "_badge2.js": {
+    "file": "assets/badge2.js",
+    "name": "badge",
+    "imports": [
+      "resources/js/app.jsx",
       "_utils.js",
       "_dist5.js"
     ]
@@ -121,13 +186,27 @@
       "_createLucideIcon.js"
     ]
   },
+  "_building-2.js": {
+    "file": "assets/building-2.js",
+    "name": "building-2",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_building.js": {
+    "file": "assets/building.js",
+    "name": "building",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
   "_button.js": {
     "file": "assets/button.js",
     "name": "button",
     "imports": [
-      "_jsx-runtime.js",
-      "_dist3.js",
+      "resources/js/app.jsx",
       "_utils.js",
+      "_dist3.js",
       "_dist5.js"
     ]
   },
@@ -142,8 +221,7 @@
     "file": "assets/card.js",
     "name": "card",
     "imports": [
-      "_jsx-runtime.js",
-      "_utils.js"
+      "resources/js/app.jsx"
     ]
   },
   "_chart-column.js": {
@@ -158,19 +236,6 @@
     "name": "check",
     "imports": [
       "_createLucideIcon.js"
-    ]
-  },
-  "_checkbox.js": {
-    "file": "assets/checkbox.js",
-    "name": "checkbox",
-    "imports": [
-      "_jsx-runtime.js",
-      "_check.js",
-      "_dist.js",
-      "_dist3.js",
-      "_dist4.js",
-      "_utils.js",
-      "_dist7.js"
     ]
   },
   "_chevron-left.js": {
@@ -201,6 +266,13 @@
       "_createLucideIcon.js"
     ]
   },
+  "_circle-check.js": {
+    "file": "assets/circle-check.js",
+    "name": "circle-check",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
   "_circle-x.js": {
     "file": "assets/circle-x.js",
     "name": "circle-x",
@@ -226,35 +298,41 @@
     "file": "assets/createLucideIcon.js",
     "name": "createLucideIcon",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
+    ]
+  },
+  "_credit-card.js": {
+    "file": "assets/credit-card.js",
+    "name": "credit-card",
+    "imports": [
+      "_createLucideIcon.js"
     ]
   },
   "_dist.js": {
     "file": "assets/dist.js",
     "name": "dist",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "_dist2.js": {
     "file": "assets/dist2.js",
     "name": "dist",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "_dist3.js": {
     "file": "assets/dist3.js",
     "name": "dist",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "_dist4.js": {
     "file": "assets/dist4.js",
     "name": "dist",
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
       "_dist3.js"
     ]
@@ -270,16 +348,7 @@
     "file": "assets/dist6.js",
     "name": "dist",
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx"
-    ]
-  },
-  "_dist7.js": {
-    "file": "assets/dist7.js",
-    "name": "dist",
-    "imports": [
-      "_jsx-runtime.js",
-      "_dist.js"
     ]
   },
   "_dollar-sign.js": {
@@ -300,17 +369,23 @@
     "file": "assets/dropdown-menu.js",
     "name": "dropdown-menu",
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
+      "_utils.js",
       "_createLucideIcon.js",
       "_check.js",
       "_chevron-right.js",
-      "resources/js/app.jsx",
       "_dist.js",
       "_dist2.js",
       "_dist3.js",
       "_dist4.js",
-      "_utils.js",
-      "_dist7.js"
+      "_table2.js"
+    ]
+  },
+  "_external-link.js": {
+    "file": "assets/external-link.js",
+    "name": "external-link",
+    "imports": [
+      "_createLucideIcon.js"
     ]
   },
   "_eye.js": {
@@ -320,9 +395,37 @@
       "_createLucideIcon.js"
     ]
   },
+  "_file-text.js": {
+    "file": "assets/file-text.js",
+    "name": "file-text",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_folder-tree.js": {
+    "file": "assets/folder-tree.js",
+    "name": "folder-tree",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
   "_funnel.js": {
     "file": "assets/funnel.js",
     "name": "funnel",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_globe.js": {
+    "file": "assets/globe.js",
+    "name": "globe",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_graduation-cap.js": {
+    "file": "assets/graduation-cap.js",
+    "name": "graduation-cap",
     "imports": [
       "_createLucideIcon.js"
     ]
@@ -345,17 +448,45 @@
       "_createLucideIcon.js"
     ]
   },
-  "_jsx-runtime.js": {
-    "file": "assets/jsx-runtime.js",
-    "name": "jsx-runtime"
+  "_house.js": {
+    "file": "assets/house.js",
+    "name": "house",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_id.js": {
+    "file": "assets/id.js",
+    "name": "id"
+  },
+  "_image.js": {
+    "file": "assets/image.js",
+    "name": "image",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_info.js": {
+    "file": "assets/info.js",
+    "name": "info",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_input.js": {
+    "file": "assets/input.js",
+    "name": "input",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
   },
   "_label.js": {
     "file": "assets/label.js",
     "name": "label",
     "imports": [
-      "_jsx-runtime.js",
-      "_dist4.js",
+      "resources/js/app.jsx",
       "_utils.js",
+      "_dist4.js",
       "_dist5.js"
     ]
   },
@@ -363,12 +494,47 @@
     "file": "assets/lib.js",
     "name": "lib",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
+    ]
+  },
+  "_library.js": {
+    "file": "assets/library.js",
+    "name": "library",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_loader-circle.js": {
+    "file": "assets/loader-circle.js",
+    "name": "loader-circle",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_log-out.js": {
+    "file": "assets/log-out.js",
+    "name": "log-out",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_mail.js": {
+    "file": "assets/mail.js",
+    "name": "mail",
+    "imports": [
+      "_createLucideIcon.js"
     ]
   },
   "_map-pin.js": {
     "file": "assets/map-pin.js",
     "name": "map-pin",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_menu.js": {
+    "file": "assets/menu.js",
+    "name": "menu",
     "imports": [
       "_createLucideIcon.js"
     ]
@@ -401,11 +567,25 @@
       "_createLucideIcon.js"
     ]
   },
+  "_printer.js": {
+    "file": "assets/printer.js",
+    "name": "printer",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
   "_proxy.js": {
     "file": "assets/proxy.js",
     "name": "proxy",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
+    ]
+  },
+  "_refresh-cw.js": {
+    "file": "assets/refresh-cw.js",
+    "name": "refresh-cw",
+    "imports": [
+      "_createLucideIcon.js"
     ]
   },
   "_save.js": {
@@ -415,11 +595,89 @@
       "_createLucideIcon.js"
     ]
   },
+  "_school.js": {
+    "file": "assets/school.js",
+    "name": "school",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_search.js": {
+    "file": "assets/search.js",
+    "name": "search",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_select.js": {
+    "file": "assets/select.js",
+    "name": "select",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "_send.js": {
+    "file": "assets/send.js",
+    "name": "send",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_settings.js": {
+    "file": "assets/settings.js",
+    "name": "settings",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_share-2.js": {
+    "file": "assets/share-2.js",
+    "name": "share-2",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_shield.js": {
+    "file": "assets/shield.js",
+    "name": "shield",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_square-pen.js": {
+    "file": "assets/square-pen.js",
+    "name": "square-pen",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
   "_table.js": {
     "file": "assets/table.js",
     "name": "table",
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
+    ]
+  },
+  "_table2.js": {
+    "file": "assets/table2.js",
+    "name": "table",
+    "imports": [
+      "resources/js/app.jsx",
+      "_dist.js"
+    ]
+  },
+  "_tag.js": {
+    "file": "assets/tag.js",
+    "name": "tag",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_textarea.js": {
+    "file": "assets/textarea.js",
+    "name": "textarea",
+    "imports": [
+      "resources/js/app.jsx"
     ]
   },
   "_trash-2.js": {
@@ -443,9 +701,23 @@
       "_createLucideIcon.js"
     ]
   },
+  "_trophy.js": {
+    "file": "assets/trophy.js",
+    "name": "trophy",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
   "_upload.js": {
     "file": "assets/upload.js",
     "name": "upload",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
+  "_user-plus.js": {
+    "file": "assets/user-plus.js",
+    "name": "user-plus",
     "imports": [
       "_createLucideIcon.js"
     ]
@@ -457,9 +729,23 @@
       "_createLucideIcon.js"
     ]
   },
+  "_users.js": {
+    "file": "assets/users.js",
+    "name": "users",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
+  },
   "_utils.js": {
     "file": "assets/utils.js",
     "name": "utils"
+  },
+  "_x.js": {
+    "file": "assets/x.js",
+    "name": "x",
+    "imports": [
+      "_createLucideIcon.js"
+    ]
   },
   "resources/css/app.css": {
     "file": "assets/app.css",
@@ -470,13 +756,159 @@
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/js/Pages/Absensi/Checkin.tsx": {
+    "file": "assets/Checkin.js",
+    "name": "Checkin",
+    "src": "resources/js/Pages/Absensi/Checkin.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_circle-alert.js",
+      "_circle-check-big.js",
+      "_circle-x.js",
+      "_house.js",
+      "_loader-circle.js",
+      "_info.js",
+      "_log-out.js",
+      "_map-pin.js",
+      "_card.js",
+      "_badge.js"
+    ]
+  },
+  "resources/js/Pages/Absensi/Checkout.tsx": {
+    "file": "assets/Checkout.js",
+    "name": "Checkout",
+    "src": "resources/js/Pages/Absensi/Checkout.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_circle-alert.js",
+      "_circle-check-big.js",
+      "_circle-x.js",
+      "_house.js",
+      "_loader-circle.js",
+      "_clock.js",
+      "_info.js",
+      "_log-out.js",
+      "_map-pin.js",
+      "_card.js",
+      "_badge.js"
+    ]
+  },
+  "resources/js/Pages/Absensi/Status.tsx": {
+    "file": "assets/Status.js",
+    "name": "Status",
+    "src": "resources/js/Pages/Absensi/Status.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_circle-alert.js",
+      "_circle-check-big.js",
+      "_circle-x.js",
+      "_arrow-left.js",
+      "_calendar.js",
+      "_clock.js",
+      "_log-out.js",
+      "_map-pin.js",
+      "_refresh-cw.js",
+      "_card.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Absensi/GuruIndex.tsx": {
+    "file": "assets/GuruIndex.js",
+    "name": "GuruIndex",
+    "src": "resources/js/Pages/Admin/Absensi/GuruIndex.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_circle-alert.js",
+      "_circle-check-big.js",
+      "_circle-x.js",
+      "_funnel.js",
+      "_calendar.js",
+      "_chevron-left.js",
+      "_clock.js",
+      "_download.js",
+      "_users.js",
+      "_card.js",
+      "_badge.js",
+      "_input.js",
+      "_table.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Absensi/Index.tsx": {
+    "file": "assets/Index.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Admin/Absensi/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_circle-alert.js",
+      "_circle-check-big.js",
+      "_arrow-right.js",
+      "_calendar.js",
+      "_clock.js",
+      "_download.js",
+      "_users.js",
+      "_card.js",
+      "_input.js",
+      "_select.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Absensi/Kelas.tsx": {
+    "file": "assets/Kelas.js",
+    "name": "Kelas",
+    "src": "resources/js/Pages/Admin/Absensi/Kelas.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_circle-alert.js",
+      "_circle-check.js",
+      "_circle-x.js",
+      "_loader-circle.js",
+      "_calendar.js",
+      "_chevron-left.js",
+      "_clock.js",
+      "_save.js",
+      "_card.js",
+      "_badge.js",
+      "_input.js",
+      "_table.js",
+      "_select.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Absensi/Rekap.tsx": {
+    "file": "assets/Rekap.js",
+    "name": "Rekap",
+    "src": "resources/js/Pages/Admin/Absensi/Rekap.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_circle-alert.js",
+      "_circle-check.js",
+      "_circle-x.js",
+      "_funnel.js",
+      "_calendar.js",
+      "_chevron-left.js",
+      "_clock.js",
+      "_download.js",
+      "_users.js",
+      "_card.js",
+      "_badge.js",
+      "_input.js",
+      "_table.js",
+      "_select.js"
+    ]
+  },
   "resources/js/Pages/Admin/Alumni/Create.tsx": {
     "file": "assets/Create.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Alumni/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
@@ -486,17 +918,17 @@
     "src": "resources/js/Pages/Admin/Alumni/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Alumni/Index.tsx": {
-    "file": "assets/Index.js",
+    "file": "assets/Index2.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Alumni/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_ImportModal.js",
       "_AdminTable.js",
       "_upload.js",
@@ -509,7 +941,7 @@
     "src": "resources/js/Pages/Admin/Alumni/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
@@ -519,8 +951,8 @@
     "src": "resources/js/Pages/Admin/Bendahara/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
@@ -530,21 +962,21 @@
     "src": "resources/js/Pages/Admin/Bendahara/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
+      "_utils.js",
       "_Head.js",
       "_dist.js",
       "_dist2.js",
-      "_dist4.js",
-      "_utils.js"
+      "_dist4.js"
     ]
   },
   "resources/js/Pages/Admin/Bendahara/Index.tsx": {
-    "file": "assets/Index2.js",
+    "file": "assets/Index3.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Bendahara/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
@@ -555,7 +987,7 @@
     "src": "resources/js/Pages/Admin/Berita/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
@@ -565,19 +997,61 @@
     "src": "resources/js/Pages/Admin/Berita/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Berita/Index.tsx": {
-    "file": "assets/Index3.js",
+    "file": "assets/Index4.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Berita/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
+    ]
+  },
+  "resources/js/Pages/Admin/BukuInduk/Cetak.tsx": {
+    "file": "assets/Cetak.js",
+    "name": "Cetak",
+    "src": "resources/js/Pages/Admin/BukuInduk/Cetak.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js",
+      "_printer.js"
+    ]
+  },
+  "resources/js/Pages/Admin/BukuInduk/Index.tsx": {
+    "file": "assets/Index5.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Admin/BukuInduk/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_circle-check.js",
+      "_circle-x.js",
+      "_search.js",
+      "_AdminTable.js"
+    ]
+  },
+  "resources/js/Pages/Admin/BukuInduk/Show.tsx": {
+    "file": "assets/Show2.js",
+    "name": "Show",
+    "src": "resources/js/Pages/Admin/BukuInduk/Show.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_arrow-left.js",
+      "_heart.js",
+      "_plus.js",
+      "_printer.js",
+      "_save.js",
+      "_trash-2.js",
+      "_user.js",
+      "_users.js"
     ]
   },
   "resources/js/Pages/Admin/CalonSiswa/Create.tsx": {
@@ -586,8 +1060,8 @@
     "src": "resources/js/Pages/Admin/CalonSiswa/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
@@ -597,18 +1071,18 @@
     "src": "resources/js/Pages/Admin/CalonSiswa/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/CalonSiswa/Index.tsx": {
-    "file": "assets/Index4.js",
+    "file": "assets/Index6.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/CalonSiswa/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
@@ -619,17 +1093,17 @@
     "src": "resources/js/Pages/Admin/CalonSiswa/Seleksi.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_Head.js"
     ]
   },
   "resources/js/Pages/Admin/CalonSiswa/Show.tsx": {
-    "file": "assets/Show2.js",
+    "file": "assets/Show3.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/CalonSiswa/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_Head.js"
     ]
   },
@@ -639,7 +1113,7 @@
     "src": "resources/js/Pages/Admin/CalonSiswa/Statistik.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_Head.js"
     ]
   },
@@ -649,7 +1123,7 @@
     "src": "resources/js/Pages/Admin/Dispensasi/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
@@ -659,29 +1133,29 @@
     "src": "resources/js/Pages/Admin/Dispensasi/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Dispensasi/Index.tsx": {
-    "file": "assets/Index5.js",
+    "file": "assets/Index7.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Dispensasi/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_AdminTable.js",
       "resources/js/app.jsx",
+      "_AdminTable.js",
+      "_x.js",
       "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/Dispensasi/Show.tsx": {
-    "file": "assets/Show3.js",
+    "file": "assets/Show4.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Dispensasi/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
@@ -691,7 +1165,7 @@
     "src": "resources/js/Pages/Admin/Donasi/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_save.js"
     ]
@@ -702,18 +1176,18 @@
     "src": "resources/js/Pages/Admin/Donasi/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_save.js"
     ]
   },
   "resources/js/Pages/Admin/Donasi/Index.tsx": {
-    "file": "assets/Index6.js",
+    "file": "assets/Index8.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Donasi/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_circle-check-big.js",
       "_circle-x.js",
       "_funnel.js",
@@ -723,19 +1197,19 @@
     ]
   },
   "resources/js/Pages/Admin/Donasi/Show.tsx": {
-    "file": "assets/Show4.js",
+    "file": "assets/Show5.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Donasi/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_circle-check-big.js",
       "_arrow-left.js",
       "_calendar.js",
       "_dollar-sign.js",
+      "_mail.js",
       "_phone.js",
-      "_user.js",
-      "resources/js/app.jsx"
+      "_user.js"
     ]
   },
   "resources/js/Pages/Admin/Gtk/Create.tsx": {
@@ -744,7 +1218,7 @@
     "src": "resources/js/Pages/Admin/Gtk/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
@@ -754,17 +1228,17 @@
     "src": "resources/js/Pages/Admin/Gtk/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Gtk/Index.tsx": {
-    "file": "assets/Index7.js",
+    "file": "assets/Index9.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Gtk/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_ImportModal.js",
       "_AdminTable.js",
       "_upload.js",
@@ -772,12 +1246,12 @@
     ]
   },
   "resources/js/Pages/Admin/Gtk/Show.tsx": {
-    "file": "assets/Show5.js",
+    "file": "assets/Show6.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Gtk/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
@@ -787,9 +1261,30 @@
     "src": "resources/js/Pages/Admin/Home.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx"
+    ]
+  },
+  "resources/js/Pages/Admin/JadwalPelajaran/Index.tsx": {
+    "file": "assets/Index10.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Admin/JadwalPelajaran/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
       "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_plus.js",
+      "_AdminTable.js",
+      "_x.js",
+      "_ConfirmModal.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Kelas/Create.tsx": {
+    "file": "assets/Create8.js",
+    "name": "Create",
+    "src": "resources/js/Pages/Admin/Kelas/Create.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js"
     ]
   },
   "resources/js/Pages/Admin/Kelas/Edit.tsx": {
@@ -798,41 +1293,197 @@
     "src": "resources/js/Pages/Admin/Kelas/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Kelas/Index.tsx": {
-    "file": "assets/Index8.js",
+    "file": "assets/Index11.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Kelas/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_ImportModal.js",
       "_AdminTable.js",
       "_upload.js",
-      "resources/js/app.jsx",
+      "_x.js",
       "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/Kelas/Show.tsx": {
-    "file": "assets/Show6.js",
+    "file": "assets/Show7.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Kelas/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
+  "resources/js/Pages/Admin/Laporan/Alumni.tsx": {
+    "file": "assets/Alumni.js",
+    "name": "Alumni",
+    "src": "resources/js/Pages/Admin/Laporan/Alumni.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_file-text.js",
+      "_proxy.js",
+      "_SimpleFilterDropdown.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Dispensasi.tsx": {
+    "file": "assets/Dispensasi.js",
+    "name": "Dispensasi",
+    "src": "resources/js/Pages/Admin/Laporan/Dispensasi.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_file-text.js",
+      "_AdminTable.js",
+      "_Head.js",
+      "_proxy.js",
+      "_SimpleFilterDropdown.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Erapor.tsx": {
+    "file": "assets/Erapor.js",
+    "name": "Erapor",
+    "src": "resources/js/Pages/Admin/Laporan/Erapor.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AdminTable.js",
+      "_Head.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Gtk.tsx": {
+    "file": "assets/Gtk.js",
+    "name": "Gtk",
+    "src": "resources/js/Pages/Admin/Laporan/Gtk.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_file-text.js",
+      "_proxy.js",
+      "_SimpleFilterDropdown.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Index.tsx": {
+    "file": "assets/Index12.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Admin/Laporan/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_book-open.js",
+      "_building.js",
+      "_credit-card.js",
+      "_file-text.js",
+      "_graduation-cap.js",
+      "_school.js",
+      "_trophy.js",
+      "_user-plus.js",
+      "_users.js",
+      "_proxy.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Perpustakaan.tsx": {
+    "file": "assets/Perpustakaan.js",
+    "name": "Perpustakaan",
+    "src": "resources/js/Pages/Admin/Laporan/Perpustakaan.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_book-open.js",
+      "_clock.js",
+      "_users.js",
+      "_Head.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Prestasi.tsx": {
+    "file": "assets/Prestasi.js",
+    "name": "Prestasi",
+    "src": "resources/js/Pages/Admin/Laporan/Prestasi.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_file-text.js",
+      "_AdminTable.js",
+      "_Head.js",
+      "_proxy.js",
+      "_SimpleFilterDropdown.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/PrintView.tsx": {
+    "file": "assets/PrintView.js",
+    "name": "PrintView",
+    "src": "resources/js/Pages/Admin/Laporan/PrintView.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_printer.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Sarana.tsx": {
+    "file": "assets/Sarana.js",
+    "name": "Sarana",
+    "src": "resources/js/Pages/Admin/Laporan/Sarana.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AdminTable.js",
+      "_Head.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Siswa.tsx": {
+    "file": "assets/Siswa.js",
+    "name": "Siswa",
+    "src": "resources/js/Pages/Admin/Laporan/Siswa.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_file-text.js",
+      "_proxy.js",
+      "_SimpleFilterDropdown.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Spmb.tsx": {
+    "file": "assets/Spmb.js",
+    "name": "Spmb",
+    "src": "resources/js/Pages/Admin/Laporan/Spmb.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_circle-check-big.js",
+      "_circle-x.js",
+      "_clock.js",
+      "_AdminTable.js",
+      "_Head.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Laporan/Spp.tsx": {
+    "file": "assets/Spp.js",
+    "name": "Spp",
+    "src": "resources/js/Pages/Admin/Laporan/Spp.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_file-text.js",
+      "_proxy.js",
+      "_SimpleFilterDropdown.js"
+    ]
+  },
   "resources/js/Pages/Admin/MasterBank/Create.tsx": {
-    "file": "assets/Create8.js",
+    "file": "assets/Create9.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/MasterBank/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_Head.js",
       "_button.js",
       "_label.js",
@@ -845,7 +1496,7 @@
     "src": "resources/js/Pages/Admin/MasterBank/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_Head.js",
       "_button.js",
       "_label.js",
@@ -853,37 +1504,41 @@
     ]
   },
   "resources/js/Pages/Admin/MasterBank/Index.tsx": {
-    "file": "assets/Index9.js",
+    "file": "assets/Index13.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/MasterBank/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
+      "_utils.js",
+      "_check.js",
       "_Head.js",
+      "_dist.js",
+      "_dist3.js",
+      "_dist4.js",
       "_button.js",
-      "_checkbox.js",
-      "_table.js"
+      "_table2.js"
     ]
   },
   "resources/js/Pages/Admin/MasterBank/Show.tsx": {
-    "file": "assets/Show7.js",
+    "file": "assets/Show8.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/MasterBank/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_Head.js",
       "_button.js",
-      "_badge.js"
+      "_badge2.js"
     ]
   },
   "resources/js/Pages/Admin/Murid/Create.tsx": {
-    "file": "assets/Create9.js",
+    "file": "assets/Create10.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Murid/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Admin/Murid/Edit.tsx": {
@@ -892,37 +1547,37 @@
     "src": "resources/js/Pages/Admin/Murid/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Admin/Murid/Index.tsx": {
-    "file": "assets/Index10.js",
+    "file": "assets/Index14.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Murid/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/Murid/Show.tsx": {
-    "file": "assets/Show8.js",
+    "file": "assets/Show9.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Murid/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Pengguna/Pengajar/Create.tsx": {
-    "file": "assets/Create10.js",
+    "file": "assets/Create11.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Pengguna/Pengajar/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_button.js",
       "_label.js"
     ]
@@ -933,40 +1588,40 @@
     "src": "resources/js/Pages/Admin/Pengguna/Pengajar/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_button.js",
       "_label.js"
     ]
   },
   "resources/js/Pages/Admin/Pengguna/Pengajar/Index.tsx": {
-    "file": "assets/Index11.js",
+    "file": "assets/Index15.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Pengguna/Pengajar/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_dropdown-menu.js",
-      "_table.js",
-      "_badge.js"
+      "_table2.js",
+      "_badge2.js"
     ]
   },
   "resources/js/Pages/Admin/Pengguna/Pengajar/Show.tsx": {
-    "file": "assets/Show9.js",
+    "file": "assets/Show10.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Pengguna/Pengajar/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_badge.js"
+      "resources/js/app.jsx",
+      "_badge2.js"
     ]
   },
   "resources/js/Pages/Admin/Pengguna/Staf/Create.tsx": {
-    "file": "assets/Create11.js",
+    "file": "assets/Create12.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Pengguna/Staf/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_button.js",
       "_label.js"
     ]
@@ -977,40 +1632,40 @@
     "src": "resources/js/Pages/Admin/Pengguna/Staf/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_button.js",
       "_label.js"
     ]
   },
   "resources/js/Pages/Admin/Pengguna/Staf/Index.tsx": {
-    "file": "assets/Index12.js",
+    "file": "assets/Index16.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Pengguna/Staf/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_dropdown-menu.js",
-      "_table.js",
-      "_badge.js"
+      "_table2.js",
+      "_badge2.js"
     ]
   },
   "resources/js/Pages/Admin/Pengguna/Staf/Show.tsx": {
-    "file": "assets/Show10.js",
+    "file": "assets/Show11.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Pengguna/Staf/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_badge.js"
+      "resources/js/app.jsx",
+      "_badge2.js"
     ]
   },
   "resources/js/Pages/Admin/Perpustakaan/Create.tsx": {
-    "file": "assets/Create12.js",
+    "file": "assets/Create13.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Perpustakaan/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
@@ -1020,17 +1675,17 @@
     "src": "resources/js/Pages/Admin/Perpustakaan/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Perpustakaan/Index.tsx": {
-    "file": "assets/Index13.js",
+    "file": "assets/Index17.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Perpustakaan/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_ImportModal.js",
       "_AdminTable.js",
       "_upload.js",
@@ -1038,56 +1693,56 @@
     ]
   },
   "resources/js/Pages/Admin/Perpustakaan/Peminjam/Index.tsx": {
-    "file": "assets/Index14.js",
+    "file": "assets/Index18.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Perpustakaan/Peminjam/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js",
       "_lib.js"
     ]
   },
   "resources/js/Pages/Admin/Perpustakaan/Show.tsx": {
-    "file": "assets/Show11.js",
+    "file": "assets/Show12.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Perpustakaan/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/Ppdb/Create.tsx": {
-    "file": "assets/Create13.js",
+    "file": "assets/Create14.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Ppdb/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Ppdb/Index.tsx": {
-    "file": "assets/Index15.js",
+    "file": "assets/Index19.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Ppdb/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/Prestasi/Create.tsx": {
-    "file": "assets/Create14.js",
+    "file": "assets/Create15.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Prestasi/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_save.js",
       "_upload.js"
@@ -1099,43 +1754,43 @@
     "src": "resources/js/Pages/Admin/Prestasi/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_save.js"
     ]
   },
   "resources/js/Pages/Admin/Prestasi/Index.tsx": {
-    "file": "assets/Index16.js",
+    "file": "assets/Index20.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Prestasi/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/Prestasi/Show.tsx": {
-    "file": "assets/Show12.js",
+    "file": "assets/Show13.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Prestasi/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_calendar.js",
       "_map-pin.js",
-      "_user.js",
-      "resources/js/app.jsx"
+      "_trophy.js",
+      "_user.js"
     ]
   },
   "resources/js/Pages/Admin/Profile/Index.tsx": {
-    "file": "assets/Index17.js",
+    "file": "assets/Index21.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Profile/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_button.js",
       "_label.js"
     ]
@@ -1146,18 +1801,18 @@
     "src": "resources/js/Pages/Admin/RaporKelas/Form.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/RaporKelas/Index.tsx": {
-    "file": "assets/Index18.js",
+    "file": "assets/Index22.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/RaporKelas/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
@@ -1168,18 +1823,18 @@
     "src": "resources/js/Pages/Admin/RaporMapel/Form.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/RaporMapel/Index.tsx": {
-    "file": "assets/Index19.js",
+    "file": "assets/Index23.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/RaporMapel/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
@@ -1190,18 +1845,18 @@
     "src": "resources/js/Pages/Admin/RaporSiswa/Assign.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/RaporSiswa/Index.tsx": {
-    "file": "assets/Index20.js",
+    "file": "assets/Index24.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/RaporSiswa/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
@@ -1212,19 +1867,19 @@
     "src": "resources/js/Pages/Admin/RaporSiswa/InputNilai.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/RaporSiswa/Show.tsx": {
-    "file": "assets/Show13.js",
+    "file": "assets/Show14.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/RaporSiswa/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
@@ -1234,9 +1889,19 @@
     "src": "resources/js/Pages/Admin/RaporSiswa/Statistik.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
+    ]
+  },
+  "resources/js/Pages/Admin/SaranaPrasarana/Create.tsx": {
+    "file": "assets/Create16.js",
+    "name": "Create",
+    "src": "resources/js/Pages/Admin/SaranaPrasarana/Create.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js"
     ]
   },
   "resources/js/Pages/Admin/SaranaPrasarana/Edit.tsx": {
@@ -1245,56 +1910,83 @@
     "src": "resources/js/Pages/Admin/SaranaPrasarana/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
   "resources/js/Pages/Admin/SaranaPrasarana/Index.tsx": {
-    "file": "assets/Index21.js",
+    "file": "assets/Index25.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/SaranaPrasarana/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_ImportModal.js",
+      "_plus.js",
       "_AdminTable.js",
       "_upload.js",
-      "resources/js/app.jsx",
       "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/SaranaPrasarana/Show.tsx": {
-    "file": "assets/Show14.js",
+    "file": "assets/Show15.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/SaranaPrasarana/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chevron-left.js"
     ]
   },
+  "resources/js/Pages/Admin/Setting/DataInstansi.tsx": {
+    "file": "assets/DataInstansi.js",
+    "name": "DataInstansi",
+    "src": "resources/js/Pages/Admin/Setting/DataInstansi.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js"
+    ]
+  },
   "resources/js/Pages/Admin/Setting/Index.tsx": {
-    "file": "assets/Index22.js",
+    "file": "assets/Index26.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Setting/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_Head.js",
-      "_button.js",
-      "_label.js",
-      "_dist6.js",
-      "_checkbox.js",
-      "_card.js"
+      "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_building-2.js",
+      "_shield.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Setting/KonfigurasiWeb.tsx": {
+    "file": "assets/KonfigurasiWeb.js",
+    "name": "KonfigurasiWeb",
+    "src": "resources/js/Pages/Admin/Setting/KonfigurasiWeb.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Setting/LegalitasInstansi.tsx": {
+    "file": "assets/LegalitasInstansi.js",
+    "name": "LegalitasInstansi",
+    "src": "resources/js/Pages/Admin/Setting/LegalitasInstansi.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js"
     ]
   },
   "resources/js/Pages/Admin/Siswa/Create.tsx": {
-    "file": "assets/Create15.js",
+    "file": "assets/Create17.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Siswa/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Admin/Siswa/Detail.tsx": {
@@ -1303,7 +1995,7 @@
     "src": "resources/js/Pages/Admin/Siswa/Detail.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Admin/Siswa/Edit.tsx": {
@@ -1312,16 +2004,16 @@
     "src": "resources/js/Pages/Admin/Siswa/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Admin/Siswa/Index.tsx": {
-    "file": "assets/Index23.js",
+    "file": "assets/Index27.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Siswa/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_ImportModal.js",
       "_AdminTable.js",
       "_upload.js",
@@ -1334,10 +2026,11 @@
     "src": "resources/js/Pages/Admin/Siswa/Landing.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_arrow-right.js",
-      "resources/js/app.jsx"
+      "_graduation-cap.js",
+      "_users.js"
     ]
   },
   "resources/js/Pages/Admin/Siswa/Tingkat.tsx": {
@@ -1346,13 +2039,13 @@
     "src": "resources/js/Pages/Admin/Siswa/Tingkat.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_ImportModal.js",
       "_funnel.js",
-      "_AdminTable.js",
       "_chevron-left.js",
       "_plus.js",
+      "_AdminTable.js",
       "_upload.js"
     ]
   },
@@ -1362,44 +2055,45 @@
     "src": "resources/js/Pages/Admin/Spmb/Applicant/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Applicant/Index.tsx": {
-    "file": "assets/Index24.js",
+    "file": "assets/Index28.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Spmb/Applicant/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_AppLayout.js",
       "_trash-2.js",
       "_AdminTable.js",
-      "resources/js/app.jsx",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Applicant/Show.tsx": {
-    "file": "assets/Show15.js",
+    "file": "assets/Show16.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Spmb/Applicant/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Config/Create.tsx": {
-    "file": "assets/Create16.js",
+    "file": "assets/Create18.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Spmb/Config/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_arrow-left.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
+      "_arrow-left.js",
       "_AdminLayout.js"
     ]
   },
@@ -1409,50 +2103,50 @@
     "src": "resources/js/Pages/Admin/Spmb/Config/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Config/Index.tsx": {
-    "file": "assets/Index25.js",
+    "file": "assets/Index29.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Spmb/Config/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_AdminTable.js",
+      "resources/js/app.jsx",
       "_plus.js",
+      "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Config/Show.tsx": {
-    "file": "assets/Show16.js",
+    "file": "assets/Show17.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Spmb/Config/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js"
     ]
   },
   "resources/js/Pages/Admin/Spmb/Ranking/Index.tsx": {
-    "file": "assets/Index26.js",
+    "file": "assets/Index30.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Spmb/Ranking/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Spp/Create.tsx": {
-    "file": "assets/Create17.js",
+    "file": "assets/Create19.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Spp/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Admin/Spp/Detail.tsx": {
@@ -1461,7 +2155,7 @@
     "src": "resources/js/Pages/Admin/Spp/Detail.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Admin/Spp/Edit.tsx": {
@@ -1470,485 +2164,704 @@
     "src": "resources/js/Pages/Admin/Spp/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Admin/Spp/Index.tsx": {
-    "file": "assets/Index27.js",
+    "file": "assets/Index31.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Spp/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
   },
+  "resources/js/Pages/Admin/TU/ArsipAkreditasi/Create.tsx": {
+    "file": "assets/Create20.js",
+    "name": "Create",
+    "src": "resources/js/Pages/Admin/TU/ArsipAkreditasi/Create.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js",
+      "_file-text.js",
+      "_save.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/ArsipAkreditasi/Edit.tsx": {
+    "file": "assets/Edit20.js",
+    "name": "Edit",
+    "src": "resources/js/Pages/Admin/TU/ArsipAkreditasi/Edit.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js",
+      "_file-text.js",
+      "_save.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/ArsipAkreditasi/Index.tsx": {
+    "file": "assets/Index32.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Admin/TU/ArsipAkreditasi/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_folder-tree.js",
+      "_plus.js",
+      "_AdminTable.js",
+      "_ConfirmModal.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/ArsipAkreditasi/Show.tsx": {
+    "file": "assets/Show18.js",
+    "name": "Show",
+    "src": "resources/js/Pages/Admin/TU/ArsipAkreditasi/Show.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_square-pen.js",
+      "_arrow-left.js",
+      "_clock.js",
+      "_download.js",
+      "_external-link.js",
+      "_file-text.js",
+      "_tag.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/NisnManagement/Index.tsx": {
+    "file": "assets/Index33.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Admin/TU/NisnManagement/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_refresh-cw.js",
+      "_AdminTable.js",
+      "_ConfirmModal.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/NisnManagement/Show.tsx": {
+    "file": "assets/Show19.js",
+    "name": "Show",
+    "src": "resources/js/Pages/Admin/TU/NisnManagement/Show.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_utils.js",
+      "_createLucideIcon.js",
+      "_square-pen.js",
+      "_arrow-left.js",
+      "_library.js",
+      "_mail.js",
+      "_refresh-cw.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/SuratKeluar/Create.tsx": {
+    "file": "assets/Create21.js",
+    "name": "Create",
+    "src": "resources/js/Pages/Admin/TU/SuratKeluar/Create.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js",
+      "_file-text.js",
+      "_save.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/SuratKeluar/Edit.tsx": {
+    "file": "assets/Edit21.js",
+    "name": "Edit",
+    "src": "resources/js/Pages/Admin/TU/SuratKeluar/Edit.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js",
+      "_file-text.js",
+      "_save.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/SuratKeluar/Index.tsx": {
+    "file": "assets/Index34.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Admin/TU/SuratKeluar/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_plus.js",
+      "_AdminTable.js",
+      "_ConfirmModal.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/SuratKeluar/Show.tsx": {
+    "file": "assets/Show20.js",
+    "name": "Show",
+    "src": "resources/js/Pages/Admin/TU/SuratKeluar/Show.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_square-pen.js",
+      "_archive.js",
+      "_arrow-left.js",
+      "_calendar.js",
+      "_download.js",
+      "_external-link.js",
+      "_eye.js",
+      "_file-text.js",
+      "_mail.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/SuratMasuk/Create.tsx": {
+    "file": "assets/Create22.js",
+    "name": "Create",
+    "src": "resources/js/Pages/Admin/TU/SuratMasuk/Create.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js",
+      "_file-text.js",
+      "_save.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/SuratMasuk/Edit.tsx": {
+    "file": "assets/Edit22.js",
+    "name": "Edit",
+    "src": "resources/js/Pages/Admin/TU/SuratMasuk/Edit.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js",
+      "_external-link.js",
+      "_file-text.js",
+      "_save.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/SuratMasuk/Index.tsx": {
+    "file": "assets/Index35.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Admin/TU/SuratMasuk/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_plus.js",
+      "_AdminTable.js",
+      "_ConfirmModal.js"
+    ]
+  },
+  "resources/js/Pages/Admin/TU/SuratMasuk/Show.tsx": {
+    "file": "assets/Show21.js",
+    "name": "Show",
+    "src": "resources/js/Pages/Admin/TU/SuratMasuk/Show.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_square-pen.js",
+      "_triangle-alert.js",
+      "_archive.js",
+      "_arrow-left.js",
+      "_calendar.js",
+      "_clock.js",
+      "_download.js",
+      "_external-link.js",
+      "_eye.js",
+      "_file-text.js",
+      "_mail.js",
+      "_send.js"
+    ]
+  },
   "resources/js/Pages/Admin/TracerStudy/Create.tsx": {
-    "file": "assets/Create18.js",
+    "file": "assets/Create23.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/TracerStudy/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_save.js"
     ]
   },
   "resources/js/Pages/Admin/TracerStudy/Edit.tsx": {
-    "file": "assets/Edit20.js",
+    "file": "assets/Edit23.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/TracerStudy/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_save.js"
     ]
   },
   "resources/js/Pages/Admin/TracerStudy/Index.tsx": {
-    "file": "assets/Index28.js",
+    "file": "assets/Index36.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/TracerStudy/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_AdminTable.js",
-      "_briefcase.js",
-      "_trending-up.js",
       "resources/js/app.jsx",
+      "_briefcase.js",
+      "_graduation-cap.js",
+      "_AdminTable.js",
+      "_trending-up.js",
       "_ConfirmModal.js"
     ]
   },
   "resources/js/Pages/Admin/TracerStudy/Show.tsx": {
-    "file": "assets/Show17.js",
+    "file": "assets/Show22.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/TracerStudy/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_briefcase.js",
       "_user.js"
     ]
   },
   "resources/js/Pages/Admin/Website/About/Create.tsx": {
-    "file": "assets/Create19.js",
+    "file": "assets/Create24.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Website/About/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/About/Edit.tsx": {
-    "file": "assets/Edit21.js",
+    "file": "assets/Edit24.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/About/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/About/Index.tsx": {
-    "file": "assets/Index29.js",
+    "file": "assets/Index37.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/About/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/About/Show.tsx": {
-    "file": "assets/Show18.js",
+    "file": "assets/Show23.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Website/About/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Berita/Create.tsx": {
-    "file": "assets/Create20.js",
+    "file": "assets/Create25.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Website/Berita/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_arrow-left.js",
+      "_save.js",
+      "_card.js",
+      "_input.js",
+      "_select.js",
+      "_textarea.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Berita/Edit.tsx": {
-    "file": "assets/Edit22.js",
+    "file": "assets/Edit25.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/Berita/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
-      "_AdminLayout.js"
+      "_circle-check-big.js",
+      "_circle-x.js",
+      "_arrow-left.js",
+      "_save.js",
+      "_send.js",
+      "_trash-2.js",
+      "_card.js",
+      "_input.js",
+      "_select.js",
+      "_textarea.js",
+      "_id.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Berita/Index.tsx": {
-    "file": "assets/Index30.js",
+    "file": "assets/Index38.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/Berita/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_trash-2.js",
       "resources/js/app.jsx",
-      "_AdminLayout.js",
-      "_lib.js"
+      "_circle-check-big.js",
+      "_circle-x.js",
+      "_funnel.js",
+      "_square-pen.js",
+      "_download.js",
+      "_eye.js",
+      "_plus.js",
+      "_send.js",
+      "_trash-2.js",
+      "_card.js",
+      "_badge.js",
+      "_input.js",
+      "_table.js",
+      "_select.js",
+      "_id.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Berita/Show.tsx": {
-    "file": "assets/Show19.js",
+    "file": "assets/Show24.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Website/Berita/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Events/Create.tsx": {
-    "file": "assets/Create21.js",
+    "file": "assets/Create26.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Website/Events/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Events/Edit.tsx": {
-    "file": "assets/Edit23.js",
+    "file": "assets/Edit26.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/Events/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Events/Index.tsx": {
-    "file": "assets/Index31.js",
+    "file": "assets/Index39.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/Events/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Events/Show.tsx": {
-    "file": "assets/Show20.js",
+    "file": "assets/Show25.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Website/Events/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Footer/Create.tsx": {
-    "file": "assets/Create22.js",
+    "file": "assets/Create27.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Website/Footer/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Footer/Edit.tsx": {
-    "file": "assets/Edit24.js",
+    "file": "assets/Edit27.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/Footer/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Footer/Index.tsx": {
-    "file": "assets/Index32.js",
+    "file": "assets/Index40.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/Footer/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Footer/Show.tsx": {
-    "file": "assets/Show21.js",
+    "file": "assets/Show26.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Website/Footer/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/ImageSlider/Create.tsx": {
-    "file": "assets/Create23.js",
+    "file": "assets/Create28.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Website/ImageSlider/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/ImageSlider/Edit.tsx": {
-    "file": "assets/Edit25.js",
+    "file": "assets/Edit28.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/ImageSlider/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/ImageSlider/Index.tsx": {
-    "file": "assets/Index33.js",
+    "file": "assets/Index41.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/ImageSlider/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/ImageSlider/Show.tsx": {
-    "file": "assets/Show22.js",
+    "file": "assets/Show27.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Website/ImageSlider/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/KategoriBerita/Create.tsx": {
-    "file": "assets/Create24.js",
+    "file": "assets/Create29.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Website/KategoriBerita/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/KategoriBerita/Edit.tsx": {
-    "file": "assets/Edit26.js",
+    "file": "assets/Edit29.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/KategoriBerita/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/KategoriBerita/Index.tsx": {
-    "file": "assets/Index34.js",
+    "file": "assets/Index42.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/KategoriBerita/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/KategoriBerita/Show.tsx": {
-    "file": "assets/Show23.js",
+    "file": "assets/Show28.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Website/KategoriBerita/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Kegiatan/Create.tsx": {
-    "file": "assets/Create25.js",
+    "file": "assets/Create30.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Website/Kegiatan/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Kegiatan/Edit.tsx": {
-    "file": "assets/Edit27.js",
+    "file": "assets/Edit30.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/Kegiatan/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Kegiatan/Index.tsx": {
-    "file": "assets/Index35.js",
+    "file": "assets/Index43.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/Kegiatan/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Kegiatan/Show.tsx": {
-    "file": "assets/Show24.js",
+    "file": "assets/Show29.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Website/Kegiatan/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Program/Create.tsx": {
-    "file": "assets/Create26.js",
+    "file": "assets/Create31.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Website/Program/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Program/Edit.tsx": {
-    "file": "assets/Edit28.js",
+    "file": "assets/Edit31.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/Program/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Program/Index.tsx": {
-    "file": "assets/Index36.js",
+    "file": "assets/Index44.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/Program/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Program/Show.tsx": {
-    "file": "assets/Show25.js",
+    "file": "assets/Show30.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Website/Program/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Video/Create.tsx": {
-    "file": "assets/Create27.js",
+    "file": "assets/Create32.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Website/Video/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Video/Edit.tsx": {
-    "file": "assets/Edit29.js",
+    "file": "assets/Edit32.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/Video/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Video/Index.tsx": {
-    "file": "assets/Index37.js",
+    "file": "assets/Index45.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/Video/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/Video/Show.tsx": {
-    "file": "assets/Show26.js",
+    "file": "assets/Show31.js",
     "name": "Show",
     "src": "resources/js/Pages/Admin/Website/Video/Show.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/VisidanMisi/Edit.tsx": {
-    "file": "assets/Edit30.js",
+    "file": "assets/Edit33.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Website/VisidanMisi/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
   "resources/js/Pages/Admin/Website/VisidanMisi/Index.tsx": {
-    "file": "assets/Index38.js",
+    "file": "assets/Index46.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Website/VisidanMisi/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_AppLayout.js",
       "_AdminLayout.js"
     ]
   },
@@ -1958,12 +2871,12 @@
     "src": "resources/js/Pages/Auth/Login.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_eye.js",
       "_Head.js",
-      "_GuestLayout.js",
-      "_gsap.js"
+      "_gsap.js",
+      "_GuestLayout.js"
     ]
   },
   "resources/js/Pages/Auth/Register.tsx": {
@@ -1972,7 +2885,7 @@
     "src": "resources/js/Pages/Auth/Register.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_Head.js",
       "_GuestLayout.js"
     ]
@@ -1983,7 +2896,8 @@
     "src": "resources/js/Pages/Dashboard.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
+      "_utils.js",
       "_createLucideIcon.js",
       "_chart-column.js",
       "_arrow-right.js",
@@ -1991,29 +2905,34 @@
       "_calendar.js",
       "_chevron-right.js",
       "_clock.js",
+      "_credit-card.js",
+      "_globe.js",
+      "_library.js",
+      "_school.js",
       "_trending-up.js",
-      "resources/js/app.jsx",
-      "_card.js"
+      "_trophy.js",
+      "_user-plus.js",
+      "_users.js"
     ]
   },
   "resources/js/Pages/Erapor/DapodikSync/Index.tsx": {
-    "file": "assets/Index39.js",
+    "file": "assets/Index47.js",
     "name": "Index",
     "src": "resources/js/Pages/Erapor/DapodikSync/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_Head.js"
     ]
   },
   "resources/js/Pages/Erapor/Nilai/Index.tsx": {
-    "file": "assets/Index40.js",
+    "file": "assets/Index48.js",
     "name": "Index",
     "src": "resources/js/Pages/Erapor/Nilai/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "resources/js/app.jsx"
+      "resources/js/app.jsx",
+      "_AppLayout.js"
     ]
   },
   "resources/js/Pages/Erapor/Nilai/InputForm.tsx": {
@@ -2022,38 +2941,38 @@
     "src": "resources/js/Pages/Erapor/Nilai/InputForm.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "resources/js/app.jsx"
+      "resources/js/app.jsx",
+      "_AppLayout.js"
     ]
   },
   "resources/js/Pages/Erapor/P5/Create.tsx": {
-    "file": "assets/Create28.js",
+    "file": "assets/Create33.js",
     "name": "Create",
     "src": "resources/js/Pages/Erapor/P5/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "resources/js/app.jsx"
+      "resources/js/app.jsx",
+      "_AppLayout.js"
     ]
   },
   "resources/js/Pages/Erapor/P5/Edit.tsx": {
-    "file": "assets/Edit31.js",
+    "file": "assets/Edit34.js",
     "name": "Edit",
     "src": "resources/js/Pages/Erapor/P5/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "resources/js/app.jsx"
+      "resources/js/app.jsx",
+      "_AppLayout.js"
     ]
   },
   "resources/js/Pages/Erapor/P5/Index.tsx": {
-    "file": "assets/Index41.js",
+    "file": "assets/Index49.js",
     "name": "Index",
     "src": "resources/js/Pages/Erapor/P5/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "resources/js/app.jsx"
+      "resources/js/app.jsx",
+      "_AppLayout.js"
     ]
   },
   "resources/js/Pages/Erapor/P5/InputNilai.tsx": {
@@ -2062,46 +2981,64 @@
     "src": "resources/js/Pages/Erapor/P5/InputNilai.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "resources/js/app.jsx"
+      "resources/js/app.jsx",
+      "_AppLayout.js"
     ]
   },
   "resources/js/Pages/Erapor/TujuanPembelajaran/Create.tsx": {
-    "file": "assets/Create29.js",
+    "file": "assets/Create34.js",
     "name": "Create",
     "src": "resources/js/Pages/Erapor/TujuanPembelajaran/Create.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "resources/js/app.jsx"
+      "resources/js/app.jsx",
+      "_AppLayout.js"
     ]
   },
   "resources/js/Pages/Erapor/TujuanPembelajaran/Index.tsx": {
-    "file": "assets/Index42.js",
+    "file": "assets/Index50.js",
     "name": "Index",
     "src": "resources/js/Pages/Erapor/TujuanPembelajaran/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "resources/js/app.jsx"
+      "resources/js/app.jsx",
+      "_AppLayout.js"
+    ]
+  },
+  "resources/js/Pages/Frontend/Agenda/Index.tsx": {
+    "file": "assets/Index51.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Frontend/Agenda/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js",
+      "_calendar.js",
+      "_tag.js",
+      "_card.js",
+      "_badge.js",
+      "_select.js"
     ]
   },
   "resources/js/Pages/Frontend/Alumni.tsx": {
-    "file": "assets/Alumni.js",
+    "file": "assets/Alumni2.js",
     "name": "Alumni",
     "src": "resources/js/Pages/Frontend/Alumni.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_chart-column.js",
       "_briefcase.js",
       "_chevron-right.js",
+      "_graduation-cap.js",
       "_heart.js",
+      "_mail.js",
       "_map-pin.js",
       "_message-circle.js",
       "_user.js",
-      "resources/js/app.jsx",
+      "_users.js",
       "_proxy.js",
+      "_AnimatePresence.js",
       "_Header.js",
       "_Footer.js",
       "_Pagination.js"
@@ -2113,15 +3050,53 @@
     "src": "resources/js/Pages/Frontend/Berita.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_calendar.js",
-      "_hash.js",
-      "_newspaper.js",
       "resources/js/app.jsx",
+      "_calendar.js",
+      "_file-text.js",
+      "_hash.js",
+      "_image.js",
+      "_newspaper.js",
       "_proxy.js",
+      "_AnimatePresence.js",
       "_Header.js",
       "_Footer.js",
       "_Pagination.js"
+    ]
+  },
+  "resources/js/Pages/Frontend/Berita/Index.tsx": {
+    "file": "assets/Index52.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Frontend/Berita/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_funnel.js",
+      "_calendar.js",
+      "_search.js",
+      "_tag.js",
+      "_card.js",
+      "_input.js",
+      "_select.js",
+      "_id.js",
+      "_Pagination.js"
+    ]
+  },
+  "resources/js/Pages/Frontend/Berita/Show.tsx": {
+    "file": "assets/Show32.js",
+    "name": "Show",
+    "src": "resources/js/Pages/Frontend/Berita/Show.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js",
+      "_calendar.js",
+      "_eye.js",
+      "_share-2.js",
+      "_tag.js",
+      "_user.js",
+      "_card.js",
+      "_badge.js",
+      "_id.js"
     ]
   },
   "resources/js/Pages/Frontend/DetailBerita.tsx": {
@@ -2130,14 +3105,16 @@
     "src": "resources/js/Pages/Frontend/DetailBerita.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_createLucideIcon.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_calendar.js",
       "_clock.js",
+      "_image.js",
       "_newspaper.js",
+      "_tag.js",
       "_user.js",
       "_proxy.js",
+      "_AnimatePresence.js",
       "_Header.js",
       "_Footer.js"
     ]
@@ -2148,12 +3125,13 @@
     "src": "resources/js/Pages/Frontend/DetailEvent.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_arrow-left.js",
       "_calendar.js",
       "_clock.js",
       "_map-pin.js",
+      "_share-2.js",
       "_Header.js",
       "_Footer.js"
     ]
@@ -2164,11 +3142,11 @@
     "src": "resources/js/Pages/Frontend/Donasi.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_createLucideIcon.js",
-      "_arrow-right.js",
-      "_heart.js",
       "resources/js/app.jsx",
+      "_arrow-right.js",
+      "_credit-card.js",
+      "_heart.js",
+      "_shield.js",
       "_Header.js",
       "_Footer.js"
     ]
@@ -2179,7 +3157,7 @@
     "src": "resources/js/Pages/Frontend/Events.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_calendar.js",
       "_map-pin.js",
       "_Header.js",
@@ -2193,13 +3171,13 @@
     "src": "resources/js/Pages/Frontend/Forum.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_calendar.js",
       "_eye.js",
       "_plus.js",
+      "_search.js",
       "_user.js",
-      "resources/js/app.jsx",
       "_Header.js",
       "_Footer.js"
     ]
@@ -2210,34 +3188,39 @@
     "src": "resources/js/Pages/Frontend/Guru.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_funnel.js",
       "_book-open.js",
       "_briefcase.js",
+      "_graduation-cap.js",
       "_hash.js",
+      "_mail.js",
       "_user.js",
-      "resources/js/app.jsx",
+      "_users.js",
+      "_x.js",
       "_proxy.js",
+      "_AnimatePresence.js",
       "_Header.js",
       "_Footer.js",
       "_Pagination.js"
     ]
   },
   "resources/js/Pages/Frontend/Index.tsx": {
-    "file": "assets/Index43.js",
+    "file": "assets/Index53.js",
     "name": "Index",
     "src": "resources/js/Pages/Frontend/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_arrow-right.js",
       "_chevron-right.js",
+      "_globe.js",
       "_heart.js",
+      "_mail.js",
       "_map-pin.js",
       "_message-circle.js",
       "_phone.js",
-      "resources/js/app.jsx",
       "_gsap.js",
       "_Header.js"
     ]
@@ -2248,7 +3231,7 @@
     "src": "resources/js/Pages/Frontend/Kegiatan.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_calendar.js",
       "_clock.js",
       "_Header.js",
@@ -2261,16 +3244,18 @@
     "src": "resources/js/Pages/Frontend/ProfileSekolah.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_award.js",
+      "_building-2.js",
       "_hash.js",
+      "_mail.js",
       "_map-pin.js",
       "_phone.js",
-      "resources/js/app.jsx",
       "_Head.js",
-      "_gsap.js",
       "_proxy.js",
+      "_AnimatePresence.js",
+      "_gsap.js",
       "_Header.js",
       "_Footer.js"
     ]
@@ -2281,7 +3266,7 @@
     "src": "resources/js/Pages/Frontend/ProgramStudi.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_arrow-left.js",
       "_book-open.js",
       "_Header.js",
@@ -2294,7 +3279,7 @@
     "src": "resources/js/Pages/Frontend/ProgramStudiIndex.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_Header.js",
       "_Footer.js"
     ]
@@ -2305,10 +3290,10 @@
     "src": "resources/js/Pages/Frontend/TracerStudy.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_createLucideIcon.js",
+      "resources/js/app.jsx",
       "_circle-check-big.js",
       "_clipboard-list.js",
+      "_info.js",
       "_Header.js"
     ]
   },
@@ -2318,14 +3303,15 @@
     "src": "resources/js/Pages/Frontend/Visimisi.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_book-open.js",
       "_check.js",
       "_eye.js",
-      "resources/js/app.jsx",
+      "_globe.js",
       "_Head.js",
       "_proxy.js",
+      "_AnimatePresence.js",
       "_Header.js",
       "_Footer.js"
     ]
@@ -2336,8 +3322,24 @@
     "src": "resources/js/Pages/Layout/App.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
       "resources/js/app.jsx",
+      "_createLucideIcon.js",
+      "_archive.js",
+      "_book-open.js",
+      "_building.js",
+      "_settings.js",
+      "_credit-card.js",
+      "_file-text.js",
+      "_globe.js",
+      "_graduation-cap.js",
+      "_library.js",
+      "_mail.js",
+      "_school.js",
+      "_send.js",
+      "_trophy.js",
+      "_user-plus.js",
+      "_users.js",
+      "_x.js",
       "_Head.js"
     ]
   },
@@ -2347,16 +3349,16 @@
     "src": "resources/js/Pages/Ppdb/CheckStatus.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Ppdb/Edit.tsx": {
-    "file": "assets/Edit32.js",
+    "file": "assets/Edit35.js",
     "name": "Edit",
     "src": "resources/js/Pages/Ppdb/Edit.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Ppdb/Register.tsx": {
@@ -2365,8 +3367,8 @@
     "src": "resources/js/Pages/Ppdb/Register.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
-      "_Head.js"
+      "resources/js/app.jsx",
+      "_globe.js"
     ]
   },
   "resources/js/Pages/Ppdb/Success.tsx": {
@@ -2375,7 +3377,7 @@
     "src": "resources/js/Pages/Ppdb/Success.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js"
+      "resources/js/app.jsx"
     ]
   },
   "resources/js/Pages/Spmb/CheckStatus.tsx": {
@@ -2384,27 +3386,29 @@
     "src": "resources/js/Pages/Spmb/CheckStatus.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_circle-alert.js",
       "_circle-check-big.js",
       "_circle-x.js",
       "_calendar.js",
       "_chevron-right.js",
       "_clock.js",
+      "_file-text.js",
+      "_mail.js",
+      "_search.js",
       "_user.js",
-      "resources/js/app.jsx",
       "_gsap.js",
       "_Header.js",
       "_Footer.js"
     ]
   },
   "resources/js/Pages/Spmb/Index.tsx": {
-    "file": "assets/Index44.js",
+    "file": "assets/Index54.js",
     "name": "Index",
     "src": "resources/js/Pages/Spmb/Index.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_createLucideIcon.js",
       "_circle-check-big.js",
       "_arrow-right.js",
@@ -2413,10 +3417,11 @@
       "_briefcase.js",
       "_calendar.js",
       "_clipboard-list.js",
+      "_graduation-cap.js",
       "_heart.js",
       "_map-pin.js",
       "_trending-up.js",
-      "resources/js/app.jsx"
+      "_user-plus.js"
     ]
   },
   "resources/js/Pages/Spmb/Register.tsx": {
@@ -2425,14 +3430,14 @@
     "src": "resources/js/Pages/Spmb/Register.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_circle-alert.js",
       "_circle-check-big.js",
       "_book-open.js",
       "_calendar.js",
       "_dollar-sign.js",
       "_user.js",
-      "resources/js/app.jsx",
+      "_users.js",
       "_gsap.js",
       "_Header.js",
       "_Footer.js"
@@ -2444,11 +3449,11 @@
     "src": "resources/js/Pages/Spmb/Success.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime.js",
+      "resources/js/app.jsx",
       "_circle-check-big.js",
       "_triangle-alert.js",
       "_download.js",
-      "resources/js/app.jsx",
+      "_file-text.js",
       "_gsap.js",
       "_Header.js",
       "_Footer.js"
@@ -2459,12 +3464,14 @@
     "name": "app",
     "src": "resources/js/app.jsx",
     "isEntry": true,
-    "imports": [
-      "_jsx-runtime.js",
-      "_createLucideIcon.js",
-      "_book-open.js"
-    ],
     "dynamicImports": [
+      "resources/js/Pages/Absensi/Checkin.tsx",
+      "resources/js/Pages/Absensi/Checkout.tsx",
+      "resources/js/Pages/Absensi/Status.tsx",
+      "resources/js/Pages/Admin/Absensi/GuruIndex.tsx",
+      "resources/js/Pages/Admin/Absensi/Index.tsx",
+      "resources/js/Pages/Admin/Absensi/Kelas.tsx",
+      "resources/js/Pages/Admin/Absensi/Rekap.tsx",
       "resources/js/Pages/Admin/Alumni/Create.tsx",
       "resources/js/Pages/Admin/Alumni/Edit.tsx",
       "resources/js/Pages/Admin/Alumni/Index.tsx",
@@ -2475,6 +3482,9 @@
       "resources/js/Pages/Admin/Berita/Create.tsx",
       "resources/js/Pages/Admin/Berita/Edit.tsx",
       "resources/js/Pages/Admin/Berita/Index.tsx",
+      "resources/js/Pages/Admin/BukuInduk/Cetak.tsx",
+      "resources/js/Pages/Admin/BukuInduk/Index.tsx",
+      "resources/js/Pages/Admin/BukuInduk/Show.tsx",
       "resources/js/Pages/Admin/CalonSiswa/Create.tsx",
       "resources/js/Pages/Admin/CalonSiswa/Edit.tsx",
       "resources/js/Pages/Admin/CalonSiswa/Index.tsx",
@@ -2494,9 +3504,23 @@
       "resources/js/Pages/Admin/Gtk/Index.tsx",
       "resources/js/Pages/Admin/Gtk/Show.tsx",
       "resources/js/Pages/Admin/Home.tsx",
+      "resources/js/Pages/Admin/JadwalPelajaran/Index.tsx",
+      "resources/js/Pages/Admin/Kelas/Create.tsx",
       "resources/js/Pages/Admin/Kelas/Edit.tsx",
       "resources/js/Pages/Admin/Kelas/Index.tsx",
       "resources/js/Pages/Admin/Kelas/Show.tsx",
+      "resources/js/Pages/Admin/Laporan/Alumni.tsx",
+      "resources/js/Pages/Admin/Laporan/Dispensasi.tsx",
+      "resources/js/Pages/Admin/Laporan/Erapor.tsx",
+      "resources/js/Pages/Admin/Laporan/Gtk.tsx",
+      "resources/js/Pages/Admin/Laporan/Index.tsx",
+      "resources/js/Pages/Admin/Laporan/Perpustakaan.tsx",
+      "resources/js/Pages/Admin/Laporan/Prestasi.tsx",
+      "resources/js/Pages/Admin/Laporan/PrintView.tsx",
+      "resources/js/Pages/Admin/Laporan/Sarana.tsx",
+      "resources/js/Pages/Admin/Laporan/Siswa.tsx",
+      "resources/js/Pages/Admin/Laporan/Spmb.tsx",
+      "resources/js/Pages/Admin/Laporan/Spp.tsx",
       "resources/js/Pages/Admin/MasterBank/Create.tsx",
       "resources/js/Pages/Admin/MasterBank/Edit.tsx",
       "resources/js/Pages/Admin/MasterBank/Index.tsx",
@@ -2534,10 +3558,14 @@
       "resources/js/Pages/Admin/RaporSiswa/InputNilai.tsx",
       "resources/js/Pages/Admin/RaporSiswa/Show.tsx",
       "resources/js/Pages/Admin/RaporSiswa/Statistik.tsx",
+      "resources/js/Pages/Admin/SaranaPrasarana/Create.tsx",
       "resources/js/Pages/Admin/SaranaPrasarana/Edit.tsx",
       "resources/js/Pages/Admin/SaranaPrasarana/Index.tsx",
       "resources/js/Pages/Admin/SaranaPrasarana/Show.tsx",
+      "resources/js/Pages/Admin/Setting/DataInstansi.tsx",
       "resources/js/Pages/Admin/Setting/Index.tsx",
+      "resources/js/Pages/Admin/Setting/KonfigurasiWeb.tsx",
+      "resources/js/Pages/Admin/Setting/LegalitasInstansi.tsx",
       "resources/js/Pages/Admin/Siswa/Create.tsx",
       "resources/js/Pages/Admin/Siswa/Detail.tsx",
       "resources/js/Pages/Admin/Siswa/Edit.tsx",
@@ -2556,6 +3584,20 @@
       "resources/js/Pages/Admin/Spp/Detail.tsx",
       "resources/js/Pages/Admin/Spp/Edit.tsx",
       "resources/js/Pages/Admin/Spp/Index.tsx",
+      "resources/js/Pages/Admin/TU/ArsipAkreditasi/Create.tsx",
+      "resources/js/Pages/Admin/TU/ArsipAkreditasi/Edit.tsx",
+      "resources/js/Pages/Admin/TU/ArsipAkreditasi/Index.tsx",
+      "resources/js/Pages/Admin/TU/ArsipAkreditasi/Show.tsx",
+      "resources/js/Pages/Admin/TU/NisnManagement/Index.tsx",
+      "resources/js/Pages/Admin/TU/NisnManagement/Show.tsx",
+      "resources/js/Pages/Admin/TU/SuratKeluar/Create.tsx",
+      "resources/js/Pages/Admin/TU/SuratKeluar/Edit.tsx",
+      "resources/js/Pages/Admin/TU/SuratKeluar/Index.tsx",
+      "resources/js/Pages/Admin/TU/SuratKeluar/Show.tsx",
+      "resources/js/Pages/Admin/TU/SuratMasuk/Create.tsx",
+      "resources/js/Pages/Admin/TU/SuratMasuk/Edit.tsx",
+      "resources/js/Pages/Admin/TU/SuratMasuk/Index.tsx",
+      "resources/js/Pages/Admin/TU/SuratMasuk/Show.tsx",
       "resources/js/Pages/Admin/TracerStudy/Create.tsx",
       "resources/js/Pages/Admin/TracerStudy/Edit.tsx",
       "resources/js/Pages/Admin/TracerStudy/Index.tsx",
@@ -2610,7 +3652,10 @@
       "resources/js/Pages/Erapor/P5/InputNilai.tsx",
       "resources/js/Pages/Erapor/TujuanPembelajaran/Create.tsx",
       "resources/js/Pages/Erapor/TujuanPembelajaran/Index.tsx",
+      "resources/js/Pages/Frontend/Agenda/Index.tsx",
       "resources/js/Pages/Frontend/Alumni.tsx",
+      "resources/js/Pages/Frontend/Berita/Index.tsx",
+      "resources/js/Pages/Frontend/Berita/Show.tsx",
       "resources/js/Pages/Frontend/Berita.tsx",
       "resources/js/Pages/Frontend/DetailBerita.tsx",
       "resources/js/Pages/Frontend/DetailEvent.tsx",
@@ -2633,7 +3678,8 @@
       "resources/js/Pages/Spmb/CheckStatus.tsx",
       "resources/js/Pages/Spmb/Index.tsx",
       "resources/js/Pages/Spmb/Register.tsx",
-      "resources/js/Pages/Spmb/Success.tsx"
+      "resources/js/Pages/Spmb/Success.tsx",
+      "_AppLayout.js"
     ]
   }
 }

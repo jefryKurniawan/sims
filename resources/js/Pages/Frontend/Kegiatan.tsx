@@ -1,7 +1,7 @@
-import { Head, Link } from '@inertiajs/inertia-react';
-import Header from '@/Components/Frontend/Header';
-import Footer from '@/Components/Frontend/Footer';
-import { Calendar, Clock } from 'lucide-react';
+import { Head, Link } from "@inertiajs/inertia-react";
+import Header from "@/Components/Frontend/Header";
+import Footer from "@/Components/Frontend/Footer";
+import { Calendar, Clock } from "lucide-react";
 
 interface Kegiatan {
     id: number;
@@ -22,11 +22,11 @@ export default function Kegiatan({ kegiatan }: Props) {
     function formatDate(dateString: string | null) {
         if (!dateString) return null;
         const date = new Date(dateString);
-        return date.toLocaleDateString('id-ID', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
+        return date.toLocaleDateString("id-ID", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
         });
     }
 
@@ -122,8 +122,14 @@ export default function Kegiatan({ kegiatan }: Props) {
                                                         <Calendar className="w-6 h-6 text-emerald-600" />
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs text-emerald-600 font-semibold">Tanggal</p>
-                                                        <p className="text-gray-900 font-medium">{formatDate(kegiatan.tanggal)}</p>
+                                                        <p className="text-xs text-emerald-600 font-semibold">
+                                                            Tanggal
+                                                        </p>
+                                                        <p className="text-gray-900 font-medium">
+                                                            {formatDate(
+                                                                kegiatan.tanggal,
+                                                            )}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             )}
@@ -132,9 +138,13 @@ export default function Kegiatan({ kegiatan }: Props) {
                                                     <Clock className="w-6 h-6 text-primary" />
                                                 </div>
                                                 <div>
-                                                    <p className="text-xs text-primary font-semibold">Dipublikasikan</p>
+                                                    <p className="text-xs text-primary font-semibold">
+                                                        Dipublikasikan
+                                                    </p>
                                                     <p className="text-gray-900 font-medium">
-                                                        {formatDate(kegiatan.created_at)}
+                                                        {formatDate(
+                                                            kegiatan.created_at,
+                                                        )}
                                                     </p>
                                                 </div>
                                             </div>

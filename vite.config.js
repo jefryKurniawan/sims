@@ -1,40 +1,39 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
-import { resolve } from 'path';
+import { defineConfig } from "vite";
+import laravel from "laravel-vite-plugin";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import { resolve } from "path";
 
 export default defineConfig({
     server: {
         hmr: false,
+        port: 5176,
+        host: "127.0.0.1",
     },
     plugins: [
         tailwindcss(),
         laravel({
-            input: [
-                'resources/css/app.css',
-                'resources/js/app.jsx',
-            ],
+            input: ["resources/css/app.css", "resources/js/app.jsx"],
             refresh: true,
         }),
-        react({ jsxRuntime: 'automatic' })
+        react({ jsxRuntime: "automatic" }),
     ],
     resolve: {
         alias: {
-            '@': resolve(__dirname, 'resources/js')
+            "@": resolve(__dirname, "resources/js"),
         },
-        extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
+        extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
     },
     build: {
-        outDir: 'public/build',
+        outDir: "public/build",
         emptyOutDir: true,
         manifest: true,
         rollupOptions: {
             output: {
-                assetFileNames: 'assets/[name][extname]',
-                entryFileNames: 'assets/[name].js',
-                chunkFileNames: 'assets/[name].js'
-            }
-        }
-    }
+                assetFileNames: "assets/[name][extname]",
+                entryFileNames: "assets/[name].js",
+                chunkFileNames: "assets/[name].js",
+            },
+        },
+    },
 });

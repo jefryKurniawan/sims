@@ -34,13 +34,24 @@ export default function Login() {
             gsap.fromTo(
                 formRef.current,
                 { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+                { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
             );
             // Stagger inputs and button
             gsap.fromTo(
-                [emailInputRef.current, passwordInputRef.current, rememberInputRef.current, submitButtonRef.current].filter(Boolean),
+                [
+                    emailInputRef.current,
+                    passwordInputRef.current,
+                    rememberInputRef.current,
+                    submitButtonRef.current,
+                ].filter(Boolean),
                 { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power3.out" }
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    ease: "power3.out",
+                },
             );
             // Animate flash messages if any
             if (flash.error || flash.success) {
@@ -84,13 +95,16 @@ export default function Login() {
     return (
         <div>
             <Head title="Login" />
-            <div ref={formRef} className="w-full max-w-md space-y-6 bg-white dark:bg-gray-800 border-2 border-yellow-200 rounded-2xl shadow-2xl p-8">
+            <div
+                ref={formRef}
+                className="w-full max-w-md space-y-6 bg-white dark:bg-gray-800 border-2 border-yellow-200 rounded-2xl shadow-2xl p-8"
+            >
                 <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
                     Masuk ke Akun Anda
                 </h2>
 
                 {flash.error && (
-                    <div className="flash-message mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-700 dark:text-red-300">
+                    <div className="flash-message mb-4 p-3 bg-destructive/10 dark:bg-destructive/20 border border-destructive/20 dark:border-destructive rounded-lg text-sm text-destructive">
                         {flash.error}
                     </div>
                 )}
@@ -117,13 +131,13 @@ export default function Login() {
                             onChange={(e) => setData("email", e.target.value)}
                             onFocus={handleFocus}
                             onBlur={handleBlur}
-                            className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none transition duration-200 dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.email ? "border-red-500" : "border-gray-300"}`}
+                            className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none transition duration-200 dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.email ? "border-destructive" : "border-gray-300"}`}
                             placeholder="admin@sekolahku.sch.id"
                             required
                             autoFocus
                         />
                         {errors.email && (
-                            <p className="mt-1 text-xs text-red-500">
+                            <p className="mt-1 text-xs text-destructive">
                                 {errors.email}
                             </p>
                         )}
@@ -142,10 +156,12 @@ export default function Login() {
                                 ref={passwordInputRef}
                                 type={showPassword ? "text" : "password"}
                                 value={data.password}
-                                onChange={(e) => setData("password", e.target.value)}
+                                onChange={(e) =>
+                                    setData("password", e.target.value)
+                                }
                                 onFocus={handleFocus}
                                 onBlur={handleBlur}
-                                className={`w-full px-4 py-2.5 pr-10 border rounded-lg text-sm focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none transition duration-200 dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.password ? "border-red-500" : "border-gray-300"}`}
+                                className={`w-full px-4 py-2.5 pr-10 border rounded-lg text-sm focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 outline-none transition duration-200 dark:bg-gray-700 dark:text-white dark:border-gray-600 ${errors.password ? "border-destructive" : "border-gray-300"}`}
                                 placeholder="••••••••"
                                 required
                             />
@@ -153,13 +169,21 @@ export default function Login() {
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute right-2 top-0 bottom-0 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition duration-200"
-                                aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+                                aria-label={
+                                    showPassword
+                                        ? "Sembunyikan password"
+                                        : "Tampilkan password"
+                                }
                             >
-                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                {showPassword ? (
+                                    <EyeOff size={18} />
+                                ) : (
+                                    <Eye size={18} />
+                                )}
                             </button>
                         </div>
                         {errors.password && (
-                            <p className="mt-1 text-xs text-red-500">
+                            <p className="mt-1 text-xs text-destructive">
                                 {errors.password}
                             </p>
                         )}
@@ -171,7 +195,9 @@ export default function Login() {
                             ref={rememberInputRef}
                             type="checkbox"
                             checked={data.remember}
-                            onChange={(e) => setData("remember", e.target.checked)}
+                            onChange={(e) =>
+                                setData("remember", e.target.checked)
+                            }
                             className="w-4 h-4 text-yellow-400 border-gray-300 rounded focus:ring-yellow-400"
                         />
                         <label

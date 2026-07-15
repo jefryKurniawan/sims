@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
-import React from 'react';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
-import AppLayout from '@/Layout/AppLayout';
+import React from "react";
+import { Head, Link, useForm } from "@inertiajs/inertia-react";
+import AppLayout from "@/Layout/AppLayout";
 
 interface NilaiFormatif {
     id: number;
@@ -49,18 +49,25 @@ interface Props {
     };
 }
 
-export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: Props) {
-    const [activeTab, setActiveTab] = React.useState<'formatif' | 'sumatif'>('formatif');
+export default function Index({
+    nilaiFormatif,
+    nilaiSumatif,
+    mapels,
+    filters,
+}: Props) {
+    const [activeTab, setActiveTab] = React.useState<"formatif" | "sumatif">(
+        "formatif",
+    );
 
     const form = useForm({
-        rapor_mapel_id: filters.rapor_mapel_id || '',
-        tanggal_from: filters.tanggal_from || '',
-        tanggal_to: filters.tanggal_to || '',
+        rapor_mapel_id: filters.rapor_mapel_id || "",
+        tanggal_from: filters.tanggal_from || "",
+        tanggal_to: filters.tanggal_to || "",
     });
 
     const handleFilter = (e: React.FormEvent) => {
         e.preventDefault();
-        window.location.href = route('admin.erapor.nilai.index', {
+        window.location.href = route("admin.erapor.nilai.index", {
             rapor_mapel_id: form.data.rapor_mapel_id || undefined,
             tanggal_from: form.data.tanggal_from || undefined,
             tanggal_to: form.data.tanggal_to || undefined,
@@ -82,7 +89,7 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                             </p>
                         </div>
                         <Link
-                            href={route('admin.erapor.nilai.input')}
+                            href={route("admin.erapor.nilai.input")}
                             className="px-4 py-2 bg-navy-600 text-white rounded-md hover:bg-navy-700"
                         >
                             + Input Nilai
@@ -90,7 +97,10 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                     </div>
 
                     {/* Filter */}
-                    <form onSubmit={handleFilter} className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
+                    <form
+                        onSubmit={handleFilter}
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6"
+                    >
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -98,12 +108,19 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                                 </label>
                                 <select
                                     value={form.data.rapor_mapel_id}
-                                    onChange={(e) => form.setData('rapor_mapel_id', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            "rapor_mapel_id",
+                                            e.target.value,
+                                        )
+                                    }
                                     className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 >
                                     <option value="">Semua Mapel</option>
                                     {mapels.map((m) => (
-                                        <option key={m.id} value={m.id}>{m.nama}</option>
+                                        <option key={m.id} value={m.id}>
+                                            {m.nama}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
@@ -114,7 +131,12 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                                 <input
                                     type="date"
                                     value={form.data.tanggal_from}
-                                    onChange={(e) => form.setData('tanggal_from', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            "tanggal_from",
+                                            e.target.value,
+                                        )
+                                    }
                                     className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 />
                             </div>
@@ -125,7 +147,12 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                                 <input
                                     type="date"
                                     value={form.data.tanggal_to}
-                                    onChange={(e) => form.setData('tanggal_to', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            "tanggal_to",
+                                            e.target.value,
+                                        )
+                                    }
                                     className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 />
                             </div>
@@ -145,21 +172,21 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                         <div className="border-b border-gray-200 dark:border-gray-700">
                             <nav className="-mb-px flex gap-4">
                                 <button
-                                    onClick={() => setActiveTab('formatif')}
+                                    onClick={() => setActiveTab("formatif")}
                                     className={`pb-2 px-1 font-medium text-sm ${
-                                        activeTab === 'formatif'
-                                            ? 'border-b-2 border-navy-600 text-navy-600'
-                                            : 'text-gray-500 hover:text-gray-700'
+                                        activeTab === "formatif"
+                                            ? "border-b-2 border-navy-600 text-navy-600"
+                                            : "text-gray-500 hover:text-gray-700"
                                     }`}
                                 >
                                     Asesmen Formatif
                                 </button>
                                 <button
-                                    onClick={() => setActiveTab('sumatif')}
+                                    onClick={() => setActiveTab("sumatif")}
                                     className={`pb-2 px-1 font-medium text-sm ${
-                                        activeTab === 'sumatif'
-                                            ? 'border-b-2 border-navy-600 text-navy-600'
-                                            : 'text-gray-500 hover:text-gray-700'
+                                        activeTab === "sumatif"
+                                            ? "border-b-2 border-navy-600 text-navy-600"
+                                            : "text-gray-500 hover:text-gray-700"
                                     }`}
                                 >
                                     Asesmen Sumatif
@@ -169,47 +196,72 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                     </div>
 
                     {/* Table Formatif */}
-                    {activeTab === 'formatif' && (
+                    {activeTab === "formatif" && (
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
                             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead className="bg-gray-50 dark:bg-gray-900">
                                     <tr>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Siswa</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mapel</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">TP</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jenis</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nilai</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Catatan</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Siswa
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Mapel
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            TP
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Jenis
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Tanggal
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Nilai
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Catatan
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                                     {nilaiFormatif.data.map((nilai) => (
-                                        <tr key={nilai.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <tr
+                                            key={nilai.id}
+                                            className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                                        >
                                             <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                                                {nilai.rapor_siswa?.siswa?.nama_lengkap || '-'}
+                                                {nilai.rapor_siswa?.siswa
+                                                    ?.nama_lengkap || "-"}
                                             </td>
                                             <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                                {nilai.rapor_mapel?.nama || '-'}
+                                                {nilai.rapor_mapel?.nama || "-"}
                                             </td>
                                             <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                                {nilai.tujuan_pembelajaran?.kode_tp || '-'}
+                                                {nilai.tujuan_pembelajaran
+                                                    ?.kode_tp || "-"}
                                             </td>
                                             <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                                 {nilai.jenis}
                                             </td>
                                             <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                                {new Date(nilai.tanggal).toLocaleDateString('id-ID')}
+                                                {new Date(
+                                                    nilai.tanggal,
+                                                ).toLocaleDateString("id-ID")}
                                             </td>
                                             <td className="px-4 py-3 text-sm">
-                                                <span className={`font-medium ${
-                                                    nilai.nilai >= 75 ? 'text-green-600' : 'text-red-600'
-                                                }`}>
+                                                <span
+                                                    className={`font-medium ${
+                                                        nilai.nilai >= 75
+                                                            ? "text-green-600"
+                                                            : "text-destructive"
+                                                    }`}
+                                                >
                                                     {nilai.nilai}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
-                                                {nilai.catatan || '-'}
+                                                {nilai.catatan || "-"}
                                             </td>
                                         </tr>
                                     ))}
@@ -220,19 +272,22 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                             <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                                        Halaman {nilaiFormatif.current_page} dari {nilaiFormatif.last_page}
+                                        Halaman {nilaiFormatif.current_page}{" "}
+                                        dari {nilaiFormatif.last_page}
                                     </span>
                                     <div className="flex gap-1">
                                         {nilaiFormatif.links.map((link, i) => (
                                             <Link
                                                 key={i}
-                                                href={link.url || '#'}
+                                                href={link.url || "#"}
                                                 className={`px-3 py-1 rounded text-sm ${
                                                     link.active
-                                                        ? 'bg-navy-600 text-white'
-                                                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100'
+                                                        ? "bg-navy-600 text-white"
+                                                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100"
                                                 }`}
-                                                dangerouslySetInnerHTML={{ __html: link.label }}
+                                                dangerouslySetInnerHTML={{
+                                                    __html: link.label,
+                                                }}
                                             />
                                         ))}
                                     </div>
@@ -242,37 +297,57 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                     )}
 
                     {/* Table Sumatif */}
-                    {activeTab === 'sumatif' && (
+                    {activeTab === "sumatif" && (
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
                             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead className="bg-gray-50 dark:bg-gray-900">
                                     <tr>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Siswa</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mapel</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jenis</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nilai</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Siswa
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Mapel
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Jenis
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Tanggal
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Nilai
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                                     {nilaiSumatif.data.map((nilai) => (
-                                        <tr key={nilai.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <tr
+                                            key={nilai.id}
+                                            className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                                        >
                                             <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                                                {nilai.rapor_siswa?.siswa?.nama_lengkap || '-'}
+                                                {nilai.rapor_siswa?.siswa
+                                                    ?.nama_lengkap || "-"}
                                             </td>
                                             <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                                {nilai.rapor_mapel?.nama || '-'}
+                                                {nilai.rapor_mapel?.nama || "-"}
                                             </td>
                                             <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                                                 {nilai.jenis}
                                             </td>
                                             <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                                {new Date(nilai.tanggal).toLocaleDateString('id-ID')}
+                                                {new Date(
+                                                    nilai.tanggal,
+                                                ).toLocaleDateString("id-ID")}
                                             </td>
                                             <td className="px-4 py-3 text-sm">
-                                                <span className={`font-medium ${
-                                                    nilai.nilai >= 75 ? 'text-green-600' : 'text-red-600'
-                                                }`}>
+                                                <span
+                                                    className={`font-medium ${
+                                                        nilai.nilai >= 75
+                                                            ? "text-green-600"
+                                                            : "text-destructive"
+                                                    }`}
+                                                >
                                                     {nilai.nilai}
                                                 </span>
                                             </td>
@@ -285,19 +360,22 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                             <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                                        Halaman {nilaiSumatif.current_page} dari {nilaiSumatif.last_page}
+                                        Halaman {nilaiSumatif.current_page} dari{" "}
+                                        {nilaiSumatif.last_page}
                                     </span>
                                     <div className="flex gap-1">
                                         {nilaiSumatif.links.map((link, i) => (
                                             <Link
                                                 key={i}
-                                                href={link.url || '#'}
+                                                href={link.url || "#"}
                                                 className={`px-3 py-1 rounded text-sm ${
                                                     link.active
-                                                        ? 'bg-navy-600 text-white'
-                                                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100'
+                                                        ? "bg-navy-600 text-white"
+                                                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100"
                                                 }`}
-                                                dangerouslySetInnerHTML={{ __html: link.label }}
+                                                dangerouslySetInnerHTML={{
+                                                    __html: link.label,
+                                                }}
                                             />
                                         ))}
                                     </div>
@@ -313,7 +391,7 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
                         </h3>
                         <div className="flex gap-4">
                             <Link
-                                href={route('admin.erapor.nilai.export')}
+                                href={route("admin.erapor.nilai.export")}
                                 className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700"
                             >
                                 📥 Export Excel
@@ -327,4 +405,4 @@ export default function Index({ nilaiFormatif, nilaiSumatif, mapels, filters }: 
     );
 }
 
-Index.layout = (page: React.ReactElement) => <AppLayout children={page} />
+Index.layout = (page: React.ReactElement) => <AppLayout children={page} />;

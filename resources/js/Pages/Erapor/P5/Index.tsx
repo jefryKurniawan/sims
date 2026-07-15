@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
-import React from 'react';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
-import AppLayout from '@/Layout/AppLayout';
+import React from "react";
+import { Head, Link, useForm } from "@inertiajs/inertia-react";
+import AppLayout from "@/Layout/AppLayout";
 
 interface P5Projek {
     id: number;
@@ -27,26 +27,28 @@ interface Props {
 
 export default function Index({ projeks }: Props) {
     const dimensiLabels: Record<string, string> = {
-        'beriman_bertaqwa': 'Beriman, Bertaqwa',
-        'berkebinekaan_global': 'Berkebinekaan Global',
-        'bergotong_royong': 'Bergotong Royong',
-        'mandiri': 'Mandiri',
-        'bernalar_kritis': 'Bernalar Kritis',
-        'kreatif': 'Kreatif',
+        beriman_bertaqwa: "Beriman, Bertaqwa",
+        berkebinekaan_global: "Berkebinekaan Global",
+        bergotong_royong: "Bergotong Royong",
+        mandiri: "Mandiri",
+        bernalar_kritis: "Bernalar Kritis",
+        kreatif: "Kreatif",
     };
 
     const temaBadge = (tema: string) => {
         const colors = [
-            'bg-blue-100 text-blue-800',
-            'bg-green-100 text-green-800',
-            'bg-purple-100 text-purple-800',
-            'bg-orange-100 text-orange-800',
-            'bg-pink-100 text-pink-800',
-            'bg-indigo-100 text-indigo-800',
+            "bg-blue-100 text-blue-800",
+            "bg-green-100 text-green-800",
+            "bg-purple-100 text-purple-800",
+            "bg-orange-100 text-orange-800",
+            "bg-pink-100 text-pink-800",
+            "bg-indigo-100 text-indigo-800",
         ];
         const index = Math.abs(tema.length) % colors.length;
         return (
-            <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[index]}`}>
+            <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${colors[index]}`}
+            >
                 {tema}
             </span>
         );
@@ -60,14 +62,16 @@ export default function Index({ projeks }: Props) {
                     <div className="flex justify-between items-center mb-6">
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                Projek P5 (Projek Penguatan Profil Pelajar Pancasila)
+                                Projek P5 (Projek Penguatan Profil Pelajar
+                                Pancasila)
                             </h1>
                             <p className="text-gray-600 dark:text-gray-400 mt-1">
-                                Kelola projek dan input nilai P5 dengan 6 dimensi
+                                Kelola projek dan input nilai P5 dengan 6
+                                dimensi
                             </p>
                         </div>
                         <Link
-                            href={route('admin.erapor.p5.create')}
+                            href={route("admin.erapor.p5.create")}
                             className="px-4 py-2 bg-navy-600 text-white rounded-md hover:bg-navy-700"
                         >
                             + Tambah Projek
@@ -96,7 +100,9 @@ export default function Index({ projeks }: Props) {
                         </div>
                         <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg shadow p-4 text-white">
                             <div className="text-sm opacity-90">Tema Umum</div>
-                            <div className="text-lg font-bold">Kebinekaan Global</div>
+                            <div className="text-lg font-bold">
+                                Kebinekaan Global
+                            </div>
                             <ul className="text-xs mt-2 opacity-80 space-y-1">
                                 <li>• Gotong Royong</li>
                                 <li>• Gaya Hidup Berkelanjutan</li>
@@ -123,36 +129,61 @@ export default function Index({ projeks }: Props) {
                                     </p>
                                     <div className="space-y-2 text-sm">
                                         <div className="flex justify-between">
-                                            <span className="text-gray-500">Tingkat:</span>
+                                            <span className="text-gray-500">
+                                                Tingkat:
+                                            </span>
                                             <span className="font-medium text-gray-900 dark:text-white">
                                                 Kelas {projek.tingkat}
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-500">Jurusan:</span>
+                                            <span className="text-gray-500">
+                                                Jurusan:
+                                            </span>
                                             <span className="font-medium text-gray-900 dark:text-white">
-                                                {projek.jurusan?.nama || 'Semua'}
+                                                {projek.jurusan?.nama ||
+                                                    "Semua"}
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-500">Periode:</span>
+                                            <span className="text-gray-500">
+                                                Periode:
+                                            </span>
                                             <span className="font-medium text-gray-900 dark:text-white">
-                                                {new Date(projek.tanggal_mulai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} - {new Date(projek.tanggal_selesai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                                                {new Date(
+                                                    projek.tanggal_mulai,
+                                                ).toLocaleDateString("id-ID", {
+                                                    day: "numeric",
+                                                    month: "short",
+                                                })}{" "}
+                                                -{" "}
+                                                {new Date(
+                                                    projek.tanggal_selesai,
+                                                ).toLocaleDateString("id-ID", {
+                                                    day: "numeric",
+                                                    month: "short",
+                                                })}
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-500">Guru Pengampu:</span>
+                                            <span className="text-gray-500">
+                                                Guru Pengampu:
+                                            </span>
                                             <span className="font-medium text-gray-900 dark:text-white">
                                                 {projek.nama_guru_pengampu}
                                             </span>
                                         </div>
                                         <div className="flex justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-                                            <span className="text-gray-500">Nilai Terinput:</span>
-                                            <span className={`font-medium ${
-                                                projek.p5_nilai_count > 0
-                                                    ? 'text-green-600'
-                                                    : 'text-gray-400'
-                                            }`}>
+                                            <span className="text-gray-500">
+                                                Nilai Terinput:
+                                            </span>
+                                            <span
+                                                className={`font-medium ${
+                                                    projek.p5_nilai_count > 0
+                                                        ? "text-green-600"
+                                                        : "text-gray-400"
+                                                }`}
+                                            >
                                                 {projek.p5_nilai_count} data
                                             </span>
                                         </div>
@@ -160,13 +191,19 @@ export default function Index({ projeks }: Props) {
                                 </div>
                                 <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex justify-between gap-2">
                                     <Link
-                                        href={route('admin.erapor.p5.input-nilai', projek.id)}
+                                        href={route(
+                                            "admin.erapor.p5.input-nilai",
+                                            projek.id,
+                                        )}
                                         className="px-3 py-1.5 text-sm bg-emerald-600 text-white rounded hover:bg-emerald-700"
                                     >
                                         Input Nilai
                                     </Link>
                                     <Link
-                                        href={route('admin.erapor.p5.edit', projek.id)}
+                                        href={route(
+                                            "admin.erapor.p5.edit",
+                                            projek.id,
+                                        )}
                                         className="px-3 py-1.5 text-sm bg-navy-600 text-white rounded hover:bg-navy-700"
                                     >
                                         Edit
@@ -180,19 +217,22 @@ export default function Index({ projeks }: Props) {
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow px-4 py-3">
                         <div className="flex justify-between items-center">
                             <span className="text-sm text-gray-500 dark:text-gray-400">
-                                Halaman {projeks.current_page} dari {projeks.last_page}
+                                Halaman {projeks.current_page} dari{" "}
+                                {projeks.last_page}
                             </span>
                             <div className="flex gap-1">
                                 {projeks.links.map((link, i) => (
                                     <Link
                                         key={i}
-                                        href={link.url || '#'}
+                                        href={link.url || "#"}
                                         className={`px-3 py-1 rounded text-sm ${
                                             link.active
-                                                ? 'bg-navy-600 text-white'
-                                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100'
+                                                ? "bg-navy-600 text-white"
+                                                : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100"
                                         }`}
-                                        dangerouslySetInnerHTML={{ __html: link.label }}
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
                                     />
                                 ))}
                             </div>
@@ -204,4 +244,4 @@ export default function Index({ projeks }: Props) {
     );
 }
 
-Index.layout = (page: React.ReactElement) => <AppLayout children={page} />
+Index.layout = (page: React.ReactElement) => <AppLayout children={page} />;

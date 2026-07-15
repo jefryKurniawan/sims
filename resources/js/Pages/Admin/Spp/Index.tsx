@@ -46,7 +46,7 @@ export default function Index() {
             render: (v: string) => {
                 const colors: Record<string, string> = {
                     lunas: "bg-emerald-100 text-emerald-700",
-                    belum_lunas: "bg-red-100 text-red-700",
+                    belum_lunas: "bg-destructive/10 text-destructive",
                     pending: "bg-yellow-100 text-yellow-700",
                 };
                 const labels: Record<string, string> = {
@@ -85,7 +85,7 @@ export default function Index() {
                     </div>
                     <Link
                         href={route("spp.create")}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition text-sm font-semibold shadow-sm"
                     >
                         SPP Baru
                     </Link>
@@ -97,7 +97,7 @@ export default function Index() {
                     </div>
                 )}
                 {flash?.error && (
-                    <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">
+                    <div className="mb-4 p-4 bg-destructive/10 text-destructive border-destructive/20 rounded-lg text-sm font-medium">
                         {flash.error}
                     </div>
                 )}
@@ -146,4 +146,3 @@ export default function Index() {
         </>
     );
 }
-

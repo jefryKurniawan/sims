@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
-import React from 'react';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
-import AppLayout from '@/Layout/AppLayout';
+import React from "react";
+import { Head, Link, useForm } from "@inertiajs/inertia-react";
+import AppLayout from "@/Layout/AppLayout";
 
 interface Mapel {
     id: number;
@@ -21,19 +21,20 @@ interface Props {
 
 export default function Create({ mapels, gurus, faseOptions }: Props) {
     const form = useForm({
-        rapor_mapel_id: '',
-        guru_id: '',
-        kode_tp: '',
-        deskripsi: '',
-        fase: 'A',
+        rapor_mapel_id: "",
+        guru_id: "",
+        kode_tp: "",
+        deskripsi: "",
+        fase: "A",
         semester: 1,
-        tahun_ajaran: new Date().getFullYear() + '/' + (new Date().getFullYear() + 1),
+        tahun_ajaran:
+            new Date().getFullYear() + "/" + (new Date().getFullYear() + 1),
         aktif: true,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        form.post(route('admin.erapor.tujuan-pembelajaran.store'));
+        form.post(route("admin.erapor.tujuan-pembelajaran.store"));
     };
 
     return (
@@ -43,7 +44,9 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
                 <div className="max-w-3xl mx-auto sm:px-6 lg:px-8">
                     <div className="mb-6">
                         <Link
-                            href={route('admin.erapor.tujuan-pembelajaran.index')}
+                            href={route(
+                                "admin.erapor.tujuan-pembelajaran.index",
+                            )}
                             className="text-emerald-600 hover:text-emerald-900"
                         >
                             ← Kembali ke Daftar TP
@@ -53,20 +56,31 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
                         </h1>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
+                    <form
+                        onSubmit={handleSubmit}
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4"
+                    >
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Mata Pelajaran <span className="text-red-500">*</span>
+                                Mata Pelajaran{" "}
+                                <span className="text-destructive">*</span>
                             </label>
                             <select
                                 value={form.data.rapor_mapel_id}
-                                onChange={(e) => form.setData('rapor_mapel_id', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData(
+                                        "rapor_mapel_id",
+                                        e.target.value,
+                                    )
+                                }
                                 className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 required
                             >
                                 <option value="">Pilih Mapel</option>
                                 {mapels.map((m) => (
-                                    <option key={m.id} value={m.id}>{m.nama}</option>
+                                    <option key={m.id} value={m.id}>
+                                        {m.nama}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -77,12 +91,16 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
                             </label>
                             <select
                                 value={form.data.guru_id}
-                                onChange={(e) => form.setData('guru_id', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData("guru_id", e.target.value)
+                                }
                                 className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                             >
                                 <option value="">Pilih Guru</option>
                                 {gurus.map((g) => (
-                                    <option key={g.id} value={g.id}>{g.nama}</option>
+                                    <option key={g.id} value={g.id}>
+                                        {g.nama}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -90,12 +108,15 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Kode TP <span className="text-red-500">*</span>
+                                    Kode TP{" "}
+                                    <span className="text-destructive">*</span>
                                 </label>
                                 <input
                                     type="text"
                                     value={form.data.kode_tp}
-                                    onChange={(e) => form.setData('kode_tp', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData("kode_tp", e.target.value)
+                                    }
                                     placeholder="Contoh: TP-MTK-001"
                                     className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                     required
@@ -104,16 +125,21 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Fase <span className="text-red-500">*</span>
+                                    Fase{" "}
+                                    <span className="text-destructive">*</span>
                                 </label>
                                 <select
                                     value={form.data.fase}
-                                    onChange={(e) => form.setData('fase', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData("fase", e.target.value)
+                                    }
                                     className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                     required
                                 >
                                     {faseOptions.map((f) => (
-                                        <option key={f} value={f}>Fase {f}</option>
+                                        <option key={f} value={f}>
+                                            Fase {f}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
@@ -121,11 +147,14 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Deskripsi <span className="text-red-500">*</span>
+                                Deskripsi{" "}
+                                <span className="text-destructive">*</span>
                             </label>
                             <textarea
                                 value={form.data.deskripsi}
-                                onChange={(e) => form.setData('deskripsi', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData("deskripsi", e.target.value)
+                                }
                                 rows={4}
                                 className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 placeholder="Deskripsi tujuan pembelajaran..."
@@ -136,11 +165,17 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Semester <span className="text-red-500">*</span>
+                                    Semester{" "}
+                                    <span className="text-destructive">*</span>
                                 </label>
                                 <select
                                     value={form.data.semester}
-                                    onChange={(e) => form.setData('semester', parseInt(e.target.value))}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            "semester",
+                                            parseInt(e.target.value),
+                                        )
+                                    }
                                     className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                     required
                                 >
@@ -151,12 +186,18 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Tahun Ajaran <span className="text-red-500">*</span>
+                                    Tahun Ajaran{" "}
+                                    <span className="text-destructive">*</span>
                                 </label>
                                 <input
                                     type="text"
                                     value={form.data.tahun_ajaran}
-                                    onChange={(e) => form.setData('tahun_ajaran', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            "tahun_ajaran",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="2023/2024"
                                     className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                     required
@@ -169,10 +210,14 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
                                 <input
                                     type="checkbox"
                                     checked={form.data.aktif}
-                                    onChange={(e) => form.setData('aktif', e.target.checked)}
+                                    onChange={(e) =>
+                                        form.setData("aktif", e.target.checked)
+                                    }
                                     className="rounded border-gray-300 dark:border-gray-700"
                                 />
-                                <span className="text-sm text-gray-700 dark:text-gray-300">Aktif</span>
+                                <span className="text-sm text-gray-700 dark:text-gray-300">
+                                    Aktif
+                                </span>
                             </label>
                         </div>
 
@@ -182,10 +227,12 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
                                 disabled={form.processing}
                                 className="px-4 py-2 bg-navy-600 text-white rounded-md hover:bg-navy-700 disabled:opacity-50"
                             >
-                                {form.processing ? 'Menyimpan...' : 'Simpan'}
+                                {form.processing ? "Menyimpan..." : "Simpan"}
                             </button>
                             <Link
-                                href={route('admin.erapor.tujuan-pembelajaran.index')}
+                                href={route(
+                                    "admin.erapor.tujuan-pembelajaran.index",
+                                )}
                                 className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
                             >
                                 Batal
@@ -198,4 +245,4 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
     );
 }
 
-Create.layout = (page: React.ReactElement) => <AppLayout children={page} />
+Create.layout = (page: React.ReactElement) => <AppLayout children={page} />;

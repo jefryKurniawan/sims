@@ -1,0 +1,1 @@
+import{f as e,r as t,s as n}from"./app2.js";var r=e(n()),i=t(),a=r.forwardRef(({className:e,...t},n)=>(0,i.jsx)(`input`,{ref:n,className:e,...t}));a.displayName=`Input`;export{a as t};

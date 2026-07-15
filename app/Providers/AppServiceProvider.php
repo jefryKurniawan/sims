@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Berita;
+use App\Observers\BeritaObserver;
 use App\Models\CalonSiswa;
 use App\Observers\CalonSiswaObserver;
 use App\Models\Alumni;
@@ -34,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
         Siswa::observe(SiswaObserver::class);
         SuratMasuk::observe(SuratMasukObserver::class);
         SuratKeluar::observe(SuratKeluarObserver::class);
+        Berita::observe(BeritaObserver::class);
     }
 }

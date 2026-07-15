@@ -10,32 +10,101 @@ class BeritaPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User $user)
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $user->hasRole(['Admin', 'Guru', 'Staf', 'Murid', 'Orang Tua', 'Alumni']);
+        return $user->hasAnyRole(['Admin', 'Humas', 'Penulis']);
     }
 
-    public function view(User $user, Berita $berita)
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Berita $berita): bool
     {
-        // All roles can view active news; Admin can view any
+        // Public can view published
+        if ($berita->status === 'published') {
+            return true;
+        }
+
+        // Admin/Humas can view all
+        if ($user->hasAnyRole(['Admin', 'Humas'])) {
+            return true;
+        }
+
+        // Penulis can view own
+        return $berita->penulis_id === $user->id || $berita->created_by === $user->id;
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        return $user->hasAnyRole(['Admin', 'Humas', 'Penulis']);
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Berita $berita): bool
+    {
+        // Admin/Humas can update any
+        if ($user->hasAnyRole(['Admin', 'Humas'])) {
+            return true;
+        }
+
+        // Penulis can update own drafts/pending
+        return ($berita->penulis_id === $user->id || $berita->created_by === $user->id)
+            && in_array($berita->status, ['draft', 'pending']);
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Berita $berita): bool
+    {
+        // Admin can delete any
         if ($user->hasRole('Admin')) {
             return true;
         }
-        return $berita->is_active == '0'; // assuming '0' means active per model scope
+
+        // Humas/Penulis can delete own drafts
+        return ($berita->penulis_id === $user->id || $berita->created_by === $user->id)
+            && $berita->status === 'draft';
     }
 
-    public function create(User $user)
+    /**
+     * Determine whether the user can submit for approval.
+     */
+    public function submit(User $user, Berita $berita): bool
     {
-        return $user->hasRole(['Admin', 'Guru']);
+        // Only Penulis can submit (Admin/Humas publish directly)
+        if (!$user->hasRole('Penulis')) {
+            return false;
+        }
+
+        // Can only submit own drafts
+        return ($berita->penulis_id === $user->id || $berita->created_by === $user->id)
+            && $berita->status === 'draft';
     }
 
-    public function update(User $user, Berita $berita)
+    /**
+     * Determine whether the user can approve the model.
+     */
+    public function approve(User $user, Berita $berita): bool
     {
-        return $user->hasRole(['Admin', 'Guru']);
+        return $user->hasAnyRole(['Admin', 'Humas'])
+            && $berita->status === 'pending';
     }
 
-    public function delete(User $user, Berita $berita)
+    /**
+     * Determine whether the user can reject the model.
+     */
+    public function reject(User $user, Berita $berita): bool
     {
-        return $user->hasRole('Admin');
+        return $user->hasAnyRole(['Admin', 'Humas'])
+            && $berita->status === 'pending';
     }
 }

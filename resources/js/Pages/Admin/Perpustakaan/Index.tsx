@@ -33,7 +33,7 @@ export default function Index() {
             label: "Status",
             render: (v: boolean) => (
                 <span
-                    className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${v ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}
+                    className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${v ? "bg-emerald-100 text-emerald-700" : "bg-destructive/10 text-destructive"}`}
                 >
                     {v ? "Tersedia" : "Dipinjam"}
                 </span>
@@ -62,7 +62,7 @@ export default function Index() {
                     <div className="flex items-center gap-2">
                         <Link
                             href={route("admin.perpustakaan.create")}
-                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-school-red text-white rounded-lg hover:bg-red-700 transition text-sm font-semibold shadow-sm"
+                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition text-sm font-semibold shadow-sm"
                         >
                             Buku Baru
                         </Link>
@@ -82,7 +82,7 @@ export default function Index() {
                     </div>
                 )}
                 {flash?.error && (
-                    <div className="mb-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium">
+                    <div className="mb-4 p-4 bg-destructive/10 text-destructive border-destructive/20 rounded-lg text-sm font-medium">
                         {flash.error}
                     </div>
                 )}
@@ -136,12 +136,15 @@ export default function Index() {
                     open={showImport}
                     onClose={() => setShowImport(false)}
                     title="Import Buku Perpustakaan"
-                    templateRouteXlsx={route("admin.perpustakaan.template") + "?format=xlsx"}
-                    templateRouteCsv={route("admin.perpustakaan.template") + "?format=csv"}
+                    templateRouteXlsx={
+                        route("admin.perpustakaan.template") + "?format=xlsx"
+                    }
+                    templateRouteCsv={
+                        route("admin.perpustakaan.template") + "?format=csv"
+                    }
                     importRoute={route("admin.perpustakaan.import")}
                 />
             </div>
         </>
     );
 }
-

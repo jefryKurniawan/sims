@@ -106,6 +106,7 @@ export default function Index() {
                             Sarana Baru
                         </Link>
                         <button
+                            type="button"
                             onClick={() => setShowImport(true)}
                             className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm font-semibold shadow-sm"
                         >

@@ -1,123 +1,124 @@
-import { Head } from '@/Layout/Head';
-import { useForm } from '@inertiajs/inertia-react';
-import { useRouter } from '@inertiajs/inertia-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
-import { Link } from '@inertiajs/inertia-react';
+import { Head, useForm, Link, usePage } from "@inertiajs/inertia-react";
+import { ArrowLeft } from "lucide-react";
 
-export default function LegalitasInstansi({ profileSekolah, setting }: { profileSekolah: any; setting: any }) {
-    const { data, setData, put, processing, errors, reset } = useForm({
-        // fields not used in this form but needed for submit
-        nama_sekolah: profileSekolah?.nama_sekolah ?? '',
-        alamat: profileSekolah?.alamat ?? '',
-        logo_url: profileSekolah?.logo ?? '',
-        facebook: profileSekolah?.facebook ?? '',
-        twitter: profileSekolah?.twitter ?? '',
-        instagram: profileSekolah?.instagram ?? '',
-        npsn: setting?.npsn ?? '',
-        akreditasi: setting?.akreditasi ?? '',
-        nama_kepala_sekolah: setting?.nama_kepala_sekolah ?? '',
-        nip_kepala_sekolah: setting?.nip_kepala_sekolah ?? '',
-        tema: setting?.tema ?? 'navy',
-        hero_media_type: setting?.hero_media_type ?? 'foto',
-        hero_media_url: setting?.hero_media_url ?? '',
+export default function LegalitasInstansi() {
+    const { setting } = usePage().props as any;
+    const s = setting || {};
+
+    const { data, setData, put, processing, errors } = useForm({
+        npsn: s.npsn || "",
+        akreditasi: s.akreditasi || "",
+        nama_kepala_sekolah: s.nama_kepala_sekolah || "",
+        nip_kepala_sekolah: s.nip_kepala_sekolah || "",
     });
-
-    const router = useRouter();
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(route('settings.update'), {
-            onSuccess: () => {
-                toast.success('Pengaturan berhasil disimpan.');
-                router.visit(route('settings'));
-            },
-            onError: () => {
-                toast.error('Terjadi kesalahan, silakan coba lagi');
-            },
-        });
+        put(route("settings.update"));
     };
 
     return (
         <>
             <Head title="Legalitas Instansi" />
-            <div className="pb-8">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                    <h1 className="text-2xl font-bold">Legalitas Instansi</h1>
-                    <Link href={route('settings')} className={Button} variant="secondary">
-                        Kembali
+            <div className="p-6 max-w-2xl mx-auto">
+                <div className="flex items-center gap-4 mb-6">
+                    <Link
+                        href={route("settings")}
+                        className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
                     </Link>
+                    <h1 className="text-2xl font-bold text-gray-900 font-heading">
+                        Legalitas Instansi
+                    </h1>
                 </div>
 
-                <form onSubmit={submit} className="space-y-6">
-                    <div>
-                        <Label htmlFor="npsn">NPSN</Label>
-                        <Input
-                            id="npsn"
-                            type="text"
-                            value={data.npsn}
-                            onChange={(e) => setData('npsn', e.target.value)}
-                            disabled={processing}
-                            className={errors.npsn ? 'border-red-500' : undefined}
-                        />
-                        {errors.npsn && (
-                            <p className="text-sm text-red-600 mt-1">{errors.npsn}</p>
-                        )}
-                    </div>
+                <div className="bg-white rounded-xl border border-border shadow-sm">
+                    <form onSubmit={submit} className="p-6 space-y-5">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label htmlFor="npsn" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    NPSN <span className="text-destructive">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="npsn"
+                                    value={data.npsn}
+                                    onChange={(e) => setData("npsn", e.target.value)}
+                                    className="w-full px-3 py-2 border border-primary/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                                />
+                                {errors.npsn && (
+                                    <p className="text-sm text-destructive mt-1">{errors.npsn}</p>
+                                )}
+                            </div>
+                            <div>
+                                <label htmlFor="akreditasi" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Akreditasi <span className="text-destructive">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="akreditasi"
+                                    value={data.akreditasi}
+                                    onChange={(e) => setData("akreditasi", e.target.value)}
+                                    className="w-full px-3 py-2 border border-primary/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                                    placeholder="A / B / C"
+                                />
+                                {errors.akreditasi && (
+                                    <p className="text-sm text-destructive mt-1">{errors.akreditasi}</p>
+                                )}
+                            </div>
+                        </div>
 
-                    <div>
-                        <Label htmlFor="akreditasi">Akreditasi</Label>
-                        <Input
-                            id="akreditasi"
-                            type="text"
-                            value={data.akreditasi}
-                            onChange={(e) => setData('akreditasi', e.target.value)}
-                            disabled={processing}
-                            className={errors.akreditasi ? 'border-red-500' : undefined}
-                        />
-                        {errors.akreditasi && (
-                            <p className="text-sm text-red-600 mt-1">{errors.akreditasi}</p>
-                        )}
-                    </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label htmlFor="nama_kepala_sekolah" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Nama Kepala Sekolah <span className="text-destructive">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="nama_kepala_sekolah"
+                                    value={data.nama_kepala_sekolah}
+                                    onChange={(e) => setData("nama_kepala_sekolah", e.target.value)}
+                                    className="w-full px-3 py-2 border border-primary/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                                />
+                                {errors.nama_kepala_sekolah && (
+                                    <p className="text-sm text-destructive mt-1">{errors.nama_kepala_sekolah}</p>
+                                )}
+                            </div>
+                            <div>
+                                <label htmlFor="nip_kepala_sekolah" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    NIP Kepala Sekolah <span className="text-destructive">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="nip_kepala_sekolah"
+                                    value={data.nip_kepala_sekolah}
+                                    onChange={(e) => setData("nip_kepala_sekolah", e.target.value)}
+                                    className="w-full px-3 py-2 border border-primary/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                                />
+                                {errors.nip_kepala_sekolah && (
+                                    <p className="text-sm text-destructive mt-1">{errors.nip_kepala_sekolah}</p>
+                                )}
+                            </div>
+                        </div>
 
-                    <div>
-                        <Label htmlFor="nama_kepala_sekolah">Nama Kepala Sekolah</Label>
-                        <Input
-                            id="nama_kepala_sekolah"
-                            type="text"
-                            value={data.nama_kepala_sekolah}
-                            onChange={(e) => setData('nama_kepala_sekolah', e.target.value)}
-                            disabled={processing}
-                            className={errors.nama_kepala_sekolah ? 'border-red-500' : undefined}
-                        />
-                        {errors.nama_kepala_sekolah && (
-                            <p className="text-sm text-red-600 mt-1">{errors.nama_kepala_sekolah}</p>
-                        )}
-                    </div>
-
-                    <div>
-                        <Label htmlFor="nip_kepala_sekolah">NIP Kepala Sekolah</Label>
-                        <Input
-                            id="nip_kepala_sekolah"
-                            type="text"
-                            value={data.nip_kepala_sekolah}
-                            onChange={(e) => setData('nip_kepala_sekolah', e.target.value)}
-                            disabled={processing}
-                            className={errors.nip_kepala_sekolah ? 'border-red-500' : undefined}
-                        />
-                        {errors.nip_kepala_sekolah && (
-                            <p className="text-sm text-red-600 mt-1">{errors.nip_kepala_sekolah}</p>
-                        )}
-                    </div>
-
-                    <div className="flex justify-end">
-                        <Button type="submit" disabled={processing}>
-                            Simpan
-                        </Button>
-                    </div>
-                </form>
+                        <div className="flex gap-3 pt-4 border-t border-border">
+                            <button
+                                type="submit"
+                                disabled={processing}
+                                className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition text-sm font-semibold shadow-sm disabled:opacity-50"
+                            >
+                                {processing ? "Menyimpan..." : "Simpan"}
+                            </button>
+                            <Link
+                                href={route("settings")}
+                                className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-semibold"
+                            >
+                                Batal
+                            </Link>
+                        </div>
+                    </form>
+                </div>
             </div>
         </>
     );

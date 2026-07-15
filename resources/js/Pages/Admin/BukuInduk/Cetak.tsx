@@ -2,8 +2,8 @@ import { Head, usePage } from "@inertiajs/inertia-react";
 import { Printer, ArrowLeft } from "lucide-react";
 
 export default function Cetak() {
-    const { siswa, bukuInduk, rekamMedis, orangTua, mutasi } = usePage()
-        .props as any;
+    const { siswa, bukuInduk, rekamMedis, orangTua, mutasi, namaSekolah, namaKepalaSekolah } =
+        usePage().props as any;
 
     return (
         <>
@@ -34,9 +34,7 @@ export default function Cetak() {
                     <h1 className="text-xl font-bold uppercase">
                         Buku Induk Siswa
                     </h1>
-                    <p className="text-sm">
-                        Sekolah: ________________________________________
-                    </p>
+                    <p className="text-sm">Sekolah: {namaSekolah || "________________________________________"}</p>
                 </header>
 
                 <Section title="IDENTITAS SISWA">
@@ -181,6 +179,9 @@ export default function Cetak() {
                     <div className="text-right">
                         <p className="mb-16">____________________________</p>
                         <p>Kepala Sekolah</p>
+                        {namaKepalaSekolah ? (
+                            <p className="text-xs mt-1 font-medium">{namaKepalaSekolah}</p>
+                        ) : null}
                     </div>
                 </footer>
             </div>

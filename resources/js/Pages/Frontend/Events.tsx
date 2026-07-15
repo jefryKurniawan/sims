@@ -1,8 +1,8 @@
-import { Head, Link } from '@inertiajs/inertia-react';
-import Header from '@/Components/Frontend/Header';
-import Footer from '@/Components/Frontend/Footer';
-import { Pagination } from '@/Components/Frontend/Pagination';
-import { Calendar, MapPin, Image as ImageIcon } from 'lucide-react';
+import { Head, Link } from "@inertiajs/inertia-react";
+import Header from "@/Components/Frontend/Header";
+import Footer from "@/Components/Frontend/Footer";
+import { Pagination } from "@/Components/Frontend/Pagination";
+import { Calendar, MapPin, Image as ImageIcon } from "lucide-react";
 
 interface Event {
     id: number;
@@ -31,20 +31,20 @@ interface Props {
 export default function Events({ events }: Props) {
     function formatDate(dateString: string) {
         const date = new Date(dateString);
-        return date.toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
+        return date.toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
         });
     }
 
     function formatFullDate(dateString: string) {
         const date = new Date(dateString);
-        return date.toLocaleDateString('id-ID', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
+        return date.toLocaleDateString("id-ID", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
         });
     }
 
@@ -63,8 +63,13 @@ export default function Events({ events }: Props) {
                                     📅 Agenda Sekolah
                                 </span>
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold mb-4">Event Sekolah</h1>
-                            <p className="text-xl text-white/90">Beragam kegiatan dan acara sekolah untuk mengembangkan bakat dan minat siswa</p>
+                            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                                Event Sekolah
+                            </h1>
+                            <p className="text-xl text-white/90">
+                                Beragam kegiatan dan acara sekolah untuk
+                                mengembangkan bakat dan minat siswa
+                            </p>
                         </div>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent" />
@@ -91,28 +96,53 @@ export default function Events({ events }: Props) {
                                                     />
                                                     <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-xl p-3 text-center shadow-lg">
                                                         <div className="text-xs text-gray-500 uppercase font-semibold">
-                                                            {new Date(event.acara).toLocaleDateString('id-ID', { month: 'short' })}
+                                                            {new Date(
+                                                                event.acara,
+                                                            ).toLocaleDateString(
+                                                                "id-ID",
+                                                                {
+                                                                    month: "short",
+                                                                },
+                                                            )}
                                                         </div>
                                                         <div className="text-2xl font-bold text-primary">
-                                                            {new Date(event.acara).getDate()}
+                                                            {new Date(
+                                                                event.acara,
+                                                            ).getDate()}
                                                         </div>
                                                         <div className="text-xs text-gray-500">
-                                                            {new Date(event.acara).getFullYear()}
+                                                            {new Date(
+                                                                event.acara,
+                                                            ).getFullYear()}
                                                         </div>
                                                     </div>
                                                 </div>
                                             ) : (
                                                 <div className="relative h-48 bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
-                                                    <Calendar className="w-20 h-20 text-white/30" strokeWidth={1.5} />
+                                                    <Calendar
+                                                        className="w-20 h-20 text-white/30"
+                                                        strokeWidth={1.5}
+                                                    />
                                                     <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-xl p-3 text-center shadow-lg">
                                                         <div className="text-xs text-gray-500 uppercase font-semibold">
-                                                            {new Date(event.acara).toLocaleDateString('id-ID', { month: 'short' })}
+                                                            {new Date(
+                                                                event.acara,
+                                                            ).toLocaleDateString(
+                                                                "id-ID",
+                                                                {
+                                                                    month: "short",
+                                                                },
+                                                            )}
                                                         </div>
                                                         <div className="text-2xl font-bold text-primary">
-                                                            {new Date(event.acara).getDate()}
+                                                            {new Date(
+                                                                event.acara,
+                                                            ).getDate()}
                                                         </div>
                                                         <div className="text-xs text-gray-500">
-                                                            {new Date(event.acara).getFullYear()}
+                                                            {new Date(
+                                                                event.acara,
+                                                            ).getFullYear()}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -121,7 +151,9 @@ export default function Events({ events }: Props) {
                                             {/* Content */}
                                             <div className="p-6">
                                                 <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                                                    <Link href={`/event/${event.slug}`}>
+                                                    <Link
+                                                        href={`/event/${event.slug}`}
+                                                    >
                                                         {event.title}
                                                     </Link>
                                                 </h3>
@@ -132,12 +164,24 @@ export default function Events({ events }: Props) {
                                                 {/* Info */}
                                                 <div className="space-y-2 mb-4">
                                                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                                                        <Calendar className="w-4 h-4 text-primary" strokeWidth={2} />
-                                                        <span>{formatFullDate(event.acara)}</span>
+                                                        <Calendar
+                                                            className="w-4 h-4 text-primary"
+                                                            strokeWidth={2}
+                                                        />
+                                                        <span>
+                                                            {formatFullDate(
+                                                                event.acara,
+                                                            )}
+                                                        </span>
                                                     </div>
                                                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                                                        <MapPin className="w-4 h-4 text-primary" strokeWidth={2} />
-                                                        <span>{event.lokasi}</span>
+                                                        <MapPin
+                                                            className="w-4 h-4 text-primary"
+                                                            strokeWidth={2}
+                                                        />
+                                                        <span>
+                                                            {event.lokasi}
+                                                        </span>
                                                     </div>
                                                 </div>
 
@@ -147,8 +191,18 @@ export default function Events({ events }: Props) {
                                                     className="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all"
                                                 >
                                                     Baca Selengkapnya
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                    <svg
+                                                        className="w-4 h-4"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M9 5l7 7-7 7"
+                                                        />
                                                     </svg>
                                                 </Link>
                                             </div>
@@ -164,10 +218,17 @@ export default function Events({ events }: Props) {
                         ) : (
                             <div className="text-center py-16 bg-white rounded-2xl shadow-lg">
                                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                                    <Calendar className="w-12 h-12 text-gray-400" strokeWidth={1.5} />
+                                    <Calendar
+                                        className="w-12 h-12 text-gray-400"
+                                        strokeWidth={1.5}
+                                    />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-700 mb-2">Belum Ada Event</h3>
-                                <p className="text-gray-500">Event akan segera ditambahkan</p>
+                                <h3 className="text-xl font-bold text-gray-700 mb-2">
+                                    Belum Ada Event
+                                </h3>
+                                <p className="text-gray-500">
+                                    Event akan segera ditambahkan
+                                </p>
                             </div>
                         )}
                     </div>

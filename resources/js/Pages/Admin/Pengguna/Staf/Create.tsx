@@ -1,38 +1,46 @@
-import { Head, useForm, router } from '@inertiajs/inertia-react';
-import { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { Head, useForm } from "@inertiajs/inertia-react";
+import { Inertia as router } from "@inertiajs/inertia";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export default function StafCreate() {
-    const { data: formData, setData, post, processing, reset, errors } = useForm({
-        name: '',
-        email: '',
-        username: '',
-        password: '',
+    const {
+        data: formData,
+        setData,
+        post,
+        processing,
+        reset,
+        errors,
+    } = useForm({
+        name: "",
+        email: "",
+        username: "",
+        password: "",
         foto_profile: null,
-        nip: '',
-        mengajar: '',
-        linkidln: '',
-        instagram: '',
-        website: '',
-        facebook: '',
-        twitter: '',
-        youtube: '',
+        nip: "",
+        mengajar: "",
+        linkidln: "",
+        instagram: "",
+        website: "",
+        facebook: "",
+        twitter: "",
+        youtube: "",
     });
 
     const handleFotoProfileChange = (e) => {
         if (e.target.files[0]) {
-            setData('foto_profile', e.target.files[0]);
+            setData("foto_profile", e.target.files[0]);
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('users.staf.store'), {
+        post(route("users.staf.store"), {
             onSuccess: () => {
                 reset();
-            }
+            },
         });
     };
 
@@ -40,17 +48,21 @@ export default function StafCreate() {
         <>
             <Head title="Tambah Staf" />
             <div className="p-6">
-                <h1 className="text-2xl font-bold text-gray-800 mb-6">Tambah Staf Baru</h1>
+                <h1 className="text-2xl font-bold text-gray-800 mb-6">
+                    Tambah Staf Baru
+                </h1>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Simplified form fields */}
                     <div>
-                        <Label htmlFor="name" className="mb-2">Nama Lengkap</Label>
+                        <Label htmlFor="name" className="mb-2">
+                            Nama Lengkap
+                        </Label>
                         <Input
                             type="text"
                             id="name"
                             value={formData.name}
-                            onChange={(e) => setData('name', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary"
+                            onChange={(e) => setData("name", e.target.value)}
+                            className="w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary"
                             disabled={processing}
                         />
                     </div>
@@ -67,7 +79,7 @@ export default function StafCreate() {
                             className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
                             disabled={processing}
                         >
-                            {processing ? 'Menyimpan...' : 'Simpan'}
+                            {processing ? "Menyimpan..." : "Simpan"}
                         </Button>
                     </div>
                 </form>

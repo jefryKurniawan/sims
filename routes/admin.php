@@ -77,7 +77,13 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::resource('alumni/donasi', 'Admin\DonasiController', ['as' => 'alumni']);
         Route::post('alumni/donasi/{donasi}/verify', 'Admin\DonasiController@verify')->name('alumni.donasi.verify');
         Route::resource('alumni/tracer-study', 'Admin\TracerStudyController', ['as' => 'alumni']);
-        Route::resource('berita-admin', 'Admin\BeritaController');
+        Route::resource('berita', 'Admin\BeritaController')->names('admin.berita');
+        Route::post('berita/{berita}/submit', 'Admin\BeritaController@submit')->name('admin.berita.submit');
+        Route::post('berita/{berita}/approve', 'Admin\BeritaController@approve')->name('admin.berita.approve');
+        Route::post('berita/{berita}/reject', 'Admin\BeritaController@reject')->name('admin.berita.reject');
+        Route::get('berita/export', 'Admin\BeritaController@export')->name('admin.berita.export');
+
+        // Berita Admin (legacy website)
 
         // User Management
         Route::resource('users/pengajar', 'Admin\Pengguna\PengajarController', ['as' => 'users']);
@@ -182,6 +188,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::post('kelas/import', 'Admin\KelasController@import')->name('kelas.import');
         Route::resource('kelas', 'Admin\KelasController');
 
+        // Jadwal Pelajaran
+        Route::resource('jadwal', 'Admin\JadwalPelajaranController')->names('jadwal');
+
         // Sarana Prasarana
         Route::get('sarana/template', 'Admin\SaranaPrasaranaController@template')->name('sarana.template');
         Route::post('sarana/import', 'Admin\SaranaPrasaranaController@import')->name('sarana.import');
@@ -194,6 +203,18 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
 
         // SPP
         Route::resource('spp', 'Admin\SppController');
+
+        // Absensi Digital (Simple MVP)
+        Route::prefix('absensi')->name('absensi.')->group(function () {
+            Route::get('/', 'Admin\AbsensiController@index')->name('index');
+            Route::get('kelas/{kelas}', 'Admin\AbsensiController@kelas')->name('kelas');
+            Route::get('kelas/{kelas}/{tanggal}', 'Admin\AbsensiController@kelas')->name('kelas.tanggal');
+            Route::post('kelas/{kelas}', 'Admin\AbsensiController@storeKelas')->name('kelas.store');
+            Route::get('rekap', 'Admin\AbsensiController@rekap')->name('rekap');
+            Route::get('rekap/export', 'Admin\AbsensiController@export')->name('rekap.export');
+            Route::get('guru', 'Admin\AbsensiController@guruIndex')->name('guru');
+            Route::get('guru/export', 'Admin\AbsensiController@guruExport')->name('guru.export');
+        });
         // SPMB Config
         // Laporan (Reports)
         Route::prefix("laporan")->name("laporan.")->group(function () {

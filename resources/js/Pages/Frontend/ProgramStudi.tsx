@@ -1,7 +1,7 @@
-import { Head, Link } from '@inertiajs/inertia-react';
-import Header from '@/Components/Frontend/Header';
-import Footer from '@/Components/Frontend/Footer';
-import { BookOpen, ArrowLeft } from 'lucide-react';
+import { Head, Link } from "@inertiajs/inertia-react";
+import Header from "@/Components/Frontend/Header";
+import Footer from "@/Components/Frontend/Footer";
+import { BookOpen, ArrowLeft } from "lucide-react";
 
 interface DataJurusan {
     id: number;
@@ -68,7 +68,8 @@ export default function ProgramStudi({ jurusan }: Props) {
                 <section className="py-12 -mt-10">
                     <div className="container mx-auto px-4">
                         {/* Program Info Cards */}
-                        {jurusan.data_jurusan && jurusan.data_jurusan.length > 0 ? (
+                        {jurusan.data_jurusan &&
+                        jurusan.data_jurusan.length > 0 ? (
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {jurusan.data_jurusan.map((data) => (
                                     <div
@@ -85,7 +86,10 @@ export default function ProgramStudi({ jurusan }: Props) {
                                                 />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center">
-                                                    <BookOpen className="w-20 h-20 text-primary/30" strokeWidth={1.5} />
+                                                    <BookOpen
+                                                        className="w-20 h-20 text-primary/30"
+                                                        strokeWidth={1.5}
+                                                    />
                                                 </div>
                                             )}
                                         </div>
@@ -115,9 +119,16 @@ export default function ProgramStudi({ jurusan }: Props) {
                             </div>
                         ) : (
                             <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-                                <BookOpen className="w-20 h-20 text-gray-300 mx-auto mb-4" strokeWidth={1.5} />
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">Belum Ada Data</h3>
-                                <p className="text-gray-600">Data program studi belum tersedia.</p>
+                                <BookOpen
+                                    className="w-20 h-20 text-gray-300 mx-auto mb-4"
+                                    strokeWidth={1.5}
+                                />
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                    Belum Ada Data
+                                </h3>
+                                <p className="text-gray-600">
+                                    Data program studi belum tersedia.
+                                </p>
                             </div>
                         )}
 
@@ -127,7 +138,10 @@ export default function ProgramStudi({ jurusan }: Props) {
                                 href="/"
                                 className="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary-dark transition-colors"
                             >
-                                <ArrowLeft className="w-5 h-5" strokeWidth={2} />
+                                <ArrowLeft
+                                    className="w-5 h-5"
+                                    strokeWidth={2}
+                                />
                                 Kembali ke Beranda
                             </Link>
                         </div>

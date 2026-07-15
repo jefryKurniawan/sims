@@ -3,53 +3,64 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BeritaRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return true; // Authorization handled by Policy
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
-        if ($this->method() == 'POST') {
-            return [
-                'title'         => ['required','unique:beritas,title'],
-                'kategori_id'   => ['required'],
-                'content'       => ['required'],
-                'thumbnail'     => ['required','image','max:1024'],
-            ];
+        $rules = [
+            'title' => 'required|string|max:255',
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('beritas', 'slug')->ignore($this->route('berita')?->id),
+            ],
+            'content' => 'required|string',
+            'kategori' => ['required', Rule::in(['pengumuman', 'kegiatan', 'artikel'])],
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ];
+
+        // Penulis cannot set status/is_active directly
+        if (!$this->user()->hasAnyRole(['Admin', 'Humas'])) {
+            $rules['status'] = 'prohibited';
+            $rules['is_active'] = 'prohibited';
+        } else {
+            $rules['status'] = ['sometimes', Rule::in(['draft', 'pending', 'published', 'rejected'])];
+            $rules['is_active'] = 'sometimes|in:0,1';
         }
 
+        return $rules;
+    }
+
+    public function messages(): array
+    {
         return [
-            'title'         => ['required'],
-            'kategori_id'   => ['required'],
-            'content'       => ['required'],
-            'thumbnail'     => ['image','max:1024'],
+            'title.required' => 'Judul berita wajib diisi.',
+            'slug.required' => 'Slug wajib diisi.',
+            'slug.unique' => 'Slug sudah digunakan, gunakan slug lain.',
+            'content.required' => 'Konten berita wajib diisi.',
+            'kategori.required' => 'Kategori wajib dipilih.',
+            'kategori.in' => 'Kategori tidak valid.',
+            'thumbnail.image' => 'Thumbnail harus berupa gambar.',
+            'thumbnail.mimes' => 'Format thumbnail harus jpeg, png, jpg, atau webp.',
+            'thumbnail.max' => 'Ukuran thumbnail maksimal 2MB.',
         ];
     }
 
-    public function messages()
+    protected function prepareForValidation(): void
     {
-        return [
-            'title.required'        => 'Title tidak boleh kosong.',
-            'title.unique'          => 'Title sudah pernah digunakan.',
-            'kategori_id.required'  => 'Kategori tidak boleh kosong.',
-            'content.required'      => 'Content tidak boleh kosong.',
-            'thumbnail.required'    => 'Thumbnail tidak boleh kosong.',
-            'thumbnail.image'       => 'File yang di masukan tidak valid.',
-            'thumbnail.max'         => 'Maksimal size  Thumbnail 1MB.',
-        ];
+        // Auto-generate slug from title if not provided
+        if ($this->title && !$this->slug) {
+            $this->merge([
+                'slug' => str($this->title)->slug(),
+            ]);
+        }
     }
 }

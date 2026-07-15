@@ -1,23 +1,23 @@
 /// <reference types="vite/client" />
-import { Head, Link } from '@inertiajs/inertia-react';
-import Header from '@/Components/Frontend/Header';
-import Footer from '@/Components/Frontend/Footer';
-import { useState } from 'react';
-import { Heart, Shield, ArrowRight, CreditCard } from 'lucide-react';
+import { Head, Link } from "@inertiajs/inertia-react";
+import Header from "@/Components/Frontend/Header";
+import Footer from "@/Components/Frontend/Footer";
+import { useState } from "react";
+import { Heart, Shield, ArrowRight, CreditCard } from "lucide-react";
 
 export default function Donasi() {
     const [donationAmount, setDonationAmount] = useState<number>(0);
-    const [customAmount, setCustomAmount] = useState<string>('');
+    const [customAmount, setCustomAmount] = useState<string>("");
 
     const presetAmounts = [50000, 100000, 250000, 500000, 1000000];
 
     const handlePresetClick = (amount: number) => {
         setDonationAmount(amount);
-        setCustomAmount('');
+        setCustomAmount("");
     };
 
     const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.replace(/\D/g, '');
+        const value = e.target.value.replace(/\D/g, "");
         setCustomAmount(value);
         setDonationAmount(value ? parseInt(value) : 0);
     };
@@ -37,8 +37,12 @@ export default function Donasi() {
                                     ❤️ Donasi Alumni
                                 </span>
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold mb-4">Berbagi untuk Sekolah</h1>
-                            <p className="text-xl text-white/90">Dukung pengembangan sekolah melalui donasi Anda</p>
+                            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                                Berbagi untuk Sekolah
+                            </h1>
+                            <p className="text-xl text-white/90">
+                                Dukung pengembangan sekolah melalui donasi Anda
+                            </p>
                         </div>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent" />
@@ -80,7 +84,10 @@ export default function Donasi() {
                             <div className="lg:col-span-2">
                                 <div className="bg-white rounded-2xl shadow-xl p-8">
                                     <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                                        <Heart className="w-6 h-6 text-rose-500" fill="currentColor" />
+                                        <Heart
+                                            className="w-6 h-6 text-rose-500"
+                                            fill="currentColor"
+                                        />
                                         Pilih Nominal Donasi
                                     </h2>
 
@@ -89,14 +96,20 @@ export default function Donasi() {
                                         {presetAmounts.map((amount) => (
                                             <button
                                                 key={amount}
-                                                onClick={() => handlePresetClick(amount)}
+                                                onClick={() =>
+                                                    handlePresetClick(amount)
+                                                }
                                                 className={`py-3 px-2 rounded-xl font-semibold transition ${
                                                     donationAmount === amount
-                                                        ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30'
-                                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                        ? "bg-rose-500 text-white shadow-lg shadow-rose-500/30"
+                                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                                 }`}
                                             >
-                                                Rp {(amount / 1000).toLocaleString('id-ID')}K
+                                                Rp{" "}
+                                                {(amount / 1000).toLocaleString(
+                                                    "id-ID",
+                                                )}
+                                                K
                                             </button>
                                         ))}
                                     </div>
@@ -107,10 +120,20 @@ export default function Donasi() {
                                             Atau Masukkan Nominal Lainnya
                                         </label>
                                         <div className="relative">
-                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">Rp</span>
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">
+                                                Rp
+                                            </span>
                                             <input
                                                 type="text"
-                                                value={customAmount ? Number(customAmount).toLocaleString('id-ID') : ''}
+                                                value={
+                                                    customAmount
+                                                        ? Number(
+                                                              customAmount,
+                                                          ).toLocaleString(
+                                                              "id-ID",
+                                                          )
+                                                        : ""
+                                                }
                                                 onChange={handleCustomChange}
                                                 placeholder="0"
                                                 className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none text-lg font-semibold"
@@ -121,32 +144,55 @@ export default function Donasi() {
                                     {/* Current Amount Display */}
                                     {donationAmount > 0 && (
                                         <div className="bg-rose-50 border-2 border-rose-200 rounded-xl p-4 mb-6 text-center">
-                                            <p className="text-sm text-rose-600 mb-1">Total Donasi</p>
+                                            <p className="text-sm text-rose-600 mb-1">
+                                                Total Donasi
+                                            </p>
                                             <p className="text-3xl font-bold text-rose-700">
-                                                Rp {donationAmount.toLocaleString('id-ID')}
+                                                Rp{" "}
+                                                {donationAmount.toLocaleString(
+                                                    "id-ID",
+                                                )}
                                             </p>
                                         </div>
                                     )}
 
                                     {/* Payment Method */}
                                     <div className="mb-6">
-                                        <h3 className="font-semibold text-gray-900 mb-3">Metode Pembayaran</h3>
+                                        <h3 className="font-semibold text-gray-900 mb-3">
+                                            Metode Pembayaran
+                                        </h3>
                                         <div className="grid grid-cols-2 gap-3">
                                             <button className="p-4 border-2 border-gray-200 rounded-xl hover:border-rose-500 transition text-center">
-                                                <div className="text-2xl mb-2">🏦</div>
-                                                <div className="text-sm font-semibold">Transfer Bank</div>
+                                                <div className="text-2xl mb-2">
+                                                    🏦
+                                                </div>
+                                                <div className="text-sm font-semibold">
+                                                    Transfer Bank
+                                                </div>
                                             </button>
                                             <button className="p-4 border-2 border-gray-200 rounded-xl hover:border-rose-500 transition text-center">
-                                                <div className="text-2xl mb-2">💳</div>
-                                                <div className="text-sm font-semibold">Kartu Kredit/Debit</div>
+                                                <div className="text-2xl mb-2">
+                                                    💳
+                                                </div>
+                                                <div className="text-sm font-semibold">
+                                                    Kartu Kredit/Debit
+                                                </div>
                                             </button>
                                             <button className="p-4 border-2 border-gray-200 rounded-xl hover:border-rose-500 transition text-center">
-                                                <div className="text-2xl mb-2">📱</div>
-                                                <div className="text-sm font-semibold">E-Wallet</div>
+                                                <div className="text-2xl mb-2">
+                                                    📱
+                                                </div>
+                                                <div className="text-sm font-semibold">
+                                                    E-Wallet
+                                                </div>
                                             </button>
                                             <button className="p-4 border-2 border-gray-200 rounded-xl hover:border-rose-500 transition text-center">
-                                                <div className="text-2xl mb-2">🏪</div>
-                                                <div className="text-sm font-semibold">Retail/Alfamart</div>
+                                                <div className="text-2xl mb-2">
+                                                    🏪
+                                                </div>
+                                                <div className="text-sm font-semibold">
+                                                    Retail/Alfamart
+                                                </div>
                                             </button>
                                         </div>
                                     </div>
@@ -166,39 +212,59 @@ export default function Donasi() {
                             <div className="lg:col-span-1">
                                 {/* Impact Card */}
                                 <div className="bg-gradient-to-br from-rose-500 to-pink-700 rounded-2xl shadow-lg p-6 text-white mb-6">
-                                    <h3 className="font-bold text-lg mb-4">Dampak Donasi Anda</h3>
+                                    <h3 className="font-bold text-lg mb-4">
+                                        Dampak Donasi Anda
+                                    </h3>
                                     <ul className="space-y-3 text-sm">
                                         <li className="flex items-start gap-2">
                                             <span>📚</span>
-                                            <span>Rp 50.000 = 1 paket buku tulis untuk siswa kurang mampu</span>
+                                            <span>
+                                                Rp 50.000 = 1 paket buku tulis
+                                                untuk siswa kurang mampu
+                                            </span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <span>💻</span>
-                                            <span>Rp 500.000 = 1 hari pelatihan komputer untuk 10 siswa</span>
+                                            <span>
+                                                Rp 500.000 = 1 hari pelatihan
+                                                komputer untuk 10 siswa
+                                            </span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <span>🔬</span>
-                                            <span>Rp 1.000.000 = Alat praktikum laboratorium untuk 1 bulan</span>
+                                            <span>
+                                                Rp 1.000.000 = Alat praktikum
+                                                laboratorium untuk 1 bulan
+                                            </span>
                                         </li>
                                         <li className="flex items-start gap-2">
                                             <span>🏆</span>
-                                            <span>Rp 2.000.000 = Beasiswa prestasi untuk 1 siswa berprestasi</span>
+                                            <span>
+                                                Rp 2.000.000 = Beasiswa prestasi
+                                                untuk 1 siswa berprestasi
+                                            </span>
                                         </li>
                                     </ul>
                                 </div>
 
                                 {/* Progress Card */}
                                 <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-                                    <h3 className="font-bold text-gray-900 mb-4">Target Donasi Bulan Ini</h3>
+                                    <h3 className="font-bold text-gray-900 mb-4">
+                                        Target Donasi Bulan Ini
+                                    </h3>
                                     <div className="mb-4">
                                         <div className="flex justify-between text-sm mb-2">
-                                            <span className="text-gray-600">Terkumpul</span>
-                                            <span className="font-semibold">Rp 12.500.000</span>
+                                            <span className="text-gray-600">
+                                                Terkumpul
+                                            </span>
+                                            <span className="font-semibold">
+                                                Rp 12.500.000
+                                            </span>
                                         </div>
                                         <div className="w-full bg-gray-200 rounded-full h-3">
                                             <div
                                                 className="bg-gradient-to-r from-rose-500 to-pink-600 h-3 rounded-full transition-all"
-                                                style={{ width: '62.5%' }}
+                                                style={{ width: "62.5%" }}
                                             />
                                         </div>
                                         <div className="flex justify-between text-xs text-gray-500 mt-2">
@@ -207,7 +273,10 @@ export default function Donasi() {
                                         </div>
                                     </div>
                                     <div className="text-center text-sm text-gray-600">
-                                        <span className="font-bold text-rose-600">156</span> donatur telah berkontribusi
+                                        <span className="font-bold text-rose-600">
+                                            156
+                                        </span>{" "}
+                                        donatur telah berkontribusi
                                     </div>
                                 </div>
 
@@ -217,10 +286,14 @@ export default function Donasi() {
                                         <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
                                             <Shield className="w-5 h-5 text-emerald-600" />
                                         </div>
-                                        <h3 className="font-bold text-emerald-800">Transparansi</h3>
+                                        <h3 className="font-bold text-emerald-800">
+                                            Transparansi
+                                        </h3>
                                     </div>
                                     <p className="text-sm text-emerald-700">
-                                        Semua donasi akan dilaporkan penggunaannya secara transparan dan dapat diakses oleh seluruh donatur.
+                                        Semua donasi akan dilaporkan
+                                        penggunaannya secara transparan dan
+                                        dapat diakses oleh seluruh donatur.
                                     </p>
                                     <a
                                         href="#"
@@ -248,9 +321,15 @@ export default function Donasi() {
                                         <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl font-bold">
                                             A
                                         </div>
-                                        <h3 className="font-bold text-gray-900">Ahmad Fauzi</h3>
-                                        <p className="text-rose-600 font-semibold">Rp 5.000.000</p>
-                                        <p className="text-sm text-gray-500">Angkatan 2015</p>
+                                        <h3 className="font-bold text-gray-900">
+                                            Ahmad Fauzi
+                                        </h3>
+                                        <p className="text-rose-600 font-semibold">
+                                            Rp 5.000.000
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            Angkatan 2015
+                                        </p>
                                     </div>
 
                                     {/* 2nd Place */}
@@ -261,9 +340,15 @@ export default function Donasi() {
                                         <div className="w-20 h-20 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl font-bold">
                                             S
                                         </div>
-                                        <h3 className="font-bold text-gray-900">Siti Aminah</h3>
-                                        <p className="text-rose-600 font-semibold">Rp 3.000.000</p>
-                                        <p className="text-sm text-gray-500">Angkatan 2012</p>
+                                        <h3 className="font-bold text-gray-900">
+                                            Siti Aminah
+                                        </h3>
+                                        <p className="text-rose-600 font-semibold">
+                                            Rp 3.000.000
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            Angkatan 2012
+                                        </p>
                                     </div>
 
                                     {/* 3rd Place */}
@@ -274,9 +359,15 @@ export default function Donasi() {
                                         <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl font-bold">
                                             B
                                         </div>
-                                        <h3 className="font-bold text-gray-900">Budi Hartono</h3>
-                                        <p className="text-rose-600 font-semibold">Rp 2.000.000</p>
-                                        <p className="text-sm text-gray-500">Angkatan 2018</p>
+                                        <h3 className="font-bold text-gray-900">
+                                            Budi Hartono
+                                        </h3>
+                                        <p className="text-rose-600 font-semibold">
+                                            Rp 2.000.000
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            Angkatan 2018
+                                        </p>
                                     </div>
                                 </div>
                             </div>

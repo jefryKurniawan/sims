@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
-import React from 'react';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
-import AppLayout from '@/Layout/AppLayout';
+import React from "react";
+import { Head, Link, useForm } from "@inertiajs/inertia-react";
+import AppLayout from "@/Layout/AppLayout";
 
 interface TP {
     id: number;
@@ -32,21 +32,21 @@ interface Props {
 
 export default function Index({ tps, filters }: Props) {
     const form = useForm({
-        fase: filters.fase || '',
-        tahun_ajaran: filters.tahun_ajaran || '',
+        fase: filters.fase || "",
+        tahun_ajaran: filters.tahun_ajaran || "",
         aktif: filters.aktif || false,
     });
 
     const handleFilter = (e: React.FormEvent) => {
         e.preventDefault();
-        window.location.href = route('admin.erapor.tujuan-pembelajaran.index', {
+        window.location.href = route("admin.erapor.tujuan-pembelajaran.index", {
             fase: form.data.fase || undefined,
             tahun_ajaran: form.data.tahun_ajaran || undefined,
             aktif: form.data.aktif || undefined,
         } as any);
     };
 
-    const faseOptions = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const faseOptions = ["A", "B", "C", "D", "E", "F"];
 
     return (
         <>
@@ -59,11 +59,14 @@ export default function Index({ tps, filters }: Props) {
                                 Tujuan Pembelajaran
                             </h1>
                             <p className="text-gray-600 dark:text-gray-400 mt-1">
-                                Kelola TP per mata pelajaran sesuai Kurikulum Merdeka
+                                Kelola TP per mata pelajaran sesuai Kurikulum
+                                Merdeka
                             </p>
                         </div>
                         <Link
-                            href={route('admin.erapor.tujuan-pembelajaran.create')}
+                            href={route(
+                                "admin.erapor.tujuan-pembelajaran.create",
+                            )}
                             className="px-4 py-2 bg-navy-600 text-white rounded-md hover:bg-navy-700"
                         >
                             + Tambah TP
@@ -71,7 +74,10 @@ export default function Index({ tps, filters }: Props) {
                     </div>
 
                     {/* Filter */}
-                    <form onSubmit={handleFilter} className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
+                    <form
+                        onSubmit={handleFilter}
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6"
+                    >
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -79,12 +85,16 @@ export default function Index({ tps, filters }: Props) {
                                 </label>
                                 <select
                                     value={form.data.fase}
-                                    onChange={(e) => form.setData('fase', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData("fase", e.target.value)
+                                    }
                                     className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 >
                                     <option value="">Semua Fase</option>
                                     {faseOptions.map((f) => (
-                                        <option key={f} value={f}>Fase {f}</option>
+                                        <option key={f} value={f}>
+                                            Fase {f}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
@@ -95,7 +105,12 @@ export default function Index({ tps, filters }: Props) {
                                 <input
                                     type="text"
                                     value={form.data.tahun_ajaran}
-                                    onChange={(e) => form.setData('tahun_ajaran', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            "tahun_ajaran",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="2023/2024"
                                     className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                                 />
@@ -105,10 +120,17 @@ export default function Index({ tps, filters }: Props) {
                                     <input
                                         type="checkbox"
                                         checked={form.data.aktif}
-                                        onChange={(e) => form.setData('aktif', e.target.checked)}
+                                        onChange={(e) =>
+                                            form.setData(
+                                                "aktif",
+                                                e.target.checked,
+                                            )
+                                        }
                                         className="rounded border-gray-300 dark:border-gray-700"
                                     />
-                                    <span className="text-sm text-gray-700 dark:text-gray-300">Hanya yang aktif</span>
+                                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                                        Hanya yang aktif
+                                    </span>
                                 </label>
                             </div>
                             <div className="flex items-end">
@@ -127,18 +149,35 @@ export default function Index({ tps, filters }: Props) {
                         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead className="bg-gray-50 dark:bg-gray-900">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode TP</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mapel</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fase</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Semester</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                        Kode TP
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                        Deskripsi
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                        Mapel
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                        Fase
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                        Semester
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                        Status
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                        Aksi
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                                 {tps.data.map((tp) => (
-                                    <tr key={tp.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <tr
+                                        key={tp.id}
+                                        className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                                    >
                                         <td className="px-4 py-3 text-sm font-medium text-navy-600">
                                             {tp.kode_tp}
                                         </td>
@@ -146,7 +185,7 @@ export default function Index({ tps, filters }: Props) {
                                             {tp.deskripsi}
                                         </td>
                                         <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                            {tp.rapor_mapel?.nama || '-'}
+                                            {tp.rapor_mapel?.nama || "-"}
                                         </td>
                                         <td className="px-4 py-3 text-sm">
                                             <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
@@ -170,14 +209,20 @@ export default function Index({ tps, filters }: Props) {
                                         <td className="px-4 py-3 text-sm">
                                             <div className="flex gap-2">
                                                 <Link
-                                                    href={route('admin.erapor.tujuan-pembelajaran.edit', tp.id)}
+                                                    href={route(
+                                                        "admin.erapor.tujuan-pembelajaran.edit",
+                                                        tp.id,
+                                                    )}
                                                     className="text-emerald-600 hover:text-emerald-900"
                                                 >
                                                     Edit
                                                 </Link>
                                                 <Link
-                                                    href={route('admin.erapor.tujuan-pembelajaran.edit', tp.id)}
-                                                    className="text-red-600 hover:text-red-900"
+                                                    href={route(
+                                                        "admin.erapor.tujuan-pembelajaran.edit",
+                                                        tp.id,
+                                                    )}
+                                                    className="text-destructive hover:text-destructive/80"
                                                     method="delete"
                                                     as="button"
                                                 >
@@ -194,19 +239,22 @@ export default function Index({ tps, filters }: Props) {
                         <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                                    Halaman {tps.current_page} dari {tps.last_page}
+                                    Halaman {tps.current_page} dari{" "}
+                                    {tps.last_page}
                                 </span>
                                 <div className="flex gap-1">
                                     {tps.links.map((link, i) => (
                                         <Link
                                             key={i}
-                                            href={link.url || '#'}
+                                            href={link.url || "#"}
                                             className={`px-3 py-1 rounded text-sm ${
                                                 link.active
-                                                    ? 'bg-navy-600 text-white'
-                                                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100'
+                                                    ? "bg-navy-600 text-white"
+                                                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100"
                                             }`}
-                                            dangerouslySetInnerHTML={{ __html: link.label }}
+                                            dangerouslySetInnerHTML={{
+                                                __html: link.label,
+                                            }}
                                         />
                                     ))}
                                 </div>
@@ -219,4 +267,4 @@ export default function Index({ tps, filters }: Props) {
     );
 }
 
-Index.layout = (page: React.ReactElement) => <AppLayout children={page} />
+Index.layout = (page: React.ReactElement) => <AppLayout children={page} />;

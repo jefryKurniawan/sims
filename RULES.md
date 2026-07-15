@@ -9,38 +9,46 @@ Detail aturan, konvensi, dan panduan teknis untuk semua AI agent yang bekerja pa
 ## Backend (Laravel)
 
 ### Controllers
+
 - **Inertia controllers**: Kembalikan `Inertia::render('Page', [...])`. JANGAN `view()` untuk halaman Inertia.
 - **Admin**: `app/Http/Controllers/Admin/` (subdir: Pengguna/, Spmb/, Website/)
 - **Frontend**: `app/Http/Controllers/Frontend/` (PageController, PpdbController, SpmbController, GuruController)
 - **Namespace**: RouteServiceProvider set `$namespace = App\Http\Controllers`, jadi string controller relatif otomatis prepend.
 
 ### Routing
-| File | Middleware | Purpose |
-|------|------------|---------|
-| `routes/web.php` | web | Entry point, requires frontend.php + admin.php |
-| `routes/admin.php` | auth, role: | Admin/dashboard routes |
-| `routes/frontend.php` | web | Public routes |
-| `routes/api.php` | sanctum | Orang Tua portal API |
-| `routes/spmb.php` | web | SPMB-specific routes |
+
+| File                  | Middleware  | Purpose                                        |
+| --------------------- | ----------- | ---------------------------------------------- |
+| `routes/web.php`      | web         | Entry point, requires frontend.php + admin.php |
+| `routes/admin.php`    | auth, role: | Admin dashboard + settings (role:Admin)        |
+| `routes/frontend.php` | web         | Public routes                                  |
+| `routes/api.php`      | sanctum     | Orang Tua portal API                           |
+| `routes/spmb.php`     | web         | SPMB-specific routes                           |
 
 ### Validation
+
 - Gunakan Form Request classes (mis. `KegiatanRequest`). Re-use yang ada; jangan duplikat aturan.
 
 ### Flash Messages
+
 - `Session::flash('success', 'pesan')` atau `redirect()->route('...')->with('success', '...')` -> otomatis di-render AppLayout.
 
 ### File Upload
+
 - Simpan di `public/images/<module>/` via `$request->storeAs()`; simpan nama file di model.
 
 ### Transactions
+
 - Bungkus multi-tabel changes dalam DB transaction.
 
 ### Observers & Events
+
 - Manfaatkan Eloquent events untuk side effects otomatis.
 - Contoh: auto-create Siswa saat PpdbApplicant status `lulus`.
 - Gunakan queued mail jobs untuk email (database queue driver).
 
 ### Database & Migrations
+
 - Migrasi HARUS reversible; `down()` konsisten dengan `up()`.
 - Foreign key eksplisit: `$table->foreignId('user_id')->constrained('users')`.
 - Index pada kolom yang sering di-query (FK, status, tanggal).
@@ -51,21 +59,23 @@ Detail aturan, konvensi, dan panduan teknis untuk semua AI agent yang bekerja pa
 ## Frontend (Inertia + React + TypeScript)
 
 ### Core Conventions
+
 - **Form**: WAJIB `useForm` dari `@inertiajs/inertia-react`. DILARANG React Hook Form, Formik, atau `fetch()` langsung.
 - **Data fetching**: HANYA via Inertia props. Controller kirim `Inertia::render('Page', [...])`, halaman terima via destructured props. Shared props via `usePage().props`.
 - **File upload**: `useState` + `FormData` + `Inertia.post()`.
 - **Tables**: WAJIB `@tanstack/react-table`. DILARANG `<table>` manual.
 - **Pagination**: WAJIB `Components/Pagination.tsx` (admin) atau `Components/Frontend/Pagination.tsx` (public).
-- **Layout resolution**: 
-  - `Pages/Admin/*` -> otomatis `AppLayout` (sidebar + topbar).
-  - `Pages/Frontend/*`, `Pages/Spmb/*`, `Pages/Auth/*` -> TIDAK dibungkus AppLayout (self-contained).
-  - Override: export `.layout = GuestLayout` pada halaman.
+- **Layout resolution**:
+    - `Pages/Admin/*` -> otomatis `AppLayout` (sidebar + topbar).
+    - `Pages/Frontend/*`, `Pages/Spmb/*`, `Pages/Auth/*` -> TIDAK dibungkus AppLayout (self-contained).
+    - Override: export `.layout = GuestLayout` pada halaman.
 - **Icons**: WAJIB `lucide-react`, import spesifik untuk tree-shaking `import { User } from 'lucide-react'`. Dinamis: `<Icon name="User" />` dari `@/lib/icons`. DILARANG FontAwesome, Heroicons, @iconify/react, react-icons.
 - **Components**: Gunakan shadcn/ui siap pakai (Button, Input, Card, Badge, Checkbox, DropdownMenu, Label, Separator, Avatar, Sheet). Radix primitives (Accordion, Collapsible, Popover, Progress, RadioGroup, Select, Switch, Tabs, Tooltip) tersedia belum di-wrap.
 - **State**: Zustand untuk global state -> `resources/js/store/`. Arktype untuk runtime validation (opsional).
 - **Flash Messages**: Controller beri `->with('success', '...')` -> otomatis di-render AppLayout. Tidak perlu render manual.
 
 ### Accessibility (WCAG 2.1 AA)
+
 - Setiap `<input>` HARUS punya `<label>` dengan `htmlFor`.
 - Tombol HARUS punya `type` eksplisit (`button`, `submit`, `reset`).
 - Icon-only button HARUS punya `aria-label`.
@@ -74,16 +84,18 @@ Detail aturan, konvensi, dan panduan teknis untuk semua AI agent yang bekerja pa
 - ARIA labels untuk komponen khusus (modal, dropdown).
 
 ### Visual & Animasi
-| Item | Value |
-|------|-------|
-| Admin colors | Navy #003366, Emerald #28A745 |
-| Public colors | Kuning #FFD700, Merah #E31E24 |
-| Font | Inter (Google Fonts, weights 300-800) |
-| Animasi | framer-motion (whileInView, variants, staggerChildren) |
-| Counter hook | `useCountUp` custom (requestAnimationFrame + ease-out) |
-| Micro-interactions | Button hover scale(1.02), input focus glow, toast slide-in top-right 5s auto-dismiss |
+
+| Item               | Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Theme System       | Admin-only. 5 tema (navy, emerald, amber, rose, indigo) via CSS custom properties: `--primary` / `--ring` untuk aksen aktif (tombol, badge, link aktif, sidebar hover, focus ring); `<thead>` background di-tint sesuai tema (`hsl(var(--primary) / 0.08)`). `<select>` element dan `<option>` (`:checked`) di-tint tema. `<input type="checkbox">` dan `<input type="radio">` pakai `accent-color: hsl(var(--primary))`. CI/CD: `[data-tema]` di `<html>`. User pilih via Settings → Konfigurasi Web (role:Admin). Default: navy. **Alert/notifikasi:** flash toast success ikut tema (`bg-primary/10 text-primary`), error tetap semantic red (`bg-destructive/10 text-destructive`). Sonner toast di-import tapi butuh `<Toaster>` — belum aktif. |
+| Admin colors       | Navy #003366, Emerald #28A745 (legacy — prefer pakai tema dinamis)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Font               | Inter (Google Fonts, weights 300-800)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Animasi            | framer-motion (whileInView, variants, staggerChildren)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Counter hook       | `useCountUp` custom (requestAnimationFrame + ease-out)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Micro-interactions | Button hover scale(1.02), input focus glow, toast slide-in top-right 5s auto-dismiss                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 ### Build & Deploy
+
 - **Dev**: `pnpm run dev` (Vite HMR)
 - **Prod**: `pnpm run build` -> `public/build/` (hash filenames, emptyOutDir: true)
 - **Entry points**: `resources/css/app.css` + `resources/js/app.jsx`
@@ -96,6 +108,7 @@ Detail aturan, konvensi, dan panduan teknis untuk semua AI agent yang bekerja pa
 ## Hosting & Performance (Shared Hosting)
 
 ### Laravel Caching (Wajib Production)
+
 ```bash
 php artisan config:cache    # Gabung semua config jadi 1 file
 php artisan route:cache     # Route registration cached
@@ -104,6 +117,7 @@ composer install --optimize-autoloader --no-dev  # Classmap optimization
 ```
 
 ### OPcache (.user.ini di root project)
+
 ```ini
 opcache.enable=1
 opcache.memory_consumption=192
@@ -113,6 +127,7 @@ opcache.revalidate_freq=60
 ```
 
 ### Database Optimization
+
 - **Index semua FK** (`user_id`, `siswa_id`, `kelas_id`, `jurusan_id`, dll) via migration `$table->index('kolom')`.
 - **Ganti `get()` dengan `paginate()`** di semua controller list - jangan load semua record.
 - **Eager loading wajib**: `->with('relasi', 'relasi.relasi')` untuk mencegah N+1 queries.
@@ -120,23 +135,27 @@ opcache.revalidate_freq=60
 - **Query logger** hanya aktif di dev; nonaktif di production.
 
 ### Queue & Session (No Redis)
-| Feature | Driver | Config |
-|---------|--------|--------|
-| Queue | `database` | `QUEUE_CONNECTION=database` |
-| Session | `database` | `SESSION_DRIVER=database` |
-| Cache | `file` (default) | `CACHE_DRIVER=file` (swap ke database jika perlu) |
+
+| Feature | Driver           | Config                                            |
+| ------- | ---------------- | ------------------------------------------------- |
+| Queue   | `database`       | `QUEUE_CONNECTION=database`                       |
+| Session | `database`       | `SESSION_DRIVER=database`                         |
+| Cache   | `file` (default) | `CACHE_DRIVER=file` (swap ke database jika perlu) |
 
 Queue runner di shared hosting via cron:
+
 ```bash
 * * * * * cd /path/to/project && php artisan queue:work --stop-when-empty --max-time=60 >> /dev/null 2>&1
 ```
 
 ### HTTP Optimization (.htaccess)
+
 - `mod_deflate` - kompres HTML, CSS, JS, JSON
 - `mod_expires` - 1 bulan CSS/JS, 1 tahun gambar/font
 - Security headers: `X-Content-Type-Options nosniff`, `X-Frame-Options SAMEORIGIN`, `X-XSS-Protection 1; mode=block`
 
 ### Frontend Performance
+
 - **Static build**: `pnpm run build` -> hash-based filenames -> long cache possible
 - **Lazy loading gambar**: `loading="lazy"` pada semua `<img>` di public pages
 - **Code splitting**: manual chunks di `vite.config.js` untuk modul besar (SPP, PPDB, Alumni)
@@ -144,6 +163,7 @@ Queue runner di shared hosting via cron:
 - **Avoid heavy libs** di kritikal path - defer non-critical JS
 
 ### Deployment Checklist
+
 1. `pnpm run build` (local/CI)
 2. Upload semua file + `public/build/`
 3. `composer install --optimize-autoloader --no-dev`
@@ -177,13 +197,16 @@ Queue runner di shared hosting via cron:
 ## Agile Workflow
 
 ### Sprint (1-2 minggu)
+
 1. **Sprint Planning**: Ambil story dari `docs/lean-prd.md` MVP priority #1-9. Prioritaskan berdasarkan prioritas MVP (1=tertinggi).
 2. **Daily**: `php artisan test` + `pnpm test` - pastikan pipeline hijau.
 3. **Sprint Review**: Demo ke stakeholder (kepala sekolah/tata usaha).
 4. **Retrospective**: Catat di `docs/retro-YYYY-MM-DD.md` - what went well, what to improve.
 
 ### Story Format
+
 Setiap story di commit message atau PR body:
+
 ```
 [PRIORITY-#] Module: Judul singkat
 
@@ -197,6 +220,7 @@ Acceptance Criteria:
 ```
 
 ### Definition of Done (DoD)
+
 - [ ] Code berfungsi sesuai acceptance criteria
 - [ ] `php artisan test` lulus (no failing tests)
 - [ ] `php artisan route:list` - route baru terdaftar
@@ -208,40 +232,46 @@ Acceptance Criteria:
 - [ ] PR description: screenshots (jika UI change) + link ke bagian PRD
 
 ### Branch & PR Convention
-| Prefix | Use case |
-|--------|----------|
-| `feature/` | Fitur baru (mis. `feature/ppdb-auto-sync`) |
-| `fix/` | Bug fix (mis. `fix/route-404`) |
-| `chore/` | Refactor, config, deps (mis. `chore/opcache-config`) |
+
+| Prefix     | Use case                                             |
+| ---------- | ---------------------------------------------------- |
+| `feature/` | Fitur baru (mis. `feature/ppdb-auto-sync`)           |
+| `fix/`     | Bug fix (mis. `fix/route-404`)                       |
+| `chore/`   | Refactor, config, deps (mis. `chore/opcache-config`) |
 
 PR body wajib:
+
 - Satu paragraf deskripsi singkat
 - Screenshots/GIF untuk perubahan UI
 - Acceptance criteria checklist (DoD)
 - Reference ke section `docs/lean-prd.md`
 
 ### Priority Reference (MVP)
+
 Dari `docs/lean-prd.md`:
-| Priority | Module | Why |
-|----------|--------|-----|
-| 1 | Manajemen Siswa | Foundation - tanpa data siswa, modul lain tidak bisa jalan |
-| 2 | SPP | Arus kas sekolah |
-| 3 | Manajemen Pengguna | Login/role untuk staf |
-| 4 | Import Excel/CSV | Migrasi data manual |
-| 5 | Kelas & Jadwal | Operasi harian |
-| 6 | Manajemen Orang Tua | Kontak & komunikasi |
-| 7 | Nilai Akademik | Bisa ditunda |
-| 8 | Laporan | Setelah data inti stabil |
-| 9 | Estetika & Pelengkap | Setelah fungsi core solid |
+
+| Priority | Module               | Why                                                        |
+| -------- | -------------------- | ---------------------------------------------------------- |
+| 1        | Manajemen Siswa      | Foundation - tanpa data siswa, modul lain tidak bisa jalan |
+| 2        | SPP                  | Arus kas sekolah                                           |
+| 3        | Manajemen Pengguna   | Login/role untuk staf                                      |
+| 4        | Import Excel/CSV     | Migrasi data manual                                        |
+| 5        | Kelas & Jadwal       | Operasi harian                                             |
+| 6        | Manajemen Orang Tua  | Kontak & komunikasi                                        |
+| 7        | Nilai Akademik       | Bisa ditunda                                               |
+| 8        | Laporan              | Setelah data inti stabil                                   |
+| 9        | Estetika & Pelengkap | Setelah fungsi core solid                                  |
 
 ---
 
 ## Error Pages (Standalone)
+
 Template standalone inline-CSS di `resources/views/errors/` (404, 403, 500, 419) - tanpa dependensi Vite/manifest agar tetap muncul saat error.
 
 ---
 
 ## PWA & Offline (Modul Perpustakaan)
+
 - Service worker: `public/sw.js`
 - Manifest: `public/manifest.json`
 - Offline page: `public/offline.html`

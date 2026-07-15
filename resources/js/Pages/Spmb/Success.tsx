@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { Head, Link } from '@inertiajs/inertia-react';
-import gsap from 'gsap';
-import Header from '@/Components/Frontend/Header';
-import Footer from '@/Components/Frontend/Footer';
-import { CheckCircle, Download, FileText, AlertTriangle } from 'lucide-react';
+import { useEffect, useRef } from "react";
+import { Head, Link } from "@inertiajs/inertia-react";
+import gsap from "gsap";
+import Header from "@/Components/Frontend/Header";
+import Footer from "@/Components/Frontend/Footer";
+import { CheckCircle, Download, FileText, AlertTriangle } from "lucide-react";
 
 interface Props {
     token: string;
@@ -15,9 +15,16 @@ export default function Success({ token, nomor_registrasi }: Props) {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.fromTo('.success-anim',
+            gsap.fromTo(
+                ".success-anim",
                 { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out' }
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    ease: "power2.out",
+                },
             );
         }, cardRef);
 
@@ -41,25 +48,35 @@ export default function Success({ token, nomor_registrasi }: Props) {
                                 Pendaftaran Berhasil!
                             </h1>
                             <p className="text-gray-500 mb-2">
-                                Selamat, data pendaftaran Anda telah berhasil disimpan.
+                                Selamat, data pendaftaran Anda telah berhasil
+                                disimpan.
                             </p>
                             <p className="text-gray-500 mb-8">
-                                Silakan simpan nomor registrasi berikut untuk pengecekan status selanjutnya.
+                                Silakan simpan nomor registrasi berikut untuk
+                                pengecekan status selanjutnya.
                             </p>
 
                             <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl p-6 mb-8 text-white">
-                                <p className="text-emerald-100 text-sm mb-2">Nomor Registrasi</p>
-                                <p className="text-3xl font-bold tracking-wider">{nomor_registrasi}</p>
+                                <p className="text-emerald-100 text-sm mb-2">
+                                    Nomor Registrasi
+                                </p>
+                                <p className="text-3xl font-bold tracking-wider">
+                                    {nomor_registrasi}
+                                </p>
                             </div>
 
                             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8 text-left">
                                 <div className="flex items-start gap-3">
                                     <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
                                     <div>
-                                        <p className="text-sm font-semibold text-amber-800 mb-1">Penting!</p>
+                                        <p className="text-sm font-semibold text-amber-800 mb-1">
+                                            Penting!
+                                        </p>
                                         <p className="text-sm text-amber-700">
-                                            Simpan nomor registrasi Anda dengan baik. Nomor ini diperlukan untuk
-                                            mengecek status pendaftaran dan melakukan pendaftaran ulang.
+                                            Simpan nomor registrasi Anda dengan
+                                            baik. Nomor ini diperlukan untuk
+                                            mengecek status pendaftaran dan
+                                            melakukan pendaftaran ulang.
                                         </p>
                                     </div>
                                 </div>

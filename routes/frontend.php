@@ -15,8 +15,11 @@ Route::get('program/{slug}', 'Frontend\PageController@programStudi')->name('prog
 Route::get('kegiatan/{slug}', 'Frontend\PageController@kegiatan')->name('kegiatan');
 
 // Berita
-Route::get('berita', 'Frontend\PageController@berita')->name('berita');
-Route::get('berita/{slug}', 'Frontend\PageController@detailBerita')->name('detail.berita');
+Route::get('berita', [App\Http\Controllers\Frontend\BeritaController::class, 'index'])->name('berita');
+Route::get('berita/{slug}', [App\Http\Controllers\Frontend\BeritaController::class, 'show'])->name('detail.berita');
+
+// Agenda
+Route::get('agenda', [App\Http\Controllers\Frontend\AgendaController::class, 'index'])->name('agenda');
 
 // Event
 Route::get('event', 'Frontend\PageController@events')->name('event');
@@ -49,6 +52,13 @@ Route::prefix('spmb')->group(function () {
     Route::get('/sukses', 'Frontend\SpmbController@berhasil')->name('spmb.berhasil');
     Route::get('/cek-status', 'Frontend\SpmbController@cekStatus')->name('spmb.cek-status');
     Route::post('/cek-status', 'Frontend\SpmbController@cekStatusPost')->name('spmb.cek-status.post');
+});
+
+// ======= ABSENSI DIGITAL (PWA GPS) =======
+Route::middleware('auth')->prefix('absensi')->group(function () {
+    Route::get('checkin', [App\Http\Controllers\AbsensiController::class, 'checkin'])->name('absensi.checkin');
+    Route::get('checkout', [App\Http\Controllers\AbsensiController::class, 'checkout'])->name('absensi.checkout');
+    Route::get('status', [App\Http\Controllers\AbsensiController::class, 'status'])->name('absensi.status');
 });
 
 // ======= AUTHENTICATION =======

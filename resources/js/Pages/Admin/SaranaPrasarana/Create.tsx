@@ -55,11 +55,15 @@ export default function Create() {
                 <div className="bg-white rounded-xl border border-border shadow-sm">
                     <form onSubmit={submit} className="p-6 space-y-5">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                            <label
+                                htmlFor="nama"
+                                className="block text-sm font-medium text-gray-700 mb-1.5"
+                            >
                                 Nama <span className="text-destructive">*</span>
                             </label>
                             <input
                                 type="text"
+                                id="nama"
                                 value={data.nama}
                                 onChange={(e) =>
                                     setData("nama", e.target.value)
@@ -75,11 +79,15 @@ export default function Create() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label
+                                    htmlFor="kategori"
+                                    className="block text-sm font-medium text-gray-700 mb-1.5"
+                                >
                                     Kategori{" "}
                                     <span className="text-destructive">*</span>
                                 </label>
                                 <select
+                                    id="kategori"
                                     value={data.kategori}
                                     onChange={(e) =>
                                         setData("kategori", e.target.value)
@@ -99,11 +107,15 @@ export default function Create() {
                                 )}
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label
+                                    htmlFor="kondisi"
+                                    className="block text-sm font-medium text-gray-700 mb-1.5"
+                                >
                                     Kondisi{" "}
                                     <span className="text-destructive">*</span>
                                 </label>
                                 <select
+                                    id="kondisi"
                                     value={data.kondisi}
                                     onChange={(e) =>
                                         setData("kondisi", e.target.value)
@@ -125,10 +137,14 @@ export default function Create() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                            <label
+                                htmlFor="deskripsi"
+                                className="block text-sm font-medium text-gray-700 mb-1.5"
+                            >
                                 Deskripsi
                             </label>
                             <textarea
+                                id="deskripsi"
                                 value={data.deskripsi}
                                 onChange={(e) =>
                                     setData("deskripsi", e.target.value)
@@ -140,11 +156,15 @@ export default function Create() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label
+                                    htmlFor="lokasi"
+                                    className="block text-sm font-medium text-gray-700 mb-1.5"
+                                >
                                     Lokasi
                                 </label>
                                 <input
                                     type="text"
+                                    id="lokasi"
                                     value={data.lokasi}
                                     onChange={(e) =>
                                         setData("lokasi", e.target.value)
@@ -153,11 +173,15 @@ export default function Create() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label
+                                    htmlFor="kapasitas"
+                                    className="block text-sm font-medium text-gray-700 mb-1.5"
+                                >
                                     Kapasitas
                                 </label>
                                 <input
                                     type="number"
+                                    id="kapasitas"
                                     value={data.kapasitas}
                                     onChange={(e) =>
                                         setData("kapasitas", e.target.value)
@@ -169,11 +193,15 @@ export default function Create() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label
+                                    htmlFor="tahun_pengadaan"
+                                    className="block text-sm font-medium text-gray-700 mb-1.5"
+                                >
                                     Tahun Pengadaan
                                 </label>
                                 <input
                                     type="number"
+                                    id="tahun_pengadaan"
                                     value={data.tahun_pengadaan}
                                     onChange={(e) =>
                                         setData(
@@ -185,11 +213,15 @@ export default function Create() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label
+                                    htmlFor="sumber_dana"
+                                    className="block text-sm font-medium text-gray-700 mb-1.5"
+                                >
                                     Sumber Dana
                                 </label>
                                 <input
                                     type="text"
+                                    id="sumber_dana"
                                     value={data.sumber_dana}
                                     onChange={(e) =>
                                         setData("sumber_dana", e.target.value)

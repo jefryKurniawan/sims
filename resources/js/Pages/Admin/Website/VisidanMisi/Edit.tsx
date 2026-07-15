@@ -1,25 +1,32 @@
-import { Head, usePage, Link, useForm, router } from '@inertiajs/inertia-react';
-import { useState } from 'react';
-import AdminLayout from '@/Layout/AdminLayout';
+import { Head, usePage, Link, useForm } from "@inertiajs/inertia-react";
+import { Inertia as router } from "@inertiajs/inertia";
+import { useState } from "react";
+import AdminLayout from "@/Layout/AdminLayout";
 
 export default function Edit() {
     const { data } = usePage();
     const { visimisi } = data;
-    const { data: formData, put, processing, reset, errors } = useForm({
-        visi: visimisi?.visi ?? '',
-        misi: visimisi?.misi ?? '',
+    const {
+        data: formData,
+        put,
+        processing,
+        reset,
+        errors,
+    } = useForm({
+        visi: visimisi?.visi ?? "",
+        misi: visimisi?.misi ?? "",
         image: null,
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(route('website.visimisi.update', visimisi.id), {
+        put(route("website.visimisi.update", visimisi.id), {
             onSuccess: () => {
-                router.visit(route('website.visimisi.index'), {
+                router.visit(route("website.visimisi.index"), {
                     preserveScroll: true,
-                    only: ['visimisi']
+                    only: ["visimisi"],
                 });
-            }
+            },
         });
     };
 
@@ -35,10 +42,12 @@ export default function Edit() {
             header={
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h1 className="text-xl font-bold text-gray-800">Edit Visi dan Misi</h1>
+                        <h1 className="text-xl font-bold text-gray-800">
+                            Edit Visi dan Misi
+                        </h1>
                     </div>
                     <Link
-                        href={route('website.visimisi.index')}
+                        href={route("website.visimisi.index")}
                         className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
                     >
                         Kembali
@@ -48,45 +57,69 @@ export default function Edit() {
         >
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Visi</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Visi
+                    </label>
                     <textarea
                         value={formData.visi}
-                        onChange={(e) => { formData.visi = e.target.value; }}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.visi ? 'border-red-500' : ''}`}
+                        onChange={(e) => {
+                            formData.visi = e.target.value;
+                        }}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.visi ? "border-destructive" : ""}`}
                         rows={4}
                         disabled={processing}
                     />
-                    {errors.visi && (<p className="mt-1 text-xs text-red-500">{errors.visi}</p>)}
+                    {errors.visi && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.visi}
+                        </p>
+                    )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Misi</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Misi
+                    </label>
                     <textarea
                         value={formData.misi}
-                        onChange={(e) => { formData.misi = e.target.value; }}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.misi ? 'border-red-500' : ''}`}
+                        onChange={(e) => {
+                            formData.misi = e.target.value;
+                        }}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.misi ? "border-destructive" : ""}`}
                         rows={4}
                         disabled={processing}
                     />
-                    {errors.misi && (<p className="mt-1 text-xs text-red-500">{errors.misi}</p>)}
+                    {errors.misi && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.misi}
+                        </p>
+                    )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Gambar (biarkan kosong jika tidak ingin mengganti)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Gambar (biarkan kosong jika tidak ingin mengganti)
+                    </label>
                     <input
                         type="file"
                         accept="image/*"
                         onChange={handleImageChange}
-                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.image ? 'border-red-500' : ''}`}
+                        className={`w-full px-3 py-2 border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus-ring-primary/20 focus:border-primary ${errors.image ? "border-destructive" : ""}`}
                         disabled={processing}
                     />
-                    {errors.image && (<p className="mt-1 text-xs text-red-500">{errors.image}</p>)}
+                    {errors.image && (
+                        <p className="mt-1 text-xs text-destructive">
+                            {errors.image}
+                        </p>
+                    )}
                 </div>
 
                 <div className="flex justify-end space-x-6">
                     <button
                         type="button"
-                        onClick={() => router.visit(route('website.visimisi.index'))}
+                        onClick={() =>
+                            router.visit(route("website.visimisi.index"))
+                        }
                         className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
                     >
                         Batal
@@ -96,7 +129,7 @@ export default function Edit() {
                         className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90"
                         disabled={processing}
                     >
-                        {processing ? 'Mengupdate...' : 'Update'}
+                        {processing ? "Mengupdate..." : "Update"}
                     </button>
                 </div>
             </form>
