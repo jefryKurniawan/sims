@@ -8,7 +8,7 @@ export default defineConfig({
     server: {
         hmr: false,
         port: 5176,
-        host: "127.0.0.1",
+        host: "localhost",
     },
     plugins: [
         tailwindcss(),

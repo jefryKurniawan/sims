@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Main Menu -->
+    <menuitem id="menu_module_root"
+              name="Module Name"
+              web_icon="module_name,static/description/icon.png"
+              sequence="10"/>
+
+    <!-- Sub Menus -->
+    <menuitem id="menu_module_config"
+              name="Configuration"
+              parent="menu_module_root"
+              sequence="100"
+              groups="group_module_manager"/>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_model_name"
+              name="Model Records"
+              parent="menu_module_root"
+              action="model_name_action"
+              sequence="10"/>
+
+    <menuitem id="menu_model_config"
+              name="Model Configuration"
+              parent="menu_module_config"
+              action="model_config_action"
+              sequence="10"/>
+
+</odoo>

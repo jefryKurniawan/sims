@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class KalenderAkademik extends Model
+{
+    protected $fillable = ['tanggal', 'kegiatan', 'keterangan', 'semester', 'tahun_ajaran'];
+
+    protected function casts(): array
+    {
+        return ['tanggal' => 'date'];
+    }
+}

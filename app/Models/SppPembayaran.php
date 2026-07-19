@@ -19,6 +19,7 @@ class SppPembayaran extends Model
         'metode',
         'status',
         'keterangan',
+        'bukti_pembayaran',
     ];
 
     protected $casts = [

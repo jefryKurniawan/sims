@@ -19,15 +19,42 @@ class BeritaController extends Controller
      */
     public function index(Request $request)
     {
-        $kategori = KategoriBerita::where('is_Active', '0')->get();
-        $berita = Berita::with('kategori', 'user')
+        $kategori = KategoriBerita::where('is_active', '0')->get();
+
+        $filters = $request->only(['search', 'status', 'kategori']);
+        $filters = array_merge([
+            'search' => '',
+            'status' => '',
+            'kategori' => '',
+        ], $filters);
+
+        $berita = Berita::with('penulis', 'approvedBy', 'createdBy')
+            ->when($filters['search'] ?? null, fn($q) => $q->where('title', 'like', "%{$filters['search']}%")
+                ->orWhere('content', 'like', "%{$filters['search']}%"))
+            ->when($filters['status'] ?? null, fn($q) => $q->where('status', $filters['status']))
+            ->when($filters['kategori'] ?? null, fn($q) => $q->where('kategori', $filters['kategori']))
             ->orderBy('created_at', 'desc')
             ->paginate(10)
             ->withQueryString();
 
+        $stats = [
+            'all' => Berita::count(),
+            'draft' => Berita::where('status', 'draft')->count(),
+            'pending' => Berita::where('status', 'pending')->count(),
+            'published' => Berita::where('status', 'published')->count(),
+            'rejected' => Berita::where('status', 'rejected')->count(),
+        ];
+
+        $kategoriOptions = ['pengumuman', 'kegiatan', 'artikel'];
+        $statusOptions = ['draft', 'pending', 'published', 'rejected'];
+
         return Inertia::render('Admin/Website/Berita/Index', [
             'kategori' => $kategori,
             'berita' => $berita,
+            'filters' => $filters,
+            'stats' => $stats,
+            'kategoriOptions' => $kategoriOptions,
+            'statusOptions' => $statusOptions,
         ]);
     }
 
@@ -36,7 +63,7 @@ class BeritaController extends Controller
      */
     public function create()
     {
-        $kategori = KategoriBerita::where('is_Active', '0')->get();
+        $kategori = KategoriBerita::where('is_active', '0')->get();
 
         return Inertia::render('Admin/Website/Berita/Create', [
             'kategori' => $kategori,
@@ -75,7 +102,9 @@ class BeritaController extends Controller
             $berita->kategori_id = $request->kategori_id;
             $berita->thumbnail = $nama_image;
             $berita->created_by = Auth::id();
+            $berita->penulis_id = Auth::id(); // Set penulis_id to current user
             $berita->is_active = $request->input('is_active', '0');
+            $berita->status = $request->input('status', 'draft'); // Default status
             $berita->save();
 
             Session::flash('success', 'Berita Berhasil ditambah !');
@@ -92,7 +121,7 @@ class BeritaController extends Controller
      */
     public function show($id)
     {
-        $berita = Berita::with('kategori', 'user')->findOrFail($id);
+        $berita = Berita::with('penulis', 'approvedBy', 'createdBy')->findOrFail($id);
 
         return Inertia::render('Admin/Website/Berita/Show', [
             'berita' => $berita,
@@ -104,8 +133,8 @@ class BeritaController extends Controller
      */
     public function edit($id)
     {
-        $kategori = KategoriBerita::where('is_Active', '0')->get();
-        $berita = Berita::find($id);
+        $kategori = KategoriBerita::where('is_active', '0')->get();
+        $berita = Berita::findOrFail($id);
 
         return Inertia::render('Admin/Website/Berita/Edit', [
             'kategori' => $kategori,

@@ -10,6 +10,8 @@ use App\Models\RaporDeskripsi;
 use App\Models\RaporEkstrakurikuler;
 use App\Models\RaporCatatan;
 use App\Models\Siswa;
+use App\Models\ProfileSekolah;
+use App\Models\Setting;
 use App\Services\RaporService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -214,8 +216,7 @@ class RaporSiswaController extends Controller
             $statistik = $this->raporService->getStatistikKelas(
                 (int) $kelasId,
                 $request->input('semester', 'Ganjil'),
-                $request->input('tahun_ajaran', date('Y') . '/' . (date('Y') + 1)),
-            );
+                $request->input('tahun_ajaran', date('Y') . '/' . (date('Y') + 1)));
         }
 
         return Inertia::render('Admin/RaporSiswa/Statistik', [
@@ -225,11 +226,103 @@ class RaporSiswaController extends Controller
         ]);
     }
 
+    public function cetakPdf(RaporSiswa $raporSiswa)
+    {
+        $rapor = $this->raporService->getRaporSiswa($raporSiswa->id);
+        $profile = ProfileSekolah::first();
+        $siswa = $rapor->siswa;
+
+        $filename = 'rapor-' . ($siswa->nama_lengkap ?? 'siswa') . '-' . ($siswa->nisn ?? $rapor->id) . '.pdf';
+
+        return PdfService::download('pdf.rapor', [
+            'rapor' => $rapor,
+            'namaSekolah' => $profile?->nama_sekolah ?? 'Sekolah',
+            'alamatSekolah' => $profile?->alamat ?? '',
+            'kepalaSekolah' => optional(Setting::where('user_id', auth()->id())->first())->nama_kepala_sekolah ?? 'Kepala Sekolah',
+        ], $filename);
+    }
+
     public function destroy(RaporSiswa $raporSiswa)
     {
         $raporSiswa->delete();
 
         return redirect()->route('rapor-siswa.index')
             ->with('success', 'Data rapor siswa berhasil dihapus!');
+    }
+
+    /**
+     * Download massal PDF rapor per kelas dalam ZIP.
+     */
+    public function cetakPdfMassal(Request $request)
+    {
+        $validated = $request->validate([
+            'rapor_kelas_id' => 'required|exists:rapor_kelas,id',
+            'semester' => 'required|in:Ganjil,Genap',
+            'tahun_ajaran' => 'required|string|max:20',
+        ]);
+
+        $raporList = $this->raporService->getSiswaByKelas(
+            $validated['rapor_kelas_id'],
+            $validated['semester'],
+            $validated['tahun_ajaran']
+        );
+
+        if ($raporList->isEmpty()) {
+            return back()->with('error', 'Tidak ada siswa di kelas ini untuk semester tersebut.');
+        }
+
+        $profile = ProfileSekolah::first();
+        $kelas = RaporKelas::with('jurusan')->findOrFail($validated['rapor_kelas_id']);
+
+        $zipFileName = 'rapor-' . $kelas->nama_kelas . '-' . $validated['semester'] . '-' . $validated['tahun_ajaran'] . '-' . now()->format('YmdHis') . '.zip';
+        $zipFileName = str_replace(['/', ' '], '-', $zipFileName);
+        $zipPath = storage_path('app/tmp/' . $zipFileName);
+
+        if (!is_dir(storage_path('app/tmp'))) {
+            mkdir(storage_path('app/tmp'), 0755, true);
+        }
+
+        $zip = new \ZipArchive();
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            return back()->with('error', 'Gagal membuat file ZIP.');
+        }
+
+        foreach ($raporList as $rapor) {
+            try {
+                $rapor = $this->raporService->getRaporSiswa($rapor->id);
+
+                $mpdf = new \Mpdf\Mpdf([
+                    'mode' => 'utf-8',
+                    'format' => 'A4',
+                    'margin_left' => 15,
+                    'margin_right' => 15,
+                    'margin_top' => 15,
+                    'margin_bottom' => 20,
+                    'default_font' => 'dejavusans',
+                    'tempDir' => storage_path('app/tmp/mpdf'),
+                ]);
+
+                $html = view('pdf.rapor', [
+                    'rapor' => $rapor,
+                    'namaSekolah' => $profile?->nama_sekolah ?? 'Sekolah',
+                    'alamatSekolah' => $profile?->alamat ?? '',
+                    'kepalaSekolah' => optional(Setting::where('user_id', auth()->id())->first())->nama_kepala_sekolah ?? 'Kepala Sekolah',
+                ])->render();
+
+                $mpdf->WriteHTML($html);
+                $pdfContent = $mpdf->Output('', 'S');
+
+                $siswa = $rapor->siswa;
+                $pdfFilename = 'rapor-' . ($siswa->nama_lengkap ?? 'siswa') . '-' . ($siswa->nisn ?? $rapor->id) . '.pdf';
+                $zip->addFromString($pdfFilename, $pdfContent);
+            } catch (\Exception $e) {
+                \Log::error('Gagal generate PDF rapor untuk rapor_siswa_id ' . $rapor->id . ': ' . $e->getMessage());
+                continue;
+            }
+        }
+
+        $zip->close();
+
+        return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
     }
 }

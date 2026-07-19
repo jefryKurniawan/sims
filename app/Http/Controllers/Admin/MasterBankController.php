@@ -7,9 +7,11 @@ use App\Models\MasterBank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use App\Http\Controllers\Concerns\HandlesImport;
 
 class MasterBankController extends Controller
 {
+    use HandlesImport;
     /**
      * Display a listing of the resource.
      *
@@ -141,5 +143,37 @@ class MasterBankController extends Controller
 
         return Redirect::route('master-bank.index')
             ->with('success', 'Bank berhasil dihapus.');
+    }
+    /**
+     * Show import form.
+     */
+    public function importForm()
+    {
+        return Inertia::render('Admin/MasterBank/Import');
+    }
+
+    /**
+     * Process import.
+     */
+    public function import(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+        ]);
+
+        $result = $this->runImport($request, MasterBank::class, function ($row) {
+            // map Excel columns to model attributes
+            return [
+                'nama_bank' => $row['nama_bank'] ?? null,
+                'kode_bank' => $row['kode_bank'] ?? null,
+                'cabang' => $row['cabang'] ?? null,
+                'rekening_default' => $row['rekening_default'] ?? null,
+            ];
+        });
+
+        $flash = $this->importFlash($result);
+        return redirect()
+            ->back()
+            ->with($flash['success'] ? ['success' => $flash['success']] : ['error' => $flash['error']]);
     }
 }

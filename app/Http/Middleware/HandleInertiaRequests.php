@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Middleware;
+use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -13,12 +14,13 @@ class HandleInertiaRequests extends Middleware
 
     public function handle($request, Closure $next)
     {
-        $setting = $request->user() ? \App\Models\Setting::where('user_id', $request->user()->id)->first() : null;
+        $user = $request->user();
+        $setting = $user ? \App\Models\Setting::where('user_id', $user->id)->first() : null;
 
         Inertia::share([
             'auth' => [
-                'user' => $request->user()
-                    ? $request->user()->only(['id', 'name', 'email', 'role', 'foto_profile'])
+                'user' => $user
+                    ? array_merge($user->only(['id', 'name', 'email', 'role', 'foto_profile']), ['roles' => $user->getRoleNames()->toArray()])
                     : null,
             ],
             'flash' => [
@@ -37,6 +39,10 @@ class HandleInertiaRequests extends Middleware
                 'tema' => 'navy',
                 'hero_media_type' => 'foto',
                 'hero_media_url' => '',
+            ],
+            'ziggy' => fn () => [
+                'routes' => (new Ziggy())->toArray(),
+                'location' => $request->url(),
             ],
         ]);
 

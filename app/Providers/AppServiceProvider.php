@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Berita;
 use App\Observers\BeritaObserver;
+use App\Models\Pelanggaran;
 use App\Models\CalonSiswa;
 use App\Observers\CalonSiswaObserver;
 use App\Models\Alumni;
@@ -15,6 +16,7 @@ use App\Models\SuratMasuk;
 use App\Observers\SuratMasukObserver;
 use App\Models\SuratKeluar;
 use App\Observers\SuratKeluarObserver;
+use App\Observers\PelanggaranObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,5 +39,6 @@ class AppServiceProvider extends ServiceProvider
         SuratMasuk::observe(SuratMasukObserver::class);
         SuratKeluar::observe(SuratKeluarObserver::class);
         Berita::observe(BeritaObserver::class);
+        Pelanggaran::observe(PelanggaranObserver::class);
     }
 }

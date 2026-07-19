@@ -3,64 +3,45 @@
 namespace App\Observers;
 
 use App\Models\Siswa;
-use Illuminate\Support\Facades\Log;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class SiswaObserver
 {
-    /**
-     * Handle the Siswa "creating" event.
-     */
     public function creating(Siswa $siswa): void
     {
-        // Auto-generate NISN if empty
-        if (empty($siswa->nisn)) {
-            $siswa->nisn = $this->generateNisn();
-        }
-
-        // Auto-generate NIS if empty
-        if (empty($siswa->nis)) {
-            $siswa->nis = $this->generateNis();
-        }
-
-        // Ensure user_id is null if not set
-        if (!$siswa->user_id) {
-            $siswa->user_id = null;
-        }
+        // handled in model boot creating
     }
 
-    /**
-     * Generate unique 10-digit NISN
-     * Format: YYYYNNNNNN (4-digit year + 6-digit sequence)
-     * Example: 2025000001
-     */
-    private function generateNisn(): string
+    public function created(Siswa $siswa): void
     {
-        $year = now()->format('Y');
-        $prefix = $year;
-
-        $last = Siswa::where('nisn', 'like', $prefix . '%')
-            ->orderBy('nisn', 'desc')
-            ->first();
-
-        if ($last) {
-            $lastNumber = (int) substr($last->nisn, 4);
-            $nextNumber = $lastNumber + 1;
-        } else {
-            $nextNumber = 1;
+        if ($siswa->user_id) {
+            return;
         }
 
-        return $prefix . str_pad((string) $nextNumber, 6, '0', STR_PAD_LEFT);
-    }
+        $username = $siswa->nisn ?? 'siswa' . $siswa->id;
+        $password = Str::random(8);
 
-    /**
-     * Generate unique 6-digit NIS
-     * Format: NNNNNN
-     * Example: 000001
-     */
-    private function generateNis(): string
-    {
-        $last = Siswa::max('nis');
-        $nextNumber = $last ? (int) $last + 1 : 1;
-        return str_pad((string) $nextNumber, 6, '0', STR_PAD_LEFT);
+        $user = User::create([
+            'name' => $siswa->nama_lengkap,
+            'email' => $siswa->email ?? $username . '@sekolah.com',
+            'password' => Hash::make($password),
+            'username' => $username,
+        ]);
+
+        $user->assignRole('murid');
+
+        $siswa->user_id = $user->id;
+        $siswa->saveQuietly();
+
+        // ponytail: langsung simpan password di log sebagai temp workaround
+        // TODO: kirim email kredensial via SendCredentialsMail job
+        \Log::info('Akun siswa dibuat', [
+            'siswa_id' => $siswa->id,
+            'user_id' => $user->id,
+            'username' => $username,
+            'password' => $password,
+        ]);
     }
 }

@@ -18,6 +18,10 @@ export default function KonfigurasiWeb() {
         hero_media_type: s.hero_media_type || "foto",
         hero_media_url: s.hero_media_url || "",
         isEmail: s.isEmail ? true : false,
+        wa_gateway_url: s.wa_gateway_url || "",
+        wa_api_key: s.wa_api_key || "",
+        wa_nomor_tujuan: s.wa_nomor_tujuan || "",
+        wa_template_pesan: s.wa_template_pesan || "",
     });
 
     const submit = (e: React.FormEvent) => {
@@ -129,6 +133,32 @@ export default function KonfigurasiWeb() {
                             </label>
                         </div>
 
+                        {/* WhatsApp Gateway */}
+                        <div className="pt-6 border-t border-border">
+                            <h2 className="text-lg font-semibold text-gray-900 mb-4">WhatsApp Gateway</h2>
+                            <p className="text-sm text-gray-500 mb-4">Konfigurasi gateway WhatsApp untuk notifikasi otomatis (Fonnte/Wablas/dll).</p>
+                            <div className="space-y-4">
+                                <div>
+                                    <label htmlFor="wa_gateway_url" className="block text-sm font-medium text-gray-700 mb-1.5">Gateway URL</label>
+                                    <input type="url" id="wa_gateway_url" value={data.wa_gateway_url} onChange={(e) => setData("wa_gateway_url", e.target.value)} className="w-full px-3 py-2 border border-primary/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="https://api.fonnte.com/send" />
+                                    <p className="text-xs text-gray-400 mt-1">Endpoint API gateway WhatsApp (Fonnte, Wablas, dll)</p>
+                                </div>
+                                <div>
+                                    <label htmlFor="wa_api_key" className="block text-sm font-medium text-gray-700 mb-1.5">API Key</label>
+                                    <input type="password" id="wa_api_key" value={data.wa_api_key} onChange={(e) => setData("wa_api_key", e.target.value)} className="w-full px-3 py-2 border border-primary/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="Token API" />
+                                </div>
+                                <div>
+                                    <label htmlFor="wa_nomor_tujuan" className="block text-sm font-medium text-gray-700 mb-1.5">Nomor Tujuan (Admin)</label>
+                                    <input type="tel" id="wa_nomor_tujuan" value={data.wa_nomor_tujuan} onChange={(e) => setData("wa_nomor_tujuan", e.target.value)} className="w-full px-3 py-2 border border-primary/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="6281234567890" />
+                                    <p className="text-xs text-gray-400 mt-1">Format: 62xxxx (tanpa + atau spasi)</p>
+                                </div>
+                                <div>
+                                    <label htmlFor="wa_template_pesan" className="block text-sm font-medium text-gray-700 mb-1.5">Template Pesan</label>
+                                    <textarea id="wa_template_pesan" rows={3} value={data.wa_template_pesan} onChange={(e) => setData("wa_template_pesan", e.target.value)} className="w-full px-3 py-2 border border-primary/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="Halo {{nama}}, pembayaran SPP {{nominal}} sudah diterima." />
+                                    <p className="text-xs text-gray-400 mt-1">Variable: {{{nama}}} {{{nominal}}} {{{tanggal}}}</p>
+                                </div>
+                            </div>
+                        </div>
                         <div className="flex gap-3 pt-4 border-t border-border">
                             <button
                                 type="submit"

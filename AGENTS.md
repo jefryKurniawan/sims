@@ -1,4 +1,4 @@
-<!-- Generated: 2026-07-12 | Updated: 2026-07-12 -->
+<!-- Generated: 2026-07-12 | Updated: 2026-07-17 | Verified: 2026-07-17 -->
 
 # Sekolahku
 
@@ -8,8 +8,8 @@ Sistem manajemen sekolah (Laravel + Inertia.js React). ERP internal yang migrasi
 
 ## Tech Stack
 
-- **Backend:** Laravel 11, PHP 8.2+, Inertia.js (SSR nonaktif, Blade-injected)
-- **Frontend:** React 18 + TypeScript (TSX), Vite + SWC, Tailwind CSS v4 (@theme)
+- **Backend:** Laravel 9, PHP 8.0+ + Symfony Components, Inertia.js (SSR nonaktif, Blade-injected)
+- **Frontend:** React 18 + TypeScript (TSX), Vite + SWC, Tailwind CSS v4, shadcn/ui
 - **UI:** shadcn/ui + Radix primitives, @tanstack/react-table, framer-motion, lucide-react
 - **State:** Zustand (global), Arktype (runtime validation, opsional)
 - **Auth:** Spatie Permission (role-based), Sanctum (API Orang Tua)
@@ -46,6 +46,25 @@ Sistem manajemen sekolah (Laravel + Inertia.js React). ERP internal yang migrasi
 | `docs/`         | Dokumentasi (lean-prd.md = roadmap MVP)                    |
 | `public/`       | Compiled assets, sw.js, manifest.json, offline.html        |
 
+## Sandbox Constraints (CRITICAL)
+
+**Environment**: Codex sandbox = **read-only filesystem**, **no systemd**, **no network**, **no sudo**.
+
+### Database Operations
+- JANGAN retry DB connection > 2x
+- JANGAN coba start service (mariadb/mysqld)
+- JANGAN pakai `sudo` untuk DB
+- JIKA DB gagal: SKIP migrate/seed/test, LANJUT static checks (`php -l`, `pnpm build`)
+- CATAT di summary: "DB not available in sandbox, migrations ready for production"
+
+### Migration Safety
+- SEBELUM buat migration: `ls database/migrations/*$(basename slug)*` cek existing
+- JIKA similar migration exists: STOP, gunakan yang ada, JANGAN buat baru
+
+### Syntax Validation
+- SETIAP write/edit `.php`: auto-run `php -l` via hook
+- JIKA error: FIX immediately, JANGAN lanjut
+
 ## Key Entry Points
 
 - Admin pages: `resources/js/Pages/Admin/*` -> auto-wrapped AppLayout
@@ -57,12 +76,14 @@ Sistem manajemen sekolah (Laravel + Inertia.js React). ERP internal yang migrasi
 ## Universal Rules (applies to every task)
 
 1. **Ponytail** -- solusi paling sederhana yang bekerja. Hindari abstraksi yang tidak perlu. Hapus kode dikomentari.
-2. **Satu PR = satu masalah** -- atomic, fokus, testable.
-3. **Minimal satu test** untuk logika baru (unit/feature).
-4. **Migrasi reversible** -- down() konsisten dengan up(). Seed data untuk tabel baru.
-5. **Aksesibilitas** -- WCAG 2.1 AA, label/aria/kontras/keyboard.
-6. **Jangan commit .env** -- pakai .env.example.
-7. **Shared hosting only** -- no Redis/Node.js di server. Lihat RULES.md.
+2. **No Over-Fix** -- jangan over-engineer fix. Satu guard di shared function > guard di setiap caller. Fix root cause sekali, bukan symptom di setiap caller. (Ponytail: global lock ceiling, per-account lock jika throughput matter).
+3. **Satu PR = satu masalah** -- atomic, fokus, testable.
+4. **Minimal satu test** untuk logika baru (unit/feature).
+5. **Migrasi reversible** -- down() konsisten dengan up(). Seed data untuk tabel baru.
+   - **WAJIB**: Setiap migration WAJIB punya method `down()` yang reversible (drop table, drop column, rename back). Hook akan block jika missing `down()`.
+6. **Aksesibilitas** -- WCAG 2.1 AA, label/aria/kontras/keyboard.
+7. **Jangan commit .env** -- pakai .env.example.
+8. **Shared hosting only** -- no Redis/Node.js di server. Lihat RULES.md.
 
 ## Referensi
 
@@ -72,96 +93,58 @@ GitHub summary: **README.md**
 
 <!-- MANUAL: -->
 
-## graphify
+## Skills (invoke manual)
 
-This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+Pakai `$nama-skill` di chat. Tidak auto-load — kamu tentukan kapan perlu.
 
-When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+| Skill | Kapan dipakai |
+|-------|---------------|
+| `$laravel-expert` | Backend Laravel, Eloquent, Spatie, migrations |
+| `$senior-frontend` | React/TSX, shadcn/ui, Inertia, Tailwind |
+| `$systematic-debugging` | Error 500, crash, root cause analysis |
+| `$mysql-patterns` | Query复杂, join, performance |
+| `$vite-patterns` | Build, HMR, Vite config |
+| `$pr-review` | Self-review sebelum commit |
+| `$writing-plans` | Fitur baru perlu breakdown |
+| `$to-prd` | Konversi request ke PRD |
 
-Rules:
+## Context Files
 
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
-- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
-- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+Auto-read saat start. Jangan dihapus isinya, justru expand kalau perlu.
 
-## Codex Skills & Context Boundary (Added 2026-07-15)
+| File | Fungsi |
+|------|--------|
+| `docs/lean-prd.md` | Roadmap MVP priorities, migration phases |
+| `RULES.md` | Conventions, theme system, hosting deploy |
+| `AGENTS.md` | Commands, structure, skill index (ini) |
 
-### Skill Paths
+## Source Code Explore
 
-Codex skills loaded from:
+Bebas — baca file apa aja tanpa izin.
 
-```
-.codex-skills/
-├── context-boundary/          # DISABLED: terlalu restriktif, ganti explore bebas
-├── prd-tracker/               # Reads/writes docs/lean-prd.md progress
-├── systematic-debugging/      # Root cause analysis workflow
-├── executing-plans/           # Step-by-step plan execution
-├── verification-before-completion/ # Quality gate before done
-├── writing-plans/             # Break down features into steps
-├── to-issues/                 # Track progress via issues/TASKS.md
-└── codex-review/              # Self-review checklist
-```
+- `app/` — Models, Controllers, Services
+- `resources/js/` — React/TSX pages + components
+- `routes/` — web, admin, api, frontend
+- `database/` — migrations + seeders
 
-### Hooks (when .codex writable)
+**Tools:** `grep`, `find`, `cat` — native, fast.
 
-```
-.codex/hooks/pre_task.sh  → Runs `graphify update .` + context reminder
-```
-
-### Context Boundary (Flexible — proven faster)
-
-**Reference files (auto-read saat start task):**
-
-1. `docs/lean-prd.md` — Roadmap, MVP priorities, success metrics
-2. `AGENTS.md` — Commands, structure, conventions pointer
-
-**Source code — BEBAS explore:**
-
-- ✅ `app/`, `resources/`, `routes/`, `database/`, `Modules/` — baca bebas
-- ✅ Migrations, seeders, models, controllers, views — baca bebas
-- ✅ `graphify query` — pakai saat perlu orientasi arsitektur cepat
-- ✅ `grep` / `find` — gunakan untuk locate file dengan cepat
-- ✅ AI yang tentukan kapan perlu baca apa — tidak perlu izin
-
-**Prinsip:** Requirement → PRD. Implementation → explore bebas. Quality → skills auto-trigger.
-
-### File Editing
-
-- **`apply_patch` sering gagal** karena line number mismatch → jangan retry > 1x
-- **Fallback:** `sed -i` untuk edit kecil, `cat <<'EOF' > file` untuk rewrite
-- `heredoc` (`<<'ENDOFFILE'`) lebih reliable untuk file baru/lengkap
-
-### Workflow
+## Workflow
 
 ```
-User request
-    │
-    ▼
-Baca lean-prd.md + AGENTS.md (orientasi)
-    │
-    ▼
-graphify query / grep / baca source → pahami existing code
-    │
-    ▼
-Skill: prd-tracker → Find next MVP item (jika perlu)
-    │
-    ▼
-Skill: writing-plans + to-issues → Break down (jika fitur besar)
-    │
-    ▼
-Implement → edit dengan sed/heredoc (hindari apply_patch)
-    │
-    ▼
-Skill: systematic-debugging (if error)
-    │
-    ▼
-Skill: verification-before-completion → build + test
-    │
-    ▼
-Skill: codex-review → self-check
-    │
-    ▼
-Update lean-prd.md: - [x] #N — Done DATE — PR #XX
+Request → Baca lean-prd.md (orientasi)
+       → grep/cat/source (pahami kode)
+       → Skill breakdown (jika fitur baru) → $writing-plans
+       → Implement (sed/heredoc, bukan apply_patch)
+       → systematic-debugging (if error)
+       → build → pr-review → done
 ```
+
+## Ponytail Rules
+
+Default: **lite**
+
+1. Solusi paling sederhana yang работает. No over-engineer.
+2. Fix root cause, bukan symptom.
+3. Hapus kode nggak butuh.
+4. Minimal test untuk logic non-trivial.

@@ -97,7 +97,7 @@ class SettingController extends Controller
         }
 
         // Update Setting — only if fields present
-        $settingFields = ['npsn', 'akreditasi', 'nama_kepala_sekolah', 'nip_kepala_sekolah', 'tema', 'hero_media_type', 'hero_media_url'];
+        $settingFields = ['npsn', 'akreditasi', 'nama_kepala_sekolah', 'nip_kepala_sekolah', 'tema', 'hero_media_type', 'hero_media_url', 'wa_gateway_url', 'wa_api_key', 'wa_nomor_tujuan', 'wa_template_pesan'];
         if ($request->hasAny($settingFields)) {
             $setting = Setting::where('user_id', auth()->id())->first() ?? new Setting(['user_id' => auth()->id()]);
             foreach ($settingFields as $f) {

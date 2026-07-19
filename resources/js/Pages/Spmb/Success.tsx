@@ -34,7 +34,7 @@ export default function Success({ token, nomor_registrasi }: Props) {
     return (
         <>
             <Head title="Pendaftaran Berhasil - SPMB" />
-            <Header footer={null as any} jurusanM={[]} kegiatanM={[]} />
+            <Header />
 
             <main className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-50 py-16">
                 <div className="container mx-auto px-4">
@@ -103,7 +103,7 @@ export default function Success({ token, nomor_registrasi }: Props) {
                 </div>
             </main>
 
-            <Footer footer={null as any} />
+            <Footer />
         </>
     );
 }

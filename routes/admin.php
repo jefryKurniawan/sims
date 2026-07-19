@@ -116,9 +116,13 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
 
         // SPP - Dispensi
         Route::resource('dispensasi', 'Admin\DispensasiController');
+        Route::get('dispensasi/template', 'Admin\DispensasiController@importForm')->name('dispensasi.template');
+        Route::post('dispensasi/import', 'Admin\DispensasiController@import')->name('dispensasi.import');
 
         // Master Bank
         Route::resource('master-bank', 'Admin\MasterBankController');
+        Route::get('master-bank/template', 'Admin\MasterBankController@importForm')->name('master-bank.template');
+        Route::post('master-bank/import', 'Admin\MasterBankController@import')->name('master-bank.import');
 
         // Rapor
         Route::get('rapor-kelas/create', 'Admin\RaporKelasController@create')->name('rapor-kelas.create');
@@ -140,7 +144,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
             Route::get('/assign', 'Admin\RaporSiswaController@assignForm')->name('rapor-siswa.assign');
             Route::post('/assign', 'Admin\RaporSiswaController@assignStore')->name('rapor-siswa.assign-store');
             Route::get('/statistik', 'Admin\RaporSiswaController@statistik')->name('rapor-siswa.statistik');
+            Route::get('/cetak-pdf-massal', 'Admin\RaporSiswaController@cetakPdfMassal')->name('rapor-siswa.cetak-pdf-massal');
             Route::get('/{raporSiswa}', 'Admin\RaporSiswaController@show')->name('rapor-siswa.show');
+            Route::get('/{raporSiswa}/cetak-pdf', 'Admin\RaporSiswaController@cetakPdf')->name('rapor-siswa.cetak-pdf');
             Route::get('/{raporSiswa}/input-nilai', 'Admin\RaporSiswaController@inputNilaiForm')->name('rapor-siswa.input-nilai');
             Route::post('/{raporSiswa}/input-nilai', 'Admin\RaporSiswaController@inputNilaiStore')->name('rapor-siswa.input-nilai-store');
             Route::post('/{raporSiswa}/generate-deskripsi', 'Admin\RaporSiswaController@generateDeskripsi')->name('rapor-siswa.generate-deskripsi');
@@ -191,6 +197,25 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         // Jadwal Pelajaran
         Route::resource('jadwal', 'Admin\JadwalPelajaranController')->names('jadwal');
 
+        // Kurikulum
+        Route::get('kurikulum', 'Admin\KurikulumController@index')->name('kurikulum.index');
+        Route::get('kurikulum/create', 'Admin\KurikulumController@create')->name('kurikulum.create');
+        Route::post('kurikulum', 'Admin\KurikulumController@store')->name('kurikulum.store');
+        Route::get('kurikulum/{kurikulum}/edit', 'Admin\KurikulumController@edit')->name('kurikulum.edit');
+        Route::put('kurikulum/{kurikulum}', 'Admin\KurikulumController@update')->name('kurikulum.update');
+        Route::delete('kurikulum/{kurikulum}', 'Admin\KurikulumController@destroy')->name('kurikulum.destroy');
+        Route::get('kurikulum/{kurikulum}/mapels', 'Admin\KurikulumController@mapels')->name('kurikulum.mapels');
+        Route::post('kurikulum/{kurikulum}/mapels', 'Admin\KurikulumController@storeMapel')->name('kurikulum.mapels.store');
+        Route::delete('kurikulum/{kurikulum}/mapels/{mapel}', 'Admin\KurikulumController@destroyMapel')->name('kurikulum.mapels.destroy');
+        Route::get('kurikulum/{kurikulum}/skbm', 'Admin\KurikulumController@skbm')->name('kurikulum.skbm');
+        Route::post('kurikulum/{kurikulum}/skbm', 'Admin\KurikulumController@storeSkbm')->name('kurikulum.skbm.store');
+        Route::delete('kurikulum/{kurikulum}/skbm/{skbm}', 'Admin\KurikulumController@destroySkbm')->name('kurikulum.skbm.destroy');
+
+        // Kalender Akademik
+        Route::get('kalender-akademik', 'Admin\KurikulumController@kalender')->name('kalender-akademik.index');
+        Route::post('kalender-akademik', 'Admin\KurikulumController@storeKalender')->name('kalender-akademik.store');
+        Route::delete('kalender-akademik/{kalenderAkademik}', 'Admin\KurikulumController@destroyKalender')->name('kalender-akademik.destroy');
+
         // Sarana Prasarana
         Route::get('sarana/template', 'Admin\SaranaPrasaranaController@template')->name('sarana.template');
         Route::post('sarana/import', 'Admin\SaranaPrasaranaController@import')->name('sarana.import');
@@ -203,6 +228,15 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
 
         // SPP
         Route::resource('spp', 'Admin\SppController');
+
+        // Pembayaran Generic (Polymorphic) — Section 32.6
+        Route::get('pembayaran', 'Admin\PembayaranController@index')->name('pembayaran.index');
+        Route::get('pembayaran/create', 'Admin\PembayaranController@create')->name('pembayaran.create');
+        Route::post('pembayaran', 'Admin\PembayaranController@store')->name('pembayaran.store');
+        Route::get('pembayaran/{pembayaran}', 'Admin\PembayaranController@show')->name('pembayaran.show');
+        Route::post('pembayaran/{pembayaran}/bayar', 'Admin\PembayaranController@bayar')->name('pembayaran.bayar');
+        Route::post('pembayaran/detail/{detailId}/verify', 'Admin\PembayaranController@verifyDetail')->name('pembayaran.verify');
+        Route::delete('pembayaran/{pembayaran}', 'Admin\PembayaranController@destroy')->name('pembayaran.destroy');
 
         // Absensi Digital (Simple MVP)
         Route::prefix('absensi')->name('absensi.')->group(function () {
@@ -257,4 +291,12 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::post('nisn-management/bulk-regenerate', 'Admin\NisnManagementController@bulkRegenerate')->name('nisn-management.bulk-regenerate');
         Route::post('nisn-management/sync-dapodik', 'Admin\NisnManagementController@syncDapodik')->name('nisn-management.sync-dapodik');
     });
+    // Notifications — Section 32.7
+    Route::middleware("auth")->prefix("notifications")->name("notifications.")->group(function () {
+        Route::get("/", "Admin\NotificationController@index")->name("index");
+        Route::get("/unread-count", "Admin\NotificationController@unreadCount")->name("unread-count");
+        Route::post("/mark-all-read", "Admin\NotificationController@markAllAsRead")->name("mark-all-read");
+        Route::put("/{id}/read", "Admin\NotificationController@markAsRead")->name("mark-as-read");
+    });
+
 });

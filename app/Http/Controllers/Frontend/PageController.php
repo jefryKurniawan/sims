@@ -30,8 +30,8 @@ class PageController extends Controller
 
     public function index()
     {
-        $berita = Berita::with('kategori', 'user')
-            ->active()
+        $berita = Berita::with('penulis')
+            ->published()
             ->orderBy('created_at', 'desc')
             ->limit(3)
             ->get();
@@ -110,8 +110,8 @@ class PageController extends Controller
 
     public function berita()
     {
-        $beritas = Berita::with('kategori', 'user')
-            ->active()
+        $beritas = Berita::with('penulis')
+            ->published()
             ->orderBy('created_at', 'desc')
             ->paginate(9);
 
@@ -122,13 +122,13 @@ class PageController extends Controller
 
     public function detailBerita($slug)
     {
-        $berita = Berita::with('kategori', 'user')
-            ->active()
+        $berita = Berita::with('penulis')
+            ->published()
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $recentBeritas = Berita::with('kategori')
-            ->active()
+        $recentBeritas = Berita::query()
+            ->published()
             ->where('id', '!=', $berita->id)
             ->orderBy('created_at', 'desc')
             ->limit(4)

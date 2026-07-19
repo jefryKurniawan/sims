@@ -129,12 +129,25 @@ class MenuItemsSeeder extends Seeder
                     ['label' => 'Pengaturan', 'icon' => 'sliders', 'route' => 'settings', 'permission' => 'Admin'],
                 ],
             ],
+            // BK - Bimbingan Konseling
+            [
+                'label' => 'BK / Konseling',
+                'icon' => 'message-square',
+                'route' => null,
+                'order' => 10,
+                'children' => [
+                    ['label' => 'Dashboard BK', 'icon' => 'layout-dashboard', 'route' => 'bk.dashboard', 'permission' => 'Admin'],
+                    ['label' => 'Pelanggaran', 'icon' => 'alert-triangle', 'route' => 'bk.pelanggaran.index', 'permission' => 'Admin'],
+                    ['label' => 'Prestasi Siswa', 'icon' => 'trophy', 'route' => 'bk.prestasi.index', 'permission' => 'Admin'],
+                    ['label' => 'Konseling', 'icon' => 'message-square', 'route' => 'bk.konseling.index', 'permission' => 'Admin'],
+                ],
+            ],
             // Laporan
             [
                 'label' => 'Laporan',
                 'icon' => 'file-bar-chart',
                 'route' => null,
-                'order' => 10,
+                'order' => 11,
                 'children' => [
                     ['label' => 'Keuangan', 'icon' => 'trending-up', 'route' => '#', 'permission' => 'Admin'],
                     ['label' => 'e-Rapor Kemendikdasmen', 'icon' => 'file-text', 'route' => '#', 'permission' => 'Admin'],
@@ -146,7 +159,7 @@ class MenuItemsSeeder extends Seeder
                 'label' => 'e-Rapor Kemendikdasmen',
                 'icon' => 'file-text',
                 'route' => null,
-                'order' => 11,
+                'order' => 12,
                 'children' => [
                     ['label' => 'Sinkronisasi Data Dapodik', 'icon' => 'sync', 'route' => '#', 'permission' => 'Admin'],
                     ['label' => 'Input Nilai', 'icon' => 'edit', 'route' => '#', 'permission' => 'Admin'],

@@ -355,7 +355,7 @@ export default function Dashboard({
         {
             title: "Website / Berita",
             desc: "Kelola konten website sekolah",
-            href: route("berita-admin.index"),
+            href: route("admin.berita.index"),
             icon: <Globe className="w-6 h-6" />,
             color: "text-sky-600",
             bgColor: "bg-sky-50",

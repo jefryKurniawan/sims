@@ -19,6 +19,7 @@ class Kelas extends Model
         'ruangan',
         'kapasitas',
         'tahun_ajaran',
+        'variant',
     ];
 
     public function jurusan()

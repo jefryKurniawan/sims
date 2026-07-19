@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Dispensasi;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Excel;
+use App\Http\Controllers\Concerns\HandlesImport;
 use Inertia\Inertia;
 
 class DispensasiController extends Controller
 {
+    use HandlesImport;
+
     /**
      * Display a listing of the resource.
      */
@@ -111,5 +115,40 @@ class DispensasiController extends Controller
 
         return redirect()->route('dispensasi.index')
             ->with('success', 'Dispensasi berhasil dihapus.');
+    }
+
+    /**
+     * Show import form.
+     */
+    public function importForm()
+    {
+        return Inertia::render('Admin/Dispensasi/Import');
+    }
+
+    /**
+     * Process import.
+     */
+    public function import(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+        ]);
+
+        $result = $this->runImport($request, Dispensasi::class, function ($row) {
+            // map Excel columns to model attributes
+            return [
+                'siswa_id' => $row['siswa_id'] ?? null,
+                'jenis' => $row['jenis'] ?? null,
+                'nominal' => $row['nominal'] ?? null,
+                'tanggal_mulai' => $row['tanggal_mulai'] ?? null,
+                'tanggal_selesai' => $row['tanggal_selesai'] ?? null,
+                'keterangan' => $row['keterangan'] ?? null,
+            ];
+        });
+
+        $flash = $this->importFlash($result);
+        return redirect()
+            ->back()
+            ->with($flash['success'] ? ['success' => $flash['success']] : ['error' => $flash['error']]);
     }
 }

@@ -39,7 +39,7 @@ class Berita extends Model
     /**
      * Legacy relation - deprecated for MVP
      */
-    public function kategoriRelation()
+    public function kategori()
     {
         return $this->belongsTo(KategoriBerita::class, 'kategori_id', 'id');
     }
@@ -101,9 +101,9 @@ class Berita extends Model
     }
 
     /**
-     * Scope: by kategori
+     * Scope: by kategori enum (pengumuman/kegiatan/artikel)
      */
-    public function scopeKategori($query, $kategori)
+    public function scopeByJenisKategori($query, $kategori)
     {
         return $query->where('kategori', $kategori);
     }

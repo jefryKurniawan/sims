@@ -29,4 +29,9 @@ class SppTagihan extends Model
     {
         return $this->belongsTo(Siswa::class);
     }
+
+    public function pembayaran()
+    {
+        return $this->hasMany(SppPembayaran::class, 'spp_tagihan_id');
+    }
 }

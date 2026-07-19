@@ -24,8 +24,17 @@ class DapodikSyncService
 
     public function __construct()
     {
-        $this->config = WebserviceConfig::active()->first();
-        $this->baseUrl = $this->config?->server_url ?? '';
+        // Lazy load config to avoid DB queries during artisan commands
+        $this->config = null;
+        $this->baseUrl = '';
+    }
+
+    protected function loadConfig(): void
+    {
+        if ($this->config === null) {
+            $this->config = WebserviceConfig::active()->first();
+            $this->baseUrl = $this->config?->server_url ?? '';
+        }
     }
 
     /**
@@ -140,12 +149,15 @@ class DapodikSyncService
     protected function ensureAuthenticated(): void
     {
         if (!$this->config || !$this->config->hasValidToken()) {
+            $this->loadConfig();
             $this->authenticate();
         }
     }
 
     protected function authenticate(): void
     {
+        $this->loadConfig();
+        
         if (!$this->config) {
             throw new \RuntimeException('Webservice config not found');
         }

@@ -7,7 +7,7 @@ import {
     Heart,
     Users,
     ArrowLeftRight,
-    Printer,
+    FileDown,
     Save,
     Plus,
     Trash2,
@@ -75,14 +75,16 @@ export default function Show() {
                                 : "Perempuan"}
                         </p>
                     </div>
-                    <Link
-                        href={route("buku-induk.cetak", siswa.id)}
-                        target="_blank"
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90"
-                    >
-                        <Printer className="h-4 w-4" />
-                        Cetak Buku Induk
-                    </Link>
+                    <div className="flex gap-2">
+                        <a
+                            href={route("buku-induk.cetak-pdf", siswa.id)}
+                            target="_blank"
+                            className="inline-flex items-center gap-2 px-4 py-2 border border-primary text-primary rounded-lg text-sm font-medium hover:bg-primary/5"
+                        >
+                            <FileDown className="h-4 w-4" />
+                            Download PDF
+                        </a>
+                    </div>
                 </div>
 
                 {flash?.success && (

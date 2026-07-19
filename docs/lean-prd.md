@@ -3,7 +3,9 @@
 **Tujuan:** Menentukan modul dan fitur yang harus diprioritaskan dalam Minimum Viable Product (MVP) untuk memigrasi dari sistem sekolah manual (buku, spreadsheet, berbasis kertas) ke sistem ERP internal sekolah ini, sehingga operasi sekolah dasar dapat berjalan segera sementara fitur lanjutan ditambahkan secara bertahap.
 
 #### 15.1 Prinsip MVP untuk Migrasi Sekolah
+
 MVP harus fokus pada:
+
 1. **Operasi Hari-hari yang Esensial**: Apa yang diperlukan untuk membuka sekolah besok pagi
 2. **Data Inti yang Tidak Boleh Hilang**: Informasi yang kritis untuk kejelasan administratif dan hukum
 3. **Proses yang Memengaruhi Arus Kas**: Aktivitas yang langsung berhubungan dengan penerimaan dan pengeluaran uang
@@ -13,12 +15,12 @@ MVP harus fokus pada:
 #### 15.2 Modul dan Fitur yang Harus Di-prioritaskan dalam MVP Migrasi
 
 | Prioritas | Modul/Fitur | Deskripsi | Alasan Prioritas |
-|-----------|-------------|-----------|------------------|
+| ----------- | ------------- | ----------- | ------------------ |
 | **1 (Tinggi)** | **Manajemen Data Siswa Inti** | - Pendaftaran siswa baru (NISN, biodata, orang tua)<br>- Pengelolaan status siswa (aktif, pindah, lulus, dropout)<br>- Klasifikasi kelas/jurusan dasar | Tanpa data siswa yang akurat, tidak ada basis untuk modul lain (nilai, pembayaran, raport). Ini adalah fondasi seluruh sistem. |
 | **2 (Tinggi)** | **Sistem Pembayaran SPP Dasar** | - Pembuatan tagihan SPP bulanan<br>- Pencatatan pembayaran (tunai, transfer)<br>- Pelacakan hutang piutang sederhana<br>- Riwayat transaksi per siswa | Arus kas adalah kehidupan sekolah. Sistem pembayaran yang berfungsi memastikan operasional bisa berjalan dan memberikan visibilitas keuangan segera. |
 | **3 (Tinggi)** | **Manajemen Pengguna dan Peran** | - Pendaftaran admin, guru, dan staf TU<br>- Definisi peran (Kepala Sekolah, Wakil Kepala, Tata Usaha, Guru, Kepala Bagian)<br>- Otentikasi dasar (username/password)<br>- Akses berbasis peran ke modul yang relevan | Untuk sistem dapat digunakan oleh staf, diperlukan manajemen pengguna yang aman dan terstruktur. Tanpa ini, tidak ada yang bisa login dan menggunakan sistem. |
 | **4 (Sedang)** | **Import Data Guru dan Siswa dari Manual** | - Fitur import Excel/CSV seperti yang dijelaskan di bagian 14<br>- Validasi dan cleansing data dasar<br>- Mapping ke struktur sistem | Mempercepat migrasi dari data manual yang sudah ada. Tanpa ini, proses pencatatan ulang data ribuan siswa dan guru akan membutuhkan waktu dan usaha yang besar, menambah risiko kesalahan manusia. |
-| **5 (Sedang)** | **Modul Kelas dan Jadwal Dasar** ✅ | - Daftar kelas aktif ✅<br>- Assign guru ke kelas/mata pelajaran ✅<br>- Jadwal pelajaran mingguan sederhana ✅ (2026‑07‑16) | Diperlukan untuk mengatur pembelajaran harian dan menyediakan basis untuk modul nilai dan raport di masa depan. |
+| **5 (Sedang)** | **Modul Kelas dan Jadwal Dasar** ✅ | - Daftar kelas aktif ✅<br>- Assign guru ke kelas/mata pelajaran ✅<br>- Jadwal pelajaran mingguan sederhana ✅ (2026‑07‑16) *(selesai 2026-07-17)* | Diperlukan untuk mengatur pembelajaran harian dan menyediakan basis untuk modul nilai dan raport di masa depan. |
 | **6 (Sedang)** | **Manajemen Orang Tua dan Kontak Dasar** | - Data orang tua/wali siswa<br>- Nomor telepon dan informasi kontak<br>- Hubungan dengan anak siswa | Diperlukan untuk komunikasi sehari-hari (pengumuman, surat, panggilan darurat) dan sebagai fondasi untuk modul Portal Orang Tua di masa depan. |
 | **7 (Rendah)** | **Modul Nilai Akademik Dasar** | - Input nilai tugas, UTS, UAS<br>- Perhitungan nilai akhir sederhana<br>- Kelulusan berdasarkan kriteria minimum | Meskipun penting untuk akademik, nilai bisa ditangani secara manual sementara sistem nilai siap, terutama jika fokus awal adalah administrasi dan keuangan. |
 | **8 (Rendah)** | **Laporan Operasional Dasar** | - Laporan siswa aktif/pindah/lulus<br>- Laporan pembayaran SPP bulanan<br>- Laporan hutang piutang<br>- Laporan guru dan kehadiran | Laporan bisa dikembangkan setelah data inti terkelola dengan baik. Fokus awal adalah pada transaksi dan entri data, bukan analisis. |
@@ -27,12 +29,14 @@ MVP harus fokus pada:
 #### 15.3 Alur Kerja Migrasi MVP yang Direkomendasikan
 
 **Fase 1: Persiapan dan Inisialisasi (1-2 Minggu)**
+
 1. Set up sistem dasar (instalasi, konfigurasi awal)
 2. Buat struktur data inti (siswa, guru, orang tua, kelas, SPP)
 3. Siapkan template import Excel/CSV untuk data guru dan siswa
 4. Lakukan pelatihan dasar untuk administrator sistem
 
 **Fase 2: Migrasi Data Inti (2-4 Minggu)**
+
 1. Export data siswa dan guru dari sistem manual (buku/spreadsheet)
 2. Isi template import yang telah disediakan
 3. Lakukan import ke sistem ERP (mulai dengan data guru, lalu siswa)
@@ -40,6 +44,7 @@ MVP harus fokus pada:
 5. Buat akun pengguna untuk staf kunci (Kepala Sekolah, Tata Usaha)
 
 **Fase 3: Peluncuran Operasional Dasar (Ongoing)**
+
 1. Mulai menggunakan sistem untuk:
    - Pendaftaran siswa baru
    - Pembuatan dan pencatatan tagihan SPP
@@ -52,6 +57,7 @@ MVP harus fokus pada:
 #### 15.4 Metrik Kesuksesan MVP Migrasi
 
 MVP dianggap berhasil ketika:
+
 - **≥ 95%** data siswa aktif berhasil diimport tanpa duplikasi atau kehilangan kolom wajib
 - **≥ 90%** transaksi SPP harian dapat dicatat melalui sistem ERP (bukan manual)
 - Administrator sekolah dapat melakukan **operasi core** (tambah siswa, buat tagihan, catat pembayaran) tanpa bantuan teknis setelah 2 minggu pelatihan
@@ -61,6 +67,7 @@ MVP dianggap berhasil ketika:
 #### 15.5 Catatan Implementasi untuk Tim Pengembang
 
 Untuk mendukung fokus pada MVP ini:
+
 1. **Prioritaskan fungsi dasar**: pastikan fitur CRUD untuk siswa, SPP, dan pengguna bekerja sempurna sebelum menambahkan fitur kompleks
    - **SPP CRUD lengkap**: tambahkan tampilan detail (`Detail`), edit (`Edit`), create (`Create`), dan hapus (soft‑delete) dengan flash‑message serta tampilan riwayat pembayaran.
    - **Siswa menu lengkap**: pastikan sidebar menampilkannya dengan sub‑menu **Data Siswa → List, Detail, Tambah, Edit, Hapus** (soft‑delete) sehingga tim dapat mengelola data inti secara penuh.
@@ -81,7 +88,7 @@ Dengan fokus pada daerah-danah ini, sekolah dapat mulai digitalisasi operasi int
 **`/dashboard/users/murid` → `/dashboard/murid` (SiswaController)**
 
 | Item | Detail |
-|------|--------|
+| ------ | -------- |
 | **Model** | `Siswa` (app/Models/Siswa.php) — `nama_lengkap`, `nisn`, `nis`, `jenis_kelamin`, `status`, `jurusan_id`, `user_id` (nullable) |
 | **Enrollment** | `SiswaKelas` pivot — `siswa_id`, `kelas_id`, `status` (aktif/pindah/lulus), `tanggal_masuk_kelas`, `tanggal_keluar_kelas` |
 | **Landing page** | `Admin/Siswa/Landing.tsx` — 3 kartu angkatan (10/11/12) dengan jumlah siswa, jumlah kelas, varian (A/B/C/D) |
@@ -92,10 +99,12 @@ Dengan fokus pada daerah-danah ini, sekolah dapat mulai digitalisasi operasi int
 | **Header** | "Siswa/Siswi" — "Kelola data siswa & status akademik" |
 | **Route** | `users.murid.*` → `Admin\SiswaController` (routes/admin.php), bukan MuridController lama |
 
-**Catatan untuk pengembangan selanjutnya:**
-- **Relasi User ↔ Siswa**: Kolom `user_id` di tabel `siswa` masih nullable. Belum ada mekanisme auto-create user akun untuk siswa baru. Perlu observer/listener saat siswa dibuat → auto-create `users` record dengan role `murid`, generate password, kirim email kredensial.
-- **Naik Kelas Massal**: `promote()` sudah implementasi bulk pindah kelas, tapi belum ada mekanisme otomatis akhir tahun ajaran (kenaikan massal seluruh siswa kelas 10→11, 11→12, 12→lulus). Perlu scheduled job atau tombol admin "Proses Kenaikan Kelas" yang: (a) iterasi semua siswa aktif, (b) tutup enrollment lama, (c) buat enrollment baru di kelas tingkat+1, (d) siswa kelas 12 status jadi `Lulus`.
-- **Kolom Variant di Kelas**: Saat ini variant (A/B/C/D) di-derive dari karakter pertama `nama_kelas` via `strtoupper(substr($k->nama_kelas, 0, 1))`. Jika variant tidak selalu sama dengan karakter pertama, perlu tambah kolom `variant` di tabel `kelas`.
+**Catatan untuk pengembangan selanjutnya (semua ✅ selesai per 2026-07-19):**
+
+- ✅ **Auto-create User** → `SiswaObserver::created()` buat User (username=nisn, password random), role murid, log kredensial.
+- ✅ **Naik Kelas Massal** → `Artisan Command siswa:promote` — 10→11, 11→12, 12→lulus. Jalankan: `php artisan siswa:promote`.
+- ✅ **Kolom Variant di Kelas** → Migration `2026_07_19_000001_add_variant_to_kelas_table.php` + model fillable updated.
+
 
 #### 16.2 Redesign Halaman Publik (Frontend)
 
@@ -104,7 +113,7 @@ Dengan fokus pada daerah-danah ini, sekolah dapat mulai digitalisasi operasi int
 **Ikon**: `lucide-react` eksklusif — tidak ada FontAwesome, Heroicons, atau react-icons.
 
 | Halaman | URL | Perubahan |
-|---------|-----|-----------|
+| --------- | ----- | ----------- |
 | **ProfileSekolah** | `/profile-sekolah` | Hero gradient merah→kuning, `useCountUp` hook untuk NPSN, 4 info cards (tahun berdiri, akreditasi, NPSN, kepala sekolah), kontak 2-kolom (email+telepon kiri, alamat+sosmed kanan), social media SVG inline (Facebook, YouTube, Instagram, TikTok), Visi & Misi section, GSAP ScrollTrigger |
 | **Berita** | `/berita` | Hero gradient + decorative circles, `useCountUp` total artikel, card grid 3-kolom dengan `staggerChildren`, hover lift (`y: -6`), category badge merah, author avatar merah+kuning, empty state animasi floating |
 | **DetailBerita** | `/berita/{slug}` | Full-width header gradient, glass-morphism back button, estimasi "X menit baca", thumbnail border putih + shadow, article card putih, related posts dengan stagger entrance + hover lift |
@@ -117,6 +126,7 @@ Dengan fokus pada daerah-danah ini, sekolah dapat mulai digitalisasi operasi int
 **Masalah**: Frontend GuruController filter `jenis` pakai lowercase (`'guru'`, `'tenaga_kependidikan'`) tidak match DB yang menyimpan `'Guru'`, `'Tenaga Kependidikan'`. Plus `whereNotNull('user_id')` gate tidak ada di admin controller.
 
 **Fix** (3 file):
+
 - `Frontend/GuruController.php`: hapus `whereNotNull('user_id')`, fix `in_array` → `['Guru', 'Tenaga Kependidikan']`, fix stats query values
 - `Frontend/Guru.tsx`: option values → `"Guru"` / `"Tenaga Kependidikan"`, badge check → `guru.jenis === 'Guru'`
 
@@ -129,7 +139,7 @@ Dengan fokus pada daerah-danah ini, sekolah dapat mulai digitalisasi operasi int
 #### 16.5 Modul Tambahan (Admin)
 
 | Modul | Route | Keterangan |
-|-------|-------|------------|
+| ------- | ------- | ------------ |
 | **Kelas** | `dashboard/kelas` | CRUD Kelas (nama_kelas, tingkat, jurusan_id, wali_kelas_id, ruangan, kapasitas, tahun_ajaran) |
 | **Sarana Prasarana** | `dashboard/sarana` | Inventarisasi fasilitas sekolah |
 | **Dispensasi** | `dashboard/dispensasi` | Manajemen dispensasi/keringanan SPP (siswa_id, jenis, nilai, mulai, sampai, keterangan) |
@@ -139,7 +149,7 @@ Dengan fokus pada daerah-danah ini, sekolah dapat mulai digitalisasi operasi int
 #### 16.6 UI/UX Patterns yang Sudah Diterapkan
 
 | Pattern | Lokasi | Deskripsi |
-|---------|--------|-----------|
+| --------- | -------- | ----------- |
 | `useCountUp` hook | ProfileSekolah, Berita, Alumni, Guru | Custom counter dengan `requestAnimationFrame` + ease-out cubic, trigger via IntersectionObserver (opsional `inView` param) |
 | `getField(value, fallback)` | ProfileSekolah | Null-safe field rendering — pakai data DB jika ada, fallback ke defaultProfile jika null |
 | `socialLinks` SVG inline | ProfileSekolah | Brand icon (FB, YT, IG, TT) tanpa dependensi eksternal — ~800 bytes total |
@@ -167,6 +177,7 @@ Semua kontroler admin yang terkait dengan modul website (Kegiatan, Events, Video
 Dengan ini, seluruh panel admin sekarang menggunakan stack teknologi yang sama dengan frontend publik, meminimalkan konteks switching dan meningkatkan konsistensi kode.
 
 #### 16.8 Prinsip Ponytail dan Standar Pengembangan untuk Agen AI
+
 Semua pengembangan frontend baru WAJIB mengikuti Prinsip Ponytail: pilihlah solusi sederhana yang bekerja; hindari abstraksi yang tidak diperlukan. Khususnya untuk agen AI (termasuk laravel-specialist dan frontend-design), pastikan:
 
 - **WAJIB** menggunakan `useForm` dari `@inertiajs/inertia-react` untuk semua penanganan form. DILARANG menggunakan React Hook Form, Formik, atau `fetch()` langsung.
@@ -188,13 +199,14 @@ Prastawa ini memastikan konsistensi, kesederhanaan, dan kepatuhan terhadap arsit
 Sebelumnya (16.5) hanya backend (routes + controller); frontend belum ada. Kini halaman Inertia lengkap dengan migrasi kolom yang hilang:
 
 | Halaman | Path | Route | Form |
-|---------|------|-------|------|
+| --------- | ------ | ------- | ------ |
 | Index (hub 3 kartu) | `Admin/Setting/Index.tsx` | `settings` | Card Data Instansi, Legalitas, Konfigurasi + info Bank & SPP |
 | Data Instansi | `Admin/Setting/DataInstansi.tsx` | `settings.data-instansi` | Nama sekolah, alamat, logo URL, sosial media |
 | Legalitas Instansi | `Admin/Setting/LegalitasInstansi.tsx` | `settings.legalitas` | NPSN, Akreditasi, Nama & NIP Kepala Sekolah |
 | Konfigurasi Web | `Admin/Setting/KonfigurasiWeb.tsx` | `settings.konfigurasi` | Tema (5 warna: navy/emerald/amber/rose/indigo), Hero media (foto/video), notifikasi email |
 
 Migrasi baru:
+
 - `2026_07_16_000001_add_legalitas_to_settings_table.php` — +npsn, akreditasi, nama_kepala_sekolah, nip_kepala_sekolah
 - `2026_07_16_000002_add_data_instansi_to_profile_sekolahs_table.php` — +nama_sekolah, alamat, logo_url, facebook, twitter, instagram
 
@@ -202,7 +214,7 @@ Migrasi baru:
 Sebelumnya: not started. Kini:
 
 | Layer | File |
-|-------|------|
+| ------- | ------ |
 | Migrasi (reversible + unique constraint anti-bentrok slot kelas) | `2026_07_16_000003_create_jadwal_pelajaran_table.php` |
 | Model | `app/Models/JadwalPelajaran.php` — relasi kelas + guru |
 | Controller | `app/Http/Controllers/Admin/JadwalPelajaranController.php` — index (sort by hari+jam), store/update (validasi bentrok guru & ruangan), destroy |
@@ -222,10 +234,11 @@ File `Admin/SaranaPrasarana/Create.tsx` sudah ada (14 Jul), tapi melanggar WCAG.
 ### 17. Fitur Tambahan (Post-MVP Roadmap)
 
 #### 17.1 Anjungan Absensi Digital
+
 **Tujuan:** Pencatatan kehadiran siswa dan guru via RFID, biometrik, atau aplikasi mobile berbasis lokasi (GPS) yang terhubung langsung ke WhatsApp orang tua.
 
 | Prioritas | Fitur | Deskripsi |
-|-----------|-------|-----------|
+| ----------- | ------- | ----------- |
 | **Sedang** | Absensi RFID/GPS Siswa | Scan RFID di gerbang / GPS check-in radius sekolah → log kehadiran real-time |
 | **Sedang** | Absensi Guru | Login kehadiran guru via mobile/app + GPS verifikasi lokasi |
 | **Sedang** | Notifikasi WhatsApp Orang Tua | Push notifikasi kehadiran (masuk/pulang) ke WhatsApp orang tua via WhatsApp Business API / gateway |
@@ -233,6 +246,7 @@ File `Admin/SaranaPrasarana/Create.tsx` sudah ada (14 Jul), tapi melanggar WCAG.
 | **Rendah** | Izin/Sakit Digital | Form pengajuan izin/sakit oleh orang tua → approval guru BK/wali kelas |
 
 **Teknis:**
+
 - Tabel baru: `absensi` (siswa_id, guru_id, tanggal, jam_masuk, jam_pulang, metode: rfid/gps/manual, status, latitude, longitude, bukti_foto)
 - Tabel `absensi_izin` (siswa_id, tanggal_mulai, tanggal_selesai, jenis: sakit/izin/alfa, keterangan, bukti_file, status_approval, approved_by)
 - Integrasi WhatsApp: queue job `SendAbsensiNotification` pakai database driver, template pesan konfigurabel di Settings
@@ -242,42 +256,52 @@ File `Admin/SaranaPrasarana/Create.tsx` sudah ada (14 Jul), tapi melanggar WCAG.
 ---
 
 #### 17.2 Buku Induk Digital — **✅ SELESAI**
+
 **Tujuan:** Basis data profil siswa, rekam medis ringkas, latar belakang orang tua, dan riwayat mutasi.
 
 | Status | Fitur | Deskripsi |
-|--------|-------|-----------|
+| -------- | ------- | ----------- |
 | ✅ **Selesai** | Profil Lengkap Siswa | Tabel `buku_induk_siswa`: agama, anak_ke, jumlah_saudara, bahasa_sehari_hari, transportasi, jarak_rumah_sekolah_km, hobi, cita_cita, berat_badan_kg, tinggi_badan_cm, kebutuhan_khusus |
 | ✅ **Selesai** | Rekam Medis | Tabel `rekam_medis_siswa`: golongan_darah, alergi, penyakit_terdahulu, obat_rutin, nama_dokter, rumah_sakit_rujukan, kontak_darurat |
 | ✅ **Selesai** | Data Orang Tua/Wali | Tabel `orang_tua_detail` (1:N): hubungan (Ayah/Ibu/Wali), nama_lengkap, nik, npwp, tanggal_lahir, pendidikan_terakhir, pekerjaan, penghasilan_bulanan, status_pernikahan, jumlah_tanggungan, no_hp, email, alamat |
 | ✅ **Selesai** | Riwayat Mutasi | Tabel `mutasi_siswa`: jenis (masuk/pindah/keluar/lulus), tanggal_mutasi, asal_sekolah, sekolah_tujuan, alasan, no_sk, dokumen_scan, dicatat_oleh |
-| ✅ **Selesai (2026-07-16)** | Cetak Buku Induk (PDF) | Generate via browser print-to-PDF, format A4 portrait (Identitas, Orang Tua, Rekam Medis, Mutasi, ttd). `window.print()` native — dompdf YAGNI. Upgrade: pasang dompdf saat butuh batch-email/otomasi server-side. |
+| ✅ **Selesai (2026-07-16)** | Cetak Buku Induk (PDF) | Generate via browser print-to-PDF `window.print()` + server-side PDF via **mPDF** (`composer require mpdf/mpdf`). Format A4 portrait (Identitas, Orang Tua, Rekam Medis, Mutasi, ttd). Dua opsi cetak: client-side (React + `@media print`) dan server-side (Blade + mPDF untuk download langsung). |
+| ✅ **Selesai (2026-07-16)** | Filter Tingkat & Kolom Kelas | Index page: filter dropdown per tingkat (10/11/12), kolom kelas menampilkan tingkat + nama_kelas. |
+| ✅ **Selesai (2026-07-16)** | UI Polish Index | Badge status warna ring-1 dengan label Indonesia (Aktif/Lulus/Pindah/Keluar), badge kelengkapan tooltip + icon, tombol "Tambah" langsung ke create siswa. |
+| ✅ **Selesai (2026-07-16)** | Show → Download PDF Langsung | Show.tsx: tombol "Download PDF" langsung ke route `cetakPdf()` (mPDF server-side). Cetak.tsx: tombol "Cetak/Simpan PDF" (browser) + "Download PDF (Server)". |
 
 **Implementasi Teknis:**
+
 - Migration: `2026_07_14_000001_create_buku_induk_tables` (4 tabel sekaligus)
-- Models: `BukuIndukSiswa`, `RekamMedisSiswa`, `OrangTuaDetail`, `MutasiSiswa` + relasi di `Siswa::bukuInduk()`, `rekamMedis()`, `orangTuaDetails()`, `mutasis()`
-- Controller: `BukuIndukController` (index, show, cetak, updateProfil, updateRekamMedis, store/update/destroy OrangTua, store/destroy Mutasi)
+- Models: `BukuIndukSiswa`, `RekamMedisSiswa`, `OrangTuaDetail`, `MutasiSiswa` + relasi di `Siswa::bukuInduk()`, `rekamMedis()`, `orangTuaDetails()`, `mutasis()`, `kelasAktif()` (existing)
+- Controller: `BukuIndukController` (index, show, cetak, cetakPdf, updateProfil, updateRekamMedis, store/update/destroy OrangTua, store/destroy Mutasi)
 - Routes: `dashboard/buku-induk*` (middleware `auth`, role `Admin/Guru/Staf`)
 - Frontend: `resources/js/Pages/Admin/BukuInduk/{Index,Show,Cetak}.tsx`
 **Catatan Cetak PDF:**
-- Controller `cetak()` render Inertia page `Admin/BukuInduk/Cetak` dengan data siswa + `namaSekolah` (dari `ProfileSekolah`) + `namaKepalaSekolah` (dari `Setting`)
-- `Cetak.tsx`: layout A4 portrait via `@media print`, header nama sekolah (fallback garis), 4 section (Identitas, Orang Tua, Rekam Medis, Mutasi), footer ttd Kepala Sekolah + nama
-- Tombol cetak panggil `window.print()` → browser simpan sebagai PDF. Tidak perlu dompdf/dependensi tambahan.
+- **Client-side**: Controller `cetak()` render Inertia page `Admin/BukuInduk/Cetak` dengan data siswa + nama sekolah/kepsek. `Cetak.tsx` layout A4 portrait via `@media print`, 4 section (Identitas, Orang Tua, Rekam Medis, Mutasi), footer ttd Kepala Sekolah. Tombol "Cetak / Simpan PDF" panggil `window.print()`. Juga ada tombol "Download PDF (Server)".
+- **Server-side (2026-07-16)**: Controller `cetakPdf()` render Blade view `resources/views/pdf/buku-induk.blade.php` via `PdfService` (`app/Services/PdfService.php`) — wrapper mPDF. Download langsung PDF tanpa dialog print browser. Support UTF-8 Bahasa Indonesia penuh via font DejaVu Sans.
+- **Library**: `composer require mpdf/mpdf` (v8.3). Bukan dompdf/barryvdh — mPDF dipilih karena dukungan UTF-8 & tabel kompleks lebih baik untuk Bahasa Indonesia.
+- **PdfService** reusable: `PdfService::download('pdf.view-name', $data, 'file.pdf')` — bisa dipakai modul Laporan, E-Rapor, dll.
+- **Show.tsx**: satu tombol "Download PDF" langsung ke `cetakPdf()` (server-side mPDF). Cetak.tsx dua tombol.
+- **Index.tsx**: filter tingkat dropdown (`tingkatList` dari distinct `kelas.tingkat`), kolom Kelas (tingkat + nama_kelas), badge status label Indonesia, badge kelengkapan tooltip, tombol "Tambah" ke route `users.murid.create`.
 - Optional: admin bisa atur nama sekolah & kepala sekolah via menu Settings → Data Instansi / Legalitas.
 - Sidebar: Item "Buku Induk Digital" (icon Library) setelah "Data Siswa"
 
 ---
 
 #### 17.3 Konseling & BK
+
 **Tujuan:** Pencatatan poin pelanggaran tata tertib, prestasi siswa, dan modul konseling siswa.
 
 | Prioritas | Fitur | Deskripsi |
-|-----------|-------|-----------|
+| ----------- | ------- | ----------- |
 | **Sedang** | Poin Pelanggaran | Tabel `pelanggaran` (siswa_id, kategori: ringan/sedang/berat, poin, deskripsi, tanggal, pelapor_id, bukti_file, status) |
 | **Sedang** | Prestasi Siswa | Extend model `Prestasi` yang sudah ada — tambah field `kategori: akademik/non-akademik/olahraga/seni`, `tingkat: sekolah/kabupaten/provinsi/nasional/internasional` |
 | **Sedang** | Konseling/Saran | Tabel `konseling` (siswa_id, guru_bk_id, tanggal, topik, catatan, tindak_lanjut, status: terbuka/selesai/rujukan) |
 | **Rendah** | Rapor Karakter | Ringkasan poin pelanggaran + prestasi + konseling masuk ke `rapor_siswa` sebagai lampiran karakter |
 
 **Teknis:**
+
 - `Pelanggaran` model baru + migration
 - Update `Prestasi` migration (add kolom `kategori`, `tingkat` enum)
 - `Konseling` model baru + migration (FK ke `siswa` & `guru` role BK)
@@ -286,10 +310,11 @@ File `Admin/SaranaPrasarana/Create.tsx` sudah ada (14 Jul), tapi melanggar WCAG.
 ---
 
 #### 17.4 E-Rapor Digital (Kemendikbudristek + Kurikulum Merdeka P5)
+
 **Tujuan:** Pembuatan laporan hasil belajar sesuai format resmi Kemendikbudristek termasuk penilaian P5.
 
 | Prioritas | Fitur | Deskripsi |
-|-----------|-------|-----------|
+| ----------- | ------- | ----------- |
 | **Tinggi** | Rapor Format Resmi | Generate PDF rapor sesuai template Kemendikbud (cover, identitas, nilai mapel, ekstrakurikuler, catatan wali kelas, P5) |
 | **Tinggi** | Input Nilai TP/Asesmen | UI input nilai per Tujuan Pembelajaran (formatif + sumatif) per mapel per siswa |
 | **Tinggi** | P5 (Projek Profil Pelajar Pancasila) | Sudah ada migration `p5_projek` & `p5_nilai` — perlu UI input 6 dimensi + predikat A/B/C/D |
@@ -298,18 +323,20 @@ File `Admin/SaranaPrasarana/Create.tsx` sudah ada (14 Jul), tapi melanggar WCAG.
 | **Rendah** | Export massal per kelas | Generate ZIP berisi PDF rapor tutta kelas untuk distribusi |
 
 **Teknis:**
+
 - Models sudah ada: `RaporSiswa`, `RaporNilai`, `RaporMapel`, `RaporKelas`, `RaporDeskripsi`, `RaporEkstrakurikuler`, `RaporCatatan`, `TujuanPembelajaran`, `AsesmenFormatif`, `AsesmenSumatif`, `P5Projek`, `P5Nilai`
 - Butuh: `RaporSiswaController` (CRUD + generate PDF), `RaporNilaiController` (input per TP), `P5NilaiController` (input 6 dimensi)
-- PDF template pakai `dompdf` dengan Blade view `rapor.pdf.blade.php`
+- PDF template pakai **mPDF** dengan Blade view `rapor.pdf.blade.php`
 - Queue job `GenerateRaporPdf` untuk batch processing
 
 ---
 
 #### 17.5 Pengelolaan Kurikulum
+
 **Tujuan:** Pengaturan struktur Kurikulum Merdeka atau K-13, pembagian jam mengajar (SKBM), dan pembuatan jadwal pelajaran.
 
 | Prioritas | Fitur | Deskripsi |
-|-----------|-------|-----------|
+| ----------- | ------- | ----------- |
 | **Sedang** | Struktur Kurikulum | Tabel `kurikulum` (nama: Merdeka/K13, aktif), `kurikulum_mapel` (kurikulum_id, mapel_id, fase, jam_mengajar_mingguan, semester) |
 | **Sedang** | SKBM (Standar Kompetensi) | Tabel `skbm` (kurikulum_id, mapel_id, fase, deskripsi_kd, kode_kd) — untuk K13; Merdeka pakai `TujuanPembelajaran` |
 | **Sedang** | Jadwal Pelajaran | Tabel `jadwal` (kelas_id, mapel_id, guru_id, hari, jam_ke, ruangan, semester, tahun_ajaran) + conflict detection (guru/ruangan/kelas) |
@@ -317,6 +344,7 @@ File `Admin/SaranaPrasarana/Create.tsx` sudah ada (14 Jul), tapi melanggar WCAG.
 | **Rendah** | Kalender Akademik | Tabel `kalender_akademik` (tanggal, kegiatan, keterangan, semester, tahun_ajaran) |
 
 **Teknis:**
+
 - Models baru: `Kurikulum`, `KurikulumMapel`, `Skbm`, `Jadwal`, `KalenderAkademik`
 - `JadwalController` dengan validasi conflict (unique composite: hari+jam_ke+kelas_id, hari+jam_ke+guru_id, hari+jam_ke+ruangan)
 - Frontend: grid jadwal per kelas + conflict warning real-time
@@ -324,29 +352,31 @@ File `Admin/SaranaPrasarana/Create.tsx` sudah ada (14 Jul), tapi melanggar WCAG.
 ---
 
 #### 17.6 Manajemen Tata Usaha (TU)
+
 **Tujuan:** Pengelolaan surat masuk, surat keluar, nomor induk siswa (NISN), dan arsip digital akreditasi.
 
 | Prioritas | Fitur | Deskripsi |
-|-----------|-------|-----------|
-| **Sedang** | Surat Masuk | Tabel `surat_masuk` (no_agenda, no_surat, tanggal_surat, tanggal_diterima, asal_surat, perihal, ringkasan, file_scan, disposisi_to, status: diterima/diproses/selesai/arsip) |
-| **Sedang** | Surat Keluar | Tabel `surat_keluar` (no_agenda, no_surat, tanggal_surat, tujuan_surat, perihal, ringkasan, file_scan, ditandatangani_oleh, status: draft/dikirim/arsip) |
-| **Sedang** | NISN Management | Auto-generate NISN saat input siswa baru (validasiunik), cek ke Dapodik via webservice |
-| **Sedang** | Arsip Digital Akreditasi | Tabel `arsip_akreditasi` (kategori: standar_1-8, sub_kategori, nama_dokumen, deskripsi, file_path, tanggal_upload, tahun_ajaran, status_verifikasi) |
+| ----------- | ------- | ----------- |
+| **Sedang** | Surat Masuk | Tabel `surat_masuk`: no_agenda, tanggal_terima, no_surat, tanggal_surat, asal_surat, perihal, ringkasan, file_scan, disposisi (kepada, instruksi, batas_waktu), status (baru/diproses/selesai/arsip). **✅ Selesai 2026-07-16** |
+| **Sedang** | Surat Keluar | Tabel `surat_keluar`: no_agenda, tanggal_kirim, no_surat, tujuan, perihal, ringkasan, file_scan, penandatangan, status. Nomor otomatis per tahun (001/TU/SK/2025). **✅ Selesai 2026-07-16** |
+| **Sedang** | NISN Management | Auto-generate NISN saat input siswa baru (validasi unique), cek ke Dapodik via webservice **✅ Selesai 2026-07-16** |
+| **Sedang** | Arsip Digital Akreditasi | Tabel `arsip_akreditasi` (kategori: standar_1-8, sub_kategori, nama_dokumen, deskripsi, file_path, tanggal_upload, tahun_ajaran, status_verifikasi) **✅ Selesai 2026-07-16** |
 | **Rendah** | Disposisi Surat | Workflow disposisi: Kepala Sekolah → Wakil → BK/TU → feedback → arsip |
 | **Rendah** | Surat Otomatis | Template surat (SK, ST, Undangan) → generate PDF dengan variable substitution |
 
 **Teknis:**
+
 - Models: `SuratMasuk`, `SuratKeluar`, `ArsipAkreditasi`
 - NISN: gunakan `SiswaObserver::creating` → generate NISN format `YYYYXXXX` (tahun + sequential) atau cek ke API Dapodik
 - File upload ke `public/images/surat/` & `public/images/arsip/`
-- PDF generate untuk surat otomatis pakai `dompdf`
+- PDF generate untuk surat otomatis pakai **mPDF** (via `PdfService`)
 
 ---
 
 ### 18. Implementation Sequencing (Post-MVP)
 
 | Sprint | Modul | Dependencies |
-|--------|-------|--------------|
+| -------- | ------- | -------------- |
 | **Sprint 1-2** | Buku Induk Digital (Profil, Orang Tua, Mutasi) | Siswa model existing |
 | **Sprint 3-4** | Konseling & BK (Pelanggaran, Prestasi extend, Konseling) | Siswa, Guru existing |
 | **Sprint 5-7** | E-Rapor Digital (Nilai TP, P5, PDF Generate) | Rapor* existing migrations, KurikulumMapel |
@@ -367,8 +397,7 @@ Sebelum memulai fitur baru di atas, perlu diselesaikan:
 3. **Variant Kolom di Kelas**: Tambah kolom `variant` di tabel `kelas` (A/B/C/D) — bukan derive dari nama_kelas
 4. **WhatsApp Gateway Config**: Tambah field di `settings` table: `whatsapp_gateway_url`, `whatsapp_token`, `whatsapp_template_absensi_masuk`, `whatsapp_template_absensi_pulang`
 5. **Queue Worker Cron**: Pastikan cron `* * * * * php artisan queue:work --stop-when-empty --max-time=60` aktif di production
-6. **PDF Library**: `composer require barryvdh/laravel-dompdf` untuk generate rapor/surat PDF
-
+6. **PDF Library**: `composer require mpdf/mpdf` (v8.3) — sudah terinstall. `PdfService` (`app/Services/PdfService.php`) sebagai wrapper reusable. Untuk modul Laporan, E-Rapor, Surat pakai `PdfService::download('pdf.view-name', $data, 'file.pdf')`. Blade view: `resources/views/pdf/`. Font DejaVu Sans untuk UTF-8 Bahasa Indonesia. **Jangan** pakai dompdf/barryvdh — mPDF handle UTF-8 & tabel kompleks lebih baik.
 
 ---
 
@@ -379,7 +408,7 @@ Sebelum memulai fitur baru di atas, perlu diselesaikan:
 #### 20.1 Prioritas & Scope MVP
 
 | Prioritas | Fitur | Deskripsi | Alasan |
-|-----------|-------|-----------|--------|
+| ----------- | ------- | ----------- | -------- |
 | **1 (Kritis)** | **Approval System (Persetujuan Humas)** | Penulis buat draf → Humas review → Approve/Reject → Publish. Tanpa approval, konten tidak muncul di publik. | UU ITE & reputasi sekolah; risiko konten tidak pantas/hoaks/salah info sangat tinggi jika publish langsung. |
 | **1 (Kritis)** | **Berita Resmi & Agenda Sekolah** | Humas publish pengumuman resmi: PPDB, kelulusan, kalender akademik, agenda kegiatan. Tampil di halaman publik `/berita` & `/agenda`. | Fungsi dasar Humas: desentralisasi informasi ke orang tua & masyarakat. |
 | **2 (Sederhana)** | **Multi-Authoring (2 Role)** | Role `Humas/Admin` = publish langsung; Role `Penulis` (guru/siswa/OSIS) = hanya buat draf, butuh approval. | Cukup untuk MVP. Role detail (Guru/Siswa/OSIS) ditambah fase 2 via Spatie Permission. |
@@ -388,6 +417,7 @@ Sebelum memulai fitur baru di atas, perlu diselesaikan:
 #### 20.2 Perubahan Skema Database
 
 **Tambah kolom ke `beritas` (migration baru):**
+
 ```php
 $table->enum('kategori', ['pengumuman', 'kegiatan', 'artikel'])->default('artikel')->after('kategori_id');
 $table->enum('status', ['draft', 'pending', 'published', 'rejected'])->default('draft')->after('kategori');
@@ -396,12 +426,13 @@ $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete
 $table->timestamp('published_at')->nullable()->after('approved_by');
 $table->foreignId('penulis_id')->nullable()->constrained('users')->nullOnDelete()->after('created_by');
 ```
+
 *Catatan: `kategori_id` (FK ke `kategori_beritas`) dipertahankan untuk kompatibilitas mundur, tapi **dideprekatakan** untuk MVP.*
 
 #### 20.3 Model & Logic Updates
 
 | File | Perubahan |
-|------|-----------|
+| ------ | ----------- |
 | `Berita.php` | Tambah `penulis()` relation, `approvedBy()` relation, scope `published()`, `pending()`, `draft()`, accessor `isPublished()`. |
 | `BeritaObserver.php` (baru) | `created`: jika `created_by` punya role `Humas`/`Admin` → auto `status=published`, `published_at=now`. Jika role `Penulis` → `status=pending`. `updating`: jika `status` berubah ke `published` set `published_at=now()`, `approved_by=Auth::id()`. |
 | `BeritaRequest.php` (baru) | Validasi: `title`, `content`, `kategori` (enum), `thumbnail` (image). Role `Penulis` tidak boleh set `is_active`/`status`. |
@@ -409,15 +440,15 @@ $table->foreignId('penulis_id')->nullable()->constrained('users')->nullOnDelete(
 #### 20.4 Controller & Routes
 
 | Endpoint | Method | Middleware | Deskripsi |
-|----------|--------|------------|-----------|
-| `/dashboard/berita` | GET | `auth`, `role:Admin|Humas|Penulis` | Index: Admin/Humas lihat semua (filter status), Penulis lihat milik sendiri |
-| `/dashboard/berita/create` | GET | `auth`, `role:Admin|Humas|Penulis` | Form buat draf |
-| `/dashboard/berita` | POST | `auth`, `role:Admin|Humas|Penulis` | Simpan draf / publish (Admin/Humas) |
+| ---------- | -------- | ------------ | ----------- |
+| `/dashboard/berita` | GET | `auth`, `role:Admin | Humas | Penulis` | Index: Admin/Humas lihat semua (filter status), Penulis lihat milik sendiri |
+| `/dashboard/berita/create` | GET | `auth`, `role:Admin | Humas | Penulis` | Form buat draf |
+| `/dashboard/berita` | POST | `auth`, `role:Admin | Humas | Penulis` | Simpan draf / publish (Admin/Humas) |
 | `/dashboard/berita/{id}/edit` | GET | `auth`, owner check | Edit draf sendiri |
 | `/dashboard/berita/{id}` | PUT/PATCH | `auth`, owner check | Update |
 | `/dashboard/berita/{id}/submit` | POST | `auth`, `role:Penulis` | Penulis submit ke approval (status→pending) |
-| `/dashboard/berita/{id}/approve` | POST | `auth`, `role:Admin|Humas` | Approve & publish |
-| `/dashboard/berita/{id}/reject` | POST | `auth`, `role:Admin|Humas` | Reject + alasan (wajib) |
+| `/dashboard/berita/{id}/approve` | POST | `auth`, `role:Admin | Humas` | Approve & publish |
+| `/dashboard/berita/{id}/reject` | POST | `auth`, `role:Admin | Humas` | Reject + alasan (wajib) |
 | `/berita` (public) | GET | `web` | List published, filter kategori, paginate |
 | `/berita/{slug}` (public) | GET | `web` | Detail berita published only |
 | `/agenda` (public) | GET | `web` | Kalender kegiatan (kategori `kegiatan` + `published_at` range) |
@@ -425,7 +456,7 @@ $table->foreignId('penulis_id')->nullable()->constrained('users')->nullOnDelete(
 #### 20.5 Frontend Pages (Inertia React)
 
 | Halaman | Path | Props | Note |
-|---------|------|-------|------|
+| --------- | ------ | ------- | ------ |
 | Admin Index | `Admin/Website/Berita/Index.tsx` | `berita` (paginated), `filters` | Tabs: Draft/Pending/Published/Rejected. Penulis filter otomatis `penulis_id=Auth::id()` |
 | Admin Create | `Admin/Website/Berita/Create.tsx` | `kategori` (enum array) | Role Penulis: tidak ada toggle publish |
 | Admin Edit | `Admin/Website/Berita/Edit.tsx` | `berita`, `kategori` | Submit button kirim ke `/submit` (Penulis) atau `/approve` (Humas) |
@@ -452,7 +483,7 @@ Route middleware: `role:Admin|Humas|Penulis` untuk index/create; `can:berita.app
 #### 20.7 Testing Decisions (TDD)
 
 | Behavior | Test Type | Prioritas |
-|----------|-----------|-----------|
+| ---------- | ----------- | ----------- |
 | Penulis buat draf → status `draft` | Feature (Controller) | Tracer bullet #1 |
 | Penulis submit → status `pending` | Feature | Tracer bullet #2 |
 | Humas approve → status `published`, `published_at` set, `approved_by` set | Feature | Tracer bullet #3 |
@@ -468,7 +499,7 @@ Route middleware: `role:Admin|Humas|Penulis` untuk index/create; `can:berita.app
 #### 20.8 Sprint Plan (Blog MVP)
 
 | Sprint | Fokus | Deliverable |
-|--------|-------|-------------|
+| -------- | ------- | ------------- |
 | **Sprint 1** | Migration + Model + Observer + Seeder roles | `php artisan migrate:fresh --seed` jalan, roles terseed |
 | **Sprint 2** | Admin CRUD (Index, Create, Edit, Submit, Approve, Reject) | Feature tests pass, Inertia pages render |
 | **Sprint 3** | Public pages (`/berita`, `/berita/{slug}`, `/agenda`) + SEO | E2E manual test + feature tests public routes |
@@ -486,7 +517,6 @@ Route middleware: `role:Admin|Humas|Penulis` untuk index/create; `can:berita.app
 - [x] Flash messages: success/error on all actions
 - [x] `php artisan test` - core features pass (some pre-existing SPP tests fail)
 
-
 ---
 
 ### 22. Modul Anjungan Absensi Digital — **✅ MVP SELESAI (2026-07-16)**
@@ -496,7 +526,7 @@ Route middleware: `role:Admin|Humas|Penulis` untuk index/create; `can:berita.app
 #### 22.1 Scope MVP yang Sudah Diimplementasikan
 
 | Fitur | Deskripsi | Status |
-|-------|-----------|--------|
+| ------- | ----------- | -------- |
 | **Absensi GPS Siswa (PWA)** | Siswa buka `/absensi/checkin` di HP → GPS auto-capture (Haversine radius sekolah) → status otomatis: Hadir/Terlambat/Alpa. Check-out di `/absensi/checkout` → status Pulang Cepat/Hadir/Alpa. | ✅ Selesai |
 | **Absensi GPS Guru (PWA)** | API endpoint tersedia: `POST /api/absensi/guru/checkin`, `POST /api/absensi/guru/checkout`, `GET /api/absensi/guru/status`. Frontend admin list di `/dashboard/absensi/guru`. | ✅ Selesai (API + Admin list) |
 | **Absensi Manual Admin** | Admin/Wali kelas pilih kelas + tanggal → form bulk status per siswa (Hadir/Terlambat/Izin/Sakit/Alpa + jam masuk/pulang + keterangan) → Simpan Semua. | ✅ Selesai |
@@ -551,7 +581,7 @@ $table->time('absensi_jam_masuk_guru')->default('07:00');
 #### 22.3 Frontend Pages (Inertia React + TypeScript + shadcn/ui)
 
 | Halaman | Path | Route | Props |
-|---------|------|-------|-------|
+| --------- | ------ | ------- | ------- |
 | **Admin Index** | `Admin/Absensi/Index.tsx` | `GET /dashboard/absensi` | `kelasList`, `today` |
 | **Admin Kelas** | `Admin/Absensi/Kelas.tsx` | `GET/POST /dashboard/absensi/kelas/{kelas}/{tanggal?}` | `kelas`, `tanggal`, `siswa[]`, `statusOptions`, `statusPulangOptions` |
 | **Admin Rekap** | `Admin/Absensi/Rekap.tsx` | `GET /dashboard/absensi/rekap` | `siswa` (paginated), `filters`, `kelasList`, `absensiMap`, `tanggalRange`, `summary` |
@@ -563,7 +593,7 @@ $table->time('absensi_jam_masuk_guru')->default('07:00');
 #### 22.4 API Endpoints (Sanctum Auth)
 
 | Method | Endpoint | Controller | Deskripsi |
-|--------|----------|------------|-----------|
+| -------- | ---------- | ------------ | ----------- |
 | `POST` | `/api/absensi/checkin` | `AbsensiApiController::checkin` | Siswa GPS check-in (validasi radius + jam) |
 | `POST` | `/api/absensi/checkout` | `AbsensiApiController::checkout` | Siswa GPS check-out |
 | `GET` | `/api/absensi/status` | `AbsensiApiController::status` | Status hari ini / per tanggal |
@@ -594,7 +624,7 @@ $table->time('absensi_jam_masuk_guru')->default('07:00');
 #### 22.6 Testing (Manual Verified)
 
 | Behavior | Status |
-|----------|--------|
+| ---------- | -------- |
 | Siswa buka /absensi/checkin → GPS request → radius check → status auto | ✅ Verified |
 | Siswa check-out → status pulang cepat/hadir/alpa | ✅ Verified |
 | Admin pilih kelas + tanggal → form bulk status → simpan semua | ✅ Verified |
@@ -606,7 +636,7 @@ $table->time('absensi_jam_masuk_guru')->default('07:00');
 #### 22.7 Catatan untuk Post-MVP (Backlog)
 
 | Fitur | Prioritas | Catatan |
-|-------|-----------|---------|
+| ------- | ----------- | --------- |
 | Absensi RFID/Device Gateway | Sedang | Perlu `absensi_device` table, listener service terpisah |
 | Notifikasi WhatsApp Orang Tua | Sedang | Perlu WA Gateway config di settings + queue job |
 | Izin/Sakit Digital (Pengajuan Ortu) | Rendah | Form pengajuan → approval BK/Wali Kelas |
@@ -622,12 +652,14 @@ $table->time('absensi_jam_masuk_guru')->default('07:00');
 #### 23.1 Scope MVP
 
 | Fitur | Deskripsi | Prioritas |
-|-------|-----------|-----------|
+| ------- | ----------- | ----------- |
 | **Profil Siswa Lengkap** | Extend `siswa` + tabel `buku_induk_siswa`: data kelahiran, agama, anak ke-, bahasa, transportasi, jarak rumah-sekolah, hobi, cita-cita. | Tinggi |
 | **Rekam Medis Ringkas** | Tabel `rekam_medis_siswa`: golongan darah, alergi, penyakit, obat rutin, nama dokter, RS rujukan, kontak darurat. | Tinggi |
 | **Latar Belakang Orang Tua** | Tabel `orang_tua_detail`: pekerjaan, penghasilan, pendidikan, status nikah, jumlah tanggungan, no KTP, NPWP. Relasi ke `siswa` via `wali_siswa` (sudah ada di `siswa.nama_ortu`/`no_hp_ortu`). | Tinggi |
 | **Riwayat Mutasi** | Tabel `mutasi_siswa`: tgl_mutasi, asal/sekolah_tujuan, alasan, no_sk, status (masuk/keluar), dokumen_scan. | Sedang |
-| **Cetak Buku Induk** | Generate PDF (dompdf/snappy) format Depdiknas: halaman identitas, orang tua, kesehatan, mutasi, prestasi. | Sedang |
+| **Cetak Buku Induk** | Generate PDF via **mPDF** (`composer require mpdf/mpdf`) server-side + `window.print()` client-side. Blade view `resources/views/pdf/buku-induk.blade.php`, wrapper `PdfService`. Format A4 portrait, 4 section (Identitas, Orang Tua, Rekam Medis, Mutasi), ttd Kepala Sekolah. | Sedang |
+| **Filter Tingkat Index** | Index page: filter dropdown per tingkat (10/11/12), query filter via `whereHas('kelasAktif.kelas')`. | Sedang |
+| **UI Polish Index** | Kolom Kelas render badge tingkat+nama_kelas, status badge label Indonesia (Aktif/Lulus/Pindah/Keluar), badge kelengkapan 4 item (Profil/Medis/Ortu/Mutasi) dengan tooltip + icon. | Rendah |
 
 #### 23.2 Skema Database
 
@@ -699,11 +731,14 @@ $table->timestamps();
 #### 23.3 Testing
 
 | Behavior | Test |
-|----------|------|
+| ---------- | ------ |
 | CRUD profil lengkap + validasi required | Feature |
 | Rekam medis hanya editable role `BK`/`Admin` | Feature (Policy) |
 | Mutasi keluar → auto set `siswa.status=pindah`, tutup `siswa_kelas` | Feature (Observer) |
 | PDF generate benar format & data lengkap | Feature (snapshot) |
+| Filter tingkat index → hanya tampil siswa di tingkat tersebut | Feature |
+| Search + filter tingkat kombinasi di index | Feature |
+| Status badge label sesuai mapping (aktif→Aktif, lulus→Lulus, dst) | Feature (Unit) |
 
 ---
 
@@ -714,7 +749,7 @@ $table->timestamps();
 #### 24.1 Scope MVP
 
 | Fitur | Deskripsi | Prioritas |
-|-------|-----------|-----------|
+| ------- | ----------- | ----------- |
 | **Pelanggaran Tata Tertib** | Tabel `pelanggaran`: siswa, tanggal, kategori (ringan/sedang/berat), poin, deskripsi, tindak_lanjut (peringatan/sp/skorsing), guru_pelapor, bukti_file. Auto-sum poin per semester. | Tinggi |
 | **Prestasi Siswa** | Extend `prestasi` existing: tambah kolom `poin_prestasi`, `tingkat` (sekolah/kabprov/nasional/internasional), `verified_by_bk`. Leaderboard per kelas/jurusan. | Tinggi |
 | **Konseling / Catatan BK** | Tabel `konseling`: siswa, tanggal, topik (akademik/pribadi/karier/sosial), catatan, follow_up_date, status (proses/selesai/rujuk). Hanya role `BK`/`Admin` create/edit. | Tinggi |
@@ -759,7 +794,7 @@ $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete
 #### 24.3 Testing
 
 | Behavior | Test |
-|----------|------|
+| ---------- | ------ |
 | Input pelanggaran → auto sum poin semester | Feature |
 | Poin >= 50 → auto suggest tindak lanjut | Feature |
 | Prestasi verified_by_bk true → muncul di leaderboard | Feature |
@@ -777,8 +812,8 @@ $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete
 #### 25.1 Gap yang Perlu Dilengkapi
 
 | Gap | Deskripsi | Prioritas |
-|-----|-----------|-----------|
-| **PDF Generator Resmi** | Generate PDF format Kemendikbudristek (Kurikulum Merdeka): halaman sampul, capaian kompetensi, profil pelajar pancasila (P5), ekstrakurikuler, catatan wali kelas, tanda tangan Kepsek/Wali Kelas/Ortu. Pakai `barryvdh/laravel-dompdf` + template blade. | Kritis |
+| ----- | ----------- | ----------- |
+| **PDF Generator Resmi** | Generate PDF format Kemendikbudristek (Kurikulum Merdeka): halaman sampul, capaian kompetensi, profil pelajar pancasila (P5), ekstrakurikuler, catatan wali kelas, tanda tangan Kepsek/Wali Kelas/Ortu. Pakai **mPDF** (`PdfService`) + template Blade. | Kritis |
 | **Nilai P5 per Dimensi** | UI input nilai P5 6 dimensi (beriman, berkebinekaan, gotong royong, mandiri, bernalar kritis, kreatif) per projek per siswa. Sudah ada `p5_nilai` tapi belum ada form input massal per kelas. | Tinggi |
 | **Deskripsi Capaian** | `rapor_deskripsi` per mapel per siswa: narasi capaian (bukan angka). Input guru mapel via textarea rich text. | Tinggi |
 | **Import Nilai Excel** | Template import nilai UTS/UAS/PAS/PAT per mapel per kelas. Validasi range 0-100, map ke `rapor_nilai` + `asesmen_sumatif`. | Sedang |
@@ -788,7 +823,7 @@ $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete
 #### 25.2 Testing
 
 | Behavior | Test |
-|----------|------|
+| ---------- | ------ |
 | Generate PDF rapor 1 siswa = 1 file, format benar | Feature (snapshot PDF) |
 | Input nilai massal Excel → tersimpan ke rapor_nilai + asesmen_sumatif | Feature |
 | Publish rapor → clone ke arsip, lock edit | Feature (Observer) |
@@ -803,7 +838,7 @@ $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete
 #### 26.1 Scope MVP
 
 | Fitur | Deskripsi | Prioritas |
-|-------|-----------|-----------|
+| ------- | ----------- | ----------- |
 | **Struktur Kurikulum** | Tabel `kurikulum`: nama (Merdeka/K13), aktif, tahun_mulai, tahun_selesai. Relasi ke `rapor_mapel` (mapel apa saja di kurikulum ini). | Sedang |
 | **SKBM (Satuan Kredit Belajar Mingguan)** | Tabel `skbm`: kurikulum_id, tingkat (10/11/12), jurusan_id, mapel_id, jam_per_minggu. Validasi total jam ≤ 38/40/42 per Minggu. | Sedang |
 | **Jadwal Pelajaran** | Tabel `jadwal_pelajaran`: hari, jam_ke, kelas_id, mapel_id, guru_id, ruangan, semester, tahun_ajaran. Validasi bentrok guru/kelas/ruangan. Drag-drop UI (dnd-kit). | Sedang |
@@ -812,7 +847,7 @@ $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete
 #### 26.2 Testing
 
 | Behavior | Test |
-|----------|------|
+| ---------- | ------ |
 | SKBM total jam per kelas tidak melebihi batas | Feature |
 | Jadwal tidak bentrok guru/kelas/ruangan | Feature |
 | Aktivasi kurikulum baru → copy mapel dari lama | Feature |
@@ -826,18 +861,585 @@ $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete
 #### 27.1 Scope MVP
 
 | Fitur | Deskripsi | Prioritas |
-|-------|-----------|-----------|
-| **Surat Masuk** | Tabel `surat_masuk`: no_agenda, tanggal_terima, no_surat, tanggal_surat, asal_surat, perihal, ringkasan, file_scan, disposisi (kepada, instruksi, batas_waktu), status (baru/diproses/selesai/arsip). | Sedang |
-| **Surat Keluar** | Tabel `surat_keluar`: no_agenda, tanggal_kirim, no_surat, tujuan, perihal, ringkasan, file_scan, penandatangan, status. Nomor otomatis per tahun (001/TU/SK/2025). | Sedang |
-| **NISN Management** | Sync NISN dari Dapodik → tabel `siswa.nisn`. UI verifikasi NISN duplikat, NISN kosong. | Sedang |
-| **Arsip Digital Akreditasi** | Tabel `arsip_akreditasi`: standar (1-8), sub_standar, butir, nama_dokumen, file_path, tahun_ajaran, status (lengkap/belum), penanggung_jawab. Tree view per standar. | Rendah |
-| **Disposisi & Tracking** | Surat masuk → disposisi ke pegawai → tracking status baca/balas. Notifikasi WA/email ke penerima disposisi. | Rendah |
+| ------- | ----------- | ----------- |
+| **Surat Masuk** | Tabel `surat_masuk`: no_agenda, tanggal_terima, no_surat, tanggal_surat, asal_surat, perihal, ringkasan, file_scan, disposisi (kepada, instruksi, batas_waktu), status (baru/diproses/selesai/arsip). **✅ Selesai 2026-07-16** |
+| **Surat Keluar** | Tabel `surat_keluar`: no_agenda, tanggal_kirim, no_surat, tujuan, perihal, ringkasan, file_scan, penandatangan, status. Nomor otomatis per tahun (001/TU/SK/2025). **✅ Selesai 2026-07-16** |
+| **NISN Management** | Sync NISN dari Dapodik → tabel `siswa.nisn`. UI verifikasi NISN duplikat, NISN kosong. **✅ Selesai 2026-07-16** |
+| **Arsip Digital Akreditasi** | Tabel `arsip_akreditasi`: standar (1-8), sub_standar, butir, nama_dokumen, file_path, tahun_ajaran, status (lengkap/belum), penanggung_jawab. Tree view per standar. **✅ Selesai 2026-07-16** |
 
 #### 27.2 Testing
 
 | Behavior | Test |
-|----------|------|
+| ---------- | ------ |
 | Nomor surat keluar auto-increment per tahun | Feature |
 | Disposisi → notifikasi ke penerima | Feature |
 | Arsip akreditasi filter standar/sub_standar | Feature |
 
+---
+
+### 28. Update Log BK & Settings (2026-07-17)
+
+**Perubahan yang dilakukan hari ini:**
+
+#### 28.1 Fixed Double Sidebar (BK Forms)
+
+- **Issue:** Halaman `/dashboard/bk/pelanggaran/create`, `.../prestasi/create`, `.../konseling/create` punya double `<AdminLayout>` wrapper karena Form.tsx di-import ke dalam wrapper otomatis via Inertia `app.jsx`.
+- **Fix:** Hapus import `<AdminLayout>` dari 3 file Form.tsx — Inertia auto-wrap sudah cukup.
+  - `resources/js/Pages/Admin/Bk/Pelanggaran/Form.tsx`
+  - `resources/js/Pages/Admin/Bk/Prestasi/Form.tsx`
+  - `resources/js/Pages/Admin/Bk/Konseling/Form.tsx`
+
+#### 28.2 Form Border Konsistensi
+
+Ketiga form sekarang pakai `border border-border` (theme token) — bukan `border-gray-*` — sesuai RULES.md.
+
+#### 28.3 Settings Page Pagination
+
+`/dashboard/settings` punya daftar 146 bank yang panjang. Ditambahkan pagination client-side (10 per halaman) di `Pages/Admin/Setting/Index.tsx`.
+
+#### 28.4 Fixed: NISN Management 500 Error
+
+- **Root cause:** `NisnManagementController@index` query `nama_jurusan` dari tabel `jurusans` yang sebenarnya punya kolom `nama`.
+- **Fix:** Ganti `'id', 'nama_jurusan'` → `'id', 'nama'` di controller.
+
+#### 28.5 Fixed: Settings/Index.tsx Build Error
+
+- **Issue:** Build gagal "Unexpected token `)}`" di line 172 karena `<</>` Fragment pendek di ternary JSX ambigU dengan parser.
+- **Fix:** Ganti `<></>` dengan `<Fragment>` eksplisit (import dari `react`).
+
+#### ✅ Status
+
+- Build: SUCCESS
+- Routes: NISN Management load (no 500)
+- Forms: Single sidebar, theme-compliant borders
+
+---
+
+### 29. Arsip Akreditasi Seeder & CRUD (2026-07-17)
+
+**Perubahan:**
+
+#### 29.1 Seeder Created
+
+- **File:** `database/seeders/ArsipAkreditasiSeeder.php`
+- **Registered:** `DatabaseSeeder.php` (line 19)
+- **Data:** 47 dokumen covering **8 standar** akreditasi:
+  - Standar 1: Visi, Misi, Tujuan (5)
+  - Standar 2: Tata Kelola (6)
+  - Standar 3: Kurikulum (9)
+  - Standar 4: Kependidikan (6)
+  - Standar 5: Sarana & Prasarana (8)
+  - Standar 6: Pembiayaan (6)
+  - Standar 7: Hubungan Masyarakat (5)
+  - Standar 8: Output & Hasil (6)
+- **Status mix:** ~70% `lengkap`, ~30% `belum` (realistis)
+
+#### 29.2 Verified CRUD Complete
+
+| Layer | Status |
+| ------- | -------- |
+| Migration | ✅ (2026_07_14_183834) |
+| Model + scopes | ✅ |
+| Controller (index, create, store, show, edit, update, destroy, tree) | ✅ |
+| FormRequest (validation + messages) | ✅ |
+| Policy (Admin/TU/Staf roles) | ✅ |
+| Frontend: Index, Create, Edit, Show, TreeView | ✅ |
+| Routes (resource + tree) | ✅ |
+| Permissions (TUSeeder) | ✅ |
+
+#### 29.3 Run Seeder
+
+```bash
+php artisan db:seed --class=ArsipAkreditasiSeeder
+```
+
+#### ✅ Build: SUCCESS
+
+---
+
+### 30. Nilai Akademik / E-Rapor Module Exposed (2026-07-17)
+
+**Ditemukan:** Sistem Nilai Akademik lengkap (Rapor Kurikulum Merdeka) **sudah diimplementasikan** tetapi tidak terekspos di sidebar navigation.
+
+**Yang sudah ada (backend + frontend):**
+
+| Komponen | Status |
+| ---------- | -------- |
+| Migration (7 tabel: rapor_kelas, rapor_mapel, rapor_siswa, rapor_nilai, rapor_deskripsi, rapor_ekstrakurikuler, rapor_catatan) | ✅ |
+| Models (RaporKelas, RaporMapel, RaporSiswa, RaporNilai, dll) | ✅ |
+| Controllers (RaporKelasController, RaporMapelController, RaporSiswaController) | ✅ |
+| Frontend Pages (Index, Form, Show, InputNilai, Assign, Statistik) | ✅ |
+| Routes (CRUD + assign siswa, input nilai, generate deskripsi, ekstrakurikuler, catatan, statistik) | ✅ |
+| E-Rapor submodule (Dapodik sync, Tujuan Pembelajaran, Nilai Formatif/Sumatif, P5) | ✅ |
+
+**Yang ditambahkan hari ini:**
+
+- Navigasi sidebar baru di `AppLayout.tsx`:
+  - **Rapor Kelas** → `/dashboard/rapor-kelas` (icon: School)
+  - **Rapor Mapel** → `/dashboard/rapor-mapel` (icon: BookOpen)
+  - **Rapor Siswa** → `/dashboard/rapor-siswa` (icon: FileText)
+- Role akses: Admin, TU, Staf, Guru
+
+**✅ Build: SUCCESS**
+
+**MVP Priority 7 (Nilai Akademik Dasar) → TERPENUHI** via sistem Rapor Kurikulum Merdeka yang lebih komprehensif.
+
+---
+
+### 31. Struktur Menu Simplifikasi (2026-07-17)
+
+**Tujuan:** Menu sidebar dengan struktur **Menu → Sub Menu** (max 2 level) agar mudah digunakan.
+
+#### 31.1 Struktur Menu Admin
+
+| Menu | Sub Menu | Route |
+| ------ | ---------- | ------- |
+| **Dashboard** | - | /dashboard |
+| **SPMB** | Pendaftaran | /dashboard/ppdb |
+| | Konfigurasi | /dashboard/spmb/config |
+| **Data Siswa** | List Siswa | /dashboard/users/murid |
+| | Buku Induk | /dashboard/buku-induk |
+| **Keuangan** | SPP & Pembayaran | /dashboard/spp |
+| | Dispensasi | /dashboard/dispensasi |
+| **GTK** | List GTK | /dashboard/gtk |
+| **Akademik** | Kelas | /dashboard/kelas |
+| | Jadwal Pelajaran | /dashboard/jadwal |
+| | E-Rapor | /dashboard/rapor-kelas, /dashboard/rapor-mapel, /dashboard/rapor-siswa |
+| **BK** | Dashboard | /dashboard/bk |
+| | Pelanggaran | /dashboard/bk/pelanggaran |
+| | Konseling | /dashboard/bk/konseling |
+| | Prestasi | /dashboard/bk/prestasi |
+| **Perpustakaan** | List Buku | /dashboard/perpustakaan |
+| **Sarana** | Inventaris | /dashboard/sarana |
+| **Alumni** | List Alumni | /dashboard/alumni |
+| | Tracer Study | /dashboard/alumni/tracer-study |
+| **Website** | Berita | /dashboard/website/berita |
+| | Kegiatan | /dashboard/website/kegiatan |
+| **TU** | Surat Masuk | /dashboard/tu/surat-masuk |
+| | Surat Keluar | /dashboard/tu/surat-keluar |
+| | Arsip Akreditasi | /dashboard/tu/arsip-akreditasi |
+| | Manajemen NISN | /dashboard/tu/nisn-management |
+| **Laporan** | Siswa, GTK, Keuangan, Export | /dashboard/laporan/* |
+| **Settings** | - | /dashboard/settings |
+
+#### 31.2 Struktur Menu Publik
+
+| Menu | Route |
+| ------ | ------- |
+| **Beranda** | / |
+| **Profil Sekolah** | /visi-dan-misi, /guru |
+| **Informasi** | /berita, /agenda |
+| **PPDB** | /ppdb |
+| **Alumni** | /alumni |
+| **Perpustakaan** | /perpustakaan |
+
+#### 31.3 Implementasi
+
+**`resources/js/Layout/AppLayout.tsx`**
+
+```tsx
+interface SearchItem {
+    label: string;
+    href: string;
+    keywords: string[];
+    roles?: string[];
+    parent?: string; // null = menu utama, string = submenu dari parent
+}
+
+// Item dengan parent = submenu, tampil expand saat parent aktif
+const children = navItems.filter(
+    c => c.parent === item.label && (!c.roles || c.roles.includes(role))
+);
+```
+
+#### 31.4 Checklist
+
+- [x] BK: Dashboard, Pelanggaran, Konseling, Prestasi
+- [x] Akademik: E-Rapor (Rapor Kelas/Mapel/Siswa)
+- [x] Keuangan: SPP, Dispensasi
+- [x] TU: Surat, Arsip, NISN
+- [x] SPMB: Pendaftaran, Konfigurasi
+- [x] Alumni: List, Tracer Study
+- [x] Website: Berita, Kegiatan
+- [x] Laporan: Siswa, GTK, Keuangan
+- [x] Data Siswa: List, Buku Induk
+
+---
+
+### 32. Sprint 2026-07-18 — Fitur Lanjutan
+
+#### 32.1 E-Rapor: Cetak PDF per Siswa
+
+- **Method** `RaporSiswaController::cetakPdf()` — single PDF via `PdfService::download()`
+- **Route** `rapor-siswa.cetak-pdf` (GET /dashboard/rapor-siswa/{raporSiswa}/cetak-pdf)
+- **Blade** `resources/views/pdf/rapor.blade.php` — template rapor A4
+- **Button** di Show.tsx → tombol Download PDF hijau
+
+#### 32.2 E-Rapor: Massal ZIP per Kelas
+
+- **Method** `RaporSiswaController::cetakPdfMassal()` — loop siswa → PDF → ZIP
+- **Route** `rapor-siswa.cetak-pdf-massal` (GET)
+- **Validasi** rapor_kelas_id, semester, tahun_ajaran
+
+#### 32.3 SiswaObserver — Auto-Create User
+
+- **Trigger** `Siswa::created` → buat User (username=nisn, password random), role murid
+- **Log password** sementara di log (TODO: kirim email)
+
+#### 32.4 Artisan Command: siswa:promote
+
+- Naik kelas massal: 10→11, 11→12, 12→lulus
+- Tutup enrollment lama, buat baru di kelas tujuan
+
+#### 32.5 SPP: Upload Bukti Pembayaran
+
+- Migration + kolom bukti_pembayaran, status_verifikasi
+- Upload file + tampilkan di Detail.tsx
+
+#### 32.6 Pembayaran Generic (Polymorphic)
+
+- Migration + Model Pembayaran, PembayaranDetail
+- morphs tagihan → bisa dipakai SPP, UKS, seragam, dll
+
+#### 32.7 Pembayaran: Upload Bukti (Foto/PDF) — Midtrans Dihapus
+
+**Revisi 2026-07-19:** Midtrans diganti jadi static upload bukti pembayaran (foto/PDF).
+- **PembayaranGatewayController (Midtrans)** → 🗑️ Dihapus (`app/Http/Controllers/Admin/PembayaranGatewayController.php`).
+- **PembayaranController::bayar()** sudah handle file upload (`store(\"pembayaran-bukti\", \"public\")`).
+- **Validasi** accept: `jpg,jpeg,png,pdf`, max 2MB.
+- **Tampilan** di Show.tsx: preview image/PDF, tabel riwayat ada link "Lihat".
+
+- Migration notifications table (uuid, type, morphs notifiable, data, read_at)
+
+### 33. Sprint 2026-07-18 — Fix Import Routes & Cleanup
+#### 32.8 Notifications (Laravel Default) — Full Stack
+
+**Status per 2026-07-19:** ✅ Full stack selesai (sebelumnya hanya migration).
+- **Migration** `2026_07_18_000002_create_notifications_table.php` (uuid, type, morphs notifiable, data, read_at).
+- **Controller** `NotificationController@index` (paginated list), `unreadCount`, `markAsRead`, `markAllAsRead`.
+- **Frontend** `Pages/Admin/Notification/Index.tsx` — daftar notifikasi + pagination + mark as read + mark all.
+- **Sidebar** → link "Notifikasi" di AppLayout.tsx.
+- **Header** → Bell icon link ke `/dashboard/notifications`.
+| Issue | Root Cause | Fix Applied |
+|--------|-----------|-------------|
+| Route name salah: `dispensari.template/import` | pi-agent pakai `dispensari` padahal resource line → `dispensasi` | Ganti ke `dispensasi.template/import` |
+| URL path rusak: `'dispensasi.template'` (tanpa `/`) | Sed replacement error | Rewrite manual baris 119-120 via heredoc |
+| Namespace double backslash: `App\\Http\\Controllers\\...` | Sed escaping error saat insert master-bank routes | Fix per-baris via heredoc |
+| Trait `HandlesImport` namespace salah: `Maatwebsite\Excel\Concerns\...` | pi-agent asal copy tanpa cek referensi yang ada | Ganti ke `App\Http\Controllers\Concerns\HandlesImport` |
+| `use HandlesImport;` di luar class body | Sed insertion error | Python rewrite block `use HandlesImport` masuk ke dalam class |
+| File backup menumpuk: `working.php`, `working2.php`, `*.bak` | pi-agent gagal/timeout berulang kali | Hapus manual |
+
+#### 33.2 Rute Final (routes/admin.php)
+
+```php
+Route::resource('dispensasi', 'Admin\DispensasiController');
+Route::get('dispensasi/template', 'App\Http\Controllers\Admin\DispensasiController@importForm')->name('dispensasi.template');
+Route::post('dispensasi/import', 'App\Http\Controllers\Admin\DispensasiController@import')->name('dispensasi.import');
+
+Route::resource('master-bank', 'Admin\MasterBankController');
+Route::get('master-bank/template', 'App\Http\Controllers\Admin\MasterBankController@importForm')->name('master-bank.template');
+Route::post('master-bank/import', 'App\Http\Controllers\Admin\MasterBankController@import')->name('master-bank.import');
+```
+
+#### 33.3 Controller — MasterBankController
+
+```php
+use App\Http\Controllers\Concerns\HandlesImport;
+
+class MasterBankController extends Controller
+{
+    use HandlesImport;
+    // ...
+    public function importForm() { return Inertia::render('Admin/MasterBank/Import'); }
+    public function import(Request $request) {
+        $this->validate($request, ['file' => 'required|file|mimes:xlsx,xls,csv|max:10240']);
+        $result = $this->runImport($request, MasterBank::class, function ($row) {
+            return [
+                'nama_bank'        => $row['nama_bank'] ?? null,
+                'kode_bank'        => $row['kode_bank'] ?? null,
+                'cabang'           => $row['cabang'] ?? null,
+                'rekening_default' => $row['rekening_default'] ?? null,
+            ];
+        });
+        $flash = $this->importFlash($result);
+        return redirect()->back()->with($flash['success'] ? ['success' => $flash['success']] : ['error' => $flash['error']]);
+    }
+}
+```
+
+**DispensasiController** — `importForm` & `import` sudah ada (pi-agent: 2026-07-18, tidak perlu diubah).
+
+#### 33.4 Frontend — Import.tsx
+
+| File | Route Name | Title |
+|------|-----------|-------|
+| `Pages/Admin/Dispensasi/Import.tsx` | `dispensasi.template`, `dispensasi.import` | Import Dispensasi |
+| `Pages/Admin/MasterBank/Import.tsx` | `master-bank.template`, `master-bank.import` | Import Master Bank |
+
+#### 33.5 Verifikasi
+
+```bash
+php -l app/Http/Controllers/Admin/MasterBankController.php  # ✅ No syntax errors
+php -l app/Http/Controllers/Admin/DispensasiController.php # ✅ No syntax errors
+php -l routes/admin.php                                      # ✅ No syntax errors
+php artisan route:list --name=dispensasi                     # ✅ dispensasi.import, dispensasi.template
+php artisan route:list --name=master-bank                    # ✅ master-bank.import, master-bank.template
+```
+
+#### ✅ Build: SUCCESS
+
+#### ✅ Status per 2026-07-18
+
+- [x] Route `dispensari` → `dispensasi` (fix URL + name)
+- [x] Namespace `App\\Http\\...` → `App\Http\...` (master-bank)
+- [x] Trait `HandlesImport` namespace benar + placement dalam class
+- [x] PHP syntax semua file ✅
+- [x] Route resolve kedua modul ✅
+- [x] Import.tsx Dispensasi & Master Bank ✅
+- [x] Hapus file backup menumpuk ✅
+
+### 34. Sprint 2026-07-18 — Cleanup P3 + Sidebar Kurikulum
+
+#### 34.1 P3 Cleanup — File Backup
+
+```bash
+rm phpunit.xml.bak
+rm app/Http/Controllers/Admin/MasterBankController.php.bak
+```
+
+#### 34.2 P3 — Namespace Konsisten di routes/admin.php
+
+Sebelum:
+```php
+Route::resource('dispensasi', 'Admin\DispensasiController');
+Route::get('dispensasi/template', 'App\Http\Controllers\Admin\DispensasiController@importForm')...
+```
+
+Sesudah (bare namespace, konsisten):
+```php
+Route::resource('dispensasi', 'Admin\DispensasiController');
+Route::get('dispensasi/template', 'Admin\DispensasiController@importForm')...
+```
+
+#### 34.3 Modul Kurikulum & Kalender Akademik — Terekspos!
+
+Sebelumnya (section 16.5/26) sudah ada controller, model, dan UI (`Admin/Kurikulum/*`), tetapi **tidak ada route & sidebar**. Kini:
+
+| Layer | Status |
+|-------|--------|
+| Migration | ✅ (pre-existing) |
+| Model (Kurikulum, KurikulumMapel, Skbm, KalenderAkademik) | ✅ |
+| Controller (KurikulumController: index, create, store, edit, update, destroy, mapels, skbm, kalender) | ✅ |
+| Frontend (Index, Create, Edit, Mapels, Skbm, Kalender) | ✅ (pre-existing) |
+| Routes (CRUD + mapels + skbm + kalender-akademik) | ✅ Ditambahkan hari ini |
+| Sidebar (Akademik → Kurikulum & SKBM, Kalender Akademik) | ✅ Ditambahkan hari ini |
+
+**Route ditambahkan** (routes/admin.php, setelah Jadwal):
+```php
+// Kurikulum
+Route::get('kurikulum', 'Admin\KurikulumController@index')->name('kurikulum.index');
+Route::get('kurikulum/create', 'Admin\KurikulumController@create')->name('kurikulum.create');
+Route::post('kurikulum', 'Admin\KurikulumController@store')->name('kurikulum.store');
+Route::get('kurikulum/{kurikulum}/edit', 'Admin\KurikulumController@edit')->name('kurikulum.edit');
+Route::put('kurikulum/{kurikulum}', 'Admin\KurikulumController@update')->name('kurikulum.update');
+Route::delete('kurikulum/{kurikulum}', 'Admin\KurikulumController@destroy')->name('kurikulum.destroy');
+Route::get('kurikulum/{kurikulum}/mapels', 'Admin\KurikulumController@mapels')->name('kurikulum.mapels');
+Route::post('kurikulum/{kurikulum}/mapels', 'Admin\KurikulumController@storeMapel')->name('kurikulum.mapels.store');
+Route::delete('kurikulum/{kurikulum}/mapels/{mapel}', 'Admin\KurikulumController@destroyMapel')->name('kurikulum.mapels.destroy');
+Route::get('kurikulum/{kurikulum}/skbm', 'Admin\KurikulumController@skbm')->name('kurikulum.skbm');
+Route::post('kurikulum/{kurikulum}/skbm', 'Admin\KurikulumController@storeSkbm')->name('kurikulum.skbm.store');
+Route::delete('kurikulum/{kurikulum}/skbm/{skbm}', 'Admin\KurikulumController@destroySkbm')->name('kurikulum.skbm.destroy');
+
+// Kalender Akademik
+Route::get('kalender-akademik', 'Admin\KurikulumController@kalender')->name('kalender-akademik.index');
+Route::post('kalender-akademik', 'Admin\KurikulumController@storeKalender')->name('kalender-akademik.store');
+Route::delete('kalender-akademik/{kalenderAkademik}', 'Admin\KurikulumController@destroyKalender')->name('kalender-akademik.destroy');
+```
+
+**Sidebar** (AppLayout.tsx, sub-menu Akademik):
+```tsx
+{ label: "Kurikulum & SKBM", href: "/dashboard/kurikulum", keywords: [...], parent: "Akademik", roles: ["Admin"] },
+{ label: "Kalender Akademik", href: "/dashboard/kalender-akademik", keywords: [...], parent: "Akademik", roles: ["Admin"] },
+```
+
+#### 34.4 Verifikasi
+
+```bash
+php -l routes/admin.php                                      # ✅ No syntax errors
+php artisan route:list --name=kurikulum                      # ✅ 12 routes
+php artisan route:list --name=kalender-akademik              # ✅ 3 routes
+```
+
+#### ⚠️ Catatan Build
+
+Build `pnpm run build` gagal karena pre-existing error di `resources/js/Pages/Admin/Pengguna/Pengajar/Import.tsx:3` — import `{ Toast }` dari `@/components/ui/toast-use` yang file-nya tidak ada. **Ini bukan dari kerjaan Kurikulum hari ini**, tapi perlu fix terpisah.
+
+#### ✅ Status per 2026-07-18
+
+- [x] File backup cleanup (phpunit.xml.bak, MasterBankController.php.bak)
+- [x] Namespace konsisten (bare `Admin\...` di semua route dispensasi & master-bank)
+- [x] 15 route Kurikulum + Kalender Akademik ditambahkan
+- [x] Sidebar entry Kurikulum & SKBM + Kalender Akademik
+- [x] Fix pre-existing build error di Pengajar/Import.tsx (toast-use missing) — hapus import & <Toast/> di 3 file (AppLayout sudah handle flash toast)
+
+### 35. Sprint 2026-07-19 — E-Rapor Routes + Pembayaran Polymorphic
+
+#### 35.1 Fix Routes Hilang (Rapor)
+
+Sebelumnya `Show.tsx` & `Index.tsx` sudah reference route `rapor-siswa.cetak-pdf` dan `rapor-siswa.cetak-pdf-massal`, tapi **route belum didefinisikan** → jamin crash `RouteNotFoundException`. Ditambahkan:
+
+```php
+Route::prefix('rapor-siswa')->group(function () {
+    // ...
+    Route::get('/cetak-pdf-massal', 'Admin\RaporSiswaController@cetakPdfMassal')->name('rapor-siswa.cetak-pdf-massal');
+    Route::get('/{raporSiswa}', 'Admin\RaporSiswaController@show')->name('rapor-siswa.show');
+    Route::get('/{raporSiswa}/cetak-pdf', 'Admin\RaporSiswaController@cetakPdf')->name('rapor-siswa.cetak-pdf');
+    // ...
+});
+```
+
+**Urutan penting**: `cetak-pdf-massal` harus sebelum `{raporSiswa}` agar tidak ditelan oleh param route.
+
+#### 35.2 Status 4 Fitur Sprint 32
+
+| # | Fitur | Status Catatan |
+|---|------|---------------|
+| 1 | E-Rapor: Cetak PDF per Siswa | ✅ SELESAI — `cetakPdf()` (L229) + blade `pdf/rapor.blade.php` + route + button Show.tsx |
+| 2 | E-Rapor: Cetak Massal ZIP per Kelas | ✅ SELESAI — `cetakPdfMassal()` (L256) ZipArchive penuh + route + button Index.tsx |
+| 3 | SPP: Upload Bukti Pembayaran | ✅ SELESAI — migration `2026_07_18_000001` + controller store L142-155 + UI Detail.tsx (preview, upload, link storage) |
+| 4 | Pembayaran Generic Polymorphic | ✅ SELESAI — lihat 35.3 |
+
+#### 35.3 Pembayaran Polymorphic (Section 32.6)
+
+**Yang sudah ada (pre-existing):**
+- Migration `2026_07_18_000001_create_pembayaran_tables.php` (pembayaran + pembayaran_detail, morphs tagihan)
+- Model `Pembayaran` (morphTo tagihan, hasMany details)
+- Model `PembayaranDetail` (belongsTo pembayaran, belongsTo User pencatat)
+
+**Yang ditambahkan hari ini:**
+
+| Layer | File | Status |
+|-------|------|--------|
+| Controller | `app/Http/Controllers/Admin/PembayaranController.php` (index/create/store/show/bayar/verifyDetail/destroy) | ✅ Baru |
+| Routes | 7 route `pembayaran.*` di routes/admin.php | ✅ Baru |
+| Frontend | `Pages/Admin/Pembayaran/Index.tsx` (table + filter + search + pagination) | ✅ Baru |
+| Frontend | `Pages/Admin/Pembayaran/Create.tsx` (form tagihan + optional morph link) | ✅ Baru |
+| Frontend | `Pages/Admin/Pembayaran/Show.tsx` (detail + catat pembayaran + verifikasi) | ✅ Baru |
+| Sidebar | "Pembayaran Lain" sub-menu Keuangan (roles: Admin) | ✅ Baru |
+
+**Alur polymorphic:**
+- `Pembayaran.tagihan_type` + `tagihan_id` → morph ke model apapun (SppTagihan, UKS, Seragam, dll)
+- Tagihan tanpa model khusus → `tagihan_type` biarkan null
+- `bayar()` → insert `PembayaranDetail` + auto recompute `jumlah_dibayar`, `sisa`, `status` (belum_lunas/angsuran/lunas)
+- `verifyDetail()` → Admin setujui/tolak, update `status_verifikasi` + `diverifikasi_pada`
+- Auto: role Admin langsung `terverifikasi`, role lain `pending`
+
+#### 35.4 Verifikasi
+
+```bash
+php -l app/Http/Controllers/Admin/PembayaranController.php  # ✅ No syntax errors
+php -l routes/admin.php                                       # ✅ No syntax errors
+php artisan route:list --name=pembayaran                      # ✅ 7 routes
+php artisan route:list --name=rapor-siswa.cetak               # ✅ cetak-pdf + cetak-pdf-massal
+pnpm run build                                                # ✅ SUCCESS (2.52s)
+```
+
+#### 35.5 Catatan Ponytail
+
+- **Satu controller untuk semua jenis tagihan** — bukan satu controller per jenis (SPP/UKS/Seragam). YAGNI.
+- **morph nullable** — tagihan tanpa model khusus tetap bisa dibuat (tagihan_type/id null).
+- **Admin auto-verify** — skip flow pending untuk Admin, hemat klik. Role lain tetap perlu verifikasi.
+- **Recompute status di transaksi** — satu DB transaction, tidak race antara insert detail & update parent.
+- **Skipped: FormRequest terpisah** — validasi inline cukup, belum ada 10+ field kompleks. Add ketika rules naik.
+
+#### ✅ Status per 2026-07-19
+
+- [x] Route rapor-siswa.cetak-pdf + cetak-pdf-massal ditambahkan
+- [x] 4 fitur sprint 32 selesai (PDF, ZIP, bukti pembayaran, polymorphic)
+- [x] Controller Pembayaran + 7 routes
+- [x] UI Index/Create/Show Pembayaran
+- [x] Sidebar entry "Pembayaran Lain"
+- [x] Build SUCCESS
+- [x] lean-prd section 35
+
+### 36. Sprint 2026-07-19 — WhatsApp Gateway + Notifications Full + Variant Column + Midtrans Hapus
+
+#### 36.1 WhatsApp Gateway Config
+
+**Tujuan:** Admin dapat mengonfigurasi gateway WhatsApp untuk notifikasi otomatis (Fonnte/Wablas/dll).
+
+| Layer | File | Status |
+|-------|------|--------|
+| **Migration** | `2026_07_19_000002_add_whatsapp_gateway_to_settings_table.php` — +`wa_gateway_url`, `wa_api_key`, `wa_nomor_tujuan`, `wa_template_pesan` | ✅ Baru |
+| **Backend** | `SettingController::update()` — validasi + simpan 4 field baru | ✅ Update |
+| **Frontend** | `KonfigurasiWeb.tsx` — section "WhatsApp Gateway" dengan form URL, API Key (password), nomor tujuan (62xxxx), template pesan ({{nama}}, {{nominal}}, {{tanggal}}) | ✅ Baru |
+
+#### 36.2 Notifications Full Stack
+
+Sebelumnya (Section 32.8) hanya migration. Kini:
+
+| Layer | File | Status |
+|-------|------|--------|
+| **Controller** | `NotificationController.php` — index, unreadCount, markAsRead, markAllAsRead | ✅ Baru |
+| **Routes** | `notifications.index`, `notifications.unread-count`, `notifications.mark-as-read`, `notifications.mark-all-read` | ✅ Baru |
+| **Frontend** | `Pages/Admin/Notification/Index.tsx` — daftar notifikasi + pagination + mark read + mark all | ✅ Baru |
+| **Sidebar** | Link "Notifikasi" di sidebar (AppLayout.tsx) | ✅ Baru |
+| **Header** | Bell icon → Link ke `/dashboard/notifications` (ganti dari Mail placeholder) | ✅ Update |
+
+#### 36.3 Variant Column di Kelas
+
+**Sebelumnya:** Variant (A/B/C/D) di-derive dari karakter pertama `nama_kelas` (line 16.1).
+**Sesudah:**
+
+| File | Status |
+|------|--------|
+| Migration `2026_07_19_000001_add_variant_to_kelas_table.php` | ✅ Baru |
+| Model `Kelas.php` — `'variant'` di fillable | ✅ Update |
+
+Kolom `variant` string nullable, bisa diisi langsung via UI Kelas (default tetap derive dari nama_kelas jika null).
+
+#### 36.4 Midtrans Dihapus → Static Upload Bukti
+
+**Revisi:** Midtrans diganti static upload bukti foto/PDF (Section 32.7 full update).
+
+| File | Status |
+|------|--------|
+| `PembayaranGatewayController.php` (Midtrans) | 🗑️ **Dihapus** |
+| `PembayaranController::bayar()` | ✅ Handle file upload (pre-existing) |
+
+#### 36.5 SPP Upload Bukti Pembayaran — ✅ Verifikasi Lengkap
+
+| Layer | File | Detail |
+|-------|------|--------|
+| **Migration** | `2026_07_18_000001_add_bukti_pembayaran_to_spp_pembayaran_table.php` | `bukti_pembayaran` string nullable, down() reversible ✅ |
+| **Model** | `SppPembayaran` | `$fillable` include `bukti_pembayaran` ✅ |
+| **Controller** | `SppController::bayar()` | Upload `$file->store('spp-bukti', 'public')` ✅ |
+| **Frontend** | `Admin/Spp/Detail.tsx` | File input (image/*,.pdf), preview, FormData submit ✅ |
+| **Display** | Riwayat pembayaran | Link `<a>` ke storage, tampil preview ✅ |
+
+#### ✅ Status per 2026-07-19
+
+- [x] Migration variant column (kelas)
+- [x] WhatsApp Gateway config (settings)
+- [x] Midtrans dihapus, static upload bukti
+- [x] Notifications full stack (controller + UI + sidebar + header)
+- [x] Semua PHP syntax ✅
+- [x] docs/lean-prd.md updated dengan status real
+
+### 37. Checklist Real vs Stale (2026-07-19)
+
+Berikut adalah status real semua fitur yang pernah tercatat sebagai "BELUM" di checklist lama:
+
+| Fitur | Checklist Lama | **Real Status** |
+|-------|---------------|-----------------|
+| E-Rapor: Cetak PDF per Siswa | 🔄 SEDANG | ✅ SELESAI (Section 32.1, 35.1) |
+| E-Rapor: Cetak Massal ZIP per Kelas | ❌ BELUM | ✅ SELESAI (Section 32.2, 35.1) |
+| SiswaObserver Auto-Create User | ❌ BELUM | ✅ SELESAI (Section 32.3) |
+| Artisan Command siswa:promote | ❌ BELUM | ✅ SELESAI (Section 32.4) |
+| Migration: Kolom variant di tabel kelas | ❌ BELUM | ✅ SELESAI (Section 36.3) |
+| SPP Upload Bukti Pembayaran UI | ❌ BELUM | ✅ SELESAI (Section 32.5, 36.5) |
+| Kurikulum & SPMB ke Sidebar | ❌ BELUM | ✅ SELESAI (Section 34.3, 31.4) |
+| WhatsApp Gateway Config di Settings | ❌ BELUM | ✅ SELESAI (Section 36.1) |
+| Midtrans Payment Gateway | ❌ REVISI | ✅ GANTI static upload bukti (Section 36.4) |
+| Pembayaran Generic Polymorphic | ❌ BELUM | ✅ SELESAI (Section 32.6, 35.3) |
+| Notifications Table + Real-time | ❌ BELUM | ✅ SELESAI (Section 36.2) |

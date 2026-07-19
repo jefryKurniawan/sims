@@ -5,14 +5,20 @@ namespace App\Http\Controllers\Admin\Pengguna;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PengajarRequest;
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Excel;
+use App\Http\Controllers\Concerns\HandlesImport;
 use Inertia\Inertia;
 
 class PengajarController extends Controller
 {
+    use HandlesImport;
+
     /**
      * Display a listing of the resource.
      */
@@ -184,5 +190,75 @@ class PengajarController extends Controller
             Session::flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
             return redirect()->back();
         }
+    }
+
+    /**
+     * Show import form.
+     */
+    public function importForm()
+    {
+        return Inertia::render('Admin/Pengguna/Pengajar/Import');
+    }
+
+    /**
+     * Process import.
+     */
+    public function import(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+        ]);
+
+        $result = $this->runImport($request, User::class, function ($row) {
+            // map Excel columns to model attributes
+            return [
+                'name' => $row['nama_lengkap'] ?? null,
+                'email' => $row['email'] ?? null,
+                'username' => strtolower(str_replace(' ', '', $row['nama_lengkap'] ?? '')) . rand(1000,9999),
+                'role' => 'Guru',
+                'status' => 'Aktif',
+                'password' => Hash::make('12345678'), // default password, should be changed on first login
+            ];
+        });
+
+        // after creating users, create UserDetail records
+        foreach (User::latest()->limit($result['imported'])->get() as $user) {
+            UserDetail::create([
+                'user_id' => $user->id,
+                'role' => $user->role,
+                // other fields can be left null or filled from sheet if present
+                'nip' => null,
+                'mengajar' => null,
+                'email' => $user->email,
+                'linkidln' => null,
+                'instagram' => null,
+                'website' => null,
+                'facebook' => null,
+                'twitter' => null,
+                'youtube' => null,
+            ]);
+        }
+
+        $flash = $this->importFlash($result);
+        return redirect()
+            ->back()
+            ->with($flash['success'] ? ['success' => $flash['success']] : ['error' => $flash['error']]);
+    }
+
+    /**
+     * Download import template.
+     */
+    public function template()
+    {
+        $headers = [
+            'nama_lengkap',
+            'email',
+            // optional fields: nip, mengajar, linkidln, instagram, website, facebook, twitter, youtube
+        ];
+
+        return Excel::download(new \App\Exports\TemplateExport($headers, [
+            'nama_lengkap' => 'Contoh Guru',
+            'email' => 'guru@example.com',
+        ]), 'template-pengajar.xlsx');
     }
 }

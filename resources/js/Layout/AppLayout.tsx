@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, ReactNode } from "react";
-import { Link, Head, usePage, route } from "@inertiajs/inertia-react";
+import { Link, Head, usePage } from "@inertiajs/inertia-react";
 import { useTheme } from "@/context/ThemeProvider";
 import { cn } from "@/lib/utils";
 import {
@@ -29,6 +29,12 @@ import {
     FolderTree,
     Archive,
     IdCard,
+    Heart,
+    AlertTriangle,
+    MessageCircle,
+    Trophy,
+    Bell,
+    ChevronDown,
 } from "lucide-react";
 
 interface User {
@@ -55,140 +61,77 @@ interface SearchItem {
     href: string;
     keywords: string[];
     roles?: string[];
+    parent?: string; // for submenu grouping
 }
 
-const NAV_ITEMS: SearchItem[] = [
-    {
-        label: "Dashboard",
-        href: route("dashboard"),
-        keywords: ["dashboard", "home", "beranda", "utama"],
-    },
-    {
-        label: "SPMB",
-        href: route("ppdb.index"),
-        keywords: ["spmb", "ppdb", "pendaftaran", "murid baru"],
-    },
-    {
-        label: "Konfigurasi SPMB",
-        href: route("spmb.config.index"),
-        keywords: ["konfigurasi", "spmb", "pengaturan"],
-    },
-    {
-        label: "Data Siswa",
-        href: route("users.murid.index"),
-        keywords: ["siswa", "murid", "data"],
-    },
-    {
-        label: "Buku Induk Digital",
-        href: route("buku-induk.index"),
-        keywords: [
-            "buku induk",
-            "siswa",
-            "profil",
-            "rekam medis",
-            "orang tua",
-            "mutasi",
-        ],
-    },
-    {
-        label: "SPP & Pembayaran",
-        href: route("spp.index"),
-        keywords: ["spp", "pembayaran", "tagihan", "keuangan"],
-    },
-    {
-        label: "Dispensasi",
-        href: route("dispensasi.index"),
-        keywords: ["dispensasi", "potongan", "beasiswa"],
-    },
-    {
-        label: "GTK",
-        href: route("gtk.index"),
-        keywords: ["gtk", "guru", "tenaga", "kependidikan"],
-    },
-    {
-        label: "Kelas",
-        href: route("kelas.index"),
-        keywords: ["kelas", "rombongan", "belajar"],
-    },
-    {
-        label: "Sarana Prasarana",
-        href: route("sarana.index"),
-        keywords: ["sarana", "prasarana", "fasilitas", "infrastruktur"],
-    },
-    {
-        label: "Perpustakaan",
-        href: route("admin.perpustakaan.index"),
-        keywords: ["perpustakaan", "buku", "peminjaman"],
-    },
-    {
-        label: "Alumni",
-        href: route("alumni.index"),
-        keywords: ["alumni", "lulusan"],
-    },
-    {
-        label: "Website / Berita",
-        href: route("berita-admin.index"),
-        keywords: ["website", "berita", "konten"],
-    },
-    {
-        label: "Galeri Prestasi",
-        href: route("admin.prestasi.index"),
-        keywords: ["prestasi", "galeri", "penghargaan"],
-    },
-    { label: "Laporan", href: "#", keywords: ["laporan", "export", "pdf"] },
-    {
-        label: "Settings",
-        href: route("settings"),
-        keywords: ["settings", "pengaturan", "profil"],
-    },
-    // TU Management
-    {
-        label: "Surat Masuk",
-        href: route("tu.surat-masuk.index"),
-        keywords: ["surat masuk", "disposisi", "tu", "tata usaha"],
-        roles: ["Admin", "TU", "Staf"],
-    },
-    {
-        label: "Surat Keluar",
-        href: route("tu.surat-keluar.index"),
-        keywords: ["surat keluar", "tu", "tata usaha"],
-        roles: ["Admin", "TU", "Staf"],
-    },
-    {
-        label: "Arsip Akreditasi",
-        href: route("tu.arsip-akreditasi.index"),
-        keywords: ["arsip", "akreditasi", "standar", "dokumen"],
-        roles: ["Admin", "TU", "Staf"],
-    },
-    {
-        label: "Manajemen NISN",
-        href: route("tu.nisn-management.index"),
-        keywords: ["nisn", "siswa", "verifikasi", "regenerate"],
-        roles: ["Admin", "TU", "Staf"],
-    },
+// Simplified Menu Structure for Non-Tech Users (Orang Awam)
+// anschauung: Flat structure with clear human labels, minimal nesting
+const getNavItems = (): SearchItem[] => [
+    // Dashboard
+    { label: "Dashboard", href: "/dashboard", keywords: ["dashboard", "home", "utama"] },
+
+    // SPMB / PPDB
+    { label: "SPMB", href: "/dashboard/ppdb", keywords: ["ppdb", "spmb", "daftar"], parent: "SPMB" },
+    { label: "Konfigurasi SPMB", href: "/dashboard/spmb/config", keywords: ["config", "spmb", "pengaturan"], parent: "SPMB" },
+
+    // DATA SISWA & AKADEMIK (Paling Sering Dipakai)
+    { label: "Data Siswa", href: "/dashboard/users/murid", keywords: ["siswa", "murid", "daftar"], parent: "Siswa" },
+    { label: "Buku Induk", href: "/dashboard/buku-induk", keywords: ["induk", "profil"], parent: "Siswa" },
+
+    { label: "Kelas & Jadwal", href: "/dashboard/kelas", keywords: ["kelas", "jadwal", "pelajaran"], parent: "Akademik" },
+    { label: "Input Nilai", href: "/dashboard/rapor-kelas", keywords: ["nilai", "rapor", "input"], parent: "Akademik", roles: ["Admin", "Guru"] },
+    { label: "Kurikulum & SKBM", href: "/dashboard/kurikulum", keywords: ["kurikulum", "skbm", "mapel", "jam mengajar"], parent: "Akademik", roles: ["Admin"] },
+    { label: "Kalender Akademik", href: "/dashboard/kalender-akademik", keywords: ["kalender", "akademik", "tanggal"], parent: "Akademik", roles: ["Admin"] },
+
+    { label: "BK (Bimbingan)", href: "/dashboard/bk", keywords: ["bk", "konseling", "pelanggaran"], parent: "BK" },
+    { label: "Catatan Pelanggaran", href: "/dashboard/bk/pelanggaran", keywords: ["pelanggaran", "poin"], parent: "BK" },
+    { label: "Konseling Siswa", href: "/dashboard/bk/konseling", keywords: ["konseling", "bicara"], parent: "BK" },
+    { label: "Prestasi Siswa", href: "/dashboard/bk/prestasi", keywords: ["prestasi", "penghargaan"], parent: "BK" },
+
+    // KEUANGAN
+    { label: "Bayar SPP", href: "/dashboard/spp", keywords: ["spp", "bayar", "tagihan"], parent: "Keuangan" },
+    { label: "Dispensasi/Potongan", href: "/dashboard/dispensasi", keywords: ["diskon", "potongan"], parent: "Keuangan" },
+    { label: "Pembayaran Lain", href: "/dashboard/pembayaran", keywords: ["pembayaran", "uks", "seragam", "ekstrakurikuler", "tagihan"], parent: "Keuangan", roles: ["Admin"] },
+
+    // TATA USAHA (Administrasi)
+    { label: "Surat Masuk", href: "/dashboard/tu/surat-masuk", keywords: ["surat masuk", "tu", "admin"], parent: "Tata Usaha", roles: ["Admin", "TU", "Staf"] },
+    { label: "Surat Keluar", href: "/dashboard/tu/surat-keluar", keywords: ["surat keluar"], parent: "Tata Usaha", roles: ["Admin", "TU", "Staf"] },
+    { label: "Arsip Dokumen", href: "/dashboard/tu/arsip-akreditasi", keywords: ["arsip", "dokumen"], parent: "Tata Usaha", roles: ["Admin", "TU", "Staf"] },
+
+    // LAINNYA
+    { label: "Perpustakaan", href: "/dashboard/perpustakaan", keywords: ["buku", "pinjam", "pustaka"] },
+    { label: "Alumni", href: "/dashboard/alumni", keywords: ["lulusan", "alumni"] },
+    { label: "Berita Sekolah", href: "/dashboard/website/berita", keywords: ["berita", "post", "wow"], parent: "Website", roles: ["Admin"] },
+
+    // Laporan & Settings (Admin Senior)
+    { label: "Laporan Semua", href: "/dashboard/laporan", keywords: ["laporan", "export", "cetak pdf"] },
+    { label: "Pengaturan", href: "/dashboard/settings", keywords: ["setting", "profil", "user"] },
+    { label: "Notifikasi", href: "/dashboard/notifications", keywords: ["notifikasi", "notif", "pemberitahuan"] },
 ];
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
     Dashboard: Home,
     SPMB: Users,
-    "Konfigurasi SPMB": Settings,
+    "Konfigurasi SPMB": Cog,
     "Data Siswa": UserPlus,
-    "Buku Induk Digital": Library,
-    "SPP & Pembayaran": CreditCard,
-    Dispensasi: Shield,
-    GTK: GraduationCap,
-    Kelas: School,
-    "Sarana Prasarana": Building2,
-    Perpustakaan: BookOpen,
-    Alumni: Award,
-    "Website / Berita": FileText,
-    "Galeri Prestasi": LucideImage,
-    Laporan: BarChart2,
-    Settings: Cog,
+    "Buku Induk": Library,
+    "Kelas & Jadwal": School,
+    "Input Nilai": GraduationCap,
+    "BK (Bimbingan)": Heart,
+    "Catatan Pelanggaran": AlertTriangle,
+    "Konseling Siswa": MessageCircle,
+    "Prestasi Siswa": Trophy,
+    "Bayar SPP": CreditCard,
+    "Dispensasi/Potongan": Shield,
     "Surat Masuk": MailInbox,
     "Surat Keluar": Send,
-    "Arsip Akreditasi": FolderTree,
-    "Manajemen NISN": IdCard,
+    "Arsip Dokumen": FolderTree,
+    Perpustakaan: BookOpen,
+    Alumni: Award,
+    "Berita Sekolah": FileText,
+    "Laporan Semua": BarChart2,
+    Pengaturan: Cog,
+    Notifikasi: Bell,
 };
 
 const HomeIcon = Home;
@@ -208,9 +151,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
     const userRole = auth?.user?.role || "Admin";
 
-    const filteredItems = NAV_ITEMS.filter(
-        (item) => !item.roles || item.roles.includes(userRole),
-    )
+    // Get nav items with routes evaluated at render time
+    const navItems = getNavItems();
+
+    const filteredItems = navItems
+        .filter(
+            (item) => !item.roles || item.roles.includes(userRole),
+        )
         .filter(
             (item) =>
                 item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -252,7 +199,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     const handleLogout = () => {
         const form = document.createElement("form");
         form.method = "POST";
-        form.action = route("logout");
+        form.action = "/auth/logout";
         const token = document
             .querySelector('meta[name="csrf-token"]')
             ?.getAttribute("content");
@@ -325,23 +272,70 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                             role="navigation"
                             aria-label="Main navigation"
                         >
-                            {NAV_ITEMS.filter(
-                                (item) =>
-                                    !item.roles ||
-                                    item.roles.includes(userRole),
-                            ).map((item) => (
-                                <Link
-                                    key={item.label}
-                                    href={item.href}
-                                    className={cn(
-                                        "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
-                                        "text-muted-foreground hover:text-primary hover:bg-primary/10",
-                                    )}
-                                >
-                                    {renderNavIcon(item.label)}
-                                    <span>{item.label}</span>
-                                </Link>
-                            ))}
+                            {(() => {
+                                const visible = navItems.filter(
+                                    (item) => !item.roles || item.roles.includes(userRole),
+                                );
+                                const GROUP_ORDER = ["SPMB", "Siswa", "Akademik", "BK", "Keuangan", "Tata Usaha", "Website"];
+                                const GROUP_LABEL: Record<string, string> = {
+                                    SPMB: "SPMB / PPDB",
+                                    Siswa: "Data Siswa",
+                                    Akademik: "Akademik",
+                                    BK: "BK & Bimbingan",
+                                    Keuangan: "Keuangan",
+                                    "Tata Usaha": "Tata Usaha",
+                                    Website: "Website",
+                                };
+                                const ungrouped = visible.filter(i => !i.parent || !GROUP_ORDER.includes(i.parent));
+                                const topItems = ungrouped.filter(i => i.label === "Dashboard");
+                                const bottomItems = ungrouped.filter(i => i.label !== "Dashboard");
+                                const grouped = GROUP_ORDER.map(g => ({
+                                    key: g,
+                                    label: GROUP_LABEL[g],
+                                    items: visible.filter(i => i.parent === g),
+                                })).filter(g => g.items.length > 0);
+
+                                const renderLink = (item: typeof visible[0]) => {
+                                    const isActive = window.location.pathname === item.href;
+                                    return (
+                                        <Link
+                                            key={item.label}
+                                            href={item.href}
+                                            className={cn(
+                                                "flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all",
+                                                isActive
+                                                    ? "bg-primary/10 text-primary font-semibold"
+                                                    : "text-muted-foreground hover:text-primary hover:bg-primary/10",
+                                            )}
+                                        >
+                                            {renderNavIcon(item.label)}
+                                            <span>{item.label}</span>
+                                        </Link>
+                                    );
+                                };
+
+                                return (
+                                    <>
+                                        {topItems.map(renderLink)}
+                                        {grouped.map((group) => (
+                                            <div key={group.key} className="mt-3">
+                                                <div className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/60 select-none">
+                                                    {group.label}
+                                                </div>
+                                                {group.items.map(renderLink)}
+                                            </div>
+                                        ))}
+                                        {bottomItems.length > 0 && (
+                                            <div className="mt-3">
+                                                <div className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/60 select-none">
+                                                    Lainnya
+                                                </div>
+                                                {bottomItems.map(renderLink)}
+                                            </div>
+                                        )}
+                                    </>
+                                );
+                            })()}
                         </nav>
 
                         <div className="p-4 border-t border-border">
@@ -454,10 +448,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                                 )}
                             </div>
 
-                            <div className="flex items-center gap-3">
-                                <button className="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-xl transition-all">
-                                    <Mail className="w-5 h-5" />
-                                </button>
+                            <div className="flex items-center gap-3 ml-auto">
+                            <Link href={route("notifications.index")} className="relative p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-xl transition-all">
+                                <Bell className="w-5 h-5" />
+                            </Link>
 
                                 <div className="relative" data-user-menu>
                                     <button

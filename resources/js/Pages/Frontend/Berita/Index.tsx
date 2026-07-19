@@ -17,9 +17,12 @@ import {
     CardHeader,
     CardTitle,
 } from '@/Components/ui/card';
+import { Badge } from '@/Components/ui/badge';
 import { Pagination } from '@/Components/Frontend/Pagination';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
+import Header from '@/Components/Frontend/Header';
+import Footer from '@/Components/Frontend/Footer';
 
 interface Props {
     berita: {
@@ -93,6 +96,7 @@ export default function BeritaIndex({ berita, kategoriFilter, search, kategoriOp
     return (
         <>
             <Head title="Berita & Pengumuman Sekolah" />
+            <Header />
 
             <div className="min-h-screen bg-gray-50">
                 {/* Hero Section */}
@@ -258,6 +262,8 @@ export default function BeritaIndex({ berita, kategoriFilter, search, kategoriOp
                     </div>
                 </section>
             </div>
+
+            <Footer />
         </>
     );
 }

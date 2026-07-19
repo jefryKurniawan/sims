@@ -8,14 +8,17 @@ use App\Http\Requests\MutasiSiswaRequest;
 use App\Http\Requests\OrangTuaDetailRequest;
 use App\Http\Requests\RekamMedisRequest;
 use App\Models\BukuIndukSiswa;
+use App\Models\Kelas;
 use App\Models\MutasiSiswa;
 use App\Models\OrangTuaDetail;
 use App\Models\RekamMedisSiswa;
 use App\Models\Siswa;
 use App\Models\ProfileSekolah;
 use App\Models\Setting;
+use App\Services\PdfService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class BukuIndukController extends Controller
@@ -25,7 +28,7 @@ class BukuIndukController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Siswa::query()->with(['bukuInduk', 'rekamMedis', 'orangTuaDetails', 'mutasis']);
+        $query = Siswa::query()->with(['bukuInduk', 'rekamMedis', 'orangTuaDetails', 'mutasis', 'kelasAktif.kelas']);
 
         if ($request->filled('search')) {
             $q = $request->search;
@@ -36,11 +39,20 @@ class BukuIndukController extends Controller
             });
         }
 
+        if ($request->filled('tingkat')) {
+            $query->whereHas('kelasAktif.kelas', function ($q) use ($request) {
+                $q->where('tingkat', $request->tingkat);
+            });
+        }
+
         $siswa = $query->orderBy('nama_lengkap')->paginate(15)->withQueryString();
+
+        $tingkatList = Kelas::select('tingkat')->distinct()->orderBy('tingkat')->pluck('tingkat');
 
         return Inertia::render('Admin/BukuInduk/Index', [
             'siswa' => $siswa,
-            'filters' => $request->only(['search']),
+            'filters' => $request->only(['search', 'tingkat']),
+            'tingkatList' => $tingkatList,
         ]);
     }
 
@@ -57,7 +69,6 @@ class BukuIndukController extends Controller
             'jurusan',
         ]);
 
-        // 1:1 record (or new instance for form default)
         $bukuInduk = $siswa->bukuInduk ?? new BukuIndukSiswa(['siswa_id' => $siswa->id]);
         $rekamMedis = $siswa->rekamMedis ?? new RekamMedisSiswa(['siswa_id' => $siswa->id]);
 
@@ -78,7 +89,7 @@ class BukuIndukController extends Controller
     }
 
     /**
-     * Cetak buku induk (window.print friendly view).
+     * Cetak buku induk (browser print-to-PDF / window.print).
      */
     public function cetak(Siswa $siswa)
     {
@@ -90,7 +101,6 @@ class BukuIndukController extends Controller
             'jurusan',
         ]);
 
-        // ponytail: browser-native print-to-PDF, bukan dompdf (YAGNI). Upgrade: pasang dompdf saat butuh batch-email/otomasi server-side.
         $profile = ProfileSekolah::first();
         $setting = Setting::where('user_id', auth()->id())->first();
 
@@ -103,6 +113,141 @@ class BukuIndukController extends Controller
             'namaSekolah' => $profile?->nama_sekolah,
             'namaKepalaSekolah' => $setting?->nama_kepala_sekolah,
         ]);
+    }
+
+    /**
+     * Download PDF buku induk via mPDF (server-side).
+     */
+    public function cetakPdf(Siswa $siswa)
+    {
+        $siswa->load([
+            'bukuInduk',
+            'rekamMedis',
+            'orangTuaDetails',
+            'mutasis',
+            'jurusan',
+        ]);
+
+        $profile = ProfileSekolah::first();
+        $setting = Setting::where('user_id', auth()->id())->first();
+
+        $filename = 'buku-induk-' . $siswa->nisn . '-' . now()->format('Ymd') . '.pdf';
+
+        return PdfService::download('pdf.buku-induk', [
+            'siswa' => $siswa,
+            'bukuInduk' => $siswa->bukuInduk,
+            'rekamMedis' => $siswa->rekamMedis,
+            'orangTua' => $siswa->orangTuaDetails,
+            'mutasi' => $siswa->mutasis,
+            'namaSekolah' => $profile?->nama_sekolah,
+            'namaKepalaSekolah' => $setting?->nama_kepala_sekolah,
+        ], $filename);
+    }
+
+    /**
+     * Cetak semua buku induk (filtered, print-friendly).
+     */
+    public function cetakSemua(Request $request)
+    {
+        $query = Siswa::query()->with(['bukuInduk', 'rekamMedis', 'orangTuaDetails', 'kelasAktif.kelas']);
+
+        if ($request->filled('tingkat')) {
+            $query->whereHas('kelasAktif.kelas', function ($q) use ($request) {
+                $q->where('tingkat', $request->tingkat);
+            });
+        }
+
+        $semuaSiswa = $query->orderBy('nama_lengkap')->get();
+
+        $profile = ProfileSekolah::first();
+        $setting = Setting::where('user_id', auth()->id())->first();
+
+        return Inertia::render('Admin/BukuInduk/CetakSemua', [
+            'siswa' => $semuaSiswa,
+            'filters' => $request->only(['tingkat']),
+            'namaSekolah' => $profile?->nama_sekolah ?? 'Sekolahku',
+            'namaKepalaSekolah' => $setting?->nama_kepala_sekolah ?? 'Kepala Sekolah',
+        ]);
+    }
+
+    /**
+     * Download massal PDF buku induk per kelas dalam ZIP.
+     */
+    public function cetakPdfMassal(Request $request)
+    {
+        $kelasId = $request->input('kelas_id');
+        $tingkat = $request->input('tingkat');
+
+        $query = Siswa::query()->with(['bukuInduk', 'rekamMedis', 'orangTuaDetails', 'mutasis', 'jurusan', 'kelasAktif.kelas']);
+
+        if ($kelasId) {
+            $query->whereHas('kelasAktif', function ($q) use ($kelasId) {
+                $q->where('kelas_id', $kelasId);
+            });
+        } elseif ($tingkat) {
+            $query->whereHas('kelasAktif.kelas', function ($q) use ($tingkat) {
+                $q->where('tingkat', $tingkat);
+            });
+        }
+
+        $siswaList = $query->orderBy('nama_lengkap')->get();
+
+        if ($siswaList->isEmpty()) {
+            return back()->with('error', 'Tidak ada siswa ditemukan.');
+        }
+
+        $profile = ProfileSekolah::first();
+        $setting = Setting::where('user_id', auth()->id())->first();
+
+        $zipFileName = 'buku-induk-massal-' . now()->format('YmdHis') . '.zip';
+        $zipPath = storage_path('app/tmp/' . $zipFileName);
+
+        if (!is_dir(storage_path('app/tmp'))) {
+            mkdir(storage_path('app/tmp'), 0755, true);
+        }
+
+        $zip = new \ZipArchive();
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            return back()->with('error', 'Gagal membuat file ZIP.');
+        }
+
+        foreach ($siswaList as $siswa) {
+            try {
+                $mpdf = new \Mpdf\Mpdf([
+                    'mode' => 'utf-8',
+                    'format' => 'A4',
+                    'margin_left' => 15,
+                    'margin_right' => 15,
+                    'margin_top' => 15,
+                    'margin_bottom' => 20,
+                    'default_font' => 'dejavusans',
+                    'tempDir' => storage_path('app/tmp/mpdf'),
+                ]);
+
+                $html = view('pdf.buku-induk', [
+                    'siswa' => $siswa,
+                    'bukuInduk' => $siswa->bukuInduk,
+                    'rekamMedis' => $siswa->rekamMedis,
+                    'orangTua' => $siswa->orangTuaDetails,
+                    'mutasi' => $siswa->mutasis,
+                    'namaSekolah' => $profile?->nama_sekolah,
+                    'namaKepalaSekolah' => $setting?->nama_kepala_sekolah,
+                ])->render();
+
+                $mpdf->WriteHTML($html);
+                $pdfContent = $mpdf->Output('', 'S');
+
+                $pdfFilename = 'buku-induk-' . $siswa->nama_lengkap . '-' . $siswa->nisn . '.pdf';
+                $zip->addFromString($pdfFilename, $pdfContent);
+            } catch (\Exception $e) {
+                \Log::error('Gagal generate PDF untuk siswa ' . $siswa->id . ': ' . $e->getMessage());
+                continue;
+            }
+        }
+
+        $zip->close();
+
+        return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
     }
 
     // === Profil (buku_induk_siswa) ===

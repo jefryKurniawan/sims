@@ -17,7 +17,7 @@ createInertiaApp({
         );
 
         // Skip layout wrapping for Frontend pages
-        if (name.startsWith("Frontend/")) {
+        if (name.startsWith("Frontend/") || name.startsWith("Spmb/")) {
             return page;
         }
 

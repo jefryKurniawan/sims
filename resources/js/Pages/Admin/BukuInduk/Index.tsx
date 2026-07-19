@@ -2,7 +2,14 @@ import { Head, Link, usePage } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import AdminTable from "@/Components/AdminTable";
 import type { Column } from "@/Components/AdminTable";
-import { Search, BookOpen, CheckCircle2, XCircle } from "lucide-react";
+import {
+    Search,
+    CheckCircle2,
+    XCircle,
+    Plus,
+    FileText,
+    Download,
+} from "lucide-react";
 
 interface BukuStatus {
     has_profil: boolean;
@@ -19,15 +26,29 @@ interface SiswaItem {
     jenis_kelamin: string;
     status: string;
     buku_induk: BukuStatus | null;
+    kelas_aktif?: {
+        kelas?: {
+            tingkat: string;
+            nama_kelas: string;
+        };
+    }[];
 }
 
 export default function Index() {
-    const { siswa, filters, flash } = usePage().props as any;
+    const { siswa, filters, flash, tingkatList } = usePage().props as any;
+
+    const applyFilter = (key: string, value: string) => {
+        Inertia.get(
+            route("buku-induk.index", { ...filters, [key]: value || "" }),
+            {},
+            { preserveState: true, preserveScroll: true, replace: true },
+        );
+    };
 
     const columns: Column[] = [
         {
             key: "nama_lengkap",
-            label: "Nama Siswa",
+            label: "Nama Lengkap",
             render: (_v: unknown, row: SiswaItem) => (
                 <Link
                     href={route("buku-induk.show", row.id)}
@@ -41,33 +62,50 @@ export default function Index() {
             key: "nisn",
             label: "NISN",
             render: (v: string) => v || "-",
-            className: "w-28",
         },
         {
             key: "nis",
             label: "NIS",
             render: (v: string) => v || "-",
-            className: "w-28",
+        },
+        {
+            key: "tingkat",
+            label: "Kelas",
+            render: (_v: unknown, row: SiswaItem) => {
+                const k = row.kelas_aktif?.[0]?.kelas;
+                return k ? (
+                    <span className="inline-flex px-2 py-0.5 text-xs font-medium rounded-full bg-blue-50 text-blue-700 ring-1 ring-blue-200 ring-inset">
+                        {k.tingkat} {k.nama_kelas}
+                    </span>
+                ) : (
+                    <span className="text-xs text-gray-400">-</span>
+                );
+            },
         },
         {
             key: "status",
             label: "Status",
-            className: "w-24",
             render: (_v: unknown, row: SiswaItem) => {
+                const labels: Record<string, string> = {
+                    aktif: "Aktif",
+                    lulus: "Lulus",
+                    pindah: "Pindah",
+                    keluar: "Keluar",
+                };
                 const colors: Record<string, string> = {
-                    aktif: "bg-emerald-100 text-emerald-700",
-                    lulus: "bg-blue-100 text-blue-700",
-                    pindah: "bg-amber-100 text-amber-700",
-                    keluar: "bg-destructive/10 text-destructive",
+                    aktif: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 ring-inset",
+                    lulus: "bg-blue-50 text-blue-700 ring-1 ring-blue-200 ring-inset",
+                    pindah: "bg-amber-50 text-amber-700 ring-1 ring-amber-200 ring-inset",
+                    keluar: "bg-red-50 text-red-700 ring-1 ring-red-200 ring-inset",
                 };
                 return (
                     <span
                         className={
                             "inline-flex px-2 py-0.5 text-xs font-medium rounded-full " +
-                            (colors[row.status] || "bg-gray-100 text-gray-700")
+                            (colors[row.status] || "bg-gray-50 text-gray-700 ring-1 ring-gray-200 ring-inset")
                         }
                     >
-                        {row.status}
+                        {labels[row.status] || row.status}
                     </span>
                 );
             },
@@ -75,7 +113,6 @@ export default function Index() {
         {
             key: "kelengkapan",
             label: "Kelengkapan",
-            className: "w-48",
             render: (_v: unknown, row: SiswaItem) => {
                 const b: BukuStatus = row.buku_induk || {
                     has_profil: false,
@@ -84,26 +121,28 @@ export default function Index() {
                     has_mutasi: false,
                 };
                 const items = [
-                    { label: "P", ok: b.has_profil },
-                    { label: "M", ok: b.has_rekam_medis },
-                    { label: "O", ok: b.has_orang_tua },
+                    { label: "Profil", ok: b.has_profil, title: "Data profil siswa" },
+                    { label: "Medis", ok: b.has_rekam_medis, title: "Rekam medis" },
+                    { label: "Ortu", ok: b.has_orang_tua, title: "Data orang tua/wali" },
+                    { label: "Mutasi", ok: b.has_mutasi, title: "Riwayat mutasi" },
                 ];
                 return (
-                    <div className="flex gap-1">
+                    <div className="flex flex-wrap gap-1">
                         {items.map((it) => (
                             <span
                                 key={it.label}
+                                title={it.title}
                                 className={
-                                    "inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium rounded " +
+                                    "inline-flex items-center gap-1 px-1.5 py-0.5 text-[11px] font-medium rounded " +
                                     (it.ok
                                         ? "bg-emerald-50 text-emerald-700"
-                                        : "bg-gray-100 text-gray-400")
+                                        : "bg-gray-50 text-gray-400")
                                 }
                             >
                                 {it.ok ? (
-                                    <CheckCircle2 className="h-2.5 w-2.5" />
+                                    <CheckCircle2 className="h-3 w-3" />
                                 ) : (
-                                    <XCircle className="h-2.5 w-2.5" />
+                                    <XCircle className="h-3 w-3" />
                                 )}
                                 {it.label}
                             </span>
@@ -128,6 +167,33 @@ export default function Index() {
                             riwayat mutasi siswa
                         </p>
                     </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                        <Link
+                            href={route("buku-induk.cetak-semua", {
+                                tingkat: filters?.tingkat || undefined,
+                            })}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition shadow-sm"
+                        >
+                            <FileText className="h-4 w-4" />
+                            Cetak Semua
+                        </Link>
+                        <Link
+                            href={route("buku-induk.cetak-pdf-massal", {
+                                tingkat: filters?.tingkat || undefined,
+                            })}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition shadow-sm"
+                        >
+                            <Download className="h-4 w-4" />
+                            PDF Massal
+                        </Link>
+                        <Link
+                            href={route("users.murid.create")}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition shadow-sm"
+                        >
+                            <Plus className="h-4 w-4" />
+                            Tambah
+                        </Link>
+                    </div>
                 </div>
 
                 {flash?.success && (
@@ -141,8 +207,8 @@ export default function Index() {
                     </div>
                 )}
 
-                <div className="bg-white rounded-lg border">
-                    <div className="p-4 border-b">
+                <div className="space-y-4">
+                    <div className="flex flex-col sm:flex-row gap-3">
                         <div className="relative flex-1 max-w-md">
                             <form
                                 onSubmit={(e) => {
@@ -154,6 +220,7 @@ export default function Index() {
                                     ).value;
                                     Inertia.get(
                                         route("buku-induk.index", {
+                                            ...filters,
                                             search: q,
                                         }),
                                         {},
@@ -172,7 +239,7 @@ export default function Index() {
                                         name="search"
                                         defaultValue={filters?.search ?? ""}
                                         placeholder="Cari nama / NIS / NISN..."
-                                        className="w-full pl-10 pr-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                        className="w-full pl-10 pr-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:border-primary transition-colors"
                                     />
                                 </div>
                                 <button
@@ -183,7 +250,22 @@ export default function Index() {
                                 </button>
                             </form>
                         </div>
+                        <select
+                            value={filters?.tingkat || ""}
+                            onChange={(e) =>
+                                applyFilter("tingkat", e.target.value)
+                            }
+                            className="px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:border-primary transition-colors w-full sm:w-40"
+                        >
+                            <option value="">Semua Kelas</option>
+                            {(tingkatList || []).map((t: string) => (
+                                <option key={t} value={t}>
+                                    Kelas {t}
+                                </option>
+                            ))}
+                        </select>
                     </div>
+
                     <AdminTable
                         columns={columns}
                         rows={siswa?.data || []}

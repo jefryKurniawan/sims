@@ -4,6 +4,9 @@ namespace App\Models;
 
 use App\Models\AuditLog;
 use App\Models\NisnSyncLog;
+use AppModelsAbsensi;
+use AppModelsPelanggaran;
+use AppModelsKonseling;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -180,6 +183,16 @@ class Siswa extends Model
     public function absensis()
     {
         return $this->hasMany(Absensi::class);
+    }
+
+    public function pelanggaran()
+    {
+        return $this->hasMany(Pelanggaran::class);
+    }
+
+    public function konseling()
+    {
+        return $this->hasMany(Konseling::class);
     }
 
     public function absensiToday()

@@ -73,7 +73,7 @@ class NisnManagementController extends Controller
             'invalid_format' => Siswa::whereRaw('(nisn IS NOT NULL AND nisn != "" AND (LENGTH(nisn) != 10 OR nisn NOT REGEXP "^[0-9]{10}$"))')->count(),
         ];
 
-        $jurusanList = \App\Models\Jurusan::where('aktif', true)->get(['id', 'nama_jurusan']);
+        $jurusanList = \App\Models\Jurusan::where('aktif', true)->get(['id', 'nama']);
 
         return inertia('Admin/TU/NisnManagement/Index', [
             'siswa' => $siswa,

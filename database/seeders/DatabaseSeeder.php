@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
             AddRoleSeeder::class,
             BlogRolePermissionSeeder::class,
             TUSeeder::class,
+            SuratMasukSeeder::class,
+            SuratKeluarSeeder::class,
+            ArsipAkreditasiSeeder::class,
             UserSeeder::class,
             IndoBankSeeder::class,
             SettingSeeder::class,
@@ -26,6 +29,7 @@ class DatabaseSeeder extends Seeder
             KelasSeeder::class, // added
             SiswaSeeder::class,
             SiswaKelasSeeder::class, // added
+            BukuIndukDataSeeder::class, // buku induk digital sample data
             GelombangSeeder::class,
             PengumumanPpdbSeeder::class,
             AlumniSeeder::class,
@@ -35,6 +39,7 @@ class DatabaseSeeder extends Seeder
             DispensasiSeeder::class,
             BukuSeeder::class, // added (perpustakaan buku)
             PrestasiSeeder::class,
+            KonselingSeeder::class,
             EventSeeder::class,
             SpmbApplicantSeeder::class,
             SpmbAfirmasiSeeder::class,

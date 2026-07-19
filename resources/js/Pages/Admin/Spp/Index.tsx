@@ -1,7 +1,7 @@
 import { Head, Link, usePage } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, List, FileSpreadsheet } from "lucide-react";
 import AdminTable from "@/Components/AdminTable";
 import type { Column } from "@/Components/AdminTable";
 import ConfirmModal from "@/Components/ConfirmModal";
@@ -23,6 +23,21 @@ export default function Index() {
             minimumFractionDigits: 0,
         }).format(num);
 
+    const statusColors: Record<string, string> = {
+        lunas: "bg-emerald-100 text-emerald-700",
+        belum_lunas: "bg-destructive/10 text-destructive",
+        overdue: "bg-yellow-100 text-yellow-700",
+        pending: "bg-yellow-100 text-yellow-700",
+        failed: "bg-red-100 text-red-700",
+    };
+    const statusLabels: Record<string, string> = {
+        lunas: "Lunas",
+        belum_lunas: "Belum Lunas",
+        overdue: "Overdue",
+        pending: "Pending",
+        failed: "Gagal",
+    };
+
     const columns: Column[] = [
         {
             key: "siswa_nama",
@@ -43,25 +58,11 @@ export default function Index() {
         {
             key: "status",
             label: "Status",
-            render: (v: string) => {
-                const colors: Record<string, string> = {
-                    lunas: "bg-emerald-100 text-emerald-700",
-                    belum_lunas: "bg-destructive/10 text-destructive",
-                    pending: "bg-yellow-100 text-yellow-700",
-                };
-                const labels: Record<string, string> = {
-                    lunas: "Lunas",
-                    belum_lunas: "Belum Lunas",
-                    pending: "Pending",
-                };
-                return (
-                    <span
-                        className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${colors[v] || "bg-gray-100 text-gray-700"}`}
-                    >
-                        {labels[v] || v}
-                    </span>
-                );
-            },
+            render: (v: string) => (
+                <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${statusColors[v] || "bg-gray-100 text-gray-700"}`}>
+                    {statusLabels[v] || v}
+                </span>
+            ),
         },
         {
             key: "keterangan",
@@ -83,12 +84,29 @@ export default function Index() {
                             Kelola tagihan & pembayaran SPP
                         </p>
                     </div>
-                    <Link
-                        href={route("spp.create")}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition text-sm font-semibold shadow-sm"
-                    >
-                        SPP Baru
-                    </Link>
+                    <div className="flex flex-wrap gap-2">
+                        <Link
+                            href={route("spp.hutang")}
+                            className="inline-flex items-center gap-1.5 px-3 py-2 bg-yellow-50 text-yellow-700 rounded-lg hover:bg-yellow-100 transition text-sm font-medium border border-yellow-200"
+                        >
+                            <List className="w-4 h-4" />
+                            Hutang
+                        </Link>
+                        <Link
+                            href={route("spp.generate")}
+                            className="inline-flex items-center gap-1.5 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition text-sm font-medium border border-blue-200"
+                        >
+                            <FileSpreadsheet className="w-4 h-4" />
+                            Generate
+                        </Link>
+                        <Link
+                            href={route("spp.create")}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition text-sm font-semibold shadow-sm"
+                        >
+                            <Plus className="w-4 h-4" />
+                            SPP Baru
+                        </Link>
+                    </div>
                 </div>
 
                 {flash?.success && (
@@ -117,14 +135,12 @@ export default function Index() {
                     actions={(row) => [
                         {
                             icon: "eye",
-                            onClick: () =>
-                                Inertia.visit(route("spp.show", row.id)),
+                            onClick: () => Inertia.visit(route("spp.show", row.id)),
                             label: "Detail",
                         },
                         {
                             icon: "edit",
-                            onClick: () =>
-                                Inertia.visit(route("spp.edit", row.id)),
+                            onClick: () => Inertia.visit(route("spp.edit", row.id)),
                             label: "Edit",
                         },
                         {

@@ -1,5 +1,5 @@
 import { Head, usePage } from "@inertiajs/inertia-react";
-import { Printer, ArrowLeft } from "lucide-react";
+import { Printer, FileDown, ArrowLeft } from "lucide-react";
 
 export default function Cetak() {
     const { siswa, bukuInduk, rekamMedis, orangTua, mutasi, namaSekolah, namaKepalaSekolah } =
@@ -21,6 +21,13 @@ export default function Cetak() {
                 >
                     <Printer className="h-4 w-4" /> Cetak / Simpan PDF
                 </button>
+                <a
+                    href={route("buku-induk.cetak-pdf", siswa.id)}
+                    target="_blank"
+                    className="ml-2 inline-flex items-center gap-2 px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary/5"
+                >
+                    <FileDown className="h-4 w-4" /> Download PDF (Server)
+                </a>
                 <a
                     href={route("buku-induk.show", siswa.id)}
                     className="ml-2 inline-flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50"

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "database": {
+      "command": "database-mcp",
+      "args": [
+        "--db-type", "mysql",
+        "--db-config", "{\"host\":\"localhost\",\"port\":3306,\"database\":\"sims\",\"user\":\"root\",\"password\":\"\"}"
+      ]
+    }
+  }
+}
