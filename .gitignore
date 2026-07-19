@@ -38,3 +38,24 @@ lean-prd.md
 .opencode/
 legion-mcp/
 memory/
+
+# Laravel Sail (not using Docker)
+sail
+
+# Backup files from AI agent
+*.backup
+*.bak
+*.orig
+
+# Laravel Excel stubs (generated)
+stubs/
+
+# Test cache
+.phpunit.result.cache
+
+# Local MySQL data
+storage/mysql_run/
+storage/mysql_sock/
+storage/mysql_tcp/
+storage/mysql_test/
+
