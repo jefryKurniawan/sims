@@ -25,3 +25,16 @@ login.html
 test.php
 test.txt
 database/mysql_data/
+
+# AI / Agent config — not for project repo
+AGENTS.md
+CLAUDE.md
+MEMORY.md
+RULES.md
+TASKS.md
+lean-prd.md
+.agents/
+.codex-skills/
+.opencode/
+legion-mcp/
+memory/

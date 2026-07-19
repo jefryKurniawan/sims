@@ -10,6 +10,17 @@ Sekolahku adalah aplikasi manajemen sekolah berbasis website yang di bangun dan 
 - Sistem Pembayaran Sekolah SPP (Done)
 - Alumni
 
+- Manajemen Kelas & Jadwal Pelajaran
+- Kurikulum, SKBM & Kalender Akademik
+- BK / Bimbingan Konseling (Pelanggaran, Konseling, Prestasi, Surat Rekomendasi)
+- Tata Usaha (Surat Masuk/Keluar, Arsip Akreditasi, Manajemen NISN)
+- Buku Induk Digital
+- Sarana & Prasarana
+- Absensi Siswa & Guru
+- Manajemen Orang Tua/Wali
+- Notifikasi & WhatsApp Gateway
+- Laporan (Siswa, Keuangan, Export Excel/PDF)
+
 ## Installation
 
 - Install [Composer](https://getcomposer.org/download) and [Pnpm](https://pnpm.io/installation)
