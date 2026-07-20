@@ -388,16 +388,20 @@ File `Admin/SaranaPrasarana/Create.tsx` sudah ada (14 Jul), tapi melanggar WCAG.
 
 ---
 
-### 19. Technical Debt & Prerequisites
+### 19. Technical Debt & Prerequisites — REVIEWED (2026-07-20)
 
-Sebelum memulai fitur baru di atas, perlu diselesaikan:
+Status actual dari poin-poin yang pernah tercatat sebagai prerequisite:
 
-1. **User ↔ Siswa Auto-Link**: `Siswa::created` observer → auto-create `User` dengan role `murid`, kirim kredensial via email/WA
-2. **Naik Kelas Massal**: Scheduled command `php artisan siswa:promote` end-of-year (10→11, 11→12, 12→Lulus)
-3. **Variant Kolom di Kelas**: Tambah kolom `variant` di tabel `kelas` (A/B/C/D) — bukan derive dari nama_kelas
-4. **WhatsApp Gateway Config**: Tambah field di `settings` table: `whatsapp_gateway_url`, `whatsapp_token`, `whatsapp_template_absensi_masuk`, `whatsapp_template_absensi_pulang`
-5. **Queue Worker Cron**: Pastikan cron `* * * * * php artisan queue:work --stop-when-empty --max-time=60` aktif di production
-6. **PDF Library**: `composer require mpdf/mpdf` (v8.3) — sudah terinstall. `PdfService` (`app/Services/PdfService.php`) sebagai wrapper reusable. Untuk modul Laporan, E-Rapor, Surat pakai `PdfService::download('pdf.view-name', $data, 'file.pdf')`. Blade view: `resources/views/pdf/`. Font DejaVu Sans untuk UTF-8 Bahasa Indonesia. **Jangan** pakai dompdf/barryvdh — mPDF handle UTF-8 & tabel kompleks lebih baik.
+| # | Item | Status | Keterangan |
+|---|------|--------|-----------|
+| 1 | **User ↔ Siswa Auto-Link** | [❓] **Partial** | `SiswaObserver::created()` sudah create User + assign role `murid`. Tapi kredensial masih di-log, belum dikirim via email/WA (Section 38.1). |
+| 2 | **Naik Kelas Massal** | [OK] **Selesai** | `php artisan siswa:promote` command sudah ada, handle 10→11→12→Lulus, transaction safety, progress bar. Tidak perlu perubahan. |
+| 3 | **Variant Kolom di Kelas** | [OK] **Selesai** | Migration `2026_07_19_000001_add_variant_to_kelas_table.php` + fillable update. |
+| 4 | **WhatsApp Gateway Config** | [OK] **Selesai** | 4 field di settings (`wa_gateway_url`, `wa_api_key`, `wa_nomor_tujuan`, `wa_template_pesan`) + form UI di KonfigurasiWeb.tsx. Tapi **queue job** `SendAbsensiNotification` belum dibuat (Section 38.3). |
+| 5 | **Queue Worker Cron** | [...] **Perlu ditambahkan** | Pastikan cron `* * * * * php artisan queue:work --stop-when-empty --max-time=60` aktif di production. Saat ini `QUEUE_CONNECTION=sync` (inline). |
+| 6 | **PDF Library** | [OK] **Selesai** | mPDF terinstall. `PdfService` wrapper reusable. |
+
+Catatan: Poin 1 (email kredensial) dan 4 (WA job absensi) adalah gap aktif yang perlu dieksekusi — lihat Section 38.
 
 ---
 
@@ -638,8 +642,8 @@ $table->time('absensi_jam_masuk_guru')->default('07:00');
 | Fitur | Prioritas | Catatan |
 | ------- | ----------- | --------- |
 | Absensi RFID/Device Gateway | Sedang | Perlu `absensi_device` table, listener service terpisah |
-| Notifikasi WhatsApp Orang Tua | Sedang | Perlu WA Gateway config di settings + queue job |
-| Izin/Sakit Digital (Pengajuan Ortu) | Rendah | Form pengajuan → approval BK/Wali Kelas |
+| **Notifikasi WhatsApp Orang Tua** | **Sedang** | **Architecture planned (Section 38.3).** Config siap, WA gateway fields di settings. Queue job `SendAbsensiNotification` perlu dibuat + trigger di checkin/checkout. |
+| **Izin/Sakit Digital (Pengajuan Ortu)** | **Rendah -> Sedang** | **Architecture planned (Section 38.4).** Migration `pengajuan_izin` table, public form via NISN, approval BK/Wali Kelas, auto-create Absensi entry. |
 | Rekap Bulanan Otomatis PDF | Rendah | Generate laporan bulanan untuk SKHU/Rapor |
 | Face Recognition / Biometrik | Rendah | Device spesifik, integrasi hardware |
 
@@ -1426,7 +1430,7 @@ Kolom `variant` string nullable, bisa diisi langsung via UI Kelas (default tetap
 - [x] Semua PHP syntax ✅
 - [x] docs/lean-prd.md updated dengan status real
 
-### 37. Checklist Real vs Stale (2026-07-19)
+### 37. Checklist Real vs Stale (2026-07-20)
 
 Berikut adalah status real semua fitur yang pernah tercatat sebagai "BELUM" di checklist lama:
 
@@ -1443,3 +1447,154 @@ Berikut adalah status real semua fitur yang pernah tercatat sebagai "BELUM" di c
 | Midtrans Payment Gateway | ❌ REVISI | ✅ GANTI static upload bukti (Section 36.4) |
 | Pembayaran Generic Polymorphic | ❌ BELUM | ✅ SELESAI (Section 32.6, 35.3) |
 | Notifications Table + Real-time | ❌ BELUM | ✅ SELESAI (Section 36.2) |
+| SendSiswaCredentialsJob (email kredensial) | — (baru) | ❌ BELUM — architecture siap (Section 38.1) |
+| SendAbsensiNotification (WA notif absensi) | — (baru) | ❌ BELUM — architecture siap (Section 38.3) |
+| Izin/Sakit Digital (Pengajuan Ortu) | — (baru) | ❌ BELUM — architecture siap (Section 38.4) |
+
+### 38. Sprint 2026-07-20 — Architecture Review MVP Gaps
+
+**Tujuan:** Architecture review & execution plan untuk 4 gap MVP yang tersisa, berdasarkan hasil eksplorasi & analisis kode (2026-07-20).
+
+#### 38.1 Ringkasan Status
+
+| # | Gap | Status | Estimasi File |
+|---|-----|--------|---------------|
+| 1 | **Siswa Auto-Create User -> Kirim Kredensial** | [?] Observer sudah, email blom | 3 file baru + 1 edit |
+| 2 | **Naik Kelas Massal (Artisan)** | [OK] SUDAH LENGKAP, skip | 0 file |
+| 3 | **WhatsApp Notifikasi Absensi** | [X] Config siap, job & pengiriman blom | 3 file baru + 2 edit |
+| 4 | **Izin/Sakit Digital (Pengajuan Ortu)** | [X] Dari 0 | 6+ file baru |
+
+#### 38.2 Gap 1: Siswa Auto-Create -> Kirim Kredensial
+
+**Status sekarang:** `SiswaObserver::created()` sudah create User + assign role `murid`, password di-log.
+
+**Gap:** Kredensial belum dikirim ke email orang tua/wali.
+
+**Pattern existing (reuse):** `SendPpdbCredentialsJob` + `PpdbCredentialsMail` + blade `email.ppdb_credentials`.
+
+**File baru:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `app/Mail/SiswaCredentialsMail.php` | Mail | Copy PpdbCredentialsMail, subject + body untuk siswa |
+| `resources/views/email/siswa_credentials.blade.php` | Blade | Template email: nama, username (NISN/NIS), password |
+| `app/Jobs/SendSiswaCredentialsJob.php` | Job | Dispatch SiswaCredentialsMail |
+
+**File diedit:**
+| File | Perubahan |
+|------|----------|
+| `app/Observers/SiswaObserver.php` | Ganti `\Log::info(...)` -> `dispatch(new SendSiswaCredentialsJob($user, $password))` |
+
+**Data flow:**
+```
+Siswa::created()
+  -> SiswaObserver::created()
+    -> Create User, assignRole('murid')
+    -> dispatch(new SendSiswaCredentialsJob($user, $password))
+      -> Mail::to($user->email)->send(new SiswaCredentialsMail($user, $password))
+```
+
+**Ponytail:** `QUEUE_CONNECTION=sync` — job jalan inline. Kalau mail gagal, log error saja, jangan retry. Skip mail config validation di observer. Tambah queue worker cron nanti kalau throughput naik.
+
+#### 38.3 Gap 3: WhatsApp Notifikasi Absensi
+
+**Status sekarang:** [OK] WA Gateway config di settings (4 field), [OK] form UI KonfigurasiWeb.tsx, [OK] SettingController handle wa fields. [X] Tapi **queue job `SendAbsensiNotification` belum dibuat**, [X] belum trigger di checkin/checkout.
+
+**File baru:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `app/Jobs/SendAbsensiNotification.php` | Job | Load WA config dari settings -> parse template -> HTTP POST ke gateway |
+
+**File diedit:**
+| File | Perubahan |
+|------|----------|
+| `app/Http/Controllers/Api/AbsensiApiController.php` | Dispatch job di `checkin()` & `checkout()` |
+| `app/Http/Controllers/Admin/AbsensiController.php` | Dispatch job di `storeKelas()` |
+
+**Logic SendAbsensiNotification:**
+```
+SendAbsensiNotification($siswa, $absensi, $type = 'masuk'|'pulang')
+  1. Load WA config dari Setting table (first())
+  2. Jika wa_gateway_url atau wa_api_key kosong -> skip (log)
+  3. Parse template: {{nama}} -> siswa->nama_lengkap, {{status}} -> absensi->status_masuk/pulang, {{tanggal}} -> absensi->tanggal, {{jam}} -> absensi->jam_masuk/pulang, {{nisn}} -> siswa->nisn
+  4. HTTP POST ke wa_gateway_url dengan header Authorization: wa_api_key
+  5. Body: target={no_hp_ortu}&message={parsed_template}
+  6. Log sukses/gagal
+```
+
+**Ponytail:** Hardcode format Fonnte dulu (Header Auth + form data). Skip retry — cukup log. Skip validation — kalau WA config null, skip dispatch.
+
+#### 38.4 Gap 4: Izin/Sakit Digital (Pengajuan Ortu)
+
+**Konsep:** Orang tua submit form izin/sakit via link publik (tanpa login — pakai NISN siswa), masuk ke dashboard BK/Wali Kelas untuk approval.
+
+**Migration — `pengajuan_izin` table:**
+```php
+Schema::create('pengajuan_izin', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
+    $table->string('jenis');                // 'izin', 'sakit'
+    $table->date('tanggal_mulai');
+    $table->date('tanggal_selesai')->nullable(); // null = 1 hari
+    $table->text('alasan');
+    $table->string('lampiran')->nullable();  // foto surat dokter (opsional)
+    $table->string('status')->default('pending'); // pending, disetujui, ditolak
+    $table->text('catatan_guru')->nullable();
+    $table->foreignId('diapprove_oleh')->nullable()->constrained('users')->nullOnDelete();
+    $table->timestamp('diapprove_at')->nullable();
+    $table->timestamps();
+});
+```
+
+**File baru:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `database/migrations/2026_07_20_000001_create_pengajuan_izin_table.php` | Migration | Table + indexes + down() |
+| `app/Models/PengajuanIzin.php` | Model | Relationships + casts |
+| `app/Http/Controllers/Api/IzinController.php` | Controller | Public API: form/{nisn}, submit |
+| `app/Http/Controllers/Admin/IzinController.php` | Controller | Admin: index, show, approve, reject |
+| `resources/js/Pages/Frontend/PengajuanIzin.tsx` | Page | Form publik: input NISN -> form izin/sakit |
+| `resources/js/Pages/Admin/Izin/Index.tsx` | Page | List pengajuan + filter status |
+| `resources/js/Pages/Admin/Izin/Show.tsx` | Page | Detail + tombol approve/reject |
+
+**Routes:**
+```
+# API (public, no auth — validasi via NISN + no_hp_ortu)
+GET  /api/izin/form/{nisn}      -> ambil data siswa
+POST /api/izin/submit           -> submit pengajuan
+
+# Admin
+GET    /dashboard/izin                -> list semua (BK/Wali Kelas)
+GET    /dashboard/izin/{id}           -> detail
+POST   /dashboard/izin/{id}/approve   -> approve -> auto-create Absensi (status izin/sakit)
+POST   /dashboard/izin/{id}/reject    -> reject + catatan_guru
+```
+
+**Approval flow:**
+1. Ortu submit -> status `pending`
+2. BK atau Wali Kelas buka dashboard -> lihat daftar pending
+3. Approve -> status `disetujui`, `diapprove_oleh` = user.id, `diapprove_at` = now()
+   - Auto-create Absensi entry untuk tanggal tsb dengan status sesuai jenis (izin/sakit)
+   - Gunakan `firstOrCreate` untuk avoid duplicate
+4. Reject -> status `ditolak`, catatan_guru diisi
+
+**Ponytail:** Skip auth dulu untuk form ortu — validasi via NISN + no_hp_ortu cukup. Skip multi-level approval — first-approver wins. Skip WA notif balik ke ortu (post-MVP). Lampiran opsional skip untuk MVP — cukup field alasan text.
+
+#### 38.5 Dependencies & Urutan Eksekusi
+
+```
+Gap 1 ----------- Tidak ada dependency chain — semua independen
+Gap 3 -----------
+Gap 4 --- depends on ---- Gap 3 WA notification pattern (reuse) — optional
+```
+
+**Urutan rekomendasi:** Gap 1 -> Gap 3 -> Gap 4.
+
+#### Status per 2026-07-20
+
+- [x] Architecture review 4 gap MVP selesai
+- [x] Gap 2 (Naik Kelas) diverifikasi [OK] lengkap — skip
+- [x] Gap 1 (Siswa Credentials) — pola reuse dari PPDB, estimasi 3 file baru
+- [x] Gap 3 (WA Notif Absensi) — config siap, butuh job + trigger
+- [x] Gap 4 (Izin/Sakit Digital) — desain migration + API + admin + frontend
+- [x] docs/lean-prd.md updated dengan status real & architecture plan
+
