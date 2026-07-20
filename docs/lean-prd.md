@@ -1946,3 +1946,262 @@ Rendah (Backlog):
 - [x] Gap 1,3,6,7,8 — documented dengan flow + file list + ponytail notes
 - [x] docs/lean-prd.md updated
 
+
+### 40. Sprint 2026-07-20 — Architecture: Absensi RFID/Device Gateway
+
+**Tujuan:** Arsitektur device gateway untuk integrasi RFID reader di gerbang sekolah. Device/sensor push data ke API → log absensi real-time.
+
+**Status sekarang:** Absensi GPS ✅ selesai. RFID masih backlog.
+
+#### 40.1 Gambaran Arsitektur
+
+```
+┌──────────────────┐     HTTPS POST       ┌──────────────────────┐
+│  RFID Reader     │ ──────────────────→   │  API /absensi/rfid   │
+│  (ESP32/Rasp Pi) │   card_uid, device_id │  (Sanctum token)     │
+└──────────────────┘                       └──────────┬───────────┘
+                                                       │
+                                                       ▼
+                                              ┌──────────────────────┐
+                                              │  absensi_device_log  │
+                                              │  (raw log, selalu OK) │
+                                              └──────────┬───────────┘
+                                                           │
+                                              ┌────────────▼──────────┐
+                                              │  Process & Dedup     │
+                                              │  mapping card→siswa  │
+                                              │  → absensis table    │
+                                              └──────────────────────┘
+```
+
+#### 40.2 Migration — `absensi_device` table
+
+```php
+Schema::create('absensi_device', function (Blueprint $table) {
+    $table->id();
+    $table->string('nama_device', 100);               // "Gerbang Utama", "Gerbang Belakang"
+    $table->string('device_id', 50)->unique();         // Unique hardware ID
+    $table->string('tipe', 30)->default('rfid');       // rfid, qr, fingerprint
+    $table->string('api_token', 100)->nullable();       // Sanctum-style token untuk device auth
+    $table->string('ip_address', 45)->nullable();       // Whitelist IP opsional
+    $table->boolean('aktif')->default(true);
+    $table->text('keterangan')->nullable();
+    $table->timestamps();
+});
+```
+
+#### 40.3 Migration — `absensi_device_log` table
+
+```php
+Schema::create('absensi_device_log', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('device_id')->constrained('absensi_device')->cascadeOnDelete();
+    $table->string('card_uid', 100);                   // UID kartu RFID/NFC
+    $table->string('siswa_nisn', 20)->nullable();      // resolved from card mapping
+    $table->foreignId('siswa_id')->nullable()->constrained('siswa')->nullOnDelete();
+    $table->timestamp('scan_at');                      // waktu scan dari device
+    $table->string('status', 20)->default('success');  // success, unknown_card, device_inactive
+    $table->text('payload_raw')->nullable();            // raw JSON dari device
+    $table->boolean('processed')->default(false);       // sudah diproses ke absensis?
+    $table->timestamp('processed_at')->nullable();
+    $table->timestamps();
+});
+```
+
+#### 40.4 Migration — `absensi_kartu` (card ↔ siswa mapping)
+
+```php
+Schema::create('absensi_kartu', function (Blueprint $table) {
+    $table->id();
+    $table->string('card_uid', 100)->unique();         // UID kartu RFID
+    $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
+    $table->string('jenis', 20)->default('rfid');       // rfid, nfc, qr
+    $table->boolean('aktif')->default(true);
+    $table->timestamps();
+});
+```
+
+#### 40.5 API Endpoint — Device Gateway
+
+**Route:** `POST /api/device/absensi/scan` (no Sanctum — pakai device token sendiri)
+
+```php
+Route::post('device/absensi/scan', [DeviceAbsensiController::class, 'scan'])
+    ->middleware('device.auth'); // custom middleware: cek api_token + ip whitelist
+```
+
+**Request body (dari device):**
+```json
+{
+  "device_id": "ESP32-GERBANG-01",
+  "card_uid": "04A3B2C1D5",
+  "scan_at": "2026-07-20 07:15:00",
+  "api_token": "devicetoken123"
+}
+```
+
+**Response (ke device):**
+```json
+{
+  "success": true,
+  "status": "logged",
+  "siswa": "Andi Pratama"
+}
+```
+
+#### 40.6 Controller — DeviceAbsensiController
+
+**Flow `scan()`:**
+
+```
+scan(Request):
+  1. Validasi device_id + api_token → cari absensi_device
+  2. Cek device.aktif == true
+  3. Simpan raw log ke absensi_device_log (status=success)
+  4. Cari card_uid di absensi_kartu
+     - Jika tidak ditemukan → log status=unknown_card, return {success:true, status:unknown_card}
+  5. Ambil siswa_id dari absensi_kartu
+  6. Cek absensi hari ini (unique constraint siswa_id + tanggal)
+     - Jika sudah ada jam_masuk → skip (return status=already_logged)
+  7. Create/update absensis:
+     - metode = 'rfid'
+     - jam_masuk = scan_at / jam_pulang = scan_at
+     - status_masuk = auto dari jam (sama logic GPS)
+  8. Update absensi_device_log: processed=true, siswa_id, siswa_nisn
+  9. (Optional) dispatch SendAbsensiNotification
+  10. Return {success:true, status:logged, siswa:nama_lengkap}
+```
+
+#### 40.7 File List
+
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `database/migrations/2026_07_20_000002_create_absensi_device_table.php` | Migration | `absensi_device` — registrasi device |
+| `database/migrations/2026_07_20_000003_create_absensi_device_log_table.php` | Migration | `absensi_device_log` — raw scan log |
+| `database/migrations/2026_07_20_000004_create_absensi_kartu_table.php` | Migration | `absensi_kartu` — mapping card UID ↔ siswa |
+| `app/Models/AbsensiDevice.php` | Model | + scopeAktif, relasi ke log |
+| `app/Models/AbsensiDeviceLog.php` | Model | + relasi ke device, siswa |
+| `app/Models/AbsensiKartu.php` | Model | + relasi ke siswa |
+| `app/Http/Controllers/Api/DeviceAbsensiController.php` | Controller | `scan()` endpoint — logika utama |
+| `app/Http/Middleware/DeviceAuth.php` | Middleware | Validasi device_id + api_token + IP whitelist |
+| `app/Http/Controllers/Admin/AbsensiDeviceController.php` | Controller | Admin UI: daftar device, kartu, log |
+| `resources/js/Pages/Admin/Absensi/DeviceIndex.tsx` | Page | Daftar device + status |
+| `resources/js/Pages/Admin/Absensi/DeviceLog.tsx` | Page | Raw log per device |
+| `resources/js/Pages/Admin/Absensi/KartuIndex.tsx` | Page | Mapping card UID ↔ siswa |
+| `routes/api.php` | **Edit** | + device/auth route group |
+| `routes/admin.php` | **Edit** | + device management routes |
+| `app/Providers/AppServiceProvider.php` | **Edit** | Register DeviceAuth middleware |
+| `app/Http/Kernel.php` | **Edit** | + $routeMiddleware 'device.auth' |
+
+#### 40.8 Admin UI Flow
+
+```
+Device Management (/dashboard/absensi/device)
+  ├── Daftar Device: nama, device_id, tipe, aktif, last_scan_at
+  │   ├── Tambah Device: form nama, device_id, tipe → auto-generate api_token
+  │   ├── Edit Device: nonaktifkan, ganti nama
+  │   └── Reset Token: generate ulang api_token
+  │
+  ├── Log Scan (/dashboard/absensi/device/{device}/log)
+  │   └── Tabel: scan_at, card_uid, siswa, status, payload_raw
+  │       Filter: tanggal, status (success/unknown_card/device_inactive)
+  │
+  └── Kartu RFID (/dashboard/absensi/kartu)
+      └── Tabel: card_uid, siswa_nama, siswa_nisn, aktif
+          ├── Tambah: input card_uid + pilih siswa
+          ├── Edit: ganti mapping
+          └── Nonaktifkan: kartu hilang
+```
+
+#### 40.9 Device Listener (Separate Service)
+
+**Tujuan:** Device (ESP32/Raspberry Pi) perlu software client yang push scan ke API.
+
+| Komponen | Deskripsi |
+|----------|-----------|
+| **ESP32 Native** | Call `POST /api/device/absensi/scan` langsung via WiFi. Simpan `api_token` di flash. Retry 3x jika gagal. |
+| **Raspberry Pi Bridge** | Untuk RFID reader USB (serial/RS232) → Python script baca serial → POST API |
+| **QR Scanner** | Kamera USB →Python zbar/pyzbar decode QR → POST API |
+
+**Contoh ESP32 Arduino sketch (pseudocode):**
+```cpp
+void loop() {
+  if (rfid.cardScanned()) {
+    String cardUid = rfid.getUid();
+    String payload = "{\"device_id\":\"GERBANG-01\",\"card_uid\":\"" + cardUid + "\",\"scan_at\":\"" + getTimestamp() + "\",\"api_token\":\"" + API_TOKEN + "\"}";
+    httpPOST("https://sekolah.ac.id/api/device/absensi/scan", payload);
+    delay(2000); // anti double-scan
+  }
+}
+```
+
+**Ponytail:** Project ini tidak include firmware device — dokumentasi API + contoh code ESP32 cukup. Device listener adalah tanggung jawab tim hardware. Yang kita bangun hanyalah API endpoint di Laravel.
+
+#### 40.10 Device Auth Strategy
+
+| Metode | Keterangan |
+|--------|-----------|
+| **api_token** (rekomendasi) | Simpan token di tabel `absensi_device`. Device kirim di body/header. Cek via middleware DeviceAuth. |
+| **IP Whitelist** (opsional) | Kolom `ip_address` di device. Middleware cek `request()->ip()` cocok. Berguna kalau device punya static IP lokal. |
+| **Basic Auth + SSL** (alternatif) | Device punya username:password. Tapi butuh HTTPS. Untuk shared hosting tanpa SSL, api_token lebih praktis. |
+
+**DeviceAuth middleware:**
+```php
+public function handle($request, Closure $next) {
+    $deviceId = $request->input('device_id') ?? $request->header('X-Device-Id');
+    $token = $request->input('api_token') ?? $request->header('X-Device-Token');
+    
+    $device = AbsensiDevice::where('device_id', $deviceId)
+        ->where('api_token', $token)
+        ->where('aktif', true)
+        ->first();
+    
+    if (!$device) {
+        return response()->json(['success' => false, 'message' => 'Unauthorized device'], 401);
+    }
+    
+    $request->merge(['_device' => $device]);
+    return $next($request);
+}
+```
+
+#### 40.11 Ponytail Design Decisions
+
+| Keputusan | Alasan |
+|-----------|--------|
+| **Tabel device + kartu terpisah** | Satu device bisa scan banyak kartu, satu kartu bisa dipakai di banyak device (pintu masuk/pulang). Relasi M:N via device_log. |
+| **Raw log selalu disimpan** | Bahkan untuk unknown_card — audit trail. Tidak blocking device. |
+| **Dedup via unique constraint absensis** | `unique(['siswa_id', 'tanggal'])` — kalau sudah ada jam_masuk, scan kedua dianggap checkout (jam_pulang). |
+| **Sanctum NOT used for devices** | Device tidak login sebagai user. `api_token` di tabel `absensi_device` lebih sederhana. |
+| **No queue for device log** | Langsung insert + process di satu request. Latency < 200ms. Device timeout lebih berbahaya dari blocking. |
+| **No websocket** | Device HTTP POST saja. Polling/manual refresh untuk UI. |
+
+#### 40.12 Prioritas Eksekusi
+
+```
+Phase 1 — Core (Sprint ini):
+  1. Migration absensi_device + absensi_device_log + absensi_kartu
+  2. Model AbsensiDevice, AbsensiDeviceLog, AbsensiKartu
+  3. DeviceAuth middleware
+  4. DeviceAbsensiController::scan()
+  5. API route + test endpoint (curl/Postman)
+
+Phase 2 — Admin UI (Sprint ini):
+  6. AbsensiDeviceController (CRUD device + reset token)
+  7. DeviceIndex.tsx + DeviceLog.tsx
+  8. KartuIndex.tsx (mapping card UID)
+
+Phase 3 — Device (Opsional, tim hardware):
+  9. Dokumentasi API
+  10. Contoh code ESP32 / Python bridge
+```
+
+#### ✅ Status per 2026-07-20
+
+- [x] Architecture RFID/Device Gateway selesai
+- [x] Skema database: 3 tabel (device, device_log, kartu)
+- [x] API endpoint + DeviceAuth middleware
+- [x] Admin UI: device management, log viewer, kartu mapping
+- [x] Device listener: dokumentasi API + contoh code
+- [x] docs/lean-prd.md updated
+
