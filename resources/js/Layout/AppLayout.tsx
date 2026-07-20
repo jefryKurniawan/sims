@@ -82,11 +82,19 @@ const getNavItems = (): SearchItem[] => [
     { label: "Input Nilai", href: "/dashboard/rapor-kelas", keywords: ["nilai", "rapor", "input"], parent: "Akademik", roles: ["Admin", "Guru"] },
     { label: "Kurikulum & SKBM", href: "/dashboard/kurikulum", keywords: ["kurikulum", "skbm", "mapel", "jam mengajar"], parent: "Akademik", roles: ["Admin"] },
     { label: "Kalender Akademik", href: "/dashboard/kalender-akademik", keywords: ["kalender", "akademik", "tanggal"], parent: "Akademik", roles: ["Admin"] },
+    { label: "P5 Projek", href: "/dashboard/erapor/p5", keywords: ["p5", "projek", "pancasila", "profil pelajar"], parent: "Akademik", roles: ["Admin", "Guru"] },
+    { label: "e-Rapor Nilai", href: "/dashboard/erapor/nilai", keywords: ["nilai", "formatif", "sumatif", "rapor"], parent: "Akademik", roles: ["Admin", "Guru"] },
+    { label: "Dapodik Sync", href: "/dashboard/erapor/dapodik-sync", keywords: ["dapodik", "sinkron", "sync", "kemendikbud"], parent: "Akademik", roles: ["Admin"] },
 
     { label: "BK (Bimbingan)", href: "/dashboard/bk", keywords: ["bk", "konseling", "pelanggaran"], parent: "BK" },
     { label: "Catatan Pelanggaran", href: "/dashboard/bk/pelanggaran", keywords: ["pelanggaran", "poin"], parent: "BK" },
     { label: "Konseling Siswa", href: "/dashboard/bk/konseling", keywords: ["konseling", "bicara"], parent: "BK" },
     { label: "Prestasi Siswa", href: "/dashboard/bk/prestasi", keywords: ["prestasi", "penghargaan"], parent: "BK" },
+
+    // ABSENSI
+    { label: "Absensi Siswa", href: "/dashboard/absensi", keywords: ["absensi", "hadir", "checkin", "checkout"], parent: "Absensi" },
+    { label: "Rekap Absensi", href: "/dashboard/absensi/rekap", keywords: ["rekap", "laporan", "kehadiran", "cetak"], parent: "Absensi" },
+    { label: "Absensi Guru", href: "/dashboard/absensi/guru", keywords: ["guru", "absensi", "checkin guru"], parent: "Absensi" },
 
     // KEUANGAN
     { label: "Bayar SPP", href: "/dashboard/spp", keywords: ["spp", "bayar", "tagihan"], parent: "Keuangan" },
@@ -115,8 +123,14 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
     "Konfigurasi SPMB": Cog,
     "Data Siswa": UserPlus,
     "Buku Induk": Library,
+    "Absensi Siswa": ClipboardCheck,
+    "Rekap Absensi": BarChart2,
+    "Absensi Guru": UserCheck,
     "Kelas & Jadwal": School,
     "Input Nilai": GraduationCap,
+    "P5 Projek": Leaf,
+    "e-Rapor Nilai": FileSpreadsheet,
+    "Dapodik Sync": RefreshCw,
     "BK (Bimbingan)": Heart,
     "Catatan Pelanggaran": AlertTriangle,
     "Konseling Siswa": MessageCircle,
@@ -276,12 +290,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                                 const visible = navItems.filter(
                                     (item) => !item.roles || item.roles.includes(userRole),
                                 );
-                                const GROUP_ORDER = ["SPMB", "Siswa", "Akademik", "BK", "Keuangan", "Tata Usaha", "Website"];
+                                const GROUP_ORDER = ["SPMB", "Siswa", "Akademik", "BK", "Absensi", "Keuangan", "Tata Usaha", "Website"];
                                 const GROUP_LABEL: Record<string, string> = {
                                     SPMB: "SPMB / PPDB",
                                     Siswa: "Data Siswa",
                                     Akademik: "Akademik",
                                     BK: "BK & Bimbingan",
+                                    Absensi: "Absensi",
                                     Keuangan: "Keuangan",
                                     "Tata Usaha": "Tata Usaha",
                                     Website: "Website",
