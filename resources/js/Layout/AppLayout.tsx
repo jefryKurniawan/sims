@@ -35,6 +35,11 @@ import {
     Trophy,
     Bell,
     ChevronDown,
+    ClipboardCheck,
+    UserCheck,
+    Leaf,
+    FileSpreadsheet,
+    RefreshCw,
 } from "lucide-react";
 
 interface User {
