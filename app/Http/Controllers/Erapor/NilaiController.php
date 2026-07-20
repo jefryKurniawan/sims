@@ -31,7 +31,7 @@ class NilaiController extends Controller
         return Inertia::render('Erapor/Nilai/Index', [
             'nilaiFormatif' => $nilaiFormatif,
             'nilaiSumatif' => $nilaiSumatif,
-            'mapels' => RaporMapel::all(['id', 'nama']),
+            'mapels' => RaporMapel::all(['id', 'nama_mapel']),
             'filters' => $request->only(['rapor_mapel_id', 'tanggal_from', 'tanggal_to']),
         ]);
     }
