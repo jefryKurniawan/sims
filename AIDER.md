@@ -11,7 +11,11 @@ Target deployment: **Shared Hosting (tanpa Node.js runtime)** — build statis k
 
 ### 1. Bahasa & Komunikasi
 - **Semua** komentar kode, pesan commit, dokumentasi, dan komunikasi: **Bahasa Indonesia**.
-- Lihat `CONVENTIONS.md` untuk format commit: `[modul] jenis: deskripsi`.
+- **Format Git Commit**: `[modul] jenis: deskripsi singkat`
+  - Contoh: `[erp-id] refactor: support multi-currency untuk PPN`
+  - `modul`: nama modul/area (mis. `erp-id`, `siswa`, `keuangan`, `bk`, dll.)
+  - `jenis`: `feat` (fitur baru), `fix` (perbaikan bug), `refactor` (refactoring), `docs` (dokumentasi), `style` (format kode), `test` (test), `chore` (pemeliharaan), dll.
+  - `deskripsi`: ringkasan perubahan dalam 1 kalimat, bahasa Indonesia.
 
 ### 2. Arsitektur Inertia.js (Server-Driven)
 - **Controller → Inertia::render('Page', $data)** → **React Page (TSX)** menerima props.
@@ -200,7 +204,6 @@ composer dump-optimizer
 
 | File | Deskripsi |
 |------|-----------|
-| `CONVENTIONS.md` | Aturan commit message & bahasa |
 | `docs/lean-prd.md` | PRD lengkap, MVP, roadmap, implementation log |
 | `resources/js/Pages/Admin/*/Index.tsx` | Pola AdminTable + inline modal CRUD |
 | `resources/js/Pages/Admin/BukuInduk/Cetak.tsx` | Pola cetak PDF (client + server) |
@@ -234,4 +237,4 @@ composer dump-optimizer
 
 ---
 
-**Catatan:** File ini adalah panduan untuk Aider. Selalu rujuk `CONVENTIONS.md` dan `docs/lean-prd.md` untuk detail terbaru.
+**Catatan:** File ini adalah panduan untuk Aider. Selalu rujuk `docs/lean-prd.md` untuk detail terbaru.
