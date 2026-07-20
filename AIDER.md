@@ -1,112 +1,112 @@
-# Aider Project Instructions — Sekolahku ERP
+# Panduan Proyek Aider — Sekolahku ERP
 
-## Project Overview
-**Sekolahku** is a school management ERP (Enterprise Resource Planning) built with **Laravel 9.x + Inertia.js + React 18 (TypeScript)**. Modern stack: Vite, Tailwind CSS v4, shadcn/ui, Zustand, @tanstack/react-table, ApexCharts.
+## Gambaran Umum Proyek
+**Sekolahku** adalah aplikasi manajemen sekolah (ERP) berbasis web yang dibangun dengan **Laravel 9.x + Inertia.js + React 18 (TypeScript)**. Stack modern: Vite, Tailwind CSS v4, shadcn/ui, Zustand, @tanstack/react-table, ApexCharts.
 
-Target deployment: **Shared Hosting (no Node.js runtime)** — static build to `public/build/`.
+Target deployment: **Shared Hosting (tanpa Node.js runtime)** — build statis ke `public/build/`.
 
 ---
 
-## Key Conventions (Mandatory)
+## Konvensi Wajib (Harus Diikuti)
 
-### 1. Language & Communication
-- **All** code comments, commit messages, documentation, and communication: **Bahasa Indonesia**.
-- See `CONVENTIONS.md` for commit format: `[modul] type: description`.
+### 1. Bahasa & Komunikasi
+- **Semua** komentar kode, pesan commit, dokumentasi, dan komunikasi: **Bahasa Indonesia**.
+- Lihat `CONVENTIONS.md` untuk format commit: `[modul] jenis: deskripsi`.
 
-### 2. Inertia.js Architecture (Server-Driven)
-- **Controller → Inertia::render('Page', $data)** → **React Page (TSX)** receives props.
-- **No separate API**. Data only via Inertia props (`props.flash`, `usePage().props`).
-- **Forms**: Must use `useForm` from `@inertiajs/inertia-react`. **Forbidden**: React Hook Form, Formik, manual `fetch()`.
-- **Navigation**: `Link` for links, `router.visit({ preserveScroll })` for scroll preservation.
+### 2. Arsitektur Inertia.js (Server-Driven)
+- **Controller → Inertia::render('Page', $data)** → **React Page (TSX)** menerima props.
+- **Tidak** ada API terpisah. Data hanya lewat Inertia props (`props.flash`, `usePage().props`).
+- **Form**: Wajib pakai `useForm` dari `@inertiajs/inertia-react`. **Dilarang** React Hook Form, Formik, `fetch()` manual.
+- **Navigasi**: `Link` untuk tautan, `router.visit({ preserveScroll })` untuk keep scroll.
 
-### 3. Layout Resolution (Critical)
+### 3. Resolusi Layout (Kritis)
 | Path | Layout |
 |------|--------|
-| `Pages/Admin/*` | **Auto-wrapped with `AppLayout`** (sidebar + topbar) |
-| `Pages/Frontend/*`, `Pages/Spmb/*`, `Pages/Auth/*` | **No `AppLayout`** (self-contained) |
+| `Pages/Admin/*` | **Otomatis dibungkus `AppLayout`** (sidebar + topbar) |
+| `Pages/Frontend/*`, `Pages/Spmb/*`, `Pages/Auth/*` | **Tidak** pakai `AppLayout` (self-contained) |
 
-### 4. UI & Component Standards
-- **Icons**: Only `lucide-react` (specific imports: `import { User } from 'lucide-react'`). **Forbidden**: FontAwesome, Heroicons, @iconify, react-icons.
-- **Components**: Must use available shadcn/ui (Button, Input, Card, Badge, Checkbox, DropdownMenu, Label, Separator, Avatar, Sheet, Table, Pagination).
-- **Tables**: **Must** use `@tanstack/react-table` + `Components/Pagination.tsx` (admin) / `Components/Frontend/Pagination.tsx` (public). **Forbidden**: manual `<table>`.
-- **Forms**: Every `<input>` must have `<label htmlFor>`. Buttons must have explicit `type`. Icon-only buttons must have `aria-label`.
-- **Borders**: Use theme token `border-border` (not `border-gray-*`).
+### 4. Standar UI & Komponen
+- **Ikon**: Hanya `lucide-react` (import spesifik: `import { User } from 'lucide-react'`). **Dilarang** FontAwesome, Heroicons, @iconify, react-icons.
+- **Komponen**: Wajib pakai shadcn/ui yang tersedia (Button, Input, Card, Badge, Checkbox, DropdownMenu, Label, Separator, Avatar, Sheet, Table, Pagination).
+- **Tabel**: **Wajib** `@tanstack/react-table` + `Components/Pagination.tsx` (admin) / `Components/Frontend/Pagination.tsx` (publik). **Dilarang** `<table>` manual.
+- **Form**: Setiap `<input>` wajib punya `<label htmlFor>`. Tombol wajib `type` eksplisit. Icon-only button wajib `aria-label`.
+- **Border**: Pakai token theme `border-border` (bukan `border-gray-*`).
 
-### 5. State Management
+### 5. Manajemen State
 - **Server state**: Inertia props (source of truth).
-- **Client UI state**: `useState` / `useReducer` local.
-- **Global client state**: Zustand (only if truly cross-page).
+- **Client UI state**: `useState` / `useReducer` lokal.
+- **Global client state**: Zustand (hanya jika benar-benar lintas halaman).
 
-### 6. PDF Generation
+### 6. Generate PDF
 - **Library**: `mpdf/mpdf` (v8.3) via `PdfService` (`app/Services/PdfService.php`).
-- **Templates**: Blade views in `resources/views/pdf/`.
+- **Template**: Blade view di `resources/views/pdf/`.
 - **Font**: DejaVu Sans (UTF-8 Bahasa Indonesia).
-- **Forbidden**: dompdf / barryvdh-laravel-dompdf.
+- **Dilarang** dompdf / barryvdh-laravel-dompdf.
 
-### 7. Ponytail Principles (Frontend)
-> "Choose simple solutions that work; avoid unnecessary abstractions."
-- YAGNI: Don't create master tables until module needs them.
-- Single controller for polymorphic (e.g., `PembayaranController` handles SPP, UKS, Uniform).
-- Inline validation sufficient; separate FormRequest only if rules > 10 complex fields.
-- Admin auto-verify (skip pending), other roles need verification.
+### 7. Prinsip Ponytail (Frontend)
+> "Pilih solusi sederhana yang bekerja; hindari abstraksi tidak perlu."
+- YAGNI: Jangan buat master table sampai modul butuh.
+- Satu controller untuk polymorphic (contoh: `PembayaranController` handle SPP, UKS, Seragam).
+- Validasi inline cukup; FormRequest terpisah hanya jika rules > 10 field kompleks.
+- Admin auto-verify (skip pending), role lain butuh verifikasi.
 
 ---
 
-## Project Structure (Key Paths)
+## Struktur Proyek (Path Penting)
 
 ```
 app/
-├── Http/Controllers/Admin/     # Admin controllers (Inertia)
-├── Http/Controllers/Frontend/  # Public controllers
-├── Http/Controllers/Api/       # Sanctum API (GPS attendance, etc.)
+├── Http/Controllers/Admin/     # Controller admin (Inertia)
+├── Http/Controllers/Frontend/  # Controller publik
+├── Http/Controllers/Api/       # Sanctum API (absensi GPS, dll.)
 ├── Models/                     # Eloquent models
-├── Services/                   # PdfService, etc.
-├── Observers/                  # SiswaObserver, etc.
-└── Console/Commands/           # Artisan commands (siswa:promote, etc.)
+├── Services/                   # PdfService, dll.
+├── Observers/                  # SiswaObserver, dll.
+└── Console/Commands/           # Artisan commands (siswa:promote, dll.)
 
 resources/js/
 ├── Pages/
-│   ├── Admin/                  # Admin pages (auto-wrap AppLayout)
+│   ├── Admin/                  # Halaman admin (auto-wrap AppLayout)
 │   │   ├── Siswa/              # Landing, Tingkat, CRUD
 │   │   ├── BukuInduk/          # Index, Show, Cetak (PDF)
 │   │   ├── Rapor*/             # E-Rapor (Kelas, Mapel, Siswa)
-│   │   ├── BK/                 # Violations, Counseling, Achievements
+│   │   ├── BK/                 # Pelanggaran, Konseling, Prestasi
 │   │   ├── Absensi/            # Index, Kelas, Rekap, Guru
 │   │   ├── Settings/           # Index, DataInstansi, Legalitas, Konfigurasi
-│   │   ├── Kurikulum/          # Index, Create, Edit, Mapels, SKBM, Calendar
-│   │   ├── Pembayaran/         # Polymorphic (SPP, UKS, Uniform)
+│   │   ├── Kurikulum/          # Index, Create, Edit, Mapels, SKBM, Kalender
+│   │   ├── Pembayaran/         # Polymorphic (SPP, UKS, Seragam)
 │   │   ├── Notification/       # Index
-│   │   └── ... (Website, TU, Alumni, Library, Facilities, etc.)
-│   ├── Frontend/               # Public pages (no AppLayout)
+│   │   └── ... (Website, TU, Alumni, Perpustakaan, Sarana, dll.)
+│   ├── Frontend/               # Halaman publik (no AppLayout)
 │   │   ├── Berita/, Alumni/, Guru/, ProfileSekolah/, VisiMisi/
-│   ├── Spmb/                   # Public PPDB/SPMB
+│   ├── Spmb/                   # PPDB/SPMB publik
 │   └── Auth/                   # Login, Register
 ├── Components/
 │   ├── ui/                     # shadcn/ui components
-│   ├── AdminTable.tsx          # TanStack Table + Pagination wrapper
+│   ├── AdminTable.tsx          # Wrapper TanStack Table + Pagination
 │   ├── Pagination.tsx          # Admin pagination
 │   ├── Frontend/Pagination.tsx # Public pagination
 │   └── Layout/
 │       ├── AppLayout.tsx       # Sidebar + Topbar (admin)
 │       └── FrontendLayout.tsx  # Public layout
 ├── Layout/Head.tsx             # Named export { Head }
-├── hooks/                      # useCountUp, useDebounce, etc.
-├── lib/utils.ts                # cn(), etc.
+├── hooks/                      # useCountUp, useDebounce, dll.
+├── lib/utils.ts                # cn(), dll.
 └── types/                      # TypeScript interfaces
 
 routes/
 ├── web.php                     # Public + Auth routes
-├── admin.php                   # Admin routes (auth, role middleware)
+├── admin.php                   # Admin routes (middleware auth, role)
 └── api.php                     # Sanctum API routes
 
 database/
-├── migrations/                 # All migrations (pivot, polymorphic)
-└── seeders/                    # RolePermissionSeeder, ArsipAkreditasiSeeder, etc.
+├── migrations/                 # Semua migrasi (termasuk pivot, polymorphic)
+└── seeders/                    # RolePermissionSeeder, ArsipAkreditasiSeeder, dll.
 ```
 
 ---
 
-## Common Commands
+## Perintah Umum
 
 ```bash
 # Development
@@ -124,7 +124,7 @@ php artisan migrate:fresh --seed
 
 # Testing
 php artisan test      # Pest PHP
-# npm run test        # Vitest (if configured)
+# npm run test        # Vitest (jika dikonfigurasi)
 
 # Code Quality
 ./vendor/bin/pint     # Laravel Pint (PHP CS Fixer)
@@ -146,78 +146,78 @@ composer dump-optimizer
 
 ---
 
-## Important Notes for AI
+## Catatan Penting untuk AI
 
-### DO NOT
-- ❌ Use manual `fetch()` / `axios` for Inertia → use `router.post/put/delete` or `useForm`.
-- ❌ Create manual `<table>` → must use `@tanstack/react-table`.
-- ❌ Use FontAwesome / Heroicons / react-icons → only `lucide-react`.
-- ❌ Use `border-gray-*` → use `border-border`.
-- ❌ Use dompdf/barryvdh for PDF → use `mpdf/mpdf` via `PdfService`.
-- ❌ Derive `variant` column in `kelas` from `nama_kelas` → `variant` column exists (migration `2026_07_19_000001`).
-- ❌ Manually wrap `Pages/Admin/*` with `<AppLayout>` → Inertia auto-wraps via `app.jsx`.
-- ❌ Import `Head` as default → `import { Head } from '@/Layout/Head'` (named export).
-- ❌ Create separate controllers per payment type (SPP/UKS/Uniform) → `PembayaranController` polymorphic handles all.
+### JANGAN LAKUKAN
+- ❌ Gunakan `fetch()` / `axios` manual untuk Inertia → pakai `router.post/put/delete` atau `useForm`.
+- ❌ Buat `<table>` manual → wajib `@tanstack/react-table`.
+- ❌ Pakai FontAwesome / Heroicons / react-icons → hanya `lucide-react`.
+- ❌ Pakai `border-gray-*` → pakai `border-border`.
+- ❌ Pakai dompdf/barryvdh untuk PDF → pakai `mpdf/mpdf` via `PdfService`.
+- ❌ Derive kolom `variant` di `kelas` dari `nama_kelas` → kolom `variant` sudah ada (migrasi `2026_07_19_000001`).
+- ❌ Bungkus `Pages/Admin/*` dengan `<AppLayout>` manual → Inertia auto-wrap via `app.jsx`.
+- ❌ Import `Head` sebagai default → `import { Head } from '@/Layout/Head'` (named export).
+- ❌ Buat controller terpisah per jenis tagihan (SPP/UKS/Seragam) → `PembayaranController` polymorphic handle semua.
 
 ### BEST PRACTICES
-- ✅ All forms use `useForm` + `FormData` for file uploads.
-- ✅ Flash messages via `props.flash` (Inertia default).
-- ✅ Pagination uses `Components/Pagination.tsx` (admin) / `Frontend/Pagination.tsx` (public).
-- ✅ File upload validation: `image/*,.pdf` max 2MB (SPP, Payments, Excel Import).
-- ✅ Soft delete with `SoftDeletes` trait (Siswa, etc.).
-- ✅ Observers for side-effects (SiswaObserver → auto-create User, log password).
-- ✅ Artisan commands for batch (siswa:promote mass grade promotion).
-- ✅ Reversible migrations (all `down()` drop columns/tables correctly).
-- ✅ Enum status with Indonesian labels (Aktif/Lulus/Pindah/Keluar, Hadir/Terlambat/Izin/Sakit/Alpa).
-- ✅ Search + filter combination in Index pages (TanStack Table globalFilter + column filters).
+- ✅ Semua form pakai `useForm` + `FormData` untuk file upload.
+- ✅ Flash message lewat `props.flash` (Inertia default).
+- ✅ Pagination pakai `Components/Pagination.tsx` (admin) / `Frontend/Pagination.tsx` (publik).
+- ✅ Validasi file upload: `image/*,.pdf` max 2MB (SPP, Pembayaran, Import Excel).
+- ✅ Soft delete pakai trait `SoftDeletes` (Siswa, dll.).
+- ✅ Observer untuk side-effect (SiswaObserver → auto-create User, log password).
+- ✅ Artisan command untuk batch (siswa:promote naik kelas massal).
+- ✅ Migration reversible (semua `down()` drop columns/tables dengan benar).
+- ✅ Enum status pakai label Indonesia (Aktif/Lulus/Pindah/Keluar, Hadir/Terlambat/Izin/Sakit/Alpa).
+- ✅ Search + filter kombinasi di Index pages (TanStack Table globalFilter + column filters).
 
 ---
 
-## Current Module Status (2026-07-19)
+## Status Modul Saat Ini (2026-07-19)
 
-| Module | Status | Notes |
-|--------|--------|-------|
-| **SPMB 2026** | ✅ Done | 4 pathways, TKA, Ranking, 7 new tables |
-| **PPDB** | ✅ Done | Sync candidates, auto-create parent users, initial billing |
-| **SPP & Finance** | ✅ Done | Parent portal, dispensation/scholarship, export reports |
-| **Library + PWA** | ✅ Done | Digital QR, e-books, alumni free library |
-| **Alumni** | 🔄 In Progress | Tracer study, business forum, donations |
-| **Website/CMS** | ✅ Done | PPDB/Alumni news integration, achievement gallery |
-| **E-Rapor Kemendikbud** | ✅ Base Ready | 8 tables, needs PDF generator & P5 input UI |
-| **Digital Buku Induk** | ✅ Done | Profile, Medical, Parents, Mutations, PDF Print (mPDF + browser) |
-| **Digital Attendance (GPS)** | ✅ MVP Done | Student/Teacher PWA, Manual Admin, CSV Rekap, Radius Settings |
-| **Counseling & BK** | ✅ MVP Done | Violations, Achievements, Counseling, Form fixes (no double sidebar) |
-| **Curriculum & Schedule** | ✅ Exposed | CRUD, Mapels, SKBM, Academic Calendar, Sidebar |
-| **TU (Letters, NISN, Archive)** | ✅ Done | In/Out Letters, NISN Management, Accreditation Archive (47 seeded) |
-| **Polymorphic Payments** | ✅ Done | SPP, UKS, Uniform via `PembayaranController` |
+| Modul | Status | Catatan |
+|-------|--------|---------|
+| **SPMB 2026** | ✅ Selesai | 4 jalur, TKA, Ranking, 7 tabel baru |
+| **PPDB** | ✅ Selesai | Sync calon siswa, auto-create user ortu, tagihan awal |
+| **SPP & Keuangan** | ✅ Selesai | Portal ortu, dispensasi/beasiswa, export laporan |
+| **Perpustakaan + PWA** | ✅ Selesai | QR digital, e-book, bebas pustaka alumni |
+| **Alumni** | 🔄 In Progress | Tracer study, forum bisnis, donasi |
+| **Website/CMS** | ✅ Selesai | Integrasi berita PPDB/Alumni, galeri prestasi |
+| **E-Rapor Kemendikbud** | ✅ Basis Siap | 8 tabel, butuh PDF generator & UI input nilai P5 |
+| **Buku Induk Digital** | ✅ Selesai | Profil, Medis, Ortu, Mutasi, Cetak PDF (mPDF + browser) |
+| **Absensi Digital (GPS)** | ✅ MVP Selesai | Siswa/Guru PWA, Manual Admin, Rekap CSV, Settings radius |
+| **Konseling & BK** | ✅ MVP Selesai | Pelanggaran, Prestasi, Konseling, Form fix (no double sidebar) |
+| **Kurikulum & Jadwal** | ✅ Terekspos | CRUD, Mapels, SKBM, Kalender Akademik, Sidebar |
+| **TU (Surat, NISN, Arsip)** | ✅ Selesai | Surat Masuk/Keluar, NISN Management, Arsip Akreditasi (47 docs seeded) |
+| **Pembayaran Polymorphic** | ✅ Selesai | SPP, UKS, Seragam via `PembayaranController` |
 | **Notifications** | ✅ Full Stack | Table, Controller, UI, Sidebar, Header Bell |
-| **WhatsApp Gateway Config** | ✅ Done | Settings: URL, API Key, Number, Template |
-| **Settings (Institute, Legal, Hero)** | ✅ Done | Photo/Video Hero, 5 Themes, Bank, SPP Config |
+| **WhatsApp Gateway Config** | ✅ Selesai | Settings: URL, API Key, Nomor, Template |
+| **Settings (Instansi, Legalitas, Hero)** | ✅ Selesai | Foto/Video Hero, Tema 5 warna, Bank, SPP config |
 
 ---
 
-## Key Reference Files
+## File Referensi Kunci
 
-| File | Description |
-|------|-------------|
-| `CONVENTIONS.md` | Commit message & language rules |
-| `docs/lean-prd.md` | Full PRD, MVP, roadmap, implementation log |
-| `resources/js/Pages/Admin/*/Index.tsx` | AdminTable + inline modal CRUD pattern |
-| `resources/js/Pages/Admin/BukuInduk/Cetak.tsx` | PDF print pattern (client + server) |
-| `app/Services/PdfService.php` | Reusable mPDF wrapper |
-| `app/Http/Controllers/Admin/PembayaranController.php` | Polymorphic payment pattern |
-| `app/Observers/SiswaObserver.php` | Auto-create user pattern |
-| `routes/admin.php` | Route naming convention (bare namespace `Admin\...`) |
-| `resources/js/Layout/AppLayout.tsx` | Sidebar structure (menu → submenu, roles, keywords) |
+| File | Deskripsi |
+|------|-----------|
+| `CONVENTIONS.md` | Aturan commit message & bahasa |
+| `docs/lean-prd.md` | PRD lengkap, MVP, roadmap, implementation log |
+| `resources/js/Pages/Admin/*/Index.tsx` | Pola AdminTable + inline modal CRUD |
+| `resources/js/Pages/Admin/BukuInduk/Cetak.tsx` | Pola cetak PDF (client + server) |
+| `app/Services/PdfService.php` | Wrapper mPDF reusable |
+| `app/Http/Controllers/Admin/PembayaranController.php` | Pola polymorphic payment |
+| `app/Observers/SiswaObserver.php` | Pola auto-create user |
+| `routes/admin.php` | Konvensi naming route (bare namespace `Admin\...`) |
+| `resources/js/Layout/AppLayout.tsx` | Struktur sidebar (menu → submenu, roles, keywords) |
 
 ---
 
-## Deployment Checklist (Shared Hosting)
+## Checklist Deployment (Shared Hosting)
 
-1. `pnpm run build` → upload `public/build/` **mandatory**.
+1. `pnpm run build` → upload `public/build/` **wajib**.
 2. `composer install --optimize-autoloader --no-dev`.
 3. `cp .env.example .env` → set `APP_ENV=production`, `APP_DEBUG=false`, DB credentials.
-4. `php artisan key:generate` (if not done).
+4. `php artisan key:generate` (jika belum).
 5. `php artisan config:cache && php artisan route:cache && php artisan view:cache`.
 6. `php artisan migrate --force --optimize-autoloader`.
 7. `php artisan storage:link`.
@@ -227,11 +227,11 @@ composer dump-optimizer
 
 ---
 
-## Contact / Support
+## Kontak / Dukungan
 - Email: **andridesmana29@outlook.com**
 - Repo: **github.com/andes2912/sekolahku**
-- Package: **IndoBank** (github.com/andes2912/indobank) — Indonesian bank data.
+- Package: **IndoBank** (github.com/andes2912/indobank) — data bank Indonesia.
 
 ---
 
-**Note:** This file guides Aider. Always reference `CONVENTIONS.md` and `docs/lean-prd.md` for latest details.
+**Catatan:** File ini adalah panduan untuk Aider. Selalu rujuk `CONVENTIONS.md` dan `docs/lean-prd.md` untuk detail terbaru.
