@@ -1598,3 +1598,351 @@ Gap 4 --- depends on ---- Gap 3 WA notification pattern (reuse) — optional
 - [x] Gap 4 (Izin/Sakit Digital) — desain migration + API + admin + frontend
 - [x] docs/lean-prd.md updated dengan status real & architecture plan
 
+
+### 39. Sprint 2026-07-20 — Architecture Review: 9 Gap Post-MVP
+
+**Tujuan:** Architecture analysis untuk 9 gap tersisa berdasarkan eksplorasi kode (2026-07-20).
+
+#### 39.1 Ringkasan
+
+| # | Gap | Prioritas | Status Base | Estimasi |
+|---|-----|-----------|-------------|----------|
+| 1 | **Rekap Bulanan Absensi PDF** | Sedang | Absensi sudah ada + PdfService + blade contoh | 2 file baru + 1 edit |
+| 2 | **Face Recognition** | Rendah | Butuh device + library eksternal | **SKIP — hardware dependency** |
+| 3 | **E-Rapor Import Nilai Excel** | Sedang | RaporSiswa + RaporNilai + RaporMapel sudah ada | 3+ file baru |
+| 4 | **Multi-TTD Digital (Rapor)** | Sedang | RaporSiswa model + cetakPdf() + blade rapor | 1 migration + 1 edit |
+| 5 | **Arsip Rapor per Semester** | Sedang | RaporSiswa + service + controller | 1 migration + 2 file baru |
+| 6 | **Kurikulum Rombongan Belajar** | Rendah | Kurikulum migration + DapodikSyncService | 1 migration + 1 edit |
+| 7 | **Surat Otomatis (Template)** | Rendah | SuratKeluar + PdfService | 2+ file baru |
+| 8 | **Disposisi Workflow Multi-Tahap** | Sedang | SuratMasuk disposisi sudah ada (1-level) | 1 migration + 2 edit |
+| 9 | **E-Rapor P5 Input Massal** | Tinggi | P5Projek + P5Nilai + RaporSiswa | 1 page baru + 1 edit |
+
+#### 39.2 Gap 1: Rekap Bulanan Absensi PDF
+
+**Kondisi sekarang:** Absensi module ✅ selesai (checkin/checkout/rekap/export CSV). Ada `PdfService::download()` dan contoh blade `pdf.rapor`.
+
+**Desain:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `resources/views/pdf/absensi-rekap-bulanan.blade.php` | Blade | Template PDF: header sekolah, tabel harian per siswa, summary (Hadir/Sakit/Izin/Alpa/%) |
+| `app/Http/Controllers/Admin/AbsensiController.php` | **Edit** | Tambah method `rekapPdf(Request $request)` — filter kelas, bulan, tahun |
+
+**Route:**
+```
+GET /dashboard/absensi/rekap/pdf?kelas_id=&bulan=&tahun=  -> download PDF
+```
+
+**Data flow:**
+```
+RekapBulananPdf(Request)
+  -> Load absensis + siswa for kelas_id in month range
+  -> Group by siswa -> daily rows + monthly summary
+  -> PdfService::download('pdf.absensi-rekap-bulanan', $data, 'rekap-absensi-bulanan.pdf')
+```
+
+**Ponytail:** Reuse blade pattern dari pdf.rapor. Tidak perlu job — generate sync (waktu tunggu < 2s untuk 1 kelas). Tambah tombol "Cetak PDF" di halaman Rekap yang sudah ada.
+
+#### 39.3 Gap 2: Face Recognition — SKIP
+
+**Alasan skip:** Butuh hardware (kamera IP/PCA9685), library eksternal (OpenCV/face_recognition), dan device listener service terpisah dari Laravel. Tidak cocok untuk MVP shared hosting. Tunda sampai ada permintaan eksplisit + anggaran hardware.
+
+#### 39.4 Gap 3: E-Rapor Import Nilai Excel
+
+**Kondisi sekarang:** `RaporNilai` + `RaporMapel` + `RaporSiswa` ✅ siap. Tapi input nilai masih satu-satu via `inputNilaiForm()`.
+
+**Desain:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `app/Imports/RaporNilaiImport.php` | Import | Maatwebsite/Laravel-Excel (PhpSpreadsheet) import class |
+| `resources/views/excel/template-nilai-rapor.xlsx` (atau generate PHP) | Template | Kolom: NISN, Nama, [Mapel1_nilai_angka, Mapel1_nilai_huruf, ...] |
+| `app/Http/Controllers/Admin/RaporSiswaController.php` | **Edit** | Tambah `importNilaiForm()` + `importNilaiStore()` |
+
+**Alternatif (Ponytail):** Skip Maatwebsite — generate XLSX manual via `PhpSpreadsheet` langsung (sudah jadi dependency mPDF punya `\PhpOffice\PhpSpreadsheet` kalau mPDF versi baru, atau install `phpoffice/phpspreadsheet`). Parse CSV juga cukup untuk MVP — lebih sederhana.
+
+**Flow:**
+```
+ImportNilaiForm -> pilih rapor_kelas_id + semester
+  -> Generate file template (CSV/XLSX) -> download template
+  -> Guru isi nilai -> upload
+  -> Validasi: NISN exists, nilai 0-100, map ke RaporMapel existing
+  -> Bulk insert/update RaporNilai
+```
+
+**Template CSV:**
+```csv
+nisn,nama_lengkap,matematika_p,matematika_k,bahasa_indonesia_p,bahasa_indonesia_k,...
+```
+
+**Ponytail:** CSV dulu — no binary XLSX complexity. Validasi row-by-row, kumpulkan error, report semua error sekali. Skip progress bar — cukup "100 data berhasil, 3 gagal: NISN 12345 tidak ditemukan".
+
+#### 39.5 Gap 4: Multi-TTD Digital (Rapor)
+
+**Kondisi sekarang:** `RaporSiswa` belum ada kolom TTD. Cetak PDF rapor ada, tapi TTD masih placeholder/kosong.
+
+**Migration:**
+```php
+Schema::table('rapor_siswa', function (Blueprint $table) {
+    $table->string('ttd_kepsek')->nullable()->after('tahun_ajaran');
+    $table->string('ttd_walikelas')->nullable()->after('ttd_kepsek');
+    $table->string('ttd_ortu')->nullable()->after('ttd_walikelas');
+});
+```
+
+**File:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `database/migrations/2026_07_20_add_ttd_to_rapor_siswa_table.php` | Migration | + 3 kolom string (path image) |
+| `app/Http/Controllers/Admin/RaporSiswaController.php` | **Edit** | Tambah `uploadTtd()` + update blade PDF untuk render image TTD |
+| `resources/views/pdf/rapor.blade.php` | **Edit** | Render `<img src="{{ Storage::url($rapor->ttd_kepsek) }}">` |
+
+**Flow:**
+- Setting page: upload image TTD Kepsek
+- Rapor show page: upload TTD Wali Kelas per rapor, upload TTD Ortu per rapor
+- PDF generation: render TTD images from storage
+
+**Ponytail:** Image upload simpan di `storage/app/public/ttd/`. Skip validasi tanda tangan basah — cukup upload foto TTD basah di kertas. Skip signature pad (canvas JS) — post-MVP.
+
+#### 39.6 Gap 5: Arsip Rapor per Semester
+
+**Kondisi sekarang:** `RaporSiswa` bisa diedit setelah dibuat. Tidak ada snapshot/publish flow.
+
+**Migration:**
+```php
+// rapor_siswa: tambah status
+Schema::table('rapor_siswa', function (Blueprint $table) {
+    $table->enum('status', ['draft', 'published', 'archived'])->default('draft')->after('tahun_ajaran');
+    $table->timestamp('published_at')->nullable()->after('status');
+});
+
+// rapor_arsip (clone from rapor_siswa + pivot tables)
+Schema::create('rapor_arsip', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('rapor_siswa_id')->constrained('rapor_siswa')->cascadeOnDelete();
+    // snapshot of all related data as JSON
+    $table->json('snapshot'); // {siswa: {...}, nilai: [...], deskripsi: [...], ekstrakurikuler: [...], catatan: {...}, ttd: {...}}
+    $table->string('semester');
+    $table->string('tahun_ajaran');
+    $table->timestamp('archived_at');
+    $table->timestamps();
+});
+```
+
+**Alternatif (Ponytail):** Simpan snapshot sebagai JSON — tidak perlu cloning 5+ tabel relasi. Read-only view dari `rapor_arsip.snapshot` cukup.
+
+**File:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `database/migrations/2026_07_20_add_status_to_rapor_siswa_table.php` | Migration | status + published_at |
+| `database/migrations/2026_07_20_create_rapor_arsip_table.php` | Migration | snapshot + meta |
+| `app/Models/RaporArsip.php` | Model | casts snapshot as array/object |
+| `app/Services/RaporService.php` | **Edit** | Tambah `publishRapor($raporSiswaId)` — clone to arsip, set status=published |
+| `app/Http/Controllers/Admin/RaporSiswaController.php` | **Edit** | Tambah route publish + ArsipController |
+
+**Flow:**
+```
+Publish Rapor
+  -> RaporService::publishRapor($raporSiswaId)
+    -> Load rapor_siswa + all relations (nilai, deskripsi, ekstra, catatan, ttd)
+    -> Create RaporArsip with JSON snapshot
+    -> Set rapor_siswa.status = 'published', published_at = now()
+    -> Set all related records to read-only (atau lock via status)
+
+Lihat Arsip
+  -> RaporArsip.find($id) -> decode snapshot -> render like normal rapor view
+```
+
+**Ponytail:** JSON snapshot = no schema drift issues. Skip soft-delete protection — cukup `status=archived`. Kalau perlu edit archived: unarchive dulu (clone balik ke draft).
+
+#### 39.7 Gap 6: Kurikulum Rombongan Belajar (Dapodik Sync)
+
+**Kondisi sekarang:** Ada `Kurikulum`, `KurikulumMapel`, `SKBM` tables ✅. Ada `DapodikSyncService` dengan pull/push logic ✅. Tapi belum ada `rombongan_belajar` table.
+
+**Migration:**
+```php
+Schema::create('rombongan_belajar', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('kelas_id')->constrained('kelas')->cascadeOnDelete();
+    $table->foreignId('kurikulum_id')->constrained('kurikulum')->cascadeOnDelete();
+    $table->string('tahun_ajaran', 20);
+    $table->string('semester', 10); // Ganjil/Genap
+    $table->string('nama_rombel'); // auto: {kelas.nama_kelas}-{tahun_ajaran}-{semester}
+    $table->string('dapodik_id')->nullable(); // ID dari Dapodik
+    $table->timestamps();
+    $table->unique(['kelas_id', 'tahun_ajaran', 'semester']);
+});
+```
+
+**File:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `database/migrations/2026_07_20_create_rombongan_belajar_table.php` | Migration | Table + indexes |
+| `app/Models/RombonganBelajar.php` | Model | Relations + auto-name |
+| `app/Services/DapodikSyncService.php` | **Edit** | Generate rombel from kelas + kirim ke Dapodik API |
+
+**Flow:**
+```
+Artisan command / UI: Generate Rombel
+  -> foreach Kelas aktif
+    -> RombonganBelajar::firstOrCreate(['kelas_id', 'tahun_ajaran', 'semester'])
+    -> Sync ke Dapodik: POST /api/v1/rombel
+    -> Simpan dapodik_id
+```
+
+**Ponytail:** `firstOrCreate` — idempotent. Generate via command dulu (`php artisan kurikulum:generate-rombel`), UI nanti.
+
+#### 39.8 Gap 7: Surat Otomatis (Template)
+
+**Kondisi sekarang:** `SuratKeluar` + `SuratMasuk` ✅ selesai. Ada `PdfService::download()`. Tapi surat dibuat manual (isi form), belum pakai template dengan variable substitution.
+
+**Desain:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `database/migrations/2026_07_20_create_surat_template_table.php` | Migration | `surat_template`: nama, kode, konten_blade, variable_def (JSON), kategori (SK/ST/Undangan) |
+| `app/Models/SuratTemplate.php` | Model | Render template dengan variable substitution |
+| `resources/views/pdf/surat-template.blade.php` | Blade | Layout surat: kop surat, nomor, isi, TTD |
+| `app/Http/Controllers/Admin/SuratTemplateController.php` | Controller | CRUD template + generate surat |
+| `routes/admin.php` | **Edit** | + route surat-template |
+
+**Variable system:**
+```json
+{
+  "variables": [
+    {"key": "nama_siswa", "label": "Nama Siswa", "source": "manual"},
+    {"key": "nisn", "label": "NISN", "source": "manual"},
+    {"key": "kelas", "label": "Kelas", "source": "manual"},
+    {"key": "tanggal", "label": "Tanggal Surat", "source": "auto", "default": "{{date}}"},
+    {"key": "nama_sekolah", "label": "Nama Sekolah", "source": "auto", "default": "{{profile.nama_sekolah}}"},
+    {"key": "kepala_sekolah", "label": "Kepala Sekolah", "source": "auto", "default": "{{settings.nama_kepala_sekolah}}"}
+  ]
+}
+```
+
+**Flow:**
+```
+Admin buka Generate Surat
+  -> Pilih template (SK/ST/Undangan)
+  -> Form variable muncul sesuai template.variable_def
+  -> Isi manual + auto-fill dari DB (profile, settings, siswa, dll)
+  -> Render blade + PdfService::download()
+  -> Opsional: Simpan ke SuratKeluar (auto-increment no_surat)
+```
+
+**Ponytail:** Blade template engine sudah cukup — tidak perlu Twig/Blade-like. Simpan konten sebagai string (bisa di-cache). Skip WYSIWYG editor — textarea dulu. Skip template versioning — cukup overwrite.
+
+#### 39.9 Gap 8: Disposisi Workflow Multi-Tahap
+
+**Kondisi sekarang:** ✅ Disposisi 1-level: Kepala TU → disposisi langsung ke user tujuan. `status_disposisi` enum: `belum`, `dibaca`, `dibalas`. Ada `SuratDisposisiNotification`.
+
+**Gap:** Flow: Kepala → Wakil → BK/TU → feedback → arsip. Rantai disposisi multi-level + feedback dari penerima.
+
+**Migration:**
+```php
+// Ubah status_disposisi jadi lebih granular
+// atau buat tabel disposisi_log untuk track history
+
+Schema::table('surat_masuk', function (Blueprint $table) {
+    // Tambah kolom untuk multi-level
+    $table->string('disposisi_tahap')->default('kepala')->after('status_disposisi');
+    // nilai: kepala, wakil, bk_tu, feedback, selesai
+});
+
+// Atau buat tabel baru untuk chain
+Schema::create('disposisi_log', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('surat_masuk_id')->constrained('surat_masuk')->cascadeOnDelete();
+    $table->foreignId('dari_user_id')->constrained('users');
+    $table->foreignId('ke_user_id')->constrained('users');
+    $table->string('tahap'); // kepala_wakil, wakil_bk, bk_feedback
+    $table->string('instruksi')->nullable();
+    $table->text('feedback')->nullable();
+    $table->string('status')->default('dibaca'); // dibaca, diproses, feedback, selesai
+    $table->timestamp('dibaca_at')->nullable();
+    $table->timestamp('selesai_at')->nullable();
+    $table->timestamps();
+});
+```
+
+**File:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `database/migrations/2026_07_20_create_disposisi_log_table.php` | Migration | Track multi-level disposisi |
+| `app/Models/DisposisiLog.php` | Model | Relations |
+| `app/Http/Controllers/Admin/SuratMasukController.php` | **Edit** | Tambah route: disposisiLanjut(), feedback(), selesaiDisposisi() |
+| `app/Models/SuratMasuk.php` | **Edit** | Relasi ke disposisiLog |
+| `routes/admin.php` | **Edit** | + route disposisi |
+
+**Flow:**
+```
+Kepala Sekolah:
+  -> Disposisi ke Wakil (disposisi_log: tahap=kepala_wakil)
+  -> Wakil terima notifikasi -> baca
+
+Wakil:
+  -> Disposisi lanjut ke BK/TU (disposisi_log: tahap=wakil_bk)
+  -> Atau feedback ke Kepala
+  -> BK/TU terima notifikasi
+
+BK/TU:
+  -> Proses surat
+  -> Kirim feedback ke Wakil (disposisi_log: tahap=bk_feedback)
+  -> Wakil review -> set selesai
+
+Selesai:
+  -> status_disposisi = 'selesai'
+  -> Surat otomatis arsip (atau manual)
+```
+
+**Ponytail:** Skip visual workflow diagram — cukup log kronologis. Notification via existing `SuratDisposisiNotification` (database channel). Configurable chain via settings (default: Kepala->Wakil->BK/TU). Jangan hardcode chain — pakai array di konfigurasi.
+
+#### 39.10 Gap 9: E-Rapor P5 Input Massal
+
+**Kondisi sekarang:** `P5Projek` dan `P5Nilai` ✅ sudah ada migration + model. 6 dimensi P5: beriman, berkebinekaan, gotong_royong, mandiri, bernalar_kritis, kreatif.
+
+**Gap:** Belum ada UI input massal per kelas. Input masih perlu per siswa.
+
+**Desain:**
+| File | Tipe | Keterangan |
+|------|------|-----------|
+| `resources/js/Pages/Admin/Rapor/P5InputMassal.tsx` | Page | Table: siswa per kelas, kolom: 6 dimensi + SB (Sudah Berkembang)/MB (Mulai Berkembang)/BSH (Berkembang Sesuai Harapan)/ST (Sangat Terampil) |
+| `app/Http/Controllers/Admin/RaporSiswaController.php` | **Edit** | Tambah `p5MassalForm()` + `p5MassalStore()` |
+| `routes/admin.php` | **Edit** | + route p5 massal |
+
+**UI Flow:**
+```
+P5InputMassal:
+  -> Pilih kelas (rapor_kelas_id), semester, projek_id
+  -> Table: [Nama Siswa] [Beriman] [Berkebinekaan] [Gotong Royong] [Mandiri] [Bernalar Kritis] [Kreatif]
+  -> Each cell: dropdown {Belum, Mulai Berkembang, Berkembang, Sangat Terampil} atau {-, MB, BSH, SB, ST}
+  -> Save All -> foreach siswa -> updateOrCreate P5Nilai
+```
+
+**Ponytail:** Satu table untuk satu projek. Dropdown per cell. Skip rich feedback per dimensi (textarea) — cukup nilai kualitatif. Kalau nilai sudah ada, pre-fill dari DB.
+
+#### 39.11 Prioritas Eksekusi
+
+```
+Tinggi (Sprint ini):
+  #9  P5 Input Massal      — gap paling kritis (input manual masih per-siswa)
+  #4  Multi-TTD            — prerequisite untuk PDF rapor resmi
+  #5  Arsip Rapor          — prerequisite sebelum publish massal
+
+Sedang (Sprint berikutnya):
+  #1  Rekap Bulanan PDF    — standalone, reuse pattern existing
+  #3  Import Nilai Excel   — standalone, CSV dulu
+  #8  Disposisi Workflow   — extension dari existing, butuh migration
+
+Rendah (Backlog):
+  #6  Rombel Dapodik       — standalone, command-first
+  #7  Surat Template       — standalone, bisa dikerjakan kapan saja
+  #2  Face Recognition     — SKIP (hardware dependency)
+```
+
+#### ✅ Status per 2026-07-20
+
+- [x] Architecture review 9 gap post-MVP selesai
+- [x] Gap 2 (Face Recognition) — SKIP, hardware dependency
+- [x] Gap 9 (P5 Input Massal) — prioritas tertinggi, 1 page baru + 1 edit
+- [x] Gap 4+5 (TTD + Arsip) — prerequisite chain untuk produksi rapor
+- [x] Gap 1,3,6,7,8 — documented dengan flow + file list + ponytail notes
+- [x] docs/lean-prd.md updated
+
