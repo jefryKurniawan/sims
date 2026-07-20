@@ -59,3 +59,4 @@ storage/mysql_sock/
 storage/mysql_tcp/
 storage/mysql_test/
 
+.aider*
