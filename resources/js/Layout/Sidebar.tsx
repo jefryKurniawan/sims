@@ -25,6 +25,12 @@ import {
 	Archive,
 	Fingerprint,
 	Heart,
+  UtensilsCrossed,
+  ClipboardCheck,
+  AlertTriangle,
+  MessageCircle,
+  BarChart2,
+  ImageIcon,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -161,7 +167,7 @@ export default function Sidebar({
 				},
 				{
 					title: "BK",
-					href: route("bk.dashboard"),
+					href: route("bk.index"),
 					icon: <Heart className="w-5 h-5" />,
 				},
 				{
@@ -235,6 +241,51 @@ export default function Sidebar({
 					title: "Galeri Prestasi",
 					href: route("admin.prestasi.index"),
 					icon: <Trophy className="w-5 h-5" />,
+				},
+			],
+		},
+		{
+			name: "MBG (Makan Bergizi)",
+			items: [
+				{
+					title: "Dashboard MBG",
+					href: route("mbg.dashboard"),
+					icon: <LayoutDashboard className="w-5 h-5" />,
+				},
+				{
+					title: "BAST Serah Terima",
+					href: route("mbg.basts.index"),
+					icon: <ClipboardCheck className="w-5 h-5" />,
+				},
+				{
+					title: "Uji Organoleptik",
+					href: route("mbg.organoleptik.index"),
+					icon: <ClipboardCheck className="w-5 h-5" />,
+				},
+				{
+					title: "Absensi Makan",
+					href: route("mbg.attendances.index"),
+					icon: <Users className="w-5 h-5" />,
+				},
+				{
+					title: "Insiden MBG",
+					href: route("mbg.incidents.index"),
+					icon: <AlertTriangle className="w-5 h-5" />,
+				},
+				{
+					title: "Rapat Evaluasi",
+					href: route("mbg.meetings.index"),
+					icon: <MessageCircle className="w-5 h-5" />,
+				},
+				{
+					title: "Laporan MBG",
+					href: route("mbg.reports.index"),
+					icon: <BarChart2 className="w-5 h-5" />,
+				},
+				{
+					title: "Galeri MBG",
+					href: route("mbg.galleries.index"),
+					icon: <ImageIcon className="w-5 h-5" />,
 				},
 			],
 		},

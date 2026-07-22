@@ -11,33 +11,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Kurikulum — enable dengan uncomment baris dibawah
+        // $this->call(KurikulumSeeder::class);
+
         $this->call([
-            RoleSeeder::class,
-            AddRoleSeeder::class,
+            RoleSeeder::class,           // Main roles: Admin, Guru, Staf, Murid, Orang Tua, Alumni, Guest
+            AddRoleSeeder::class,        // Additional roles: Perpustakaan, PPDB
             BlogRolePermissionSeeder::class,
             TUSeeder::class,
-            SuratMasukSeeder::class,
-            SuratKeluarSeeder::class,
-            ArsipAkreditasiSeeder::class,
-            UserSeeder::class,
+            UserSeeder::class,           // Must run before seeders that need users
             IndoBankSeeder::class,
             SettingSeeder::class,
             MenuItemsSeeder::class,
+            SuratMasukSeeder::class,
+            SuratKeluarSeeder::class,
+            ArsipAkreditasiSeeder::class,
             KategoriBeritaSeeder::class,
             BeritaSeeder::class,
             GuruSeeder::class,
-            KelasSeeder::class, // added
+            KelasSeeder::class,
             SiswaSeeder::class,
-            SiswaKelasSeeder::class, // added
-            BukuIndukDataSeeder::class, // buku induk digital sample data
+            SiswaKelasSeeder::class,
+            BukuIndukDataSeeder::class,
             GelombangSeeder::class,
             PengumumanPpdbSeeder::class,
             AlumniSeeder::class,
             TracerStudySeeder::class,
-            PopulateNisSeeder::class, // populate NIS for existing siswa
-            SaranaPrasaranaSeeder::class, // added
+            PopulateNisSeeder::class,
+            SaranaPrasaranaSeeder::class,
             DispensasiSeeder::class,
-            BukuSeeder::class, // added (perpustakaan buku)
+            BukuSeeder::class,
             PrestasiSeeder::class,
             KonselingSeeder::class,
             EventSeeder::class,

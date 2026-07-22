@@ -1,1 +1,1 @@
-import{r as e}from"./app2.js";var t=e();function n({className:e,children:n,...r}){return(0,t.jsx)(`div`,{className:e,...r,children:n})}export{n as t};
+import{n as e}from"./app2.js";var t=e();function n({className:e,children:n,...r}){return(0,t.jsx)(`div`,{className:e,...r,children:n})}export{n as t};

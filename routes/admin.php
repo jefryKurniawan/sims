@@ -110,6 +110,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::delete('buku-induk/{siswa}/orang-tua/{orangTua}', 'Admin\BukuIndukController@destroyOrangTua')->name('buku-induk.destroy-orang-tua');
         Route::post('buku-induk/{siswa}/mutasi', 'Admin\BukuIndukController@storeMutasi')->name('buku-induk.store-mutasi');
         Route::delete('buku-induk/{siswa}/mutasi/{mutasi}', 'Admin\BukuIndukController@destroyMutasi')->name('buku-induk.destroy-mutasi');
+        Route::get('buku-induk/cetak-semua', 'Admin\BukuIndukController@cetakSemua')->name('buku-induk.cetak-semua');
+        Route::get('buku-induk/cetak-pdf-massal', 'Admin\BukuIndukController@cetakPdfMassal')->name('buku-induk.cetak-pdf-massal');
 
         // Prestasi Siswa
         Route::resource('prestasi', 'Admin\PrestasiController', ['as' => 'admin']);
@@ -198,23 +200,23 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::resource('jadwal', 'Admin\JadwalPelajaranController')->names('jadwal');
 
         // Kurikulum
-        Route::get('kurikulum', 'Admin\KurikulumController@index')->name('kurikulum.index');
-        Route::get('kurikulum/create', 'Admin\KurikulumController@create')->name('kurikulum.create');
-        Route::post('kurikulum', 'Admin\KurikulumController@store')->name('kurikulum.store');
-        Route::get('kurikulum/{kurikulum}/edit', 'Admin\KurikulumController@edit')->name('kurikulum.edit');
-        Route::put('kurikulum/{kurikulum}', 'Admin\KurikulumController@update')->name('kurikulum.update');
-        Route::delete('kurikulum/{kurikulum}', 'Admin\KurikulumController@destroy')->name('kurikulum.destroy');
-        Route::get('kurikulum/{kurikulum}/mapels', 'Admin\KurikulumController@mapels')->name('kurikulum.mapels');
-        Route::post('kurikulum/{kurikulum}/mapels', 'Admin\KurikulumController@storeMapel')->name('kurikulum.mapels.store');
-        Route::delete('kurikulum/{kurikulum}/mapels/{mapel}', 'Admin\KurikulumController@destroyMapel')->name('kurikulum.mapels.destroy');
-        Route::get('kurikulum/{kurikulum}/skbm', 'Admin\KurikulumController@skbm')->name('kurikulum.skbm');
-        Route::post('kurikulum/{kurikulum}/skbm', 'Admin\KurikulumController@storeSkbm')->name('kurikulum.skbm.store');
-        Route::delete('kurikulum/{kurikulum}/skbm/{skbm}', 'Admin\KurikulumController@destroySkbm')->name('kurikulum.skbm.destroy');
+        Route::get('kurikulum', 'Admin\KurikulumController@index')->name('admin.kurikulum.index');
+        Route::get('kurikulum/create', 'Admin\KurikulumController@create')->name('admin.kurikulum.create');
+        Route::post('kurikulum', 'Admin\KurikulumController@store')->name('admin.kurikulum.store');
+        Route::get('kurikulum/{kurikulum}/edit', 'Admin\KurikulumController@edit')->name('admin.kurikulum.edit');
+        Route::put('kurikulum/{kurikulum}', 'Admin\KurikulumController@update')->name('admin.kurikulum.update');
+        Route::delete('kurikulum/{kurikulum}', 'Admin\KurikulumController@destroy')->name('admin.kurikulum.destroy');
+        Route::get('kurikulum/{kurikulum}/mapels', 'Admin\KurikulumController@mapels')->name('admin.kurikulum.mapels');
+        Route::post('kurikulum/{kurikulum}/mapels', 'Admin\KurikulumController@storeMapel')->name('admin.kurikulum.mapels.store');
+        Route::delete('kurikulum/{kurikulum}/mapels/{mapel}', 'Admin\KurikulumController@destroyMapel')->name('admin.kurikulum.mapels.destroy');
+        Route::get('kurikulum/{kurikulum}/skbm', 'Admin\KurikulumController@skbm')->name('admin.kurikulum.skbm');
+        Route::post('kurikulum/{kurikulum}/skbm', 'Admin\KurikulumController@storeSkbm')->name('admin.kurikulum.skbm.store');
+        Route::delete('kurikulum/{kurikulum}/skbm/{skbm}', 'Admin\KurikulumController@destroySkbm')->name('admin.kurikulum.skbm.destroy');
 
         // Kalender Akademik
-        Route::get('kalender-akademik', 'Admin\KurikulumController@kalender')->name('kalender-akademik.index');
-        Route::post('kalender-akademik', 'Admin\KurikulumController@storeKalender')->name('kalender-akademik.store');
-        Route::delete('kalender-akademik/{kalenderAkademik}', 'Admin\KurikulumController@destroyKalender')->name('kalender-akademik.destroy');
+        Route::get('kalender-akademik', 'Admin\KurikulumController@kalender')->name('admin.kurikulum.kalender');
+        Route::post('kalender-akademik', 'Admin\KurikulumController@storeKalender')->name('admin.kurikulum.kalender.store');
+        Route::delete('kalender-akademik/{kalenderAkademik}', 'Admin\KurikulumController@destroyKalender')->name('admin.kurikulum.kalender.destroy');
 
         // Sarana Prasarana
         Route::get('sarana/template', 'Admin\SaranaPrasaranaController@template')->name('sarana.template');
@@ -227,6 +229,12 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::resource('perpustakaan', 'Admin\PerpustakaanController', ['as' => 'admin', 'parameters' => ['perpustakaan' => 'buku']]);
 
         // SPP
+        Route::get('spp/hutang', 'Admin\SppController@hutang')->name('spp.hutang');
+        Route::get('spp/generate', 'Admin\SppController@generateForm')->name('spp.generate');
+        Route::post('spp/generate', 'Admin\SppController@generate')->name('spp.generate.store');
+        Route::get('spp/siswa/{siswa}', 'Admin\SppController@siswa')->name('spp.siswa');
+        Route::post('spp/bayar/{tagihan}', 'Admin\SppController@bayar')->name('spp.bayar');
+        Route::post('spp/setting', 'Admin\SppController@updateSetting')->name('spp.setting');
         Route::resource('spp', 'Admin\SppController');
 
         // Pembayaran Generic (Polymorphic) — Section 32.6
@@ -299,4 +307,96 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::put("/{id}/read", "Admin\NotificationController@markAsRead")->name("mark-as-read");
     });
 
+
+    // ====== BK (Bimbingan Konseling) ======
+    // ====== MBG (Makan Bergizi Gratis) ======
+    Route::middleware('role:Admin|PPH|Guru')->prefix('mbg')->name('mbg.')->group(function () {
+        // Dashboard
+        Route::get('/', 'Admin\MbgController@index')->name('dashboard');
+
+        // BAST (Serah Terima)
+        Route::get('basts', 'Admin\MbgController@bastsIndex')->name('basts.index');
+        Route::get('basts/create', 'Admin\MbgController@bastsCreate')->name('basts.create');
+        Route::post('basts', 'Admin\MbgController@bastsStore')->name('basts.store');
+        Route::get('basts/{bast}/edit', 'Admin\MbgController@bastsEdit')->name('basts.edit');
+        Route::put('basts/{bast}', 'Admin\MbgController@bastsUpdate')->name('basts.update');
+        Route::delete('basts/{bast}', 'Admin\MbgController@bastsDestroy')->name('basts.destroy');
+
+        // Organoleptik (Uji Kelayakan)
+        Route::get('organoleptik', 'Admin\MbgController@organoleptikIndex')->name('organoleptik.index');
+        Route::get('organoleptik/create', 'Admin\MbgController@organoleptikCreate')->name('organoleptik.create');
+        Route::post('organoleptik', 'Admin\MbgController@organoleptikStore')->name('organoleptik.store');
+
+        // Absensi Makan
+        Route::get('attendances', 'Admin\MbgController@attendancesIndex')->name('attendances.index');
+        Route::get('attendances/create', 'Admin\MbgController@attendancesCreate')->name('attendances.create');
+        Route::post('attendances/kelas', 'Admin\MbgController@attendancesByKelas')->name('attendances.by-kelas');
+        Route::post('attendances', 'Admin\MbgController@attendancesStore')->name('attendances.store');
+
+        // Persetujuan Orang Tua (Admin only)
+        Route::middleware('role:Admin')->group(function () {
+            Route::get('consents', 'Admin\MbgController@consentsIndex')->name('consents.index');
+            Route::get('consents/create', 'Admin\MbgController@consentsCreate')->name('consents.create');
+            Route::post('consents', 'Admin\MbgController@consentsStore')->name('consents.store');
+
+            // Kondisi Khusus
+            Route::get('special-conditions', 'Admin\MbgController@specialConditionsIndex')->name('special-conditions.index');
+            Route::post('special-conditions', 'Admin\MbgController@specialConditionsStore')->name('special-conditions.store');
+            Route::put('special-conditions/{condition}', 'Admin\MbgController@specialConditionsUpdate')->name('special-conditions.update');
+        });
+
+        // Insiden
+        Route::get('incidents', 'Admin\MbgController@incidentsIndex')->name('incidents.index');
+        Route::get('incidents/create', 'Admin\MbgController@incidentsCreate')->name('incidents.create');
+        Route::post('incidents', 'Admin\MbgController@incidentsStore')->name('incidents.store');
+        Route::put('incidents/{incident}', 'Admin\MbgController@incidentsUpdate')->name('incidents.update');
+
+        // Notulensi Rapat
+        Route::get('meetings', 'Admin\MbgController@meetingsIndex')->name('meetings.index');
+        Route::get('meetings/create', 'Admin\MbgController@meetingsCreate')->name('meetings.create');
+        Route::post('meetings', 'Admin\MbgController@meetingsStore')->name('meetings.store');
+
+        // Laporan
+        Route::get('reports', 'Admin\MbgController@reportsIndex')->name('reports.index');
+        Route::get('reports/print', 'Admin\MbgController@printReport')->name('reports.print');
+
+        // Galeri
+        Route::get('galleries', 'Admin\MbgController@galleriesIndex')->name('galleries.index');
+        Route::post('galleries', 'Admin\MbgController@galleriesStore')->name('galleries.store');
+    });
+
+
+    Route::middleware('role:Admin|Guru|BK')->prefix('bk')->name('bk.')->group(function () {
+        Route::get('/', 'Admin\BkController@index')->name('index');
+        // Pelanggaran
+        Route::get('pelanggaran', 'Admin\BkController@pelanggaranIndex')->name('pelanggaran.index');
+        Route::get('pelanggaran/create', 'Admin\BkController@pelanggaranCreate')->name('pelanggaran.create');
+        Route::post('pelanggaran', 'Admin\BkController@pelanggaranStore')->name('pelanggaran.store');
+        Route::get('pelanggaran/{pelanggaran}/edit', 'Admin\BkController@pelanggaranEdit')->name('pelanggaran.edit');
+        Route::put('pelanggaran/{pelanggaran}', 'Admin\BkController@pelanggaranUpdate')->name('pelanggaran.update');
+        Route::delete('pelanggaran/{pelanggaran}', 'Admin\BkController@pelanggaranDestroy')->name('pelanggaran.destroy');
+        // Prestasi
+        Route::get('prestasi', 'Admin\BkController@prestasiIndex')->name('prestasi.index');
+        Route::get('prestasi/create', 'Admin\BkController@prestasiCreate')->name('prestasi.create');
+        Route::post('prestasi', 'Admin\BkController@prestasiStore')->name('prestasi.store');
+        Route::get('prestasi/{prestasi}/edit', 'Admin\BkController@prestasiEdit')->name('prestasi.edit');
+        Route::put('prestasi/{prestasi}', 'Admin\BkController@prestasiUpdate')->name('prestasi.update');
+        Route::delete('prestasi/{prestasi}', 'Admin\BkController@prestasiDestroy')->name('prestasi.destroy');
+        // Konseling
+        Route::get('konseling', 'Admin\BkController@konselingIndex')->name('konseling.index');
+        Route::get('konseling/create', 'Admin\BkController@konselingCreate')->name('konseling.create');
+        Route::post('konseling', 'Admin\BkController@konselingStore')->name('konseling.store');
+        Route::get('konseling/{konseling}/edit', 'Admin\BkController@konselingEdit')->name('konseling.edit');
+        Route::put('konseling/{konseling}', 'Admin\BkController@konselingUpdate')->name('konseling.update');
+        Route::delete('konseling/{konseling}', 'Admin\BkController@konselingDestroy')->name('konseling.destroy');
+        // Surat Rekomendasi
+        Route::get('surat', 'Admin\BkController@suratIndex')->name('surat.index');
+        Route::get('surat/create', 'Admin\BkController@suratCreate')->name('surat.create');
+        Route::post('surat', 'Admin\BkController@suratStore')->name('surat.store');
+        Route::get('surat/{surat}', 'Admin\BkController@suratShow')->name('surat.show');
+        Route::get('surat/{surat}/edit', 'Admin\BkController@suratEdit')->name('surat.edit');
+        Route::put('surat/{surat}', 'Admin\BkController@suratUpdate')->name('surat.update');
+        Route::delete('surat/{surat}', 'Admin\BkController@suratDestroy')->name('surat.destroy');
+        Route::get('surat/{surat}/cetak-pdf', 'Admin\BkController@suratCetakPdf')->name('surat.cetak-pdf');
+    });
 });

@@ -1,1 +1,1 @@
-import{f as e,s as t}from"./app2.js";var n=e(t(),1);function r(e){let t=n.useRef(e);return n.useEffect(()=>{t.current=e}),n.useMemo(()=>((...e)=>t.current?.(...e)),[])}export{r as t};
+import{d as e,o as t}from"./app2.js";var n=e(t(),1);function r(e){let t=n.useRef(e);return n.useEffect(()=>{t.current=e}),n.useMemo(()=>((...e)=>t.current?.(...e)),[])}export{r as t};
