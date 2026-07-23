@@ -3,7 +3,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { useState } from "react";
 import { Plus, AlertTriangle } from "lucide-react";
 import AdminTable from "@/Components/AdminTable";
-import type { Column } from "@/Components/AdminTable";
+import type { Column, Action } from "@/Components/AdminTable";
 
 export default function Index() {
     const { incidents, filters } = usePage().props as any;
@@ -65,10 +65,9 @@ export default function Index() {
                     className="px-3 py-1.5 bg-gray-100 rounded text-sm hover:bg-gray-200">Filter</button>
             </div>
             <AdminTable columns={columns} rows={incidents?.data || []} pagination={incidents}
-                actions={(row: any) => (
-                    <button onClick={() => { setEditIncident(row); setTindakLanjut(row.tindak_lanjut || ""); }}
-                        className="p-1 hover:text-blue-600"><AlertTriangle className="w-4 h-4" /></button>
-                )}
+                actions={(row: any): Action[] => [
+                    { icon: "edit", onClick: () => { setEditIncident(row); setTindakLanjut(row.tindak_lanjut || ""); }, label: "Update" },
+                ]}
             />
         </div>
         {editIncident && (

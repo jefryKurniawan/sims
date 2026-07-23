@@ -1,7 +1,7 @@
-import { useState, ReactNode } from "react";
+import { useState, ReactNode, useEffect, useRef } from "react";
 import { usePage, Link } from "@inertiajs/inertia-react";
 import { useTheme } from "@/context/ThemeProvider";
-import { Bell, Menu, X, Search } from "lucide-react";
+import { Bell, Menu, LogOut, User } from "lucide-react";
 import Sidebar from "./Sidebar";
 
 interface Flash {
@@ -14,21 +14,45 @@ interface Flash {
 export default function AppLayout({ children }: { children: ReactNode }) {
     const { auth, flash } = usePage().props as any;
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    const handleLogout = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/auth/logout';
+        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        if (token) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = '_token';
+            input.value = token;
+            form.appendChild(input);
+        }
+        document.body.appendChild(form);
+        form.submit();
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setUserMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
             {/* Mobile sidebar overlay */}
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-            {/* Desktop sidebar */}
-            <div className="hidden xl:flex xl:flex-col xl:w-72 bg-white dark:bg-gray-800 border-r">
-                <Sidebar />
-            </div>
-
             {/* Main content */}
-            <div className="flex-1 flex flex-col min-w-0">
+            <div className="flex-1 flex flex-col min-w-0 bg-card">
                 {/* Top bar */}
-                <header className="h-16 bg-white dark:bg-gray-800 border-b flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
+                <header className="h-16 bg-card border-b flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
                     <button
                         onClick={() => setSidebarOpen(true)}
                         className="xl:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
@@ -44,16 +68,37 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                         >
                             <Bell className="w-5 h-5 text-gray-500" />
                         </Link>
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold">
-                                {auth?.user?.name?.charAt(0)?.toUpperCase() || "A"}
-                            </div>
-                            <span className="text-sm font-medium hidden sm:block">
-                                {auth?.user?.name || "Admin"}
-                            </span>
-                        </div>
-                    </div>
-                </header>
+                        <div className="relative" ref={menuRef}>
+                            <button
+                                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                                className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                aria-label="Open user menu"
+                            >
+                                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold">
+                                    {auth?.user?.name?.charAt(0)?.toUpperCase() || "A"}
+                                </div>
+                                <span className="text-sm font-medium hidden sm:block">
+                                    {auth?.user?.name || "Admin"}
+                                </span>
+                            </button>
+                            {userMenuOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-border py-1 z-50">
+                                    <div className="px-4 py-2 border-b border-border/50">
+                                        <p className="text-sm font-medium text-foreground">{auth?.user?.name}</p>
+                                        <p className="text-xs text-muted-foreground">{auth?.user?.role}</p>
+                                    </div>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                    >
+                                        <LogOut className="w-4 h-4" />
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                       </div>
+                   </div>
+               </header>
 
                 {/* Flash messages */}
                 {flash?.success && (
