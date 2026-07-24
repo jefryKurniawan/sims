@@ -363,6 +363,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
         // Galeri
         Route::get('galleries', 'Admin\MbgController@galleriesIndex')->name('galleries.index');
         Route::post('galleries', 'Admin\MbgController@galleriesStore')->name('galleries.store');
+        Route::get("galleries/create", "Admin\\MbgController@galleriesCreate")->name("galleries.create");
     });
 
 

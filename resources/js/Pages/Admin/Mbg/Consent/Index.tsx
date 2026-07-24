@@ -31,9 +31,9 @@ export default function Index() {
                     <Plus className="w-4 h-4" /> Tambah
                 </Link>
             </div>
-            <div className="bg-white rounded-lg border p-4 mb-4 flex gap-2 items-end">
+            <div className="bg-white border border-border rounded-lg shadow-sm p-4 mb-4 flex gap-2 items-end">
                 <div><label className="text-xs text-gray-500">Status</label>
-                    <select value={status} onChange={e => { setStatus(e.target.value); Inertia.get(route("mbg.consents.index"), { status: e.target.value }, { preserveState: true }); }} className="block border rounded px-2 py-1 text-sm">
+                    <select value={status} onChange={e => { setStatus(e.target.value); Inertia.get(route("mbg.consents.index"), { status: e.target.value }, { preserveState: true }); }} className="block border border-primary/20 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                         <option value="">Semua</option>
                         <option value="setuju">Setuju</option><option value="menunggu">Menunggu</option><option value="tolak">Tolak</option>
                     </select></div>

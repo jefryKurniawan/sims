@@ -41,14 +41,14 @@ export default function Index() {
                     <Plus className="w-4 h-4" /> Absensi Baru
                 </Link>
             </div>
-            <div className="bg-white rounded-lg border p-4 mb-4 flex flex-wrap gap-2 items-end">
+            <div className="bg-white border border-border rounded-lg shadow-sm p-4 mb-4 flex flex-wrap gap-2 items-end">
                 <div><label className="text-xs text-gray-500">Kelas</label>
-                    <select value={kelasId} onChange={e => setKelasId(e.target.value)} className="block border rounded px-2 py-1 text-sm">
+                    <select value={kelasId} onChange={e => setKelasId(e.target.value)} className="block border border-primary/20 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                         <option value="">Semua</option>
                         {kelasList?.map((k: any) => <option key={k.id} value={k.id}>{k.tingkat} - {k.nama}</option>)}
                     </select></div>
                 <div><label className="text-xs text-gray-500">Tanggal</label>
-                    <input type="date" value={tanggal} onChange={e => setTanggal(e.target.value)} className="block border rounded px-2 py-1 text-sm" /></div>
+                    <input type="date" value={tanggal} onChange={e => setTanggal(e.target.value)} className="block border border-primary/20 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring" /></div>
                 <button onClick={handleFilter} className="px-3 py-1.5 bg-gray-100 rounded text-sm hover:bg-gray-200">Filter</button>
             </div>
             <AdminTable columns={columns} rows={attendances?.data || []} pagination={attendances} />

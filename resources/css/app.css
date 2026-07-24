@@ -239,3 +239,16 @@ main:not([hidden]) table thead {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
+/* Date input - native calendar picker follows theme */
+input[type="date"] {
+    color-scheme: light;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}

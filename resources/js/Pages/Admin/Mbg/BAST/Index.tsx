@@ -1,9 +1,9 @@
 import { Head, usePage, Link } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import { useState } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import AdminTable from "@/Components/AdminTable";
-import type { Column } from "@/Components/AdminTable";
+import type { Action, Column } from "@/Components/AdminTable";
 import ConfirmModal from "@/Components/ConfirmModal";
 
 export default function Index() {
@@ -37,11 +37,10 @@ export default function Index() {
         { key: "creator", label: "Oleh", render: (_: any, r: any) => r.creator?.nama || "-" },
     ];
 
-    const actions = (row: any) => (<div className="flex gap-1">
-        <Link href={route("mbg.basts.edit", row.id)} className="p-1 hover:text-blue-600"><Pencil className="w-4 h-4" /></Link>
-        <button onClick={() => setDeleteTarget(row)} className="p-1 hover:text-red-600"><Trash2 className="w-4 h-4" /></button>
-    </div>);
-
+    const actions = (row: any): Action[] => [
+        { icon: "edit", onClick: () => Inertia.get(route("mbg.basts.edit", row.id)) },
+        { icon: "delete", onClick: () => setDeleteTarget(row) },
+    ];
     return (<>
         <Head title="BAST MBG" />
         <div className="max-w-7xl mx-auto">
@@ -52,18 +51,18 @@ export default function Index() {
                     <Plus className="w-4 h-4" /> BAST Baru
                 </Link>
             </div>
-            <div className="bg-white rounded-lg border p-4 mb-4 flex flex-wrap gap-2 items-end">
+            <div className="bg-white border border-border rounded-lg shadow-sm p-4 mb-4 flex flex-wrap gap-2 items-end">
                 <div><label className="text-xs text-gray-500">Status</label>
-                    <select value={status} onChange={e => setStatus(e.target.value)} className="block w-full border rounded px-2 py-1 text-sm">
+                    <select value={status} onChange={e => setStatus(e.target.value)} className="block w-full border border-primary/20 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                         <option value="">Semua</option>
                         <option value="pending">Pending</option>
                         <option value="diterima">Diterima</option>
                         <option value="ditolak">Ditolak</option>
                     </select></div>
                 <div><label className="text-xs text-gray-500">Dari</label>
-                    <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="block border rounded px-2 py-1 text-sm" /></div>
+                    <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="block border border-primary/20 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring" /></div>
                 <div><label className="text-xs text-gray-500">Sampai</label>
-                    <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="block border rounded px-2 py-1 text-sm" /></div>
+                    <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="block border border-primary/20 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring" /></div>
                 <button onClick={handleFilter} className="px-3 py-1.5 bg-gray-100 rounded text-sm hover:bg-gray-200">Filter</button>
             </div>
             <AdminTable columns={columns} rows={basts?.data || []} actions={actions} pagination={basts} />

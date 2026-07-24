@@ -29,17 +29,17 @@ export default function Index() {
 
             <div className="bg-card rounded-lg border border-border p-4 mb-6 flex flex-wrap gap-3 items-end">
                 <div><label className="text-xs text-muted-foreground">Bulan</label>
-                    <select value={bulan} onChange={e => setBulan(+e.target.value)} className="block border border-border rounded px-2 py-1 text-sm">
+                    <select value={bulan} onChange={e => setBulan(+e.target.value)} className="block border border-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                         {monthNames.slice(1).map((name, i) => <option key={i + 1} value={i + 1}>{name}</option>)}
                     </select></div>
                 <div><label className="text-xs text-muted-foreground">Tahun</label>
-                    <input type="number" value={tahun} onChange={e => setTahun(+e.target.value)} className="block border border-border rounded px-2 py-1 text-sm w-20" /></div>
+                    <input type="number" value={tahun} onChange={e => setTahun(+e.target.value)} className="block border border-border rounded px-2 py-1 text-sm w-20 focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring" /></div>
                 <div className="flex gap-2">
                     <button onClick={loadReport} className="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90">Tampilkan</button>
-                    <Link href={route("mbg.reports.print", { bulan, tahun })}
+                    <a href={route("mbg.reports.print", { bulan, tahun })}
                         className="inline-flex items-center gap-1 px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">
                         <Printer className="w-4 h-4" /> Cetak PDF
-                    </Link>
+                    </a>
                 </div>
             </div>
 

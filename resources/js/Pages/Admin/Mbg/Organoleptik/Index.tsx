@@ -33,9 +33,9 @@ export default function Index() {
                     <Plus className="w-4 h-4" /> Uji Baru
                 </Link>
             </div>
-            <div className="bg-white rounded-lg border p-4 mb-4 flex gap-2 items-end">
+            <div className="bg-white border border-border rounded-lg shadow-sm p-4 mb-4 flex gap-2 items-end">
                 <div><label className="text-xs text-gray-500">Hasil</label>
-                    <select value={hasil} onChange={e => { setHasil(e.target.value); Inertia.get(route("mbg.organoleptik.index"), { hasil: e.target.value }, { preserveState: true }); }} className="block border rounded px-2 py-1 text-sm">
+                    <select value={hasil} onChange={e => { setHasil(e.target.value); Inertia.get(route("mbg.organoleptik.index"), { hasil: e.target.value }, { preserveState: true }); }} className="block border border-primary/20 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                         <option value="">Semua</option>
                         <option value="layak">Layak</option>
                         <option value="tidak_layak">Tidak Layak</option>

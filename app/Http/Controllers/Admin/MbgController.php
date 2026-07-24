@@ -509,6 +509,11 @@ class MbgController extends Controller
     // ──────────────────────────────────────────────
     // GALERI
     // ──────────────────────────────────────────────
+    public function galleriesCreate()
+    {
+        return Inertia::render('Admin/Mbg/Gallery/Form');
+    }
+
     public function galleriesIndex()
     {
         return Inertia::render('Admin/Mbg/Gallery/Index', [

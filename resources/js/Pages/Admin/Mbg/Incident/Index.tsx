@@ -49,14 +49,14 @@ export default function Index() {
                     <Plus className="w-4 h-4" /> Insiden Baru
                 </Link>
             </div>
-            <div className="bg-white rounded-lg border p-4 mb-4 flex flex-wrap gap-2 items-end">
+            <div className="bg-white border border-border rounded-lg shadow-sm p-4 mb-4 flex flex-wrap gap-2 items-end">
                 <div><label className="text-xs text-gray-500">Status</label>
-                    <select value={status} onChange={e => setStatus(e.target.value)} className="block border rounded px-2 py-1 text-sm">
+                    <select value={status} onChange={e => setStatus(e.target.value)} className="block border border-primary/20 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                         <option value="">Semua</option>
                         <option value="terlapor">Terlapor</option><option value="ditangani">Ditangani</option><option value="selesai">Selesai</option>
                     </select></div>
                 <div><label className="text-xs text-gray-500">Kategori</label>
-                    <select value={kategori} onChange={e => setKategori(e.target.value)} className="block border rounded px-2 py-1 text-sm">
+                    <select value={kategori} onChange={e => setKategori(e.target.value)} className="block border border-primary/20 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                         <option value="">Semua</option>
                         <option value="keracunan">Keracunan</option><option value="keterlambatan">Keterlambatan</option>
                         <option value="penolakan_massal">Penolakan Massal</option><option value="kerusakan">Kerusakan</option><option value="lainnya">Lainnya</option>
@@ -78,15 +78,15 @@ export default function Index() {
                     <div className="space-y-3">
                         <div><label className="block text-sm font-medium mb-1">Status</label>
                             <select value={editIncident.status} onChange={e => setEditIncident({...editIncident, status: e.target.value})}
-                                className="w-full border rounded px-3 py-2 text-sm">
+                                className="w-full border border-primary/20 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                                 <option value="terlapor">Terlapor</option><option value="ditangani">Ditangani</option><option value="selesai">Selesai</option>
                             </select></div>
                         <div><label className="block text-sm font-medium mb-1">Tindak Lanjut</label>
                             <textarea value={tindakLanjut} onChange={e => setTindakLanjut(e.target.value)} rows={3}
-                                className="w-full border rounded px-3 py-2 text-sm" /></div>
+                                className="w-full border border-primary/20 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring" /></div>
                         <div className="flex gap-2">
                             <button onClick={handleStatusUpdate} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">Simpan</button>
-                            <button onClick={() => setEditIncident(null)} className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50">Batal</button>
+                            <button onClick={() => setEditIncident(null)} className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-gray-50">Batal</button>
                         </div>
                     </div>
                 </div>

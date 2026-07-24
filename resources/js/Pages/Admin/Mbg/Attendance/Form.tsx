@@ -51,15 +51,15 @@ export default function Form() {
                 <ArrowLeft className="w-4 h-4" /> Kembali
             </Link>
             <h1 className="text-2xl font-bold mb-6">Absensi Makan Siswa</h1>
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg border p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="bg-white border border-border rounded-lg shadow-sm p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                     <div><label className="block text-sm font-medium mb-1">BAST (Hari ini) *</label>
-                        <select value={bastId} onChange={e => setBastId(e.target.value)} required className="w-full border rounded px-3 py-2 text-sm">
+                        <select value={bastId} onChange={e => setBastId(e.target.value)} required className="w-full border border-primary/20 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                             <option value="">Pilih BAST</option>
                             {bast ? <option value={bast.id}>BAST #{bast.id} — {bast.tanggal}</option> : null}
                         </select></div>
                     <div><label className="block text-sm font-medium mb-1">Kelas *</label>
-                        <select value={kelasId} onChange={e => { setKelasId(e.target.value); setSiswaList([]); }} required className="w-full border rounded px-3 py-2 text-sm">
+                        <select value={kelasId} onChange={e => { setKelasId(e.target.value); setSiswaList([]); }} required className="w-full border border-primary/20 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring">
                             <option value="">Pilih Kelas</option>
                             {kelasList?.map((k: any) => <option key={k.id} value={k.id}>{k.tingkat} - {k.nama}</option>)}
                         </select></div>
@@ -83,7 +83,7 @@ export default function Form() {
                                         <td className="p-2">
                                             <select value={attendance[s.id] || "hadir_makan"}
                                                 onChange={e => setAttendance({...attendance, [s.id]: e.target.value})}
-                                                className={`border rounded px-2 py-1 text-xs ${badge(attendance[s.id] || "hadir_makan")}`}>
+                                                className={`border border-primary/20 rounded px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring ${badge(attendance[s.id] || "hadir_makan")}`}>
                                                 <option value="hadir_makan">Hadir & Makan</option>
                                                 <option value="tidak_hadir">Tidak Hadir</option>
                                                 <option value="dibawa_pulang">Dibawa Pulang</option>

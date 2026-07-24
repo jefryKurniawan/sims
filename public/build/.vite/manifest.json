@@ -33,6 +33,7 @@
       "resources/js/app.jsx",
       "_Sidebar.js",
       "_bell.js",
+      "_log-out.js",
       "_menu.js"
     ]
   },
@@ -655,13 +656,6 @@
   "_newspaper.js": {
     "file": "assets/newspaper.js",
     "name": "newspaper",
-    "imports": [
-      "_createLucideIcon.js"
-    ]
-  },
-  "_pencil.js": {
-    "file": "assets/pencil.js",
-    "name": "pencil",
     "imports": [
       "_createLucideIcon.js"
     ]
@@ -1930,9 +1924,7 @@
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.jsx",
-      "_pencil.js",
       "_plus.js",
-      "_trash-2.js",
       "_AdminTable.js",
       "_ConfirmModal.js"
     ]
@@ -1972,6 +1964,16 @@
       "_users.js"
     ]
   },
+  "resources/js/Pages/Admin/Mbg/Gallery/Form.tsx": {
+    "file": "assets/Form8.js",
+    "name": "Form",
+    "src": "resources/js/Pages/Admin/Mbg/Gallery/Form.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_arrow-left.js"
+    ]
+  },
   "resources/js/Pages/Admin/Mbg/Gallery/Index.tsx": {
     "file": "assets/Index22.js",
     "name": "Index",
@@ -1984,7 +1986,7 @@
     ]
   },
   "resources/js/Pages/Admin/Mbg/Incident/Form.tsx": {
-    "file": "assets/Form8.js",
+    "file": "assets/Form9.js",
     "name": "Form",
     "src": "resources/js/Pages/Admin/Mbg/Incident/Form.tsx",
     "isDynamicEntry": true,
@@ -2000,13 +2002,12 @@
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.jsx",
-      "_triangle-alert.js",
       "_plus.js",
       "_AdminTable.js"
     ]
   },
   "resources/js/Pages/Admin/Mbg/Meeting/Form.tsx": {
-    "file": "assets/Form9.js",
+    "file": "assets/Form10.js",
     "name": "Form",
     "src": "resources/js/Pages/Admin/Mbg/Meeting/Form.tsx",
     "isDynamicEntry": true,
@@ -2027,7 +2028,7 @@
     ]
   },
   "resources/js/Pages/Admin/Mbg/Organoleptik/Form.tsx": {
-    "file": "assets/Form10.js",
+    "file": "assets/Form11.js",
     "name": "Form",
     "src": "resources/js/Pages/Admin/Mbg/Organoleptik/Form.tsx",
     "isDynamicEntry": true,
@@ -2066,7 +2067,7 @@
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.jsx",
-      "_pencil.js",
+      "_createLucideIcon.js",
       "_plus.js",
       "_AdminTable.js"
     ]
@@ -2431,7 +2432,7 @@
     ]
   },
   "resources/js/Pages/Admin/RaporKelas/Form.tsx": {
-    "file": "assets/Form11.js",
+    "file": "assets/Form12.js",
     "name": "Form",
     "src": "resources/js/Pages/Admin/RaporKelas/Form.tsx",
     "isDynamicEntry": true,
@@ -2453,7 +2454,7 @@
     ]
   },
   "resources/js/Pages/Admin/RaporMapel/Form.tsx": {
-    "file": "assets/Form12.js",
+    "file": "assets/Form13.js",
     "name": "Form",
     "src": "resources/js/Pages/Admin/RaporMapel/Form.tsx",
     "isDynamicEntry": true,
@@ -4264,6 +4265,7 @@
       "resources/js/Pages/Admin/Mbg/Consent/Form.tsx",
       "resources/js/Pages/Admin/Mbg/Consent/Index.tsx",
       "resources/js/Pages/Admin/Mbg/Dashboard.tsx",
+      "resources/js/Pages/Admin/Mbg/Gallery/Form.tsx",
       "resources/js/Pages/Admin/Mbg/Gallery/Index.tsx",
       "resources/js/Pages/Admin/Mbg/Incident/Form.tsx",
       "resources/js/Pages/Admin/Mbg/Incident/Index.tsx",
