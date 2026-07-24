@@ -537,7 +537,7 @@ class MbgController extends Controller
 
         MbgGallery::create($validated);
 
-        return redirect()->route('admin.mbg.galleries.index')
+        return redirect()->route('mbg.galleries.index')
             ->with('flash', ['success' => 'Dokumentasi berhasil ditambahkan.']);
     }
 }

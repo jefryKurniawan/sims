@@ -49,4 +49,9 @@ class DapodikIdMapping extends Model
     {
         $this->update(['last_sync_at' => now()]);
     }
+
+    public function syncLogs()
+    {
+        return $this->hasMany(DapodikSyncLog::class, 'entity_id', 'local_id');
+    }
 }

@@ -16,6 +16,7 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
         $setting = $user ? \App\Models\Setting::where('user_id', $user->id)->first() : null;
+        $profileSekolah = \App\Models\ProfileSekolah::first();
 
         Inertia::share([
             'auth' => [
@@ -40,6 +41,10 @@ class HandleInertiaRequests extends Middleware
                 'hero_media_type' => 'foto',
                 'hero_media_url' => '',
             ],
+            'profileSekolah' => $profileSekolah ? [
+                'nama_sekolah' => $profileSekolah->nama_sekolah,
+                'logo_url' => $profileSekolah->logo_url,
+            ] : null,
             'ziggy' => fn () => [
                 'routes' => (new Ziggy())->toArray(),
                 'location' => $request->url(),

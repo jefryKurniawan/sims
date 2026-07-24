@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { ArrowLeft, Save, Send, CheckCircle, XCircle, Trash2 } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
+import ConfirmModal from "@/Components/ConfirmModal";
+import { Badge } from "@/Components/ui/badge";
 import { Label } from '@/Components/ui/label';
 import { Textarea } from '@/Components/ui/textarea';
 import {
@@ -67,7 +69,9 @@ const statusColors: Record<string, string> = {
 };
 
 export default function Edit({ berita, kategoriOptions, isPenulis, canSubmit, canApprove, canReject }: Props) {
-    const form = useForm({
+    const [actionConfirm, setActionConfirm] = useState<"submit" | "approve" | "reject" | null>(null);
+	const [rejectReason, setRejectReason] = useState("");
+	const form = useForm({
         title: berita.title,
         slug: berita.slug,
         content: berita.content,
@@ -90,26 +94,23 @@ export default function Edit({ berita, kategoriOptions, isPenulis, canSubmit, ca
         form.setData('thumbnail', file);
     };
 
+
     const handleAction = (action: 'submit' | 'approve' | 'reject') => {
-        const confirmMessages: Record<string, string> = {
-            submit: 'Kirim berita untuk persetujuan Humas?',
-            approve: 'Setujui dan publish berita ini?',
-            reject: 'Tolak berita ini? Alasan penolakan wajib diisi.',
-        };
-
-        if (!confirm(confirmMessages[action])) return;
-
         if (action === 'reject') {
-            const reason = prompt('Alasan penolakan:');
-            if (!reason) return;
-            form.post(route('admin.berita.reject', berita.id), {
-                data: { rejection_reason: reason },
-                preserveScroll: true,
-            });
+            setActionConfirm(action);
+            setRejectReason('');
             return;
         }
-
+        if (!confirm(action === 'submit' ? 'Kirim berita untuk persetujuan Humas?' : 'Setujui dan publish berita ini?')) return;
         form.post(route(`admin.berita.${action}`, berita.id), {
+            preserveScroll: true,
+        });
+    };
+
+    const confirmReject = () => {
+        if (!rejectReason.trim()) return;
+        form.post(route('admin.berita.reject', berita.id), {
+            data: { rejection_reason: rejectReason },
             preserveScroll: true,
         });
     };
@@ -333,7 +334,7 @@ export default function Edit({ berita, kategoriOptions, isPenulis, canSubmit, ca
                             <div className="flex justify-end gap-3 pt-4 border-t">
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <Button type="button" variant="destructive" onClick={handleDelete}>
+                                        <Button type="button" variant="destructive">
                                             <Trash2 className="w-4 h-4 mr-2" />
                                             Hapus
                                         </Button>
@@ -367,6 +368,24 @@ export default function Edit({ berita, kategoriOptions, isPenulis, canSubmit, ca
                     </CardContent>
                 </Card>
             </div>
+        
+            {/* Reject Confirmation Modal */}
+            <ConfirmModal
+                open={actionConfirm === "reject"}
+                title="Tolak Berita"
+                message="Berikan alasan penolakan:"
+                confirmLabel="Tolak"
+                confirmButtonText="Tolak"
+                variant="warning"
+                inputType="textarea"
+                inputPlaceholder="Alasan penolakan..."
+                inputValue={rejectReason}
+                inputRequired={true}
+                onInputChange={(v) => setRejectReason(v)}
+                onConfirm={confirmReject}
+                onCancel={() => setActionConfirm(null)}
+            />
+
         </>
     );
 }

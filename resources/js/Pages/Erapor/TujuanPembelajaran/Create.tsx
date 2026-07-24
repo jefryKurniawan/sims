@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 import React from "react";
 import { Head, Link, useForm } from "@inertiajs/inertia-react";
-import AppLayout from "@/Layout/AppLayout";
 
 interface Mapel {
     id: number;
@@ -34,7 +33,7 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        form.post(route("admin.erapor.tujuan-pembelajaran.store"));
+        form.post(route("erapor.tujuan-pembelajaran.store"));
     };
 
     return (
@@ -45,7 +44,7 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
                     <div className="mb-6">
                         <Link
                             href={route(
-                                "admin.erapor.tujuan-pembelajaran.index",
+                                "erapor.tujuan-pembelajaran.index",
                             )}
                             className="text-emerald-600 hover:text-emerald-900"
                         >
@@ -231,7 +230,7 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
                             </button>
                             <Link
                                 href={route(
-                                    "admin.erapor.tujuan-pembelajaran.index",
+                                    "erapor.tujuan-pembelajaran.index",
                                 )}
                                 className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
                             >
@@ -245,4 +244,3 @@ export default function Create({ mapels, gurus, faseOptions }: Props) {
     );
 }
 
-Create.layout = (page: React.ReactElement) => <AppLayout children={page} />;

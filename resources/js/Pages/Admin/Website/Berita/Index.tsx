@@ -2,27 +2,11 @@ import { Head } from '@inertiajs/inertia-react';
 import { useState } from 'react';
 import { useForm, Link, usePage } from '@inertiajs/inertia-react';
 import {
-    Search,
-    Filter,
-    Plus,
-    Edit,
-    Trash2,
-    Eye,
-    Send,
-    CheckCircle,
-    XCircle,
-    Download,
-    Newspaper,
-    FileText,
-    CalendarDays,
-    CircleCheck,
-    Clock,
-    User as UserIcon,
-    Megaphone,
-    PartyPopper,
-    PenLine,
+    Search, Filter, Plus, Edit, Trash2, Eye, Send, CheckCircle, XCircle,
+    Download, Newspaper, FileText, CalendarDays, CircleCheck, Clock,
+    User as UserIcon, Megaphone, PartyPopper, PenLine,
 } from 'lucide-react';
-
+import ConfirmModal from "@/Components/ConfirmModal";
 interface BeritaItem {
     id: number;
     title: string;
@@ -77,7 +61,10 @@ export default function BeritaIndex({ berita, filters, stats, kategoriOptions }:
     const isAdminOrHumas = userRoles.some((r) => ['Admin', 'Humas'].includes(r));
     const isPenulis = userRoles.includes('Penulis');
 
-    const [search, setSearch] = useState(filters.search ?? '');
+    const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
+	const [confirmAction, setConfirmAction] = useState<{type: string; id: number} | null>(null);
+	const [rejectReason, setRejectReason] = useState("");
+	const [search, setSearch] = useState(filters.search ?? '');
     const [statusFilter, setStatusFilter] = useState(filters.status ?? 'all');
     const [kategoriFilter, setKategoriFilter] = useState(filters.kategori ?? '');
 
@@ -115,12 +102,18 @@ export default function BeritaIndex({ berita, filters, stats, kategoriOptions }:
     };
 
     const handleDelete = (id: number) => {
-        if (confirm('Yakin ingin menghapus berita ini? Tindakan ini tidak dapat dibatalkan.')) {
-            form.delete(route('admin.berita.destroy', id), {
-                preserveScroll: true,
-                onSuccess: () => form.reset(),
-            });
-        }
+        setDeleteTarget(id);
+    };
+
+    const confirmDelete = () => {
+        if (deleteTarget === null) return;
+        form.delete(route('admin.berita.destroy', deleteTarget), {
+            preserveScroll: true,
+            onSuccess: () => {
+                form.reset();
+                setDeleteTarget(null);
+            },
+        });
     };
 
     const handleAction = (action: 'submit' | 'approve' | 'reject', id: number) => {
@@ -559,7 +552,43 @@ export default function BeritaIndex({ berita, filters, stats, kategoriOptions }:
                         Export CSV
                    </Link>
                </div>
-           </div>
+           
+            {/* Delete Confirmation */}
+            <ConfirmModal
+                open={deleteTarget !== null}
+                title="Hapus Berita"
+                message="Yakin ingin menghapus berita ini? Tindakan ini tidak dapat dibatalkan."
+                confirmLabel="Hapus"
+                variant="danger"
+                onConfirm={confirmDelete}
+                onCancel={() => setDeleteTarget(null)}
+            />
+
+            {/* Reject Confirmation */}
+            <ConfirmModal
+                open={confirmAction?.type === "reject"}
+                title="Tolak Berita"
+                message="Berikan alasan penolakan:"
+                confirmLabel="Tolak"
+                confirmButtonText="Tolak"
+                variant="warning"
+                inputType="textarea"
+                inputPlaceholder="Alasan penolakan..."
+                inputValue={rejectReason}
+                inputRequired={true}
+                onInputChange={(v) => setRejectReason(v)}
+                onConfirm={() => {
+                    if (confirmAction?.id </div></div> rejectReason.trim()) {
+                        form.post(route("admin.berita.reject", confirmAction.id), {
+                            data: { rejection_reason: rejectReason },
+                            preserveScroll: true,
+                        });
+                        setConfirmAction(null);
+                    }
+                }}
+                onCancel={() => setConfirmAction(null)}
+            />
+            </div>
         </>
     );
 }

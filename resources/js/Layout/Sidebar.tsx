@@ -58,6 +58,7 @@ export default function Sidebar({
 }: SidebarProps) {
 	const [isMobile, setIsMobile] = useState(false);
 	const { auth } = usePage().props;
+	const { profileSekolah } = usePage().props;
 	const component = usePage().component as string;
 
 	useEffect(() => {
@@ -311,15 +312,21 @@ export default function Sidebar({
 			{/* Logo / Brand */}
 			<div className="flex-shrink-0 flex items-center justify-between h-16 px-5">
 				<Link href="/dashboard" className="flex items-center gap-3">
+					{profileSekolah?.logo_url ? (
+						<div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shadow-lg shadow-primary/20 overflow-hidden">
+							<img src={profileSekolah.logo_url} alt={profileSekolah.nama_sekolah || 'Logo'} className="w-full h-full object-contain p-1" />
+						</div>
+					) : (
 					<div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
 						<span className="text-primary-foreground font-extrabold text-sm font-heading">
-							S
+							{(profileSekolah?.nama_sekolah || 'S').charAt(0)}
 						</span>
 					</div>
+					)}
 					{!collapsed && (
 						<div>
-							<span className="block text-sm font-bold text-white font-heading tracking-tight">
-								SMAK St. Bonaventura
+							<span className="block text-sm font-bold text-card-foreground font-heading tracking-tight">
+								{profileSekolah?.nama_sekolah || 'SMAK St. Bonaventura'}
 							</span>
 							<span className="block text-[10px] text-muted-foreground/70 font-label tracking-wider uppercase">
 								Admin Portal
@@ -336,7 +343,7 @@ export default function Sidebar({
 			</div>
 
 			{/* Divider */}
-			<div className="mx-5 mb-2 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+			<div className="mx-5 mb-2 h-px bg-gradient-to-r from-transparent via-border/10 to-transparent" />
 
 			{/* Navigation */}
 			<nav className="flex-1 px-3 overflow-y-auto space-y-2 py-2 scrollbar-none">
@@ -382,7 +389,7 @@ export default function Sidebar({
 			</nav>
 
 			{/* User Footer */}
-			<div className="flex-shrink-0 px-4 py-4 border-t border-white/10">
+			<div className="flex-shrink-0 px-4 py-4 border-t border-border/10">
 				<div className="flex items-center gap-3">
 					<div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-md">
 						<span className="text-sm font-bold text-primary-foreground font-heading">

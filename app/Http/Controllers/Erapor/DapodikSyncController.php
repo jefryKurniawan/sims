@@ -41,6 +41,7 @@ class DapodikSyncController extends Controller
         ];
 
         $mappings = DapodikIdMapping::withCount(['syncLogs' => function($q) {
+            $q->whereColumn("entity_type", "dapodik_id_mapping.entity_type");
             $q->where('status', 'success');
         }])
         ->latest('last_sync_at')
@@ -53,7 +54,7 @@ class DapodikSyncController extends Controller
             'last_sync_at' => $m->last_sync_at?->diffForHumans(),
         ]);
 
-        return Inertia::render('Erapor/DapodikSync', [
+        return Inertia::render('Erapor/DapodikSync/Index', [
             'syncLogs' => $syncLogs,
             'stats' => $stats,
             'mappings' => $mappings,

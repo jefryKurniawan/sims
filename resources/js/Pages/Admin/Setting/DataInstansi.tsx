@@ -27,19 +27,19 @@ export default function DataInstansi() {
                 <div className="flex items-center gap-4 mb-6">
                     <Link
                         href={route("settings")}
-                        className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
-                    <h1 className="text-2xl font-bold text-gray-900 font-heading">
+                    <h1 className="text-2xl font-bold text-card-foreground font-heading">
                         Data Instansi
                     </h1>
                 </div>
 
-                <div className="bg-white rounded-xl border border-border shadow-sm">
+                <div className="bg-card border border-border rounded-xl shadow-sm">
                     <form onSubmit={submit} className="p-6 space-y-5">
                         <div>
-                            <label htmlFor="nama_sekolah" className="block text-sm font-medium text-gray-700 mb-1.5">
+                            <label htmlFor="nama_sekolah" className="block text-sm font-medium text-foreground mb-1.5">
                                 Nama Sekolah <span className="text-destructive">*</span>
                             </label>
                             <input
@@ -55,7 +55,7 @@ export default function DataInstansi() {
                         </div>
 
                         <div>
-                            <label htmlFor="alamat" className="block text-sm font-medium text-gray-700 mb-1.5">
+                            <label htmlFor="alamat" className="block text-sm font-medium text-foreground mb-1.5">
                                 Alamat
                             </label>
                             <textarea
@@ -68,7 +68,7 @@ export default function DataInstansi() {
                         </div>
 
                         <div>
-                            <label htmlFor="logo_url" className="block text-sm font-medium text-gray-700 mb-1.5">
+                            <label htmlFor="logo_url" className="block text-sm font-medium text-foreground mb-1.5">
                                 URL Logo
                             </label>
                             <input
@@ -90,7 +90,7 @@ export default function DataInstansi() {
 
                         <div className="grid grid-cols-3 gap-4">
                             <div>
-                                <label htmlFor="facebook" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label htmlFor="facebook" className="block text-sm font-medium text-foreground mb-1.5">
                                     Facebook
                                 </label>
                                 <input
@@ -102,7 +102,7 @@ export default function DataInstansi() {
                                 />
                             </div>
                             <div>
-                                <label htmlFor="twitter" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label htmlFor="twitter" className="block text-sm font-medium text-foreground mb-1.5">
                                     Twitter
                                 </label>
                                 <input
@@ -114,7 +114,7 @@ export default function DataInstansi() {
                                 />
                             </div>
                             <div>
-                                <label htmlFor="instagram" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label htmlFor="instagram" className="block text-sm font-medium text-foreground mb-1.5">
                                     Instagram
                                 </label>
                                 <input
@@ -137,7 +137,7 @@ export default function DataInstansi() {
                             </button>
                             <Link
                                 href={route("settings")}
-                                className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-semibold"
+                                className="px-5 py-2.5 border border-border rounded-lg text-sm hover:bg-accent"
                             >
                                 Batal
                             </Link>

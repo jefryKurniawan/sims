@@ -562,7 +562,7 @@ export default function Dashboard({
                     <h2 className="text-lg font-bold text-gray-900 font-heading mb-4">
                         Aktivitas Terbaru
                     </h2>
-                    <div className="rounded-2xl border bg-white shadow-sm overflow-hidden">
+                    <div className="rounded-2xl border border-primary/10 bg-white shadow-sm overflow-hidden">
                         {latestActivities.length === 0 ? (
                             <div className="p-6 text-center text-gray-500">
                                 <Clock className="w-8 h-8 mx-auto mb-2 opacity-50" />

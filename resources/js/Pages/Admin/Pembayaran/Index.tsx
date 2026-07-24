@@ -126,7 +126,7 @@ export default function Index() {
                     </button>
                 </form>
 
-                <AdminTable columns={columns} data={items} rowKey="id" />
+                <AdminTable columns={columns} rows={items} />
 
                 {meta && <Pagination data={items} current_page={meta.current_page} last_page={meta.last_page} per_page={meta.per_page} from={meta.from} to={meta.to} total={meta.total} links={meta.links} />}
             </div>

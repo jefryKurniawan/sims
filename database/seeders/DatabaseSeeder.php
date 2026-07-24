@@ -56,6 +56,7 @@ class DatabaseSeeder extends Seeder
             FooterSeeder::class,
             MuridSeeder::class,
             SppTagihanSeeder::class,
+            MbgSeeder::class,
         ]);
     }
 }

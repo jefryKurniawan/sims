@@ -55,9 +55,9 @@ class LoginController extends Controller
         return $request->only($this->username(), 'password');
     }
 
-    protected function authenticated()
+    protected function authenticated(Request $request, $user)
     {
-        if (Auth::user()->status == 'Tidak Aktif') {
+        if ($user->status == 'Tidak Aktif') {
             Auth::logout();
             Session::flash('error', "Akun yang kamu gunakan sudah Tidak Aktif !");
             return redirect('auth/login');

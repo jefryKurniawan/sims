@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -50,6 +51,17 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         return Inertia::render('Auth/Register');
+    }
+
+    /**
+     * Send the response after the user was registered.
+     * Override to return proper Inertia redirect (303 + X-Inertia header) for POST requests.
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+
+        return Inertia::location($this->redirectPath());
     }
 
     /**

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Skbm extends Model
 {
+    protected $table = "skbm";
     protected $fillable = ['kurikulum_id', 'rapor_mapel_id', 'fase', 'kode_kd', 'deskripsi_kd'];
 
     public function kurikulum()

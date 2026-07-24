@@ -52,7 +52,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             {/* Main content */}
             <div className="flex-1 flex flex-col min-w-0 bg-card">
                 {/* Top bar */}
-                <header className="h-16 bg-card border-b flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
+                <header className="h-16 bg-card border-b border-primary/10 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
                     <button
                         onClick={() => setSidebarOpen(true)}
                         className="xl:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"

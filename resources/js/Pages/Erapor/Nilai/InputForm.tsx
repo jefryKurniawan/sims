@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 import React from "react";
 import { Head, Link, useForm } from "@inertiajs/inertia-react";
-import AppLayout from "@/Layout/AppLayout";
 
 interface Siswa {
     id: number;
@@ -59,8 +58,8 @@ export default function InputForm({ jenis_nilai, siswas, mapels, tps }: Props) {
         e.preventDefault();
         form.post(
             isFormatif
-                ? route("admin.erapor.nilai.store-formatif")
-                : route("admin.erapor.nilai.store-sumatif"),
+                ? route("erapor.nilai.store-formatif")
+                : route("erapor.nilai.store-sumatif"),
             {
                 onSuccess: () => form.reset(),
             },
@@ -102,8 +101,8 @@ export default function InputForm({ jenis_nilai, siswas, mapels, tps }: Props) {
 
         form.post(
             isFormatif
-                ? route("admin.erapor.nilai.store-formatif")
-                : route("admin.erapor.nilai.store-sumatif"),
+                ? route("erapor.nilai.store-formatif")
+                : route("erapor.nilai.store-sumatif"),
             {
                 data,
                 onSuccess: () => {
@@ -123,7 +122,7 @@ export default function InputForm({ jenis_nilai, siswas, mapels, tps }: Props) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="mb-6">
                         <Link
-                            href={route("admin.erapor.nilai.index")}
+                            href={route("erapor.nilai.index")}
                             className="text-navy-600 hover:text-navy-800 text-sm"
                         >
                             &larr; Kembali
@@ -149,7 +148,7 @@ export default function InputForm({ jenis_nilai, siswas, mapels, tps }: Props) {
                                 <div className="flex gap-2">
                                     <Link
                                         href={route(
-                                            "admin.erapor.nilai.input",
+                                            "erapor.nilai.input",
                                             { jenis_nilai: "formatif" },
                                         )}
                                         className={`px-3 py-1.5 text-sm rounded ${
@@ -162,7 +161,7 @@ export default function InputForm({ jenis_nilai, siswas, mapels, tps }: Props) {
                                     </Link>
                                     <Link
                                         href={route(
-                                            "admin.erapor.nilai.input",
+                                            "erapor.nilai.input",
                                             { jenis_nilai: "sumatif" },
                                         )}
                                         className={`px-3 py-1.5 text-sm rounded ${
@@ -387,7 +386,7 @@ export default function InputForm({ jenis_nilai, siswas, mapels, tps }: Props) {
 
                             <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                                 <Link
-                                    href={route("admin.erapor.nilai.index")}
+                                    href={route("erapor.nilai.index")}
                                     className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                                 >
                                     Batal
@@ -410,4 +409,3 @@ export default function InputForm({ jenis_nilai, siswas, mapels, tps }: Props) {
     );
 }
 
-InputForm.layout = (page: React.ReactElement) => <AppLayout children={page} />;

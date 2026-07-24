@@ -155,8 +155,8 @@ export default function KonfigurasiWeb() {
                                 <div>
                                     <label htmlFor="wa_template_pesan" className="block text-sm font-medium text-gray-700 mb-1.5">Template Pesan</label>
                                     <textarea id="wa_template_pesan" rows={3} value={data.wa_template_pesan} onChange={(e) => setData("wa_template_pesan", e.target.value)} className="w-full px-3 py-2 border border-primary/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="Halo {{nama}}, pembayaran SPP {{nominal}} sudah diterima." />
-                                    <p className="text-xs text-gray-400 mt-1">Variable: {{{nama}}} {{{nominal}}} {{{tanggal}}}</p>
-                                </div>
+                                    <p className="text-xs text-gray-400 mt-1">{"Variable: {{nama}} {{nominal}} {{tanggal}}"}</p>
+                               </div>
                             </div>
                         </div>
                         <div className="flex gap-3 pt-4 border-t border-border">

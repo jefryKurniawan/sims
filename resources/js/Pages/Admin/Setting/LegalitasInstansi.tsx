@@ -24,20 +24,20 @@ export default function LegalitasInstansi() {
                 <div className="flex items-center gap-4 mb-6">
                     <Link
                         href={route("settings")}
-                        className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
-                    <h1 className="text-2xl font-bold text-gray-900 font-heading">
+                    <h1 className="text-2xl font-bold text-card-foreground font-heading">
                         Legalitas Instansi
                     </h1>
                 </div>
 
-                <div className="bg-white rounded-xl border border-border shadow-sm">
+                <div className="bg-card border border-border rounded-xl shadow-sm">
                     <form onSubmit={submit} className="p-6 space-y-5">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label htmlFor="npsn" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label htmlFor="npsn" className="block text-sm font-medium text-foreground mb-1.5">
                                     NPSN <span className="text-destructive">*</span>
                                 </label>
                                 <input
@@ -52,7 +52,7 @@ export default function LegalitasInstansi() {
                                 )}
                             </div>
                             <div>
-                                <label htmlFor="akreditasi" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label htmlFor="akreditasi" className="block text-sm font-medium text-foreground mb-1.5">
                                     Akreditasi <span className="text-destructive">*</span>
                                 </label>
                                 <input
@@ -71,7 +71,7 @@ export default function LegalitasInstansi() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label htmlFor="nama_kepala_sekolah" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label htmlFor="nama_kepala_sekolah" className="block text-sm font-medium text-foreground mb-1.5">
                                     Nama Kepala Sekolah <span className="text-destructive">*</span>
                                 </label>
                                 <input
@@ -86,7 +86,7 @@ export default function LegalitasInstansi() {
                                 )}
                             </div>
                             <div>
-                                <label htmlFor="nip_kepala_sekolah" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label htmlFor="nip_kepala_sekolah" className="block text-sm font-medium text-foreground mb-1.5">
                                     NIP Kepala Sekolah <span className="text-destructive">*</span>
                                 </label>
                                 <input
@@ -112,7 +112,7 @@ export default function LegalitasInstansi() {
                             </button>
                             <Link
                                 href={route("settings")}
-                                className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-semibold"
+                                className="px-5 py-2.5 border border-border rounded-lg text-sm hover:bg-accent"
                             >
                                 Batal
                             </Link>

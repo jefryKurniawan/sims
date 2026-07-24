@@ -4,23 +4,18 @@ import { Download } from "lucide-react";
 import AdminTable from "@/Components/AdminTable";
 import type { Column } from "@/Components/AdminTable";
 import ConfirmModal from "@/Components/ConfirmModal";
+import { useState } from "react";
 
 export default function Index() {
-	const { raporSiswa, kelas, flash } = usePage().props as {
+	const { raporSiswa, kelas, flash, filters } = usePage().props as {
 		raporSiswa: any;
 		kelas: any[];
 		flash: { success?: string; error?: string };
 		filters: Record<string, string>;
 	};
-	const [kelasFilter, setKelasFilter] = useState(
-		(usePage().props.filters as any)?.rapor_kelas_id || "",
-	);
-	const [semester, setSemester] = useState(
-		(usePage().props.filters as any)?.semester || "",
-	);
-	const [tahunAjaran, setTahunAjaran] = useState(
-		(usePage().props.filters as any)?.tahun_ajaran || "",
-	);
+	const [kelasFilter, setKelasFilter] = useState((filters as any)?.rapor_kelas_id || "");
+	const [semester, setSemester] = useState((filters as any)?.semester || "");
+	const [tahunAjaran, setTahunAjaran] = useState((filters as any)?.tahun_ajaran || "");
 	const [deleteTarget, setDeleteTarget] = useState<any>(null);
 
 	const handleFilter = () => {
@@ -106,7 +101,7 @@ export default function Index() {
 					</div>
 				)}
 
-				<div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 mb-4">
+				<div className="bg-white border border-primary/10 rounded-lg shadow-sm p-4 mb-4">
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 						<div>
 							<label className="block text-sm font-medium text-gray-700 mb-1">

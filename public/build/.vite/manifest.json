@@ -3628,20 +3628,7 @@
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.jsx",
-      "_layers.js",
-      "_sparkles.js",
-      "_arrow-left.js",
-      "_book-open.js",
-      "_calendar.js",
-      "_check.js",
-      "_globe.js",
-      "_graduation-cap.js",
-      "_users.js",
-      "_card.js",
-      "_input.js",
-      "_select.js",
-      "_label.js",
-      "_textarea.js"
+      "_AppLayout.js"
     ]
   },
   "resources/js/Pages/Erapor/P5/Edit.tsx": {

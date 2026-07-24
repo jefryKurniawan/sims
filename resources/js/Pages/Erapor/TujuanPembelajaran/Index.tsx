@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 import React from "react";
 import { Head, Link, useForm } from "@inertiajs/inertia-react";
-import AppLayout from "@/Layout/AppLayout";
 
 interface TP {
     id: number;
@@ -39,7 +38,7 @@ export default function Index({ tps, filters }: Props) {
 
     const handleFilter = (e: React.FormEvent) => {
         e.preventDefault();
-        window.location.href = route("admin.erapor.tujuan-pembelajaran.index", {
+        window.location.href = route("erapor.tujuan-pembelajaran.index", {
             fase: form.data.fase || undefined,
             tahun_ajaran: form.data.tahun_ajaran || undefined,
             aktif: form.data.aktif || undefined,
@@ -65,7 +64,7 @@ export default function Index({ tps, filters }: Props) {
                         </div>
                         <Link
                             href={route(
-                                "admin.erapor.tujuan-pembelajaran.create",
+                                "erapor.tujuan-pembelajaran.create",
                             )}
                             className="px-4 py-2 bg-navy-600 text-white rounded-md hover:bg-navy-700"
                         >
@@ -210,7 +209,7 @@ export default function Index({ tps, filters }: Props) {
                                             <div className="flex gap-2">
                                                 <Link
                                                     href={route(
-                                                        "admin.erapor.tujuan-pembelajaran.edit",
+                                                        "erapor.tujuan-pembelajaran.edit",
                                                         tp.id,
                                                     )}
                                                     className="text-emerald-600 hover:text-emerald-900"
@@ -219,7 +218,7 @@ export default function Index({ tps, filters }: Props) {
                                                 </Link>
                                                 <Link
                                                     href={route(
-                                                        "admin.erapor.tujuan-pembelajaran.edit",
+                                                        "erapor.tujuan-pembelajaran.edit",
                                                         tp.id,
                                                     )}
                                                     className="text-destructive hover:text-destructive/80"
@@ -267,4 +266,3 @@ export default function Index({ tps, filters }: Props) {
     );
 }
 
-Index.layout = (page: React.ReactElement) => <AppLayout children={page} />;

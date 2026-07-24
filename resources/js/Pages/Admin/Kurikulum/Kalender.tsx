@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { Head, Link, usePage } from "@inertiajs/inertia-react";
+import { Head, usePage } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import { Plus, Trash2 } from "lucide-react";
+import AdminTable from "@/Components/AdminTable";
+import type { Column } from "@/Components/AdminTable";
+import Pagination from "@/Components/Pagination";
 
 interface EventItem {
 	id: number;
@@ -44,161 +47,86 @@ export default function Kalender() {
 		}
 	};
 
+	const items = (Array.isArray(events) ? events : events?.data) || [];
+	const meta = Array.isArray(events) ? null : events;
+
+	const columns: Column<EventItem>[] = [
+		{ key: "tanggal", label: "Tanggal" },
+		{ key: "kegiatan", label: "Kegiatan" },
+		{ key: "keterangan", label: "Keterangan", render: (_v, r) => r.keterangan || "-" },
+		{ key: "semester", label: "Semester", render: (_v, r) => r.semester || "-" },
+		{ key: "tahun_ajaran", label: "Thn Ajaran", render: (_v, r) => r.tahun_ajaran || "-" },
+		{
+			key: "aksi",
+			label: "Aksi",
+			render: (_v, r) => (
+				<button
+					onClick={() => handleDelete(r.id)}
+					className="p-1.5 text-red-600 hover:bg-red-50 rounded transition"
+					title="Hapus"
+				>
+					<Trash2 className="w-4 h-4" />
+				</button>
+			),
+		},
+	];
+
 	return (
 		<>
 			<Head title="Kalender Akademik" />
-			<div className="p-4 lg:p-6 max-w-4xl">
-				<div className="mb-6">
-					<h1 className="text-2xl font-bold text-gray-900">
+			<div className="p-4 lg:p-6">
+				<div className="flex items-center justify-between mb-6">
+					<h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-heading">
 						Kalender Akademik
 					</h1>
-					<p className="text-sm text-gray-500 mt-0.5">
-						Kelola kegiatan akademik per semester
-					</p>
+					<button
+						type="button"
+						onClick={() => setShowForm(!showForm)}
+						className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-md hover:opacity-90"
+					>
+						<Plus className="w-4 h-4" /> Tambah
+					</button>
 				</div>
 
 				{flash?.success && (
-					<div className="mb-4 p-4 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-sm font-medium">
-						{flash.success}
-					</div>
+					<div className="mb-4 p-3 bg-emerald-50 text-emerald-700 rounded">{flash.success}</div>
 				)}
 
-				<div className="bg-white rounded-lg border mb-6">
-					<div className="px-4 py-3 border-b bg-gray-50 flex justify-between items-center">
-						<h2 className="font-semibold">Kegiatan</h2>
-						<button
-							type="button"
-							onClick={() => setShowForm(!showForm)}
-							className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-primary text-white rounded hover:bg-primary/90"
-						>
-							<Plus className="h-3 w-3" />
-							Tambah
-						</button>
-					</div>
-
-					{showForm && (
-						<form
-							onSubmit={handleAdd}
-							className="p-4 border-b bg-gray-50 space-y-3"
-						>
+				{showForm && (
+					<div className="mb-6 p-4 border rounded-lg bg-gray-50">
+						<form onSubmit={handleAdd} className="space-y-3">
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-								<input
-									type="date"
-									value={tanggal}
-									onChange={(e) => setTanggal(e.target.value)}
-									className="px-3 py-2 border rounded text-sm"
-									required
-								/>
-								<input
-									type="text"
-									value={kegiatan}
-									onChange={(e) => setKegiatan(e.target.value)}
-									placeholder="Nama kegiatan"
-									className="px-3 py-2 border rounded text-sm"
-									required
-								/>
-								<textarea
-									value={keterangan}
-									onChange={(e) => setKeterangan(e.target.value)}
-									placeholder="Keterangan (opsional)"
-									className="px-3 py-2 border rounded text-sm"
-									rows={2}
-								/>
-								<div className="grid grid-cols-2 gap-3">
-									<select
-										value={semester}
-										onChange={(e) => setSemester(e.target.value)}
-										className="px-3 py-2 border rounded text-sm"
-									>
-										<option value="">Semester</option>
-										<option value="Ganjil">Ganjil</option>
-										<option value="Genap">Genap</option>
-									</select>
-									<input
-										type="text"
-										value={tahunAjaran}
-										onChange={(e) => setTahunAjaran(e.target.value)}
-										placeholder="Thn Ajaran"
-										className="px-3 py-2 border rounded text-sm"
-									/>
-								</div>
+								<input type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} className="border border-border px-3 py-2 rounded text-sm" required />
+								<input type="text" value={kegiatan} onChange={(e) => setKegiatan(e.target.value)} placeholder="Nama kegiatan" className="border border-border px-3 py-2 rounded text-sm" required />
+								<textarea value={keterangan} onChange={(e) => setKeterangan(e.target.value)} placeholder="Keterangan (opsional)" className="border border-border px-3 py-2 rounded text-sm" rows={2} />
+								<select value={semester} onChange={(e) => setSemester(e.target.value)} className="border border-border px-3 py-2 rounded text-sm">
+									<option value="">Semester</option>
+									<option value="Ganjil">Ganjil</option>
+									<option value="Genap">Genap</option>
+								</select>
+								<input type="text" value={tahunAjaran} onChange={(e) => setTahunAjaran(e.target.value)} placeholder="Thn Ajaran (2025/2026)" className="border border-border px-3 py-2 rounded text-sm" />
 							</div>
-							<button
-								type="submit"
-								className="px-3 py-1 text-xs font-medium bg-blue-600 text-white rounded hover:bg-blue-700"
-							>
+							<button type="submit" className="px-4 py-2 text-sm font-medium bg-primary text-white rounded hover:opacity-90">
 								Simpan
 							</button>
 						</form>
-					)}
+					</div>
+				)}
 
-					{!events?.data || events.data.length === 0 ? (
-						<div className="p-6 text-center text-sm text-gray-500">
-							Belum ada kegiatan akademik
-						</div>
-					) : (
-						<table className="w-full">
-							<thead>
-								<tr className="bg-gray-50 border-b">
-									<th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase">
-										Tanggal
-									</th>
-									<th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase">
-										Kegiatan
-									</th>
-									<th className="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase">
-										Keterangan
-									</th>
-									<th className="px-4 py-2 text-center text-xs font-semibold text-gray-600 uppercase">
-										Semester
-									</th>
-									<th className="px-4 py-2 text-center text-xs font-semibold text-gray-600 uppercase">
-										Thn Ajaran
-									</th>
-									<th className="px-4 py-2 text-center text-xs font-semibold text-gray-600 uppercase">
-										Aksi
-									</th>
-								</tr>
-							</thead>
-							<tbody className="divide-y">
-								{events.data.map((e: EventItem) => (
-									<tr key={e.id} className="hover:bg-gray-50">
-										<td className="px-4 py-2 text-sm">{e.tanggal}</td>
-										<td className="px-4 py-2 text-sm font-medium">
-											{e.kegiatan}
-										</td>
-										<td className="px-4 py-2 text-sm text-gray-500 max-w-xs truncate">
-											{e.keterangan || "-"}
-										</td>
-										<td className="px-4 py-2 text-sm text-center">
-											{e.semester || "-"}
-										</td>
-										<td className="px-4 py-2 text-sm text-center">
-											{e.tahun_ajaran || "-"}
-										</td>
-										<td className="px-4 py-2 text-center">
-											<button
-												type="button"
-												onClick={() => handleDelete(e.id)}
-												className="p-1 text-red-600 hover:bg-red-50 rounded"
-												aria-label="Hapus"
-											>
-												<Trash2 className="h-4 w-4" />
-											</button>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					)}
+				<AdminTable columns={columns} rows={items} />
 
-					{events?.meta && (
-						<div className="px-4 py-3 border-t text-sm text-gray-500 text-center">
-							Halaman {events.meta.current_page || events.current_page} dari{" "}
-							{events.meta.last_page || events.last_page}
-						</div>
-					)}
-				</div>
+				{meta && (
+					<Pagination
+						data={items}
+						current_page={meta.current_page}
+						last_page={meta.last_page}
+						per_page={meta.per_page}
+						from={meta.from}
+						to={meta.to}
+						total={meta.total}
+						links={meta.links}
+					/>
+				)}
 			</div>
 		</>
 	);
